@@ -1,14 +1,13 @@
-ACTIVE THREAD: 2026-08-05 13:25 CT
-
 # WORK_BOARD
 
 ## In Progress
 
-- Create the first Tectori website, put it under Git, publish it to GitHub, and prepare GitHub Pages hosting.
+- None.
 
 ## Pending
 
-- Update Dynadot DNS records after GitHub Pages is enabled.
+- Update Dynadot DNS records listed in `docs/hosting.md`.
+- After DNS resolves, enable GitHub Pages HTTPS enforcement if GitHub does not enable it automatically.
 
 ## Questions for Jon
 
