@@ -6,8 +6,8 @@
 
 ## Pending
 
-- Update Dynadot DNS records listed in `docs/hosting.md`.
-- After DNS resolves, enable GitHub Pages HTTPS enforcement if GitHub does not enable it automatically.
+- Add individual service pages, Contact, Privacy, Terms, Accessibility,
+  Resources, FAQ, and Trust pages in a later content release.
 
 ## Questions for Jon
 

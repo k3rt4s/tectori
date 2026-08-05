@@ -1,0 +1,5 @@
+# Tectori's robots policy permits public indexing and identifies the sitemap.
+User-agent: *
+Allow: /
+
+Sitemap: https://www.tectori.com/sitemap.xml
