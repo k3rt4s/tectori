@@ -1,0 +1,17 @@
+# Operating system files
+Thumbs.db
+.DS_Store
+
+# Local editor and build artifacts
+.vscode/
+node_modules/
+dist/
+
+# Generated data belongs under C:\Code_data\tectori\
+data/
+logs/
+
+# Local secrets
+.env
+.env.*
+!.env.example

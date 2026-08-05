@@ -1,0 +1,22 @@
+# Tectori Website
+
+Tectori is the source project for the public business website at www.tectori.com.
+
+The site presents Tectori's IT and security consulting services and is built as
+a static website for low-cost hosting.
+
+## Quick Start
+
+Open `docs/index.html` in a browser to review the site locally.
+
+## Layout
+
+- `docs/` contains the public website files served by GitHub Pages.
+- `docs/assets/` contains website-owned image assets.
+- `WORK_BOARD.md` tracks active project work.
+- `CHANGELOG.md` records completed changes.
+
+## Configuration
+
+No local secrets or runtime settings are required. Hosting setup notes live in
+`docs/hosting.md`.
