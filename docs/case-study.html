@@ -1,0 +1,208 @@
+<!doctype html>
+<!-- Tectori's case study presents a real Azure reference implementation without client claims. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Azure operations reference implementation | Tectori</title>
+    <meta
+      name="description"
+      content="A real Azure Container Apps reference implementation showing versioned delivery, operating safeguards, documentation, and recovery-minded engineering."
+    >
+    <meta property="og:title" content="Azure operations reference implementation | Tectori">
+    <meta property="og:description" content="A technical case study based on the real deployment pattern behind MailSweep.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.tectori.com/case-study.html">
+    <meta property="og:image" content="https://www.tectori.com/assets/tectori-hero.png">
+    <link rel="canonical" href="https://www.tectori.com/case-study.html">
+    <link rel="icon" href="assets/tectori-favicon.png">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header" aria-label="Primary">
+      <a class="brand" href="index.html" aria-label="Tectori home">
+        <img src="assets/tectori-logo.png" alt="Tectori">
+      </a>
+      <nav class="desktop-nav" aria-label="Site navigation">
+        <a href="about.html">About</a>
+        <a href="audit-ready-it.html">Audit-ready IT</a>
+        <a href="ai-governance.html">AI governance</a>
+        <a href="case-study.html" aria-current="page">Case study</a>
+        <a href="how-we-work.html">How we work</a>
+        <a class="nav-contact" href="mailto:jdbowker@gmail.com">Contact</a>
+      </nav>
+      <details class="nav-menu">
+        <summary>Menu</summary>
+        <nav aria-label="Mobile navigation">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="audit-ready-it.html">Audit-ready IT</a>
+          <a href="ai-governance.html">AI governance</a>
+          <a href="case-study.html" aria-current="page">Case study</a>
+          <a href="how-we-work.html">How we work</a>
+          <a href="mailto:jdbowker@gmail.com">Contact</a>
+        </nav>
+      </details>
+    </header>
+
+    <main id="main-content">
+      <section class="page-hero" aria-labelledby="page-title">
+        <div class="page-hero-inner">
+          <p class="eyebrow">Reference implementation</p>
+          <h1 id="page-title">Governed delivery on Azure Container Apps.</h1>
+          <p class="page-lead">
+            A real engineering pattern for moving a working local application
+            into a cloud service while preserving version control, deployment
+            traceability, operating safeguards, and an explicit recovery path.
+          </p>
+          <div class="case-metadata" aria-label="Case study attributes">
+            <span>Real implementation</span>
+            <span>Azure</span>
+            <span>Cloud operations</span>
+            <span>Reference architecture</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section narrow">
+        <div class="disclosure">
+          <h3>What this case study is</h3>
+          <p>
+            This is a technical reference implementation, not a client success
+            story. MailSweep is a separate product brand. It is not a Tectori
+            service line, and no client name, testimonial, or client result is
+            implied here.
+          </p>
+        </div>
+      </section>
+
+      <section class="content-section split-section" aria-labelledby="challenge-title">
+        <div class="section-heading">
+          <p class="eyebrow">The challenge</p>
+          <h2 id="challenge-title">Preserve control while the delivery model changes.</h2>
+        </div>
+        <div class="prose">
+          <p>
+            MailSweep began as a single-user Windows application for mailbox
+            triage. Its cloud variant needed to support Microsoft 365 in a
+            hosted operating model while sharing the same core engine and user
+            interface with the local product.
+          </p>
+          <p>
+            The engineering question was larger than where to run the code. The
+            deployment needed clear version identity, controlled access to
+            Azure, separated runtime storage, audit logging, a repeatable test
+            path, and a way to detect drift between shared local and cloud
+            behavior.
+          </p>
+        </div>
+      </section>
+
+      <section class="soft-band" aria-labelledby="architecture-title">
+        <div>
+          <div class="section-heading">
+            <p class="eyebrow">The implementation</p>
+            <h2 id="architecture-title">A shared product core with a controlled cloud edge.</h2>
+          </div>
+          <div class="practice-grid">
+            <article class="practice-item">
+              <h3>Shared engine and interface</h3>
+              <p>Local and cloud delivery modes share the classification engine and browser interface, with environment-specific behavior kept at the edge.</p>
+            </article>
+            <article class="practice-item">
+              <h3>Azure Container Apps</h3>
+              <p>The cloud service runs as a containerized application on Azure, with Azure storage services used for hosted state.</p>
+            </article>
+            <article class="practice-item">
+              <h3>Microsoft 365 scope</h3>
+              <p>The hosted service has a deliberate Microsoft and Azure boundary instead of claiming provider support the cloud product does not implement.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section" aria-labelledby="safeguards-title">
+        <div class="section-heading">
+          <p class="eyebrow">Operating safeguards</p>
+          <h2 id="safeguards-title">The delivery record explains what reached production.</h2>
+        </div>
+        <div class="flow-grid">
+          <article class="flow-step">
+            <span class="step-number">01</span>
+            <h3>Source control</h3>
+            <p>Application, deployment, and infrastructure definitions are versioned together in the project repository.</p>
+          </article>
+          <article class="flow-step">
+            <span class="step-number">02</span>
+            <h3>Identity</h3>
+            <p>The deployment pipeline uses identity federation to authenticate to Azure without storing a long-lived cloud password in the workflow.</p>
+          </article>
+          <article class="flow-step">
+            <span class="step-number">03</span>
+            <h3>Version pinning</h3>
+            <p>Each production deployment points to a container image tagged with the full source commit identifier.</p>
+          </article>
+          <article class="flow-step">
+            <span class="step-number">04</span>
+            <h3>Parity checks</h3>
+            <p>Automated checks detect drift in shared administrative logic between the local and cloud delivery modes.</p>
+          </article>
+          <article class="flow-step">
+            <span class="step-number">05</span>
+            <h3>Verification</h3>
+            <p>Release notes and a running manual test plan document what changed, how to verify it, and which surface is affected.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="dark-band" aria-labelledby="outcome-title">
+        <div class="split-section section">
+          <div class="section-heading">
+            <p class="eyebrow">Current state</p>
+            <h2 id="outcome-title">A live pattern with evidence behind it.</h2>
+          </div>
+          <div class="prose">
+            <p>
+              The cloud service runs in production on Azure Container Apps.
+              The repository records the product version, source commit,
+              container image, deployment definition, shared code boundaries,
+              and operator testing expectations.
+            </p>
+            <p>
+              This implementation does not claim a client outcome or a
+              fabricated performance result. Its value as evidence is simpler.
+              It shows the build standards in working code and operating
+              records, not only in a slide deck.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-band">
+        <div class="cta-inner">
+          <h2>Build cloud operations that can explain themselves.</h2>
+          <a class="button primary" href="mailto:jdbowker@gmail.com">Discuss a cloud project</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <strong>Tectori</strong>
+        <span>IT that holds up under audit and scales with your ambition.</span>
+      </div>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="audit-ready-it.html">Audit-ready IT</a>
+        <a href="ai-governance.html">AI governance</a>
+        <a href="how-we-work.html">How we work</a>
+      </nav>
+      <div class="footer-contact">
+        <a href="mailto:jdbowker@gmail.com">jdbowker@gmail.com</a><br>
+        <span>&copy; 2026 Tectori</span>
+      </div>
+    </footer>
+  </body>
+</html>

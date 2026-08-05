@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Tectori's sitemap lists the public website pages available for indexing. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.tectori.com/</loc>
+  </url>
+  <url>
+    <loc>https://www.tectori.com/about.html</loc>
+  </url>
+  <url>
+    <loc>https://www.tectori.com/audit-ready-it.html</loc>
+  </url>
+  <url>
+    <loc>https://www.tectori.com/ai-governance.html</loc>
+  </url>
+  <url>
+    <loc>https://www.tectori.com/case-study.html</loc>
+  </url>
+  <url>
+    <loc>https://www.tectori.com/how-we-work.html</loc>
+  </url>
+</urlset>
