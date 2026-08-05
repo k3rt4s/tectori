@@ -1,0 +1,378 @@
+/* Tectori's public website styles the static consultancy landing page. */
+:root {
+  --ink: #101417;
+  --muted: #53606a;
+  --paper: #fbfcfb;
+  --panel: #ffffff;
+  --line: #d9e3df;
+  --green: #155e4f;
+  --cyan: #0b7ea4;
+  --orange: #f47a24;
+  --gold: #f5aa2d;
+  --dark: #071015;
+  --shadow: 0 18px 45px rgba(16, 20, 23, 0.12);
+  color-scheme: light;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 72px;
+  padding: 14px clamp(20px, 4vw, 56px);
+  border-bottom: 1px solid rgba(217, 227, 223, 0.76);
+  background: rgba(251, 252, 251, 0.9);
+  backdrop-filter: blur(18px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand img {
+  display: block;
+  width: clamp(142px, 16vw, 210px);
+  height: auto;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 3vw, 30px);
+  color: #314047;
+  font-size: 0.94rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  color: var(--green);
+}
+
+.hero {
+  position: relative;
+  min-height: min(760px, calc(100vh - 72px));
+  overflow: hidden;
+  background: var(--dark);
+}
+
+.hero-image,
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-image {
+  object-fit: cover;
+}
+
+.hero-scrim {
+  background:
+    linear-gradient(90deg, rgba(7, 16, 21, 0.94) 0%, rgba(7, 16, 21, 0.7) 38%, rgba(7, 16, 21, 0.12) 72%),
+    linear-gradient(0deg, rgba(7, 16, 21, 0.88) 0%, rgba(7, 16, 21, 0) 35%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: min(720px, 100%);
+  min-height: min(760px, calc(100vh - 72px));
+  padding: clamp(70px, 9vw, 120px) clamp(20px, 7vw, 86px);
+  color: #fff;
+}
+
+.eyebrow {
+  margin: 0 0 14px;
+  color: var(--cyan);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.hero .eyebrow {
+  color: #ffb35a;
+}
+
+h1,
+h2,
+h3,
+p {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.05;
+}
+
+h1 {
+  max-width: 660px;
+  font-size: clamp(3rem, 7vw, 6.4rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 4rem);
+}
+
+h3 {
+  font-size: 1.14rem;
+}
+
+.hero-copy {
+  max-width: 590px;
+  margin: 24px 0 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(1.08rem, 2vw, 1.35rem);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.button.primary {
+  background: linear-gradient(135deg, var(--orange), var(--gold));
+  color: #fff;
+}
+
+.button.secondary {
+  border-color: rgba(255, 255, 255, 0.34);
+  color: #fff;
+}
+
+.button:hover,
+.button:focus-visible {
+  transform: translateY(-1px);
+}
+
+.section {
+  display: grid;
+  gap: clamp(24px, 4vw, 52px);
+  width: min(1160px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: clamp(64px, 10vw, 112px) 0;
+}
+
+.intro,
+.contact {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: start;
+}
+
+.intro > p,
+.contact-panel p {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1.04rem, 1.8vw, 1.28rem);
+}
+
+.section-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 760px;
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.service-card {
+  min-height: 260px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 1px 0 rgba(16, 20, 23, 0.03);
+}
+
+.card-number {
+  display: block;
+  margin-bottom: 34px;
+  color: var(--orange);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.service-card p,
+.principles p {
+  margin: 14px 0 0;
+  color: var(--muted);
+}
+
+.band {
+  padding: clamp(64px, 10vw, 110px) clamp(20px, 4vw, 56px);
+  background:
+    linear-gradient(90deg, rgba(21, 94, 79, 0.08), rgba(11, 126, 164, 0.08)),
+    #eef5f2;
+}
+
+.band > * {
+  width: min(1160px, 100%);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.principles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 38px;
+}
+
+.principles div {
+  padding-top: 22px;
+  border-top: 2px solid rgba(21, 94, 79, 0.28);
+}
+
+.contact-panel {
+  display: grid;
+  justify-items: start;
+  gap: 24px;
+  padding: clamp(24px, 4vw, 36px);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 28px clamp(20px, 4vw, 56px);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.site-footer a {
+  text-decoration: none;
+}
+
+@media (max-width: 920px) {
+  .hero {
+    min-height: 680px;
+  }
+
+  .hero-content {
+    min-height: 680px;
+  }
+
+  .intro,
+  .contact {
+    grid-template-columns: 1fr;
+  }
+
+  .service-grid,
+  .principles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .site-header {
+    position: static;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .hero {
+    min-height: 650px;
+  }
+
+  .hero-scrim {
+    background:
+      linear-gradient(90deg, rgba(7, 16, 21, 0.92), rgba(7, 16, 21, 0.56)),
+      linear-gradient(0deg, rgba(7, 16, 21, 0.92), rgba(7, 16, 21, 0.1) 44%);
+  }
+
+  .hero-content {
+    justify-content: flex-end;
+    min-height: 650px;
+    padding-top: 76px;
+    padding-bottom: 72px;
+  }
+
+  h1 {
+    font-size: clamp(2.65rem, 14vw, 4.4rem);
+  }
+
+  .hero-actions,
+  .button {
+    width: 100%;
+  }
+
+  .service-grid,
+  .principles {
+    grid-template-columns: 1fr;
+  }
+
+  .service-card {
+    min-height: auto;
+  }
+
+  .site-footer {
+    flex-direction: column;
+  }
+}
