@@ -4,6 +4,21 @@ Tectori website changes are recorded here.
 
 ## 2026-08-06
 
+- Added a Services page detailing six consulting service lines with anchored
+  sections, deliverables, and audit-readiness framing, placed first in the
+  navigation on every page.
+- Added privacy policy, terms of use, and accessibility pages written against
+  the site's actual data collection, with footer links sitewide and effective
+  date placeholders pending owner and attorney review.
+- Rebuilt the contact page around direct email with a one business day response
+  promise and a LinkedIn link, keeping the phone in the utility bar and footer.
+- Reframed the product portfolio as founder-built product brands and working
+  reference implementations, not offered for sale, and removed the development
+  status labels.
+- Expanded the featured credentials to full official names and named FFIEC and
+  HIPAA in the audit-readiness copy.
+- Fixed CSS browser compatibility warnings and grew the sitemap to thirteen
+  canonical pages.
 - Replaced the public personal email address with `contact@tectori.com`, added
   the public business number, and added dedicated Contact and FAQ pages.
 - Added Organization and FAQ structured data, richer sharing metadata, explicit
