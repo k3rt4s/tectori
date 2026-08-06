@@ -100,7 +100,6 @@ h3 { font-size: 1.25rem; }
 .solution-card img { width: 104px; height: 104px; border-radius: 6px; object-fit: cover; }
 .solution-card h3 { margin-top: 9px; color: var(--white); }
 .solution-card p { margin: 12px 0 0; color: rgba(254, 255, 254, 0.7); font-size: 0.94rem; }
-.status { display: inline-block; color: var(--gold); font-size: 0.72rem; font-weight: 820; text-transform: uppercase; }
 
 .platform-feature { align-items: center; gap: clamp(44px, 7vw, 110px); }
 .platform-copy { max-width: 690px; }
@@ -165,7 +164,6 @@ h3 { font-size: 1.25rem; }
 .portfolio-list { display: grid; gap: 24px; }
 .portfolio-item { display: grid; grid-template-columns: 150px minmax(0, 1fr) minmax(260px, 0.48fr); align-items: center; gap: 34px; padding: 28px; border: 1px solid var(--line); border-radius: 8px; background: var(--white); }
 .portfolio-item img { width: 150px; height: 150px; border-radius: 8px; object-fit: cover; }
-.portfolio-item .status { color: var(--orange); }
 .portfolio-item h2 { margin-top: 8px; font-size: clamp(1.8rem, 2.5vw, 2.7rem); }
 .portfolio-item p { margin: 13px 0 0; color: var(--muted); }
 .portfolio-detail { padding-left: 28px; border-left: 1px solid var(--line); }
