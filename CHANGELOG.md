@@ -4,6 +4,12 @@ Tectori website changes are recorded here.
 
 ## 2026-08-06
 
+- Replaced the public personal email address with `contact@tectori.com`, added
+  the public business number, and added dedicated Contact and FAQ pages.
+- Added Organization and FAQ structured data, richer sharing metadata, explicit
+  search crawler rules, and accurate sitemap modification dates.
+- Added a setup guide for Google Search Console, Bing Webmaster Tools, and
+  search-grounded assistant discovery.
 - Reworked the public site around Tectori's orange, gold, charcoal, and warm
   white palette with a proof-oriented homepage and consistent navigation.
 - Added a Solutions page for Compliance Compass, MailSweep, FileIQ, Architect

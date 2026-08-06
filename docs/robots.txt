@@ -1,4 +1,31 @@
-# Tectori's robots policy permits public indexing and identifies the sitemap.
+# Tectori's robots policy permits public search, answer-engine, and user-directed retrieval.
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: bingbot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
 User-agent: *
 Allow: /
 
