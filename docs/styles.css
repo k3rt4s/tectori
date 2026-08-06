@@ -172,6 +172,23 @@ h3 { font-size: 1.25rem; }
 .portfolio-detail strong { display: block; margin-bottom: 7px; }
 .portfolio-detail span { color: var(--muted); font-size: 0.92rem; }
 
+.contact-grid { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); align-items: start; }
+.contact-lead { max-width: 720px; margin: 22px 0 28px; color: var(--muted); font-size: 1.08rem; }
+.contact-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.contact-details { display: grid; border-top: 1px solid var(--line); }
+.contact-details div { display: grid; grid-template-columns: minmax(120px, 0.32fr) 1fr; gap: 24px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+.contact-details span { color: var(--orange); font-size: 0.76rem; font-weight: 850; text-transform: uppercase; }
+.contact-details strong { font-size: 1rem; font-weight: 680; }
+.contact-topics .resilience-grid { width: min(1480px, 100%); margin-right: auto; margin-left: auto; }
+
+.faq-section { grid-template-columns: minmax(260px, 0.56fr) minmax(0, 1.44fr); align-items: start; }
+.faq-list { display: grid; }
+.faq-item { padding: 26px 0; border-top: 1px solid var(--line); }
+.faq-item:last-child { border-bottom: 1px solid var(--line); }
+.faq-item h3 { font-size: 1.35rem; }
+.faq-item p { max-width: 850px; margin: 13px 0 0; color: var(--muted); font-size: 1.02rem; }
+.faq-item a { color: var(--charcoal); font-weight: 750; text-decoration-color: var(--orange); text-underline-offset: 3px; }
+
 .login-page { display: grid; min-height: 100vh; grid-template-columns: minmax(0, 0.9fr) minmax(520px, 0.7fr); background: var(--charcoal); }
 .login-brand { position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh; padding: 44px clamp(32px, 6vw, 100px); overflow: hidden; background: var(--charcoal); color: var(--white); }
 .login-brand::after { position: absolute; right: -110px; bottom: -130px; width: 470px; height: 470px; border: 90px solid var(--orange); border-radius: 50%; content: ""; opacity: 0.85; }
@@ -222,7 +239,7 @@ h3 { font-size: 1.25rem; }
   .proof-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .proof-strip div:nth-child(2) { border-right: 0; }
   .proof-strip div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
-  .intro, .contact, .split-section, .platform-feature, .portfolio-intro, .cta-inner { grid-template-columns: 1fr; }
+  .intro, .contact, .split-section, .platform-feature, .portfolio-intro, .contact-grid, .faq-section, .cta-inner { grid-template-columns: 1fr; }
   .service-grid, .path-grid, .fact-grid, .practice-grid, .principles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .resilience-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .resilience-grid article:nth-child(2) { border-right: 0; }
@@ -265,6 +282,7 @@ h3 { font-size: 1.25rem; }
   .portfolio-item { grid-template-columns: 86px 1fr; gap: 18px; padding: 20px; }
   .portfolio-item img { width: 86px; height: 86px; }
   .portfolio-detail { grid-column: 1 / -1; }
+  .contact-details div { grid-template-columns: 1fr; gap: 5px; }
   .login-brand { min-height: 390px; padding: 32px 24px; }
   .login-brand-logo { width: 150px; }
   .login-message h1 { font-size: 2.8rem; }

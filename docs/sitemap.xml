@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Tectori's sitemap lists the public website pages available for indexing. -->
+<!-- Tectori's sitemap lists canonical public pages and their latest significant update. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.tectori.com/</loc>
+    <lastmod>2026-08-06</lastmod>
   </url>
   <url>
     <loc>https://www.tectori.com/about.html</loc>
+    <lastmod>2026-08-06</lastmod>
   </url>
   <url>
     <loc>https://www.tectori.com/solutions.html</loc>
+    <lastmod>2026-08-06</lastmod>
   </url>
   <url>
     <loc>https://www.tectori.com/audit-ready-it.html</loc>
+    <lastmod>2026-08-06</lastmod>
   </url>
   <url>
     <loc>https://www.tectori.com/ai-governance.html</loc>
+    <lastmod>2026-08-06</lastmod>
   </url>
   <url>
     <loc>https://www.tectori.com/case-study.html</loc>
+    <lastmod>2026-08-06</lastmod>
   </url>
   <url>
     <loc>https://www.tectori.com/how-we-work.html</loc>
+    <lastmod>2026-08-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.tectori.com/faq.html</loc>
+    <lastmod>2026-08-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.tectori.com/contact.html</loc>
+    <lastmod>2026-08-06</lastmod>
   </url>
 </urlset>
