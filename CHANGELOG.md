@@ -2,6 +2,21 @@
 
 Tectori website changes are recorded here.
 
+## 2026-08-07
+
+- Peer-reviewed the live site with an external model review and a verified
+  multi-agent re-review, then fixed every confirmed finding.
+- Met WCAG contrast and focus minimums: a darker on-white accent color,
+  high-contrast focus outlines, and a visible focus style on the login inputs.
+- Hardened the client login so nothing typed is transmitted even without
+  JavaScript, and presented it as an operational portal gate with a plain
+  logon-failed message.
+- Unified the navigation order and footers on every page and restored the How
+  we work link to all desktop menus.
+- Removed one-person practice wording site-wide, named the frameworks the
+  compliance service line covers, and completed the FAQ structured data.
+- Set the effective dates on the privacy, terms, and accessibility pages.
+
 ## 2026-08-06
 
 - Added a Services page detailing six consulting service lines with anchored
