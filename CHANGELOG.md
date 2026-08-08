@@ -2,6 +2,12 @@
 
 Tectori website changes are recorded here.
 
+## 2026-08-08
+
+- Named ISO/IEC 42001 and the NIST AI Risk Management Framework on the agentic
+  AI service line, the AI governance page, and the homepage Organization data,
+  phrased as applied engagement scope.
+
 ## 2026-08-07
 
 - Peer-reviewed the live site with an external model review and a verified
