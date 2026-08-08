@@ -9,6 +9,12 @@
   const password = form.querySelector("#password");
   const message = form.querySelector("#login-message");
 
+  username.addEventListener("input", () => {
+    const { selectionStart, selectionEnd } = username;
+    username.value = username.value.toLowerCase();
+    username.setSelectionRange(selectionStart, selectionEnd);
+  });
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     username.value = "";
