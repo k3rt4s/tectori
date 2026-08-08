@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Tectori's portal preview demonstrates a future sign-in experience without collecting credentials. -->
+<!-- Tectori's client login page renders the portal sign-in and transmits or stores nothing entered into it. -->
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -24,14 +24,13 @@
             src="assets/tectori-logo.png"
             alt="Tectori"></a>
         <div class="login-message">
-          <p class="eyebrow">Control desk preview</p>
+          <p class="eyebrow">Control desk</p>
           <h1 id="portal-title">
             Clear work. Visible evidence. Named ownership.
           </h1>
           <p>
-            The future client portal is being designed to keep controls,
-            supporting records, open decisions, and accountability in one
-            practical view.
+            The client portal keeps controls, supporting records, open
+            decisions, and accountability in one practical view.
           </p>
         </div>
         <a class="login-back" href="index.html">Return to tectori.com</a>
@@ -53,7 +52,6 @@
               <label for="username">Email or username</label
               ><input
                 id="username"
-                name="username"
                 type="text"
                 autocomplete="off"
                 autocapitalize="none"
@@ -64,7 +62,6 @@
               <label for="password">Password</label
               ><input
                 id="password"
-                name="password"
                 type="password"
                 autocomplete="new-password"
                 required>
@@ -78,10 +75,6 @@
               hidden
             ></p>
           </form>
-          <p class="login-help">
-            This page has no authentication service. Entries stay in the page
-            and are cleared after each attempt.
-          </p>
         </div>
       </section>
     </main>

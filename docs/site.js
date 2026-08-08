@@ -1,4 +1,4 @@
-// Tectori's public site script handles the local portal preview without transmitting or storing form entries.
+// Tectori's public site script handles the client login locally without transmitting or storing form entries.
 (() => {
   "use strict";
 
@@ -13,7 +13,7 @@
     event.preventDefault();
     username.value = "";
     password.value = "";
-    message.textContent = "Invalid username and password. Client access is not active yet.";
+    message.textContent = "Logon failed. Invalid username or password.";
     message.hidden = false;
     username.focus();
   });
