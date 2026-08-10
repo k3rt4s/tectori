@@ -2,6 +2,11 @@
 
 Tectori website changes are recorded here.
 
+## 2026-08-09
+
+- Added Fortivra, the AI security discovery and reporting toolkit, to the
+  solutions portfolio, homepage, and FAQ with a new brand mark.
+
 ## 2026-08-08
 
 - Named ISO/IEC 42001 and the NIST AI Risk Management Framework on the agentic

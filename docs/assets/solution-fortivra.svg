@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-label="Fortivra mark">
+  <rect width="640" height="640" rx="96" fill="#273138"/>
+  <path d="M320 128 L484 196 V332 C484 434 414 492 320 524 C226 492 156 434 156 332 V196 Z"
+        fill="none" stroke="#f67a38" stroke-width="30" stroke-linejoin="round"/>
+  <line x1="320" y1="292" x2="262" y2="366" stroke="#f9a63e" stroke-width="10"/>
+  <line x1="320" y1="292" x2="378" y2="366" stroke="#f9a63e" stroke-width="10"/>
+  <line x1="262" y1="366" x2="378" y2="366" stroke="#f9a63e" stroke-width="10"/>
+  <circle cx="320" cy="286" r="26" fill="#f9a63e"/>
+  <circle cx="258" cy="370" r="18" fill="#fefffe"/>
+  <circle cx="382" cy="370" r="18" fill="#fefffe"/>
+</svg>
