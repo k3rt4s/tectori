@@ -7,6 +7,8 @@ Tectori website changes are recorded here.
 - Allowed `Google-Extended` so the site is eligible for citation in Gemini
   answers, accepting Gemini training use because Google covers both with one
   token.
+- Allowed `GPTBot` and `ClaudeBot`, making the crawler policy permit every
+  named crawler including model training.
 
 ## 2026-08-09
 
