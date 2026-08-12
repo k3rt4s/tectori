@@ -39,8 +39,10 @@ Google Search, Bing, and search-grounded assistants.
 - `Claude-SearchBot` and `Claude-User` are allowed for Claude discovery and
   user-directed retrieval. `ClaudeBot`, the training crawler, is blocked.
 - Googlebot is allowed for Google Search, AI Overviews, and AI Mode.
-  `Google-Extended`, which controls separate Gemini training and grounding use,
-  is blocked.
+  `Google-Extended` is allowed so Tectori can be cited inside the Gemini app.
+  Google does not separate Gemini grounding from Gemini training, so this one
+  token covers both, and the owner accepted training use to gain the
+  visibility.
 - Bingbot is allowed for Bing Search and Bing Copilot discovery.
 
 No special AI text file is used. Search providers currently emphasize normal

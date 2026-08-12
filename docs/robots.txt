@@ -3,7 +3,7 @@ User-agent: Googlebot
 Allow: /
 
 User-agent: Google-Extended
-Disallow: /
+Allow: /
 
 User-agent: bingbot
 Allow: /
