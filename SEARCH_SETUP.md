@@ -35,9 +35,12 @@ Google Search, Bing, and search-grounded assistants.
 ## Search-Grounded Assistants
 
 - `OAI-SearchBot` and `ChatGPT-User` are allowed for ChatGPT discovery and
-  user-directed retrieval. `GPTBot`, the training crawler, is blocked.
+  user-directed retrieval. `GPTBot`, the training crawler, is also allowed.
 - `Claude-SearchBot` and `Claude-User` are allowed for Claude discovery and
-  user-directed retrieval. `ClaudeBot`, the training crawler, is blocked.
+  user-directed retrieval. `ClaudeBot`, the training crawler, is also allowed.
+- Training access does not affect whether the site appears in assistant
+  answers, which the search and retrieval crawlers govern. It is allowed so
+  the site can inform future models directly.
 - Googlebot is allowed for Google Search, AI Overviews, and AI Mode.
   `Google-Extended` is allowed so Tectori can be cited inside the Gemini app.
   Google does not separate Gemini grounding from Gemini training, so this one

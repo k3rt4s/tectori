@@ -1,4 +1,4 @@
-# Tectori's robots policy permits public search, answer-engine, and user-directed retrieval.
+# Tectori's robots policy permits every named crawler, covering search, answer-engine, user-directed retrieval, and model training.
 User-agent: Googlebot
 Allow: /
 
@@ -15,7 +15,7 @@ User-agent: ChatGPT-User
 Allow: /
 
 User-agent: GPTBot
-Disallow: /
+Allow: /
 
 User-agent: Claude-SearchBot
 Allow: /
@@ -24,7 +24,7 @@ User-agent: Claude-User
 Allow: /
 
 User-agent: ClaudeBot
-Disallow: /
+Allow: /
 
 User-agent: *
 Allow: /
