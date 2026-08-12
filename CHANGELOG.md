@@ -2,6 +2,12 @@
 
 Tectori website changes are recorded here.
 
+## 2026-08-10
+
+- Allowed `Google-Extended` so the site is eligible for citation in Gemini
+  answers, accepting Gemini training use because Google covers both with one
+  token.
+
 ## 2026-08-09
 
 - Added Fortivra, the AI security discovery and reporting toolkit, to the
