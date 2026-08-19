@@ -9,6 +9,12 @@ Tectori website changes are recorded here.
   token.
 - Allowed `GPTBot` and `ClaudeBot`, making the crawler policy permit every
   named crawler including model training.
+- Added a Free tools page listing the five public open source repositories,
+  each linked to GitHub with its language and license, and put Free tools in
+  the navigation and footer on every page.
+- Moved Ops Toolkit off the solutions portfolio and onto the Free tools page,
+  since it is genuinely free and open rather than a proprietary product brand,
+  and licensed its repository MIT so the claim holds.
 
 ## 2026-08-09
 
