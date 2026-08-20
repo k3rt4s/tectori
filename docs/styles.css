@@ -146,7 +146,7 @@ h3 { font-size: 1.25rem; }
 .fact-value { display: block; margin-bottom: 12px; color: var(--orange-text); font-size: 2rem; font-weight: 850; line-height: 1.1; }
 .flow-step { position: relative; min-height: 200px; }
 
-.page-hero { padding: 72px clamp(32px, 6vw, 104px) 64px; background: var(--charcoal); color: var(--white); }
+.page-hero { padding: 104px clamp(32px, 6vw, 104px) 96px; background: var(--charcoal); color: var(--white); }
 .page-hero-inner { width: min(1480px, 100%); margin: 0 auto; }
 .page-hero h1 { max-width: 1050px; font-size: clamp(2.35rem, 3.92vw, 4.23rem); }
 .page-lead { max-width: 900px; margin: 24px 0 0; color: rgba(254, 255, 254, 0.82); font-size: 1.22rem; }
