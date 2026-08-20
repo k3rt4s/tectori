@@ -20,7 +20,7 @@ body { min-width: 320px; margin: 0; background: var(--white); color: var(--ink);
 a { color: inherit; }
 img { max-width: 100%; }
 h1, h2, h3 { margin: 0; line-height: 1.08; letter-spacing: 0; overflow-wrap: break-word; }
-h1 { font-size: clamp(3.4rem, 6vw, 6.7rem); }
+h1 { font-size: clamp(2.96rem, 5.22vw, 5.83rem); }
 h2 { font-size: clamp(2.25rem, 4vw, 4.25rem); }
 h3 { font-size: 1.25rem; }
 :focus-visible { outline: 3px solid var(--charcoal); outline-offset: 3px; }
@@ -54,7 +54,7 @@ h3 { font-size: 1.25rem; }
 .hero-image { object-fit: cover; object-position: center; }
 .hero-scrim { background: linear-gradient(90deg, rgba(39, 49, 56, 0.99) 0%, rgba(39, 49, 56, 0.88) 48%, rgba(39, 49, 56, 0.18) 100%); }
 .hero-content { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: center; width: min(1020px, 100%); min-height: min(680px, calc(100vh - 112px)); padding: 76px clamp(20px, 7vw, 130px); color: var(--white); }
-.hero h1 { max-width: 970px; font-size: clamp(3rem, 5.2vw, 5.8rem); }
+.hero h1 { max-width: 970px; font-size: clamp(2.61rem, 4.52vw, 5.05rem); }
 .hero-copy { max-width: 790px; margin: 24px 0 0; color: rgba(254, 255, 254, 0.84); font-size: 1.22rem; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
 
@@ -148,7 +148,7 @@ h3 { font-size: 1.25rem; }
 
 .page-hero { padding: 104px clamp(32px, 6vw, 104px) 96px; background: var(--charcoal); color: var(--white); }
 .page-hero-inner { width: min(1480px, 100%); margin: 0 auto; }
-.page-hero h1 { max-width: 1050px; font-size: clamp(3rem, 5vw, 5.4rem); }
+.page-hero h1 { max-width: 1050px; font-size: clamp(2.61rem, 4.35vw, 4.7rem); }
 .page-lead { max-width: 900px; margin: 24px 0 0; color: rgba(254, 255, 254, 0.82); font-size: 1.22rem; }
 .credential-list, .plain-list { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
 .credential-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -184,7 +184,7 @@ h3 { font-size: 1.25rem; }
 .login-brand::after { position: absolute; right: -110px; bottom: -130px; width: 470px; height: 470px; border: 90px solid var(--orange); border-radius: 50%; content: ""; opacity: 0.85; }
 .login-brand-logo { position: relative; z-index: 1; width: 190px; filter: brightness(0) invert(1); }
 .login-message { position: relative; z-index: 1; max-width: 680px; }
-.login-message h1 { font-size: clamp(3rem, 5vw, 5.7rem); }
+.login-message h1 { font-size: clamp(2.61rem, 4.35vw, 4.96rem); }
 .login-message p { max-width: 600px; margin: 24px 0 0; color: rgba(254, 255, 254, 0.76); font-size: 1.1rem; }
 .login-back { position: relative; z-index: 1; color: var(--gold); font-weight: 750; }
 .login-panel { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 40px; background: var(--white); }
@@ -248,13 +248,13 @@ h3 { font-size: 1.25rem; }
   .hero, .hero-content { min-height: 620px; }
   .hero-scrim { background: linear-gradient(90deg, rgba(39, 49, 56, 0.97), rgba(39, 49, 56, 0.68)); }
   .hero-content { justify-content: flex-end; padding-top: 64px; padding-bottom: 58px; }
-  .hero h1 { font-size: 2.9rem; }
+  .hero h1 { font-size: 2.52rem; }
   .hero-copy, .page-lead { font-size: 1.06rem; }
   .hero-actions, .hero-actions .button { width: 100%; }
   .section, .content-section { width: min(100% - 40px, 1480px); padding: 68px 0; }
   .dark-band, .soft-band, .band, .cta-band, .resilience-band { padding: 68px 20px; }
   .page-hero { padding: 76px 20px 70px; }
-  .page-hero h1 { font-size: 2.55rem; }
+  .page-hero h1 { font-size: 2.22rem; }
   .proof-strip, .solution-grid, .service-grid, .path-grid, .fact-grid, .practice-grid, .principles, .flow-grid, .credential-list, .resilience-grid, .site-footer { grid-template-columns: 1fr; }
   .proof-strip div { min-height: 0; border-right: 0; border-bottom: 1px solid var(--line); }
   .proof-strip div:last-child { border-bottom: 0; }
@@ -272,7 +272,7 @@ h3 { font-size: 1.25rem; }
   .portfolio-detail { grid-column: 1 / -1; }
   .login-brand { min-height: 390px; padding: 32px 24px; }
   .login-brand-logo { width: 150px; }
-  .login-message h1 { font-size: 2.8rem; }
+  .login-message h1 { font-size: 2.44rem; }
   .login-panel { padding: 50px 20px; }
   .login-card h2 { font-size: 2.2rem; }
   .site-footer { gap: 28px; padding: 44px 20px; }
