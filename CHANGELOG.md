@@ -2,6 +2,12 @@
 
 Tectori website changes are recorded here.
 
+## 2026-08-22
+
+- Corrected the Legal Self-Help Kit card to cover all fifty states and the
+  District of Columbia, after the kit shipped its all-states expansion the same
+  morning and left the card understating it by forty-nine states.
+
 ## 2026-08-20
 
 - Added Landing Gear and the Legal Self-Help Kit as the sixth and seventh free
