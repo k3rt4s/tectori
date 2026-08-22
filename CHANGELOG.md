@@ -2,6 +2,27 @@
 
 Tectori website changes are recorded here.
 
+## 2026-08-20
+
+- Added Landing Gear and the Legal Self-Help Kit as the sixth and seventh free
+  tools, each linked to its GitHub repository with its language and license.
+- Corrected the Landing Gear card to describe the finished twelve-chapter
+  manual, covering interviewing and offers instead of a chapter it does not
+  have.
+- Reduced the largest heading size on every page so a page title no longer
+  outweighs the tagline beneath it.
+- Gave every interior page header the hero image treatment, rolling off the
+  band image highlights so the graphic reads through a lighter gradient and
+  still clears WCAG contrast.
+- Made the client login page indexable and hardened it with a content security
+  policy that permits no connections, no form submission, and no third party
+  resources.
+- Scoped the login privacy claim to Tectori, since a visitor's own browser or
+  password manager can still save what they type.
+- Versioned the stylesheet and script URLs so a returning visitor gets the
+  current design rather than a cached one, which is the only cache control
+  GitHub Pages allows.
+
 ## 2026-08-10
 
 - Allowed `Google-Extended` so the site is eligible for citation in Gemini
