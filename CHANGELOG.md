@@ -2,6 +2,24 @@
 
 Tectori website changes are recorded here.
 
+## 2026-08-23
+
+- Started counting visitors. Every public page now loads two things from other
+  companies: the Cloudflare Web Analytics beacon, which reports page views,
+  top pages, referrers, countries, and browsers without cookies or any storage
+  on the visitor's device, and the Scarf pixel, an image request that sends the
+  visitor's IP address to Scarf so Scarf can name the organization that address
+  belongs to. The client login page loads neither and its content security
+  policy is untouched.
+- Rewrote the privacy policy in the same change, because three of its sentences
+  became false the moment the first request fired. It no longer claims the site
+  runs no analytics, uses no tracking scripts, or loads nothing from third
+  party services. It names both companies, describes what each receives, states
+  plainly that a visitor reading from a workplace network may have their
+  employer's name reach Tectori, and adds a section covering Do Not Track,
+  third party blocking, and how to request access or deletion. New effective
+  date, August 23, 2026.
+
 ## 2026-08-22
 
 - Rewrote the Fortivra description on the solutions page from the product's
