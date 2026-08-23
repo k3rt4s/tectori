@@ -1,8 +1,18 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-08-22 21:11
+ACTIVE THREAD: 2026-08-23 12:50
 
 ## In Progress
+
+- Site traffic statistics decision, brief at `C:\Code_data\tectori\WEBSITE_PROMPT.md`.
+  Jon wants visitors per page, referrers, and where possible visiting
+  organizations. Research Scarf, Cloudflare proxy, privacy-first scripts, and
+  doing nothing, then put the choice to Jon with the draft privacy.html wording
+  for each. No tracking resource goes on any page until he has chosen.
+  `docs/login.html` is out of scope regardless of the choice.
+  - Started 2026-08-23. Jon will export the Search Console and Bing reports
+    later; they land in `C:\Code_data\tectori\stats\` with the export date
+    in the filename.
 
 - Discovery and demand session, brief at `C:\Code_data\tectori\MORNING_PROMPT.md`.
   Jon confirmed on 2026-08-22: GBP first, then LinkedIn edits and the launch
