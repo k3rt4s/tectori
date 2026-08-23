@@ -57,6 +57,7 @@ h3 { font-size: 1.25rem; }
 .hero h1 { max-width: 970px; font-size: clamp(2.35rem, 4.07vw, 4.55rem); }
 .hero-copy { max-width: 790px; margin: 24px 0 0; color: rgba(254, 255, 254, 0.84); font-size: 1.22rem; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+.action-row { display: flex; flex-wrap: wrap; gap: 12px; }
 
 .eyebrow { margin: 0 0 14px; color: var(--orange-text); font-size: 0.78rem; font-weight: 850; letter-spacing: 0; text-transform: uppercase; }
 .hero .eyebrow, .page-hero .eyebrow, .dark-band .eyebrow, .cta-band .eyebrow { color: var(--gold); }
@@ -86,6 +87,7 @@ h3 { font-size: 1.25rem; }
 .prose { max-width: 880px; }
 .prose p { margin: 0 0 20px; color: var(--muted); font-size: 1.06rem; }
 .prose p:last-child { margin-bottom: 0; }
+.prose .action-row { margin: 0 0 20px; }
 
 .dark-band, .soft-band, .band, .cta-band, .resilience-band { padding: 96px clamp(32px, 5vw, 92px); }
 .dark-band, .cta-band { background: var(--charcoal); color: var(--white); }
@@ -250,7 +252,7 @@ h3 { font-size: 1.25rem; }
   .hero-content { justify-content: flex-end; padding-top: 64px; padding-bottom: 58px; }
   .hero h1 { font-size: 2.27rem; }
   .hero-copy, .page-lead { font-size: 1.06rem; }
-  .hero-actions, .hero-actions .button { width: 100%; }
+  .hero-actions, .hero-actions .button, .action-row, .action-row .button { width: 100%; }
   .section, .content-section { width: min(100% - 40px, 1480px); padding: 68px 0; }
   .dark-band, .soft-band, .band, .cta-band, .resilience-band { padding: 68px 20px; }
   .page-hero { padding: 76px 20px 70px; background-image: linear-gradient(90deg, rgba(39, 49, 56, 0.75) 0%, rgba(39, 49, 56, 0.55) 100%), url("assets/tectori-band.jpg"); }
