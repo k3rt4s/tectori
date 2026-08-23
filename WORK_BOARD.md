@@ -2,6 +2,10 @@
 
 ## In Progress
 
+- Next thread brief: `C:\Code_data\tectori\WEBSITE_PROMPT_2026-08-24.md`.
+  Read it before starting. It carries the scope, what shipped on 2026-08-23,
+  the open items in order, and the review and push sequence.
+
 - Site analytics is deployed. Pushed to main at 1f6b705 on 2026-08-23 and
   confirmed serving on the live site. The Cloudflare Web Analytics beacon and
   the Scarf pixel are on all fourteen public pages, `docs/login.html` has
