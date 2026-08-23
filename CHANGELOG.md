@@ -4,6 +4,11 @@ Tectori website changes are recorded here.
 
 ## 2026-08-22
 
+- Added a call path for visitors who would rather ring than write: the contact
+  page now leads with a call button beside the email button and says a call is
+  the fastest path, and every hero and closing call to action that offered a
+  conversation by email now offers the phone beside it. Contact details stay
+  character for character what the footer already carried.
 - Corrected the Legal Self-Help Kit card to cover all fifty states and the
   District of Columbia, after the kit shipped its all-states expansion the same
   morning and left the card understating it by forty-nine states.

@@ -11,10 +11,6 @@ ACTIVE THREAD: 2026-08-22 21:11
   - Step 1: Google Business Profile. Owner task, Jon works from the written
     instructions in `Tectori_Search_Setup.md`. Started 2026-08-22, video
     verification pending until Google completes it.
-  - Site change: call button beside email on contact.html, call option paired
-    with the hero "Start a conversation" CTAs. Branch `feature/call-path`.
-    A push to main deploys; it needs its own explicit yes, separate from any
-    review.
   - Step 2: LinkedIn company page (5 items) and personal profile (6 items) as
     paste-ready copy from the checklist. The HCA line is Jon's to confirm,
     nothing unconfirmed goes on a public profile.
