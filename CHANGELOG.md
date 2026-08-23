@@ -9,8 +9,10 @@ Tectori website changes are recorded here.
   top pages, referrers, countries, and browsers without cookies or any storage
   on the visitor's device, and the Scarf pixel, an image request that sends the
   visitor's IP address to Scarf so Scarf can name the organization that address
-  belongs to. The client login page loads neither and its content security
-  policy is untouched.
+  belongs to. The pixel sends only the site's own address as the referrer, so
+  Scarf learns that a visit happened and who it came from, not which page was
+  read. The client login page loads neither and its content security policy is
+  untouched.
 - Rewrote the privacy policy in the same change, because three of its sentences
   became false the moment the first request fired. It no longer claims the site
   runs no analytics, uses no tracking scripts, or loads nothing from third
