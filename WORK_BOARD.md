@@ -17,9 +17,11 @@ ACTIVE THREAD: 2026-08-22 21:11
   - Step 3: publish the launch post from `Posts for Tectori.txt` to the company
     page, Jon reshares from his personal profile the same day, then feature it.
     The Fortivra announcement is the second page post.
-  - Step 4: write the checklist asset, in the spirit of "10 questions your
-    examiner will ask about your AI use", for the page and a later featured
-    slot.
+  - Step 4: checklist asset drafted in `C:\Code_data\tectori\Paste_Copy_2026-08-22.md`
+    section 6, approved by Jon 2026-08-22. Owner task: post it from the
+    company page after the launch post has had a few weeks, then feature it.
+  - Shipped 2026-08-22: the call path on contact.html and every hero and
+    cta-band, main at bdf6e80, logged in CHANGELOG.md.
 
 ## Pending
 
