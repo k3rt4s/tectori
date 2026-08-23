@@ -4,6 +4,12 @@ Tectori website changes are recorded here.
 
 ## 2026-08-22
 
+- Rewrote the Fortivra description on the solutions page from the product's
+  README: Fortivra Discover as the first release, the full list of what
+  authorized read-only collection identifies and reports, and the OWASP GenAI
+  LLM Top 10 for 2026 named as the assessment roadmap's risk taxonomy across
+  all ten areas, stated as coverage being built rather than as certification
+  or proof that a control works.
 - Added a call path for visitors who would rather ring than write: the contact
   page now leads with a call button beside the email button and says a call is
   the fastest path, and every hero and closing call to action that offered a
