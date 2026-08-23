@@ -4,7 +4,7 @@ ACTIVE THREAD: 2026-08-23 12:50
 
 ## In Progress
 
-- Site analytics, branch `feature/site-analytics`, built and waiting on two IDs.
+- Site analytics, branch `feature/site-analytics`, waiting on the Scarf id.
   Decided by Jon 2026-08-23, against the recommendation on Scarf, and
   reconfirmed in plain terms before anything was written. Research and the
   numbers behind the options are at
@@ -16,12 +16,18 @@ ACTIVE THREAD: 2026-08-23 12:50
   - Jon's signup instructions for both accounts are written out at
     `C:\Code_data\tectori\Tectori_Analytics_Setup.md`, including what each
     tool will and will not show him in the first week.
-  - YOUR NEXT ACTION: get the two IDs from Jon and swap them in. Cloudflare
-    dashboard, Analytics, Web Analytics, Add a site for the `www.tectori.com`
-    hostname, which yields a site token. Scarf, the app dashboard at
-    `app.scarf.sh`, create a pixel, which yields a pixel id. Replace `CF_BEACON_TOKEN` and `SCARF_PIXEL_ID` on all
-    fourteen pages. This branch must not reach main with a placeholder in it,
-    because main is the live site.
+  - Cloudflare done at 593d826. Real site token set on all fourteen pages in
+    the `type=module` beacon form Cloudflare publishes. That token is public by
+    design and ships in the page HTML, so it is not a credential. Two traps
+    cost time and are written up in the setup doc: Cloudflare blocks writes
+    until the account email is verified and shows no error anywhere in the
+    interface when it does, and the hostname message box in the wizard is a
+    control that must be clicked before Done comes alive.
+  - YOUR NEXT ACTION: get the Scarf pixel id from Jon and replace
+    `SCARF_PIXEL_ID` on all fourteen pages. Scarf, the app dashboard at
+    `app.scarf.sh`, Tools, Pixels, Copy Pixel Snippet, the id is the value
+    after `x-pxid=`. This branch must not reach main with that placeholder in
+    it, because main is the live site.
   - Then, in order: ask Jon whether to run pre_push_review.py, report the
     triage, ask separately for an explicit push, log to CHANGELOG.md, and
     check the live pages actually fire both requests before calling it done.
