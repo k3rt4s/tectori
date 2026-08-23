@@ -1,7 +1,5 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-08-23 12:50
-
 ## In Progress
 
 - Site analytics is deployed. Pushed to main at 1f6b705 on 2026-08-23 and
