@@ -4,15 +4,26 @@ ACTIVE THREAD: 2026-08-23 12:50
 
 ## In Progress
 
-- Site traffic statistics decision, brief at `C:\Code_data\tectori\WEBSITE_PROMPT.md`.
-  Jon wants visitors per page, referrers, and where possible visiting
-  organizations. Research Scarf, Cloudflare proxy, privacy-first scripts, and
-  doing nothing, then put the choice to Jon with the draft privacy.html wording
-  for each. No tracking resource goes on any page until he has chosen.
-  `docs/login.html` is out of scope regardless of the choice.
-  - Started 2026-08-23. Jon will export the Search Console and Bing reports
-    later; they land in `C:\Code_data\tectori\stats\` with the export date
-    in the filename.
+- Site analytics, branch `feature/site-analytics`, built and waiting on two IDs.
+  Decided by Jon 2026-08-23, against the recommendation on Scarf, and
+  reconfirmed in plain terms before anything was written. Research and the
+  numbers behind the options are at
+  `C:\Code_data\tectori\stats\analytics_options_research_2026-08-23.md`.
+  - Built at ea9bdad: the Cloudflare Web Analytics beacon and the Scarf pixel
+    on all fourteen public pages, plus the privacy.html rewrite in the same
+    commit. `docs/login.html` has neither and its CSP is untouched. Verified
+    15 of 15 pages for coverage, exclusion, and tag balance.
+  - YOUR NEXT ACTION: get the two IDs from Jon and swap them in. Cloudflare
+    dashboard, Analytics, Web Analytics, Add a site for the `www.tectori.com`
+    hostname, which yields a site token. Scarf, the app dashboard at
+    `app.scarf.sh`, create a pixel, which yields a pixel id. Replace `CF_BEACON_TOKEN` and `SCARF_PIXEL_ID` on all
+    fourteen pages. This branch must not reach main with a placeholder in it,
+    because main is the live site.
+  - Then, in order: ask Jon whether to run pre_push_review.py, report the
+    triage, ask separately for an explicit push, log to CHANGELOG.md, and
+    check the live pages actually fire both requests before calling it done.
+  - Jon will export the Search Console and Bing reports later; they land in
+    `C:\Code_data\tectori\stats\` with the export date in the filename.
 
 - Discovery and demand session, brief at `C:\Code_data\tectori\MORNING_PROMPT.md`.
   Jon confirmed on 2026-08-22: GBP first, then LinkedIn edits and the launch
