@@ -42,6 +42,13 @@ ACTIVE THREAD: 2026-08-23 12:50
     company page after the launch post has had a few weeks, then feature it.
   - Shipped 2026-08-22: the call path on contact.html and every hero and
     cta-band, main at bdf6e80, logged in CHANGELOG.md.
+  - Confirmed live 2026-08-23: `www.tectori.com/solutions.html` serves the
+    d4a0b29 Fortivra rewrite byte for byte, and the deployed styles.css matches
+    the repo copy. Below 620px the call and email buttons go full width and
+    stack, they clear the 46px touch target, and nothing on the page can
+    overflow the 390px floor in ui-standards.md. Read from the deployed CSS and
+    markup, not rendered in a browser, so a font-driven wrap is the one thing
+    this check cannot see.
 
 ## Pending
 
