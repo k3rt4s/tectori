@@ -13,6 +13,9 @@ ACTIVE THREAD: 2026-08-23 12:50
     on all fourteen public pages, plus the privacy.html rewrite in the same
     commit. `docs/login.html` has neither and its CSP is untouched. Verified
     15 of 15 pages for coverage, exclusion, and tag balance.
+  - Jon's signup instructions for both accounts are written out at
+    `C:\Code_data\tectori\Tectori_Analytics_Setup.md`, including what each
+    tool will and will not show him in the first week.
   - YOUR NEXT ACTION: get the two IDs from Jon and swap them in. Cloudflare
     dashboard, Analytics, Web Analytics, Add a site for the `www.tectori.com`
     hostname, which yields a site token. Scarf, the app dashboard at
