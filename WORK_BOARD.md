@@ -4,37 +4,25 @@ ACTIVE THREAD: 2026-08-23 12:50
 
 ## In Progress
 
-- Site analytics, branch `feature/site-analytics`, waiting on the Scarf id.
-  Decided by Jon 2026-08-23, against the recommendation on Scarf, and
-  reconfirmed in plain terms before anything was written. Research and the
-  numbers behind the options are at
-  `C:\Code_data\tectori\stats\analytics_options_research_2026-08-23.md`.
-  - Built at ea9bdad: the Cloudflare Web Analytics beacon and the Scarf pixel
-    on all fourteen public pages, plus the privacy.html rewrite in the same
-    commit. `docs/login.html` has neither and its CSP is untouched. Verified
-    15 of 15 pages for coverage, exclusion, and tag balance.
-  - Jon's signup instructions for both accounts are written out at
-    `C:\Code_data\tectori\Tectori_Analytics_Setup.md`, including what each
-    tool will and will not show him in the first week.
-  - Cloudflare done at 593d826. Real site token set on all fourteen pages in
-    the `type=module` beacon form Cloudflare publishes. That token is public by
-    design and ships in the page HTML, so it is not a credential. Two traps
-    cost time and are written up in the setup doc: Cloudflare blocks writes
-    until the account email is verified and shows no error anywhere in the
-    interface when it does, and the hostname message box in the wizard is a
-    control that must be clicked before Done comes alive.
-  - Scarf done at 7993a4f. Real pixel id set on all fourteen pages. No
-    placeholder remains anywhere in the tree, and CHANGELOG.md carries the
-    entry.
-  - YOUR NEXT ACTION: the branch is complete and unpushed. Ask Jon whether to
-    run pre_push_review.py, report the triage, then ask separately for an
-    explicit push. A yes to the review is not a yes to the push, and the merge
-    to main is the deploy.
-  - After the push, load two live pages with the browser network tab open and
-    confirm the beacon and the pixel actually fire, and confirm login.html
-    fires neither. Not done until that check passes.
+- Site analytics is deployed. Pushed to main at 1f6b705 on 2026-08-23 and
+  confirmed serving on the live site. The Cloudflare Web Analytics beacon and
+  the Scarf pixel are on all fourteen public pages, `docs/login.html` has
+  neither and its CSP is untouched, and privacy.html was rewritten in the same
+  commit as the tracking. The options research is at
+  `C:\Code_data\tectori\stats\analytics_options_research_2026-08-23.md` and
+  Jon's account setup notes, including the two Cloudflare wizard traps, are at
+  `C:\Code_data\tectori\Tectori_Analytics_Setup.md`.
+  - Only owner check left: open a public page and the login page in a browser
+    with the network tab showing, confirm the beacon and the pixel fire on the
+    first and neither fires on the second. Fetching the deployed HTML already
+    confirms the tags ship and both endpoints answer, so this is a browser
+    confirmation, not a suspected problem.
+  - One Scarf hit on 2026-08-23 came from this workstation's verification
+    request, not a visitor. Ignore the first datapoint.
   - Jon will export the Search Console and Bing reports later; they land in
-    `C:\Code_data\tectori\stats\` with the export date in the filename.
+    `C:\Code_data\tectori\stats\` with the export date in the filename. The
+    brief flags eight pages reported discovered but not indexed on 2026-08-10,
+    so check whether that count moved.
 
 - Discovery and demand session, brief at `C:\Code_data\tectori\MORNING_PROMPT.md`.
   Jon confirmed on 2026-08-22: GBP first, then LinkedIn edits and the launch
