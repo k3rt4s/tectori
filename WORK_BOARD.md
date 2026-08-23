@@ -23,14 +23,16 @@ ACTIVE THREAD: 2026-08-23 12:50
     until the account email is verified and shows no error anywhere in the
     interface when it does, and the hostname message box in the wizard is a
     control that must be clicked before Done comes alive.
-  - YOUR NEXT ACTION: get the Scarf pixel id from Jon and replace
-    `SCARF_PIXEL_ID` on all fourteen pages. Scarf, the app dashboard at
-    `app.scarf.sh`, Tools, Pixels, Copy Pixel Snippet, the id is the value
-    after `x-pxid=`. This branch must not reach main with that placeholder in
-    it, because main is the live site.
-  - Then, in order: ask Jon whether to run pre_push_review.py, report the
-    triage, ask separately for an explicit push, log to CHANGELOG.md, and
-    check the live pages actually fire both requests before calling it done.
+  - Scarf done at 7993a4f. Real pixel id set on all fourteen pages. No
+    placeholder remains anywhere in the tree, and CHANGELOG.md carries the
+    entry.
+  - YOUR NEXT ACTION: the branch is complete and unpushed. Ask Jon whether to
+    run pre_push_review.py, report the triage, then ask separately for an
+    explicit push. A yes to the review is not a yes to the push, and the merge
+    to main is the deploy.
+  - After the push, load two live pages with the browser network tab open and
+    confirm the beacon and the pixel actually fire, and confirm login.html
+    fires neither. Not done until that check passes.
   - Jon will export the Search Console and Bing reports later; they land in
     `C:\Code_data\tectori\stats\` with the export date in the filename.
 
