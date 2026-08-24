@@ -15,6 +15,11 @@ Open `docs/index.html` in a browser to review the site locally.
 - `docs/` contains the public website files served by GitHub Pages.
 - `docs/assets/` contains website-owned image assets.
 - `docs/solutions.html` presents the incubated Tectori solution portfolio.
+- `docs/service-*.html` are the six individual service line pages, one per
+  anchored section on `docs/services.html`, which remains the hub.
+- `docs/resources.html` indexes the site reference material and defines the
+  terms used across it. `docs/trust.html` states how the practice operates,
+  how client material is handled, and how to report a problem.
 - `docs/contact.html` and `docs/faq.html` provide direct conversion and
   answer-oriented search pages.
 - `docs/login.html` is a static portal preview with no authentication, storage,
