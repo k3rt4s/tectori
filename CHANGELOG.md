@@ -39,6 +39,15 @@ Tectori website changes are recorded here.
   services.html and audit-ready-it.html, so no new CSS was needed.
 - No third party resource was added or removed anywhere, so `docs/privacy.html`
   needed no change in this release.
+- The pre-push review raised five findings. One was real and pre-existing, the
+  `docs/solutions.html` footer omitted its own Solutions link, now fixed. The
+  README layout section gained a line for the new pages. The rest were the two
+  known false positives plus checks that passed on inspection: canonical and
+  og:url match on every page, and privacy.html already reads "Every page except
+  the client login page", which covers the new pages without a change.
+- Merged to main at b46c238 and confirmed live on www.tectori.com. All eight
+  new pages return 200 and match the repo copies byte for byte once line
+  endings are normalized. The six services.html anchors still resolve.
 
 ## 2026-08-23
 

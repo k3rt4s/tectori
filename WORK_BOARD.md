@@ -1,23 +1,24 @@
-ACTIVE THREAD: 2026-08-24 (content release: service pages, Resources, Trust)
-
 # WORK_BOARD
 
 ## In Progress
 
-- The content release is committed but NOT pushed. The branch is
-  `feature/content-release-service-pages`. Eight new pages: six service
-  pages, plus resources.html and trust.html. services.html keeps all six
-  anchors and links out to each page. Resources and Trust are footer only on
-  every page, the top navigation is unchanged at nine items, and the sitemap
-  carries all eight. No styles or scripts changed, so the cache versions are
-  untouched. Your next action: ask Jon whether to run pre_push_review.py, run
-  it if he says yes and report the triage rather than the raw output, then
-  ask for the push as a separate question. The merge to main is the deploy.
-  After pushing, confirm on www.tectori.com rather than in the repo.
+- Content release shipped and confirmed live. Merged to main at b46c238 on
+  2026-08-24 and serving on www.tectori.com. Six service pages, plus
+  resources.html and trust.html, all returning 200 and matching the repo
+  copies byte for byte once line endings are normalized. services.html keeps
+  all six anchored sections and each links out to its page, so no inbound
+  anchor link broke. Resources and Trust are footer only, the top navigation
+  is unchanged at nine items, and the sitemap carries 23 urls. No styles or
+  scripts changed, so the cache versions stay at v=20260822 and v=20260820.
+  The facts on trust.html, where engagement material lives, the 30 day return
+  or destroy window, the four practice security controls, and the 48 hour
+  email response with a phone path for urgent reports, came from Jon on
+  2026-08-24. If any of them stops being true, that page has to change.
 
 - Site analytics is deployed. Pushed to main at 1f6b705 on 2026-08-23 and
   confirmed serving on the live site. The Cloudflare Web Analytics beacon and
-  the Scarf pixel are on all fourteen public pages, `docs/login.html` has
+  the Scarf pixel are on every public page, twenty two of them after the
+  2026-08-24 content release, `docs/login.html` has
   neither and its CSP is untouched, and privacy.html was rewritten in the same
   commit as the tracking. The options research is at
   `C:\Code_data\tectori\stats\analytics_options_research_2026-08-23.md` and
