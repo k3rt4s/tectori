@@ -64,7 +64,15 @@
 
 ## Pending
 
-- Nothing pending.
+- Next release: a real 404 page and structured data on the nine pages that
+  lack it. `docs/404.html` does not exist, so GitHub Pages serves its own
+  unbranded 404. JSON-LD is on index.html and faq.html only; services.html,
+  the six service pages, about.html, and contact.html have none, which
+  matters while Search Console still reports pages discovered and not
+  indexed. The orchestrator brief, including the worker dispatch plan and
+  what would make a worker's output wrong, is at
+  `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-08-24.md`. Confirm the
+  schema shape with Jon before dispatching anything.
 
 ## Questions for Jon
 
