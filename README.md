@@ -24,6 +24,11 @@ Open `docs/index.html` in a browser to review the site locally.
   answer-oriented search pages.
 - `docs/login.html` is a static portal preview with no authentication, storage,
   or network submission.
+- `docs/404.html` is the not found page GitHub Pages serves for any address
+  that does not exist. It is noindex and stays out of `docs/sitemap.xml` and the
+  navigation. Its links and assets are root-absolute so the page still renders
+  when Pages serves it for a deep path, which means it needs a server rather
+  than a `file://` open to review locally.
 - `SEARCH_SETUP.md` covers Google, Bing, and search-grounded assistant setup.
 - `WORK_BOARD.md` tracks active project work.
 - `CHANGELOG.md` records completed changes.
