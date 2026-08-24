@@ -4,6 +4,26 @@ Tectori website changes are recorded here.
 
 ## 2026-08-23
 
+- Brought the About and Home copy in line with the current resumes. The stated
+  experience count moved from 19 years to 20 years in four places, the About
+  meta description, the founder paragraph, the About statistic tile, and the
+  Home proof strip. All five resumes state 20 plus years.
+- Added a paragraph on the HCA Healthcare security architect and AI automation
+  role to the founder narrative, the most recent employment and the closest one
+  to the work this site sells. It carries the same sentence the Ncontracts
+  paragraph uses, that the company is part of the work history and is not
+  represented as a Tectori client.
+- Added two items to the credentials list, SANS SEC545, GenAI and LLM
+  Application Security, 2026, which supports the AI governance pages and
+  appeared nowhere on the site, and the 2022 Nashville Security Leader of the
+  Year Top 3 finalist recognition. The PCI internal assessor entry now names
+  where it was held, Ingo Money, and keeps the name PCI SSC issues, Internal
+  Security Assessor. The list label widened to cover training and recognition.
+- Corrected the boot camp school list to match the resumes: Vanderbilt,
+  Columbia, NYU, the University of Pennsylvania, and Georgia Tech.
+- No styles or scripts changed, so the cache versions are unchanged. No pages
+  were added, so the sitemap, navigation, and footer are unchanged. Nothing in
+  this change talks to a third party, so the privacy policy is unchanged.
 - Started counting visitors. Every public page now loads two things from other
   companies: the Cloudflare Web Analytics beacon, which reports page views,
   top pages, referrers, countries, and browsers without cookies or any storage

@@ -1,41 +1,6 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-08-23 evening
-
 ## In Progress
-
-- Resume alignment pass on the site copy, branch
-  `feature/resume-alignment-site-copy`, not yet pushed. Compared the five
-  resumes Jon keeps outside this repo against the live copy and applied what
-  Jon approved on 2026-08-23:
-  - 19 years to 20 years in four places, the about.html meta description, the
-    about.html prose line, the about.html stat tile, and the index.html proof
-    strip. All five resumes say 20 plus years.
-  - The PCI credential on about.html keeps its original name, Internal Security
-    Assessor (ISA), and now names where it was held, Ingo Money. Jon first said
-    QSA, matching the resumes, and changed to ISA when pre_push_review pointed
-    out that PCI SSC issues ISA to internal employees and reserves QSA for
-    external assessor companies. Open item for Jon, not for this repo: all five
-    resumes say Internal PCI Qualified Security Assessor and should be
-    corrected.
-  - Added SANS SEC545, GenAI and LLM Application Security, 2026, and the
-    2022 Nashville Security Leader of the Year Top 3 finalist line to the
-    credentials list. Its aria-label widened to cover training and recognition.
-  - Added an HCA Healthcare paragraph to the founder narrative, named, with
-    the same not-a-Tectori-client sentence the Ncontracts paragraph carries.
-  - Boot camp schools now match the resumes: Vanderbilt, Columbia, NYU, Penn,
-    Georgia Tech.
-  - No CSS or JS changed, so no `?v=` bump. No new pages, so no sitemap, nav,
-    or footer change. No third party resources touched, so privacy.html is
-    untouched.
-  - Left alone deliberately: the exec resume claims a client outcome through
-    an MSP partner, a 140,000 email index cut 80 percent and 37 percent in
-    license savings. The site claims no client results anywhere and
-    case-study.html says so explicitly. Putting that number on the site is
-    Jon's call and a confidentiality question. Not raised with him yet.
-  - Next action for you: ask Jon whether to run pre_push_review.py, run it if
-    he says yes, report the triage, then ask separately for the push. The
-    merge to main is the deploy.
 
 - Next thread brief: `C:\Code_data\tectori\WEBSITE_PROMPT_2026-08-24.md`.
   Read it before starting. It carries the scope, what shipped on 2026-08-23,
@@ -95,4 +60,13 @@ ACTIVE THREAD: 2026-08-23 evening
 
 ## Questions for Jon
 
-- None.
+- The five resumes outside this repo say Internal PCI Qualified Security
+  Assessor. PCI SSC issues Internal Security Assessor (ISA) to employees and
+  reserves Qualified Security Assessor for external assessor companies. The
+  site says ISA. The resumes should be corrected to match, which is work in
+  another folder, not in this repo.
+- The executive resume claims a client outcome delivered through an MSP
+  partner, a 140,000 email index cut 80 percent and 37 percent in license
+  savings. The site claims no client results anywhere and case-study.html
+  says so explicitly. Jon chose on 2026-08-23 to leave it off the site.
+  Recorded so a later thread does not rediscover it as a gap.
