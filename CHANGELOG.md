@@ -4,6 +4,41 @@ Tectori website changes are recorded here.
 
 ## 2026-08-24
 
+- Shipped a branded 404 page. `docs/404.html` did not exist, so GitHub Pages
+  served its own unbranded 404 to anyone hitting a stale or mistyped link. The
+  page reuses components already shipping, carries both analytics tags like
+  every other public page, and routes the visitor to Services, Free tools, or
+  Contact. It is noindex and follow, out of `sitemap.xml`, and out of the
+  navigation. Its links and assets are root-absolute, because Pages also serves
+  404.html for deep paths and relative paths would resolve against the missing
+  directory and render the page unstyled. Confirmed live: a request to a deep
+  missing path returns 404 and the served body matches the repo copy once line
+  endings are normalized.
+- Added JSON-LD structured data to the nine pages that had none. Each
+  `service-*.html` page gained a `Service` node and a `BreadcrumbList` of Home,
+  Services, this page. `services.html` gained a `CollectionPage` whose
+  `mainEntity` is an `ItemList` of the six services in page order, plus its own
+  `BreadcrumbList`. `about.html` gained an `AboutPage` with a `Person` node for
+  the founder, and `contact.html` a `ContactPage`. Jon chose the shape on
+  2026-08-24, including having about.html declare its own Person at
+  `about.html#person` so `index.html` did not have to change.
+- Every node references the organization by `@id` at
+  `https://www.tectori.com/#organization` rather than repeating it, matching
+  the convention `index.html` set. Every value comes from that page's own
+  title, meta description, or visible text. No `Review`, `AggregateRating`,
+  `offers`, price, or testimonial markup appears anywhere, because the site
+  claims no client results and `case-study.html` says so explicitly.
+- Verified by extracting and parsing every `application/ld+json` block across
+  `docs/`, in the repo and again from the live site: eleven pages carry a
+  block, all parse, none has two, no `@id` conflicts with its page canonical,
+  and every file is still CRLF. Two pre-existing gaps outside this release were
+  found and deliberately left alone: `faq.html`'s `FAQPage` and the
+  `index.html` founder `Person` carry no `@id`.
+- Insert only. No styles, scripts, navigation, footer, or prose changed, so the
+  cache versions stay at `v=20260822` and `v=20260820`. Merged to main at
+  9cd55be and confirmed live on www.tectori.com, with all nine pages matching
+  their repo copies byte for byte once line endings are normalized.
+
 - Shipped the content release. Eight new pages: six individual service pages,
   one per service line, plus a Resources page and a Trust page. Jon chose the
   hub shape, so `services.html` keeps all six anchored sections exactly as they

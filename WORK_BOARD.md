@@ -2,6 +2,17 @@
 
 ## In Progress
 
+- 404 page and structured data shipped and confirmed live. Merged to main
+  at 9cd55be on 2026-08-24. `docs/404.html` now serves for any missing
+  address, including deep paths, and JSON-LD is on all eleven pages that
+  should have it. Every one of the nine new blocks parses from the live
+  site and matches its repo copy once line endings are normalized. Logged
+  in CHANGELOG.md. The brief this ran from is
+  `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-08-24.md` and it is
+  finished. The JSON-LD spec the workers built to, which is what a later
+  change to any of these blocks should match, is at
+  `C:\Code_data\tectori\jsonld_spec_2026-08-24.md`.
+
 - Content release shipped and confirmed live. Merged to main at b46c238 on
   2026-08-24 and serving on www.tectori.com. Six service pages, plus
   resources.html and trust.html, all returning 200 and matching the repo
@@ -64,15 +75,15 @@
 
 ## Pending
 
-- Next release: a real 404 page and structured data on the nine pages that
-  lack it. `docs/404.html` does not exist, so GitHub Pages serves its own
-  unbranded 404. JSON-LD is on index.html and faq.html only; services.html,
-  the six service pages, about.html, and contact.html have none, which
-  matters while Search Console still reports pages discovered and not
-  indexed. The orchestrator brief, including the worker dispatch plan and
-  what would make a worker's output wrong, is at
-  `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-08-24.md`. Confirm the
-  schema shape with Jon before dispatching anything.
+- Optional, small: two pages carry structured data with no `@id`. The
+  `FAQPage` node in `docs/faq.html` and the founder `Person` node nested in
+  the `docs/index.html` Organization block both lack one. Neither is a
+  defect and neither breaks anything today. Giving the index.html founder
+  an `@id` would let `about.html#person` reference one canonical Person
+  instead of declaring its own, which is the shape Jon considered and set
+  aside on 2026-08-24 to keep that release inside its nine pages. Found by
+  the verification pass on 2026-08-24, both pre-existing, both deliberately
+  left alone.
 
 ## Questions for Jon
 
