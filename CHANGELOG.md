@@ -2,6 +2,44 @@
 
 Tectori website changes are recorded here.
 
+## 2026-08-24
+
+- Shipped the content release. Eight new pages: six individual service pages,
+  one per service line, plus a Resources page and a Trust page. Jon chose the
+  hub shape, so `services.html` keeps all six anchored sections exactly as they
+  were and each one now links out to its page. No existing anchor link breaks,
+  which matters because GitHub Pages has no redirects.
+- The six service pages follow one template: hero, who this is for, what the
+  work includes, deliverables expanded a line each, how it supports audit
+  readiness, what the service line is not, and a call to action. The what it is
+  not block is new to the site and states the boundary in public, for example
+  that the compliance service line prepares for the assessor and does not issue
+  an opinion, and that cloud architecture is not a managed service.
+- Every claim on the six pages traces to text already on `services.html`.
+  Nothing new was asserted about experience, clients, or results.
+- Resources indexes what already exists rather than adding assets. Three
+  reading paths by situation, a pointer to Free tools rather than a second copy
+  of it, and a fourteen term plain-language glossary of the vocabulary the rest
+  of the site uses.
+- Trust states how the practice itself operates, since the site claims no
+  client results anywhere. Who you are engaging, where engagement material
+  lives and when it is returned or destroyed, the practice's own security
+  controls, the three third parties this site uses with privacy.html carrying
+  the detail, and how to report a problem. Jon confirmed each of those facts on
+  2026-08-24; none were inferred.
+- Navigation: Resources and Trust are footer only, on Jon's call. The top
+  navigation stays at nine items. Privacy, Terms, and Accessibility set that
+  precedent. The footer on all fourteen existing pages gained both links.
+  `login.html` has no footer and was not touched.
+- `docs/sitemap.xml` gained the eight new pages and every changed page's
+  lastmod moved to 2026-08-24. The login.html entry kept 2026-08-20 because
+  that page did not change.
+- No styles or scripts changed, so the cache versions stay at `v=20260822` and
+  `v=20260820`. The new pages reuse layout components already shipping on
+  services.html and audit-ready-it.html, so no new CSS was needed.
+- No third party resource was added or removed anywhere, so `docs/privacy.html`
+  needed no change in this release.
+
 ## 2026-08-23
 
 - Brought the About and Home copy in line with the current resumes. The stated
