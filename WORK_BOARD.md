@@ -2,9 +2,16 @@
 
 ## In Progress
 
-- Next thread brief: `C:\Code_data\tectori\WEBSITE_PROMPT_2026-08-24.md`.
-  Read it before starting. It carries the scope, what shipped on 2026-08-23,
-  the open items in order, and the review and push sequence.
+- Your job is the content release: individual service pages, a Resources page,
+  and a Trust page. Read `C:\Code_data\tectori\WEBSITE_PROMPT_2026-08-24.md`
+  first, it carries the scope, the house rules, and the review and push
+  sequence. Then confirm the shape with Jon before writing any page, because
+  page scope is product direction. Three things he has not decided yet:
+  whether individual service pages replace the six anchored sections on
+  `docs/services.html` or sit beneath them as a hub, whether Resources and
+  Trust go in the top navigation, already nine items, or only in the footer,
+  and what each page should actually carry. Read services.html before you
+  propose either shape. Branch off current main.
 
 - Site analytics is deployed. Pushed to main at 1f6b705 on 2026-08-23 and
   confirmed serving on the live site. The Cloudflare Web Analytics beacon and
