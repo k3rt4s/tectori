@@ -6,8 +6,8 @@ ACTIVE THREAD: 2026-08-23 evening
 
 - Resume alignment pass on the site copy, branch
   `feature/resume-alignment-site-copy`, not yet pushed. Compared the five
-  resumes in `C:\Users\JDBow\Downloads\Job_Search\Resumes` against the
-  live copy and applied what Jon approved on 2026-08-23:
+  resumes Jon keeps outside this repo against the live copy and applied what
+  Jon approved on 2026-08-23:
   - 19 years to 20 years in four places, the about.html meta description, the
     about.html prose line, the about.html stat tile, and the index.html proof
     strip. All five resumes say 20 plus years.
