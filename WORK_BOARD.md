@@ -11,9 +11,13 @@ ACTIVE THREAD: 2026-08-23 evening
   - 19 years to 20 years in four places, the about.html meta description, the
     about.html prose line, the about.html stat tile, and the index.html proof
     strip. All five resumes say 20 plus years.
-  - The PCI credential on about.html now reads Internal Qualified Security
-    Assessor (QSA), held at Ingo Money. Jon confirmed QSA is the one he holds
-    and that the site was wrong, not the resumes.
+  - The PCI credential on about.html keeps its original name, Internal Security
+    Assessor (ISA), and now names where it was held, Ingo Money. Jon first said
+    QSA, matching the resumes, and changed to ISA when pre_push_review pointed
+    out that PCI SSC issues ISA to internal employees and reserves QSA for
+    external assessor companies. Open item for Jon, not for this repo: all five
+    resumes say Internal PCI Qualified Security Assessor and should be
+    corrected.
   - Added SANS SEC545, GenAI and LLM Application Security, 2026, and the
     2022 Nashville Security Leader of the Year Top 3 finalist line to the
     credentials list. Its aria-label widened to cover training and recognition.
