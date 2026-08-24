@@ -1,17 +1,19 @@
+ACTIVE THREAD: 2026-08-24 (content release: service pages, Resources, Trust)
+
 # WORK_BOARD
 
 ## In Progress
 
-- Your job is the content release: individual service pages, a Resources page,
-  and a Trust page. Read `C:\Code_data\tectori\WEBSITE_PROMPT_2026-08-24.md`
-  first, it carries the scope, the house rules, and the review and push
-  sequence. Then confirm the shape with Jon before writing any page, because
-  page scope is product direction. Three things he has not decided yet:
-  whether individual service pages replace the six anchored sections on
-  `docs/services.html` or sit beneath them as a hub, whether Resources and
-  Trust go in the top navigation, already nine items, or only in the footer,
-  and what each page should actually carry. Read services.html before you
-  propose either shape. Branch off current main.
+- The content release is committed but NOT pushed. The branch is
+  `feature/content-release-service-pages`. Eight new pages: six service
+  pages, plus resources.html and trust.html. services.html keeps all six
+  anchors and links out to each page. Resources and Trust are footer only on
+  every page, the top navigation is unchanged at nine items, and the sitemap
+  carries all eight. No styles or scripts changed, so the cache versions are
+  untouched. Your next action: ask Jon whether to run pre_push_review.py, run
+  it if he says yes and report the triage rather than the raw output, then
+  ask for the push as a separate question. The merge to main is the deploy.
+  After pushing, confirm on www.tectori.com rather than in the repo.
 
 - Site analytics is deployed. Pushed to main at 1f6b705 on 2026-08-23 and
   confirmed serving on the live site. The Cloudflare Web Analytics beacon and
@@ -61,9 +63,7 @@
 
 ## Pending
 
-- Add individual service pages, a Resources page, and a Trust page in a later
-  content release. Privacy, Terms, and Accessibility shipped on 2026-08-06 and
-  are no longer part of this item.
+- Nothing pending.
 
 ## Questions for Jon
 
