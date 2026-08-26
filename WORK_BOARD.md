@@ -2,6 +2,19 @@
 
 ## In Progress
 
+- YOUR NEXT ACTION. Read the orchestrator brief at
+  `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-08-24_B.md` before
+  anything else. It is written for you and it replaces the two briefs
+  before it, which are finished. It tells you what shipped, how to verify
+  anything on the live site, and which board items are Jon's browser work
+  rather than yours.
+  The short version: Pending holds one small optional item and nothing
+  else, and there is no FUTURE_FEATURES.md in this repo, so there is no
+  backlog to pull from. Do not invent a release. Confirm with Jon through
+  the interactive question tool what he wants built, and work from his
+  answer. The brief names two things worth putting in front of him when
+  you ask.
+
 - 404 page and structured data shipped and confirmed live. Merged to main
   at 9cd55be on 2026-08-24. `docs/404.html` now serves for any missing
   address, including deep paths, and JSON-LD is on all eleven pages that
