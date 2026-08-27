@@ -88,6 +88,7 @@
 
 ## Pending
 
+- Investigate whether the Certified Information Security open assessment platform adds value to Tectori positioning or lead-generation strategy. Use it as market/offer research only: assess how the free-tool-to-paid-advisory/training pattern compares with Tectori's Fortivra and security-program messaging, what buyer trust signals or objections it surfaces, and whether any original Tectori content or service offer should be shaped in response. Do not copy CIS language, proprietary methodology, framework mappings, scoring, or report format.
 - Optional, small: two pages carry structured data with no `@id`. The
   `FAQPage` node in `docs/faq.html` and the founder `Person` node nested in
   the `docs/index.html` Organization block both lack one. Neither is a
