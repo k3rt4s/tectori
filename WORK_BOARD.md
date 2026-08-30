@@ -88,7 +88,14 @@
 
 ## Pending
 
-- Investigate whether the Certified Information Security open assessment platform adds value to Tectori positioning or lead-generation strategy. Use it as market/offer research only: assess how the free-tool-to-paid-advisory/training pattern compares with Tectori's Fortivra and security-program messaging, what buyer trust signals or objections it surfaces, and whether any original Tectori content or service offer should be shaped in response. Do not copy CIS language, proprietary methodology, framework mappings, scoring, or report format.
+- Pilot the Evidence Readiness Baseline with the first qualified buyer. The
+  offer and delivery brief were built on 2026-08-30, but the site changes are
+  not deployed. The pilot should keep one defined review boundary and test
+  whether the scope, evidence inventory, findings, and prioritized action list
+  are useful without a maturity score. After the pilot, decide duration,
+  sample size, fixed price, payment terms, and whether the offer remains
+  standalone. Delivery brief:
+  `C:\Code_data\tectori\EVIDENCE_READINESS_BASELINE_OFFER_2026-08-30.md`.
 - Optional, small: two pages carry structured data with no `@id`. The
   `FAQPage` node in `docs/faq.html` and the founder `Person` node nested in
   the `docs/index.html` Organization block both lack one. Neither is a
