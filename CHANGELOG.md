@@ -2,6 +2,49 @@
 
 Tectori website changes are recorded here.
 
+## 2026-08-30
+
+- Built the Evidence Readiness Baseline as a manually delivered,
+  fixed-scope service offer. One examiner request, customer diligence cycle,
+  business process, system, or security-program area defines the review
+  boundary. The offer checks an agreed sample for named owners and current
+  operating records, then separates verified, missing, stale, and unassessed
+  items.
+- Added the offer to `docs/service-compliance-risk.html` with its three-step
+  public path, deliverables, limitations, and contact link. It assigns no
+  maturity score and makes no audit, assessment-opinion, certification, or
+  legal-advice claim.
+- Added a bridge from `docs/tools.html` so the free Security Program Templates
+  remain ungated while buyers who need their records checked can reach the
+  fixed-scope offer. No commercial promotion was added to a client
+  deliverable.
+- Wrote the delivery brief at
+  `C:\Code_data\tectori\EVIDENCE_READINESS_BASELINE_OFFER_2026-08-30.md` with
+  scope, delivery flow, deliverables, exclusions, intake questions, and pilot
+  acceptance criteria. Price, duration, and sample size stay unset until a
+  manually delivered pilot provides evidence for them.
+- Updated only the Tools and Compliance and risk management sitemap dates to
+  2026-08-30. No page, navigation item, style, script, analytics service, or
+  client claim was added.
+- Verified both changed pages locally. They return 200, all local references
+  and the cross-page fragment resolve, JSON-LD still parses, IDs remain unique,
+  and the browser console is clean. At 1920, 1366, and 390 pixels the new
+  content has no horizontal overflow; the three offer steps stay in one row on
+  desktop and laptop and stack at phone width. Nothing was pushed or deployed.
+
+## 2026-08-29
+
+- Completed market and offer research on Certified Information Security's
+  free assessment platform. The useful lesson is its low-friction progression
+  from a capable free asset to short paid labs and larger training, not its
+  assessment design. Tectori should preserve its operating-evidence,
+  explicit-coverage, and no-certification distinctions.
+- Added a service-offer backlog item for a fixed-scope, practitioner-led
+  Evidence Readiness Baseline. The supporting content candidate is an original
+  `A score is not evidence` article or worksheet. No public-site or Fortivra
+  change was made or approved. The research note is at
+  `C:\Code_data\tectori\certified_information_security_assessment_positioning_2026-08-29.md`.
+
 ## 2026-08-24
 
 - Shipped a branded 404 page. `docs/404.html` did not exist, so GitHub Pages
