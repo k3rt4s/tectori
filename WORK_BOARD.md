@@ -89,10 +89,11 @@
 ## Pending
 
 - Pilot the Evidence Readiness Baseline with the first qualified buyer. The
-  offer and delivery brief were built on 2026-08-30, but the site changes are
-  not deployed. The pilot should keep one defined review boundary and test
-  whether the scope, evidence inventory, findings, and prioritized action list
-  are useful without a maturity score. After the pilot, decide duration,
+  offer and delivery brief were built on 2026-08-30 and the site changes went
+  live on 2026-08-31, verified on the deployed page. The pilot should keep one
+  defined review boundary and test whether the scope, evidence inventory,
+  findings, and prioritized action list are useful without a maturity score.
+  After the pilot, decide duration,
   sample size, fixed price, payment terms, and whether the offer remains
   standalone. Delivery brief:
   `C:\Code_data\tectori\EVIDENCE_READINESS_BASELINE_OFFER_2026-08-30.md`.
