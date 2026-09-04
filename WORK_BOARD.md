@@ -3,23 +3,99 @@
 ## In Progress
 
 - YOUR NEXT ACTION. Read the orchestrator brief at
-  `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-09-03.md` before anything
-  else. It is written for you and it replaces every brief before it, all of
-  which are finished.
-  The job: ingest the 2026-09-03 SEO sales call at
-  `C:\Code_Data\workspace\website_call_20260903\`, add the work to this
-  board, dispatch research workers on six topics, take the decisions to Jon,
-  then dispatch remediation. The six topics are page load speed, duplicate
-  content, keywords, backlinks, reputation and reviews, and the business
-  address with Google Business Profile.
-  The one thing that governs the whole session: nothing the vendor said is a
-  finding until you confirm it yourself. It is a sales call, not an audit.
-  Two of its claims you can settle today with a command. Most of the rest
-  need a Search Console export that has not landed in
-  `C:\Code_data\tectori\stats\` yet.
-  Note before acting on the Google Business Profile item below: the board
-  says it was started 2026-08-22 with video verification pending, and on the
-  call Jon said he has none. Ask him which is current.
+  `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-09-04.md` before anything
+  else. It replaces every brief before it. Its Step 1 is your first move:
+  put the four business-address questions to Jon through the interactive
+  question tool (sequence, address type, what the site publishes, the
+  address itself character for character). A prompt carrying them was
+  interrupted on 2026-09-03 and none is answered. Nothing under docs/
+  changes until Jon has answered them and confirmed the address spec.
+
+- SEO call research, opened 2026-09-03. Source: the 46 minute inbound sales
+  call from Digital Guider at `C:\Code_Data\workspace\website_call_20260903\`.
+  The transcript is single-speaker merged, so the words are reliable and the
+  attribution is not. Jon settled three things on 2026-09-03 before dispatch:
+  no Google Business Profile was ever created, so the 2026-08-22 note under
+  the discovery item was wrong; the keyword research maps both buyer sets,
+  the regulated organizations the site is written for and the Series A to B
+  startups and growth SMBs described on the call, and reports where they
+  diverge; no vendor quote has arrived. Jon also has screenshots of the
+  vendor's screen share, landing in `...\website_call_20260903\screenshots\`.
+  Rule for every item: a vendor claim is a hypothesis until measured here.
+  Vendor claims and their status:
+  - 14.5 second page load: confirmed for the homepage on slow mobile only
+    (3.1b); image weight, not code.
+  - 9 percent duplicate content: reproduced at 8.6 percent body-only (3.2);
+    it is the designed hub summaries, not a duplicate page.
+  - 0 ranked keywords, 0 organic traffic, 41 spam backlinks: need Jon's
+    Search Console export, which is not in `stats\` yet. Unconfirmed.
+  - Authority score 2 of 100: a vendor tool's metric, not a Google one.
+  - Search volume over 3000 a month: no keyword named. Unusable as stated.
+  - 100 mile local radius: the vendor's line after Jon said entire US twice.
+    Not a decision.
+  Research dispatches, none changes a file in docs/, reports land in
+  `C:\Code_data\tectori\seo_research_2026-09-03\`:
+  - 3.1 page speed: report in. Assets and headers measured; the keyless
+    PageSpeed API refused every call (daily quota 0), so no load time yet.
+    3.1b report in at 3.1b_lighthouse_local.md: Lighthouse 13.4.1, 24 runs.
+    Homepage on simulated slow mobile: median LCP 14.0 s, one run 16.9 s,
+    so the vendor's 14.5 s is real for that one page and profile. Cause is
+    3.6 MB page weight, hero PNG 1.67 MB plus six 640x640 portfolio PNGs
+    shown small. Every other page 2.4 to 3.4 s mobile; desktop all under
+    2.6 s, scores 87 to 100. Field data still needs a PageSpeed API key.
+  - 3.2 duplicate content: report in. Body-only overlap 5.2 percent at
+    8-word shingles, 8.6 at 5-word (the vendor's 9); 19.7 with chrome. All
+    of it is the hub restating its six service pages by design. Redirects
+    and canonicals correct; / and /index.html both 200, canonical only.
+  - 3.3 keywords: report in at 3.3_keywords.md. Both buyer sets mapped;
+    divergence is exam language, the compliance page's FFIEC/HIPAA lead,
+    the absent vCISO term, and the Nashville modifier. No volume numbers.
+  - 3.4 backlinks: report in at 3.4_backlinks.md. Nothing measurable
+    without the Search Console Links export. Medium, Quora and Tumblr all
+    nofollow outbound links, the same class the vendor called spam. Honest
+    link sources ranked; most are Jon's to earn, not the site's to add.
+  - 3.5 reputation and reviews: report in at 3.5_reputation_reviews.md.
+    Review and rating markup ban confirmed by Google's self-serving rule
+    and the FTC's 2024 rule. Person node could carry credentials, award,
+    alumniOf and sameAs from facts already on about.html; spec change.
+    Google's own text bounds a service-area profile near 2 hours' drive.
+  - 3.6 business address and Google Business Profile: report in at
+    3.6_address_gbp.md. Options only. A profile needs a real address even
+    when hidden; service areas are named places near a 2 hour drive, no
+    radius control, 20 max; virtual offices and PO boxes ineligible.
+    LocalBusiness markup requires a complete address, so Organization
+    with areaServed United States stays the honest node.
+  - Every policy quote in 3.4 and 3.5 is snippet-sourced: the WebFetch
+    allowlist blocks google.com, ftc.gov and web.archive.org for workers
+    and orchestrator alike (3.4_policy_check.md). A shell fetch of Wayback
+    snapshots does work: 3.7_policy_quotes.md holds all ten pages from
+    dated snapshots (2025-12-30 to 2026-08-11), verbatim. The 2 hour
+    service-area guidance, the virtual-office and PO box bar, the
+    LocalBusiness address requirement and the link-spam text are all
+    primary now. Research complete; decisions are with Jon.
+  Jon's decisions, 2026-09-03, through the question tool:
+  - Google Business Profile: create it now. New fact: Tectori has a
+    business address. This comes first, together with putting the address
+    on the website. The research assumed no address; the profile options
+    in 3.6 are re-read against the quotes in 3.7 once the address type is
+    known (office operated from, staffed coworking, or mailbox).
+  - Digital Guider: not hiring. Jon wants workers to research and replicate
+    what such a vendor does, for this site only, never as a service.
+    Backlog item, after the address work.
+  - In-house remediation approved for one spec, after the address work:
+    image weight, Person JSON-LD from about.html facts (spec amendment
+    first), internal home links to the canonical /.
+  - Positioning: backlog the startup and vCISO divergence from 3.3; no
+    public copy change now.
+  Research closed 2026-09-03, logged in CHANGELOG.md. Open work, in order:
+  1. Address questions to Jon (brief Step 1). Unanswered.
+  2. Google Business Profile checklist for Jon (brief Step 2). Jon creates
+     the profile; record here only when he says it is verified.
+  3. Address on the site, branch feature/seo1-business-address (Step 3).
+  4. Image weight, Person JSON-LD, home links, branch
+     feature/seo2-page-weight-and-entity (Step 4).
+  5. Backlog items (Step 5), placed once Jon says where the backlog lives.
+  Not landed: Jon's Search Console export and his call screenshots.
 
 - 404 page and structured data shipped and confirmed live. Merged to main
   at 9cd55be on 2026-08-24. `docs/404.html` now serves for any missing
@@ -70,9 +146,10 @@
   Jon confirmed on 2026-08-22: GBP first, then LinkedIn edits and the launch
   post while verification pends, then the examiner-questions checklist asset.
   He also approved a prominent call path on contact.html and the hero CTAs.
-  - Step 1: Google Business Profile. Owner task, Jon works from the written
-    instructions in `Tectori_Search_Setup.md`. Started 2026-08-22, video
-    verification pending until Google completes it.
+  - Step 1: Google Business Profile. Not done. Jon confirmed on 2026-09-03
+    that no profile was ever created; the earlier note that it was started
+    on 2026-08-22 with verification pending was wrong. Whether to create one
+    is now a decision inside the SEO call research item above.
   - Step 2: LinkedIn company page (5 items) and personal profile (6 items) as
     paste-ready copy from the checklist. The HCA line is Jon's to confirm,
     nothing unconfirmed goes on a public profile.
