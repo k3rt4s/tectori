@@ -2,6 +2,19 @@
 
 Tectori website changes are recorded here.
 
+## 2026-09-03
+
+- Researched the 2026-09-03 SEO sales call before any site change. Seven
+  reports under `C:\Code_data\tectori\seo_research_2026-09-03\`. The
+  vendor's 14.5 second load is real for the homepage on simulated slow
+  mobile only (median 14.0 s, image weight); every other page loads in
+  2.4 to 3.4 s. The 9 percent duplicate content reproduces at 8.6 percent
+  and is the designed hub summaries. Backlink, keyword and traffic claims
+  stay unconfirmed until the Search Console export lands. Google's policy
+  text was captured verbatim from dated Wayback snapshots. No file under
+  `docs/` changed. Decisions recorded on the board; remediation follows
+  the 2026-09-04 orchestrator brief.
+
 ## 2026-08-30
 
 - Built the Evidence Readiness Baseline as a manually delivered,
