@@ -4,12 +4,12 @@
 
 - YOUR NEXT ACTION. Read the orchestrator brief at
   `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-09-04.md` before anything
-  else. It replaces every brief before it. Its Step 1 is your first move:
-  put the four business-address questions to Jon through the interactive
-  question tool (sequence, address type, what the site publishes, the
-  address itself character for character). A prompt carrying them was
-  interrupted on 2026-09-03 and none is answered. Nothing under docs/
-  changes until Jon has answered them and confirmed the address spec.
+  else. It replaces every brief before it. You are a review and planning
+  thread: verify all 18 recommendations in the ISKPRO audit (archived
+  beside the research reports), board one feature per finding, put the
+  open decisions and the four business-address questions to Jon through
+  the interactive question tool, then write the remediation orchestrator's
+  prompt. Nothing under docs/ changes in your thread.
 
 - SEO call research, opened 2026-09-03. Source: the 46 minute inbound sales
   call from Digital Guider at `C:\Code_Data\workspace\website_call_20260903\`.
@@ -96,6 +96,11 @@
      feature/seo2-page-weight-and-entity (Step 4).
   5. Backlog items (Step 5), placed once Jon says where the backlog lives.
   Not landed: Jon's Search Console export and his call screenshots.
+  Added 2026-09-04: an ISKPRO automated audit of the homepage (grade B, 18
+  recommendations, performance graded A, one backlink seen) archived at
+  `seo_research_2026-09-03\Audit_for_Tectori_ISKPRO_2026-09-04.pdf` with a
+  text extract. The brief's Step 1 verifies every recommendation; its
+  "no SPF record" is already refuted by nslookup (v=spf1 exists).
 
 - 404 page and structured data shipped and confirmed live. Merged to main
   at 9cd55be on 2026-08-24. `docs/404.html` now serves for any missing
