@@ -200,6 +200,78 @@
 
 ## Pending
 
+- Digital Guider follow-up email, items for investigation, added 2026-09-05.
+  Source saved verbatim at
+  `C:\Code_Data\workspace\website_call_20260903\vendor_followup_email.md`.
+  Jon's 2026-09-03 decision stands: not hiring; research and replicate for
+  this site only. These items feed Step 5 of the remediation brief, the
+  in-house SEO research program, and run after Releases 1 to 4. Same rule
+  as the call research: a vendor claim is a hypothesis until measured here.
+  No item changes a file in docs/; reports land in
+  `C:\Code_data\tectori\seo_research_2026-09-03\` numbered 4.x.
+  The vendor's seven deliverables, each mapped to what this site already
+  has or needs:
+  - 4.1 On-page audit: metas, alt attributes, H1s, XML sitemap, schema,
+    robots.txt. Most confirmed present on 2026-09-05 (title, canonical,
+    robots, sitemap, OG cards, JSON-LD on eleven pages). Investigate what
+    remains: alt text coverage on every image, one H1 per page, meta
+    description lengths, and whether the sitemap lists all 23 urls with
+    correct lastmod.
+  - 4.2 Keyword intent split: informational, navigational, commercial,
+    transactional. 3.3_keywords.md mapped both buyer sets without volume.
+    Investigate a free volume source (Search Console impressions once the
+    export lands, or Bing Webmaster keyword research) and classify the 3.3
+    phrases by intent, then map each intent to a page that should own it.
+  - 4.3 Backlinks by channel: blogs, articles, classified ads, social
+    bookmarking, micro-blogging. 3.4_backlinks.md already flagged Medium,
+    Quora and Tumblr as nofollow, the class the vendor called spam.
+    Investigate which of the vendor's listed channels pass link equity at
+    all, and which Google's link-spam text in 3.7_policy_quotes.md names
+    as a violation. Expected result: most of this list is what to avoid.
+  - 4.4 Social media optimization: Twitter, LinkedIn, Pinterest, Instagram,
+    Facebook, infographic per service plus transcript and hashtags.
+    Investigate which channels the regulated buyer actually uses (the
+    discovery brief already settled on LinkedIn), and what a one-page
+    per-service graphic would cost to produce in-house. Release 3 adds
+    the social profile links; this item decides which profiles exist.
+  - 4.5 "Google standards" and error removal: overlaps Release 2 and the
+    ISKPRO audit. Investigate only what neither covers: broken internal
+    and outbound links (crawl the 23 pages), mobile usability, and Core
+    Web Vitals field data once the PageSpeed API key exists.
+  - 4.6 Monthly progress report: define the in-house equivalent. Which
+    numbers, from which free sources (Search Console, Bing Webmaster,
+    Cloudflare analytics, Scarf), on what cadence, written to `stats\`
+    with the export date in the filename. Sets the baseline before any
+    of the above changes anything.
+  - 4.7 Team of 5 to 6 (seven roles listed): no investigation, recorded as
+    a claim. The roles map to the personas and workers this framework
+    already runs.
+  The vendor's authority-score roadmap (on-page, technical, off-page,
+  content marketing, local SEO) is generic and every line of it is already
+  covered by 4.1 to 4.6, 3.5, 3.6 or the remediation releases. Do not
+  research it as a separate item.
+  The vendor's own claims, for due diligence only, since Jon is not hiring:
+  - Google Partner agency ID 8609367258: verifiable on Google's Partners
+    directory. A Partner badge is a Google Ads spend and certification
+    status, not an SEO credential.
+  - Ranks for "Best SMO and SEO Company in USA" and similar: the vendor
+    chose the terms; check the terms' actual volume before treating the
+    ranking as evidence of anything.
+  - 30 to 60 percent traffic increase in 4 to 6 months, guaranteed: from a
+    stated base of 0 organic traffic any increase is a large percentage.
+    Record the base first (4.6).
+  - Address 30 N Gould St #6573, Sheridan, WY: a registered-agent and
+    virtual-mailbox address, the type 3.6 and 3.7 found ineligible for a
+    Google Business Profile. Note the contrast with Jon's coworking
+    address decision; no action.
+  - Trustpilot, Google and Clutch reviews: read before any future call,
+    not needed now.
+  - Pricing page https://digitalguider.com/pricing/seo-pricing/: capture
+    the published package prices once as the cost baseline the in-house
+    program is measured against.
+  Open decision, for Jon, when Step 5 starts: which of 4.1 to 4.6 to run
+  first. Recommendation: 4.6 first, because every other item needs the
+  baseline it defines, and it is blocked on the Search Console export.
 - Pilot the Evidence Readiness Baseline with the first qualified buyer. The
   offer and delivery brief were built on 2026-08-30 and the site changes went
   live on 2026-08-31, verified on the deployed page. The pilot should keep one
