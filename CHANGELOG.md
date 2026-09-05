@@ -13,7 +13,7 @@ Tectori website changes are recorded here.
   stay unconfirmed until the Search Console export lands. Google's policy
   text was captured verbatim from dated Wayback snapshots. No file under
   `docs/` changed. Decisions recorded on the board; remediation follows
-  the 2026-09-04 orchestrator brief.
+  the 2026-09-05 remediation brief, four releases.
 
 ## 2026-08-30
 
