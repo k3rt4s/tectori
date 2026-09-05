@@ -3,13 +3,37 @@
 ## In Progress
 
 - YOUR NEXT ACTION. Read the orchestrator brief at
-  `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-09-04.md` before anything
-  else. It replaces every brief before it. You are a review and planning
-  thread: verify all 18 recommendations in the ISKPRO audit (archived
-  beside the research reports), board one feature per finding, put the
-  open decisions and the four business-address questions to Jon through
-  the interactive question tool, then write the remediation orchestrator's
-  prompt. Nothing under docs/ changes in your thread.
+  `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-09-05_remediation.md` before
+  anything else. It replaces every brief before it. You are the build
+  thread: four releases on their own branches, every decision already
+  taken by Jon on 2026-09-05 and listed there. Its Step 0 is your first
+  move: write the thread marker, then ask Jon through the interactive
+  question tool whether to start Release 1. Jon's standing instruction:
+  do what the SEO audit recommends, then do the research; privacy is not
+  a constraint here; the framework governs how the work is engineered.
+
+- ISKPRO audit remediation, opened 2026-09-05. Decisions taken by Jon on
+  2026-09-05 through the question tool, recorded in full in the brief:
+  address is 201 Summit View Dr, Suite 305, Brentwood, TN 37027 (verified
+  on Google Maps 2026-09-05); coworking without signage, reception and
+  presence, so the profile is service-area with the address hidden; full
+  address on contact page, every footer and Organization PostalAddress,
+  utility bar unchanged; copy limited to meta description lengths; all
+  five items I recommended declining are built after Jon read the
+  reasons (home links to /, social profiles, contact form via a form
+  service, Facebook pixel, extensionless URLs), with the house rules and
+  privacy page amended; solution-ops-toolkit.png deleted. Releases:
+  1 feature/seo1-business-address (SEO-01, 03, 07, 08, 09, plus the GBP
+  checklist and link-earning documents); 2 feature/seo2-page-weight-and-
+  entity (SEO-04, 05, 06); 3 feature/seo3-contact-form-pixel-social
+  (SEO-13, 15, 16, blocked on Jon's endpoint, pixel ID and profile URLs);
+  4 feature/seo4-extensionless-urls (SEO-14). Verified, no action: SPF
+  exists; analytics exists (Cloudflare beacon); title, canonical, robots,
+  sitemap, HTTPS, OG and X cards all present.
+  Then Step 5, the in-house SEO research program for this site only.
+  Backlog: startup and vCISO positioning divergence (3.3); PageSpeed API
+  key for field data; Search Console export and call screenshots not
+  landed.
 
 - SEO call research, opened 2026-09-03. Source: the 46 minute inbound sales
   call from Digital Guider at `C:\Code_Data\workspace\website_call_20260903\`.
