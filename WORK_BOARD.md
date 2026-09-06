@@ -1,295 +1,171 @@
 # WORK_BOARD
 
+ACTIVE THREAD: 2026-09-06 07:50
+
+## Current state
+
+Records, not work. Nothing here is dispatchable.
+
+- The lane was scored on 2026-09-06 with `ai_development/docs/board-scoring.md`.
+  The scored index for the unshipped SEO remediation features lives at the top
+  of `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-09-05_remediation.md`, which
+  remains the build brief for Releases 1 to 4. The review the developer reads is
+  `C:\Code_data\tectori\board_review_2026-09-06.md`.
+- Shipped work and closed research were archived verbatim to
+  `BOARD_ARCHIVE_2026.md` on 2026-09-06: the 404 and structured data release,
+  the content release, the analytics deploy, the 2026-09-03 SEO call research,
+  the ISKPRO decision record, the discovery and demand session, and the Digital
+  Guider follow-up email record. Read it for evidence, never for instructions.
+- Verified on 2026-09-05, no action: SPF exists, analytics exists (Cloudflare
+  beacon), and title, canonical, robots, sitemap, HTTPS, OG and X cards are all
+  present. Those were audit findings SEO-10 and SEO-11; they have no items.
+
 ## In Progress
 
-- YOUR NEXT ACTION. Read the orchestrator brief at
-  `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-09-05_remediation.md` before
-  anything else. It replaces every brief before it. You are the build
-  thread: four releases on their own branches, every decision already
-  taken by Jon on 2026-09-05 and listed there. Its Step 0 is your first
-  move: write the thread marker, then ask Jon through the interactive
-  question tool whether to start Release 1. Jon's standing instruction:
-  do what the SEO audit recommends, then do the research; privacy is not
-  a constraint here; the framework governs how the work is engineered.
-
-- ISKPRO audit remediation, opened 2026-09-05. Decisions taken by Jon on
-  2026-09-05 through the question tool, recorded in full in the brief:
-  address is 201 Summit View Dr, Suite 305, Brentwood, TN 37027 (verified
-  on Google Maps 2026-09-05); coworking without signage, reception and
-  presence, so the profile is service-area with the address hidden; full
-  address on contact page, every footer and Organization PostalAddress,
-  utility bar unchanged; copy limited to meta description lengths; all
-  five items I recommended declining are built after Jon read the
-  reasons (home links to /, social profiles, contact form via a form
-  service, Facebook pixel, extensionless URLs), with the house rules and
-  privacy page amended; solution-ops-toolkit.png deleted. Releases:
-  1 feature/seo1-business-address (SEO-01, 03, 07, 08, 09, plus the GBP
-  checklist and link-earning documents); 2 feature/seo2-page-weight-and-
-  entity (SEO-04, 05, 06); 3 feature/seo3-contact-form-pixel-social
-  (SEO-13, 15, 16, blocked on Jon's endpoint, pixel ID and profile URLs);
-  4 feature/seo4-extensionless-urls (SEO-14). Verified, no action: SPF
-  exists; analytics exists (Cloudflare beacon); title, canonical, robots,
-  sitemap, HTTPS, OG and X cards all present.
-  Then Step 5, the in-house SEO research program for this site only.
-  Backlog: startup and vCISO positioning divergence (3.3); PageSpeed API
-  key for field data; Search Console export and call screenshots not
-  landed.
-
-- SEO call research, opened 2026-09-03. Source: the 46 minute inbound sales
-  call from Digital Guider at `C:\Code_Data\workspace\website_call_20260903\`.
-  The transcript is single-speaker merged, so the words are reliable and the
-  attribution is not. Jon settled three things on 2026-09-03 before dispatch:
-  no Google Business Profile was ever created, so the 2026-08-22 note under
-  the discovery item was wrong; the keyword research maps both buyer sets,
-  the regulated organizations the site is written for and the Series A to B
-  startups and growth SMBs described on the call, and reports where they
-  diverge; no vendor quote has arrived. Jon also has screenshots of the
-  vendor's screen share, landing in `...\website_call_20260903\screenshots\`.
-  Rule for every item: a vendor claim is a hypothesis until measured here.
-  Vendor claims and their status:
-  - 14.5 second page load: confirmed for the homepage on slow mobile only
-    (3.1b); image weight, not code.
-  - 9 percent duplicate content: reproduced at 8.6 percent body-only (3.2);
-    it is the designed hub summaries, not a duplicate page.
-  - 0 ranked keywords, 0 organic traffic, 41 spam backlinks: need Jon's
-    Search Console export, which is not in `stats\` yet. Unconfirmed.
-  - Authority score 2 of 100: a vendor tool's metric, not a Google one.
-  - Search volume over 3000 a month: no keyword named. Unusable as stated.
-  - 100 mile local radius: the vendor's line after Jon said entire US twice.
-    Not a decision.
-  Research dispatches, none changes a file in docs/, reports land in
-  `C:\Code_data\tectori\seo_research_2026-09-03\`:
-  - 3.1 page speed: report in. Assets and headers measured; the keyless
-    PageSpeed API refused every call (daily quota 0), so no load time yet.
-    3.1b report in at 3.1b_lighthouse_local.md: Lighthouse 13.4.1, 24 runs.
-    Homepage on simulated slow mobile: median LCP 14.0 s, one run 16.9 s,
-    so the vendor's 14.5 s is real for that one page and profile. Cause is
-    3.6 MB page weight, hero PNG 1.67 MB plus six 640x640 portfolio PNGs
-    shown small. Every other page 2.4 to 3.4 s mobile; desktop all under
-    2.6 s, scores 87 to 100. Field data still needs a PageSpeed API key.
-  - 3.2 duplicate content: report in. Body-only overlap 5.2 percent at
-    8-word shingles, 8.6 at 5-word (the vendor's 9); 19.7 with chrome. All
-    of it is the hub restating its six service pages by design. Redirects
-    and canonicals correct; / and /index.html both 200, canonical only.
-  - 3.3 keywords: report in at 3.3_keywords.md. Both buyer sets mapped;
-    divergence is exam language, the compliance page's FFIEC/HIPAA lead,
-    the absent vCISO term, and the Nashville modifier. No volume numbers.
-  - 3.4 backlinks: report in at 3.4_backlinks.md. Nothing measurable
-    without the Search Console Links export. Medium, Quora and Tumblr all
-    nofollow outbound links, the same class the vendor called spam. Honest
-    link sources ranked; most are Jon's to earn, not the site's to add.
-  - 3.5 reputation and reviews: report in at 3.5_reputation_reviews.md.
-    Review and rating markup ban confirmed by Google's self-serving rule
-    and the FTC's 2024 rule. Person node could carry credentials, award,
-    alumniOf and sameAs from facts already on about.html; spec change.
-    Google's own text bounds a service-area profile near 2 hours' drive.
-  - 3.6 business address and Google Business Profile: report in at
-    3.6_address_gbp.md. Options only. A profile needs a real address even
-    when hidden; service areas are named places near a 2 hour drive, no
-    radius control, 20 max; virtual offices and PO boxes ineligible.
-    LocalBusiness markup requires a complete address, so Organization
-    with areaServed United States stays the honest node.
-  - Every policy quote in 3.4 and 3.5 is snippet-sourced: the WebFetch
-    allowlist blocks google.com, ftc.gov and web.archive.org for workers
-    and orchestrator alike (3.4_policy_check.md). A shell fetch of Wayback
-    snapshots does work: 3.7_policy_quotes.md holds all ten pages from
-    dated snapshots (2025-12-30 to 2026-08-11), verbatim. The 2 hour
-    service-area guidance, the virtual-office and PO box bar, the
-    LocalBusiness address requirement and the link-spam text are all
-    primary now. Research complete; decisions are with Jon.
-  Jon's decisions, 2026-09-03, through the question tool:
-  - Google Business Profile: create it now. New fact: Tectori has a
-    business address. This comes first, together with putting the address
-    on the website. The research assumed no address; the profile options
-    in 3.6 are re-read against the quotes in 3.7 once the address type is
-    known (office operated from, staffed coworking, or mailbox).
-  - Digital Guider: not hiring. Jon wants workers to research and replicate
-    what such a vendor does, for this site only, never as a service.
-    Backlog item, after the address work.
-  - In-house remediation approved for one spec, after the address work:
-    image weight, Person JSON-LD from about.html facts (spec amendment
-    first), internal home links to the canonical /.
-  - Positioning: backlog the startup and vCISO divergence from 3.3; no
-    public copy change now.
-  Research closed 2026-09-03, logged in CHANGELOG.md. Open work, in order:
-  1. Address questions to Jon (brief Step 1). Unanswered.
-  2. Google Business Profile checklist for Jon (brief Step 2). Jon creates
-     the profile; record here only when he says it is verified.
-  3. Address on the site, branch feature/seo1-business-address (Step 3).
-  4. Image weight, Person JSON-LD, home links, branch
-     feature/seo2-page-weight-and-entity (Step 4).
-  5. Backlog items (Step 5), placed once Jon says where the backlog lives.
-  Not landed: Jon's Search Console export and his call screenshots.
-  Added 2026-09-04: an ISKPRO automated audit of the homepage (grade B, 18
-  recommendations, performance graded A, one backlink seen) archived at
-  `seo_research_2026-09-03\Audit_for_Tectori_ISKPRO_2026-09-04.pdf` with a
-  text extract. The brief's Step 1 verifies every recommendation; its
-  "no SPF record" is already refuted by nslookup (v=spf1 exists).
-
-- 404 page and structured data shipped and confirmed live. Merged to main
-  at 9cd55be on 2026-08-24. `docs/404.html` now serves for any missing
-  address, including deep paths, and JSON-LD is on all eleven pages that
-  should have it. Every one of the nine new blocks parses from the live
-  site and matches its repo copy once line endings are normalized. Logged
-  in CHANGELOG.md. The brief this ran from is
-  `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-08-24.md` and it is
-  finished. The JSON-LD spec the workers built to, which is what a later
-  change to any of these blocks should match, is at
-  `C:\Code_data\tectori\jsonld_spec_2026-08-24.md`.
-
-- Content release shipped and confirmed live. Merged to main at b46c238 on
-  2026-08-24 and serving on www.tectori.com. Six service pages, plus
-  resources.html and trust.html, all returning 200 and matching the repo
-  copies byte for byte once line endings are normalized. services.html keeps
-  all six anchored sections and each links out to its page, so no inbound
-  anchor link broke. Resources and Trust are footer only, the top navigation
-  is unchanged at nine items, and the sitemap carries 23 urls. No styles or
-  scripts changed, so the cache versions stay at v=20260822 and v=20260820.
-  The facts on trust.html, where engagement material lives, the 30 day return
-  or destroy window, the four practice security controls, and the 48 hour
-  email response with a phone path for urgent reports, came from Jon on
-  2026-08-24. If any of them stops being true, that page has to change.
-
-- Site analytics is deployed. Pushed to main at 1f6b705 on 2026-08-23 and
-  confirmed serving on the live site. The Cloudflare Web Analytics beacon and
-  the Scarf pixel are on every public page, twenty two of them after the
-  2026-08-24 content release, `docs/login.html` has
-  neither and its CSP is untouched, and privacy.html was rewritten in the same
-  commit as the tracking. The options research is at
-  `C:\Code_data\tectori\stats\analytics_options_research_2026-08-23.md` and
-  Jon's account setup notes, including the two Cloudflare wizard traps, are at
-  `C:\Code_data\tectori\Tectori_Analytics_Setup.md`.
-  - Only owner check left: open a public page and the login page in a browser
-    with the network tab showing, confirm the beacon and the pixel fire on the
-    first and neither fires on the second. Fetching the deployed HTML already
-    confirms the tags ship and both endpoints answer, so this is a browser
-    confirmation, not a suspected problem.
-  - One Scarf hit on 2026-08-23 came from this workstation's verification
-    request, not a visitor. Ignore the first datapoint.
-  - Jon will export the Search Console and Bing reports later; they land in
-    `C:\Code_data\tectori\stats\` with the export date in the filename. The
-    brief flags eight pages reported discovered but not indexed on 2026-08-10,
-    so check whether that count moved.
-
-- Discovery and demand session, brief at `C:\Code_data\tectori\MORNING_PROMPT.md`.
-  Jon confirmed on 2026-08-22: GBP first, then LinkedIn edits and the launch
-  post while verification pends, then the examiner-questions checklist asset.
-  He also approved a prominent call path on contact.html and the hero CTAs.
-  - Step 1: Google Business Profile. Not done. Jon confirmed on 2026-09-03
-    that no profile was ever created; the earlier note that it was started
-    on 2026-08-22 with verification pending was wrong. Whether to create one
-    is now a decision inside the SEO call research item above.
-  - Step 2: LinkedIn company page (5 items) and personal profile (6 items) as
-    paste-ready copy from the checklist. The HCA line is Jon's to confirm,
-    nothing unconfirmed goes on a public profile.
-  - Step 3: publish the launch post from `Posts for Tectori.txt` to the company
-    page, Jon reshares from his personal profile the same day, then feature it.
-    The Fortivra announcement is the second page post.
-  - Step 4: checklist asset drafted in `C:\Code_data\tectori\Paste_Copy_2026-08-22.md`
-    section 6, approved by Jon 2026-08-22. Owner task: post it from the
-    company page after the launch post has had a few weeks, then feature it.
-  - Shipped 2026-08-22: the call path on contact.html and every hero and
-    cta-band, main at bdf6e80, logged in CHANGELOG.md.
-  - Confirmed live 2026-08-23: `www.tectori.com/solutions.html` serves the
-    d4a0b29 Fortivra rewrite byte for byte, and the deployed styles.css matches
-    the repo copy. Below 620px the call and email buttons go full width and
-    stack, they clear the 46px touch target, and nothing on the page can
-    overflow the 390px floor in ui-standards.md. Read from the deployed CSS and
-    markup, not rendered in a browser, so a font-driven wrap is the one thing
-    this check cannot see.
+- **Score and group the lane.** Score every unshipped item, group the items by
+  dependency into lanes that can run concurrently, and write one dispatch brief
+  per lane. Phase 1 is the scored list. Phase 2 writes the briefs after the
+  developer replies with the groups he approves.
+  `score: kind=ops gain=4/15/45 p=0.8 hours=0.5/1/2 rev=two-way conf=assessed id=score-and-group`
+  `return: likelihood 1 in 1 per scoring run, 1 occasion this year, so about once, from the single 305-line board this ran over; impact without it the 30 unshipped items run in the brief's four-release sequence at one lane, which is about 6 weeks of evenings instead of one night, and the developer picks by whichever item was described most persuasively; evidence the 2026-09-06 run of score_board.py over WORK_BOARD.md and the remediation brief, and the file-collision map in board_review_2026-09-06.md`
+  - worker: none, orchestrator task, 1/2/3 h
 
 ## Pending
 
-- Digital Guider follow-up email, items for investigation, added 2026-09-05.
-  Source saved verbatim at
-  `C:\Code_Data\workspace\website_call_20260903\vendor_followup_email.md`.
-  Jon's 2026-09-03 decision stands: not hiring; research and replicate for
-  this site only. These items feed Step 5 of the remediation brief, the
-  in-house SEO research program, and run after Releases 1 to 4. Same rule
-  as the call research: a vendor claim is a hypothesis until measured here.
-  No item changes a file in docs/; reports land in
-  `C:\Code_data\tectori\seo_research_2026-09-03\` numbered 4.x.
-  The vendor's seven deliverables, each mapped to what this site already
-  has or needs:
-  - 4.1 On-page audit: metas, alt attributes, H1s, XML sitemap, schema,
-    robots.txt. Most confirmed present on 2026-09-05 (title, canonical,
-    robots, sitemap, OG cards, JSON-LD on eleven pages). Investigate what
-    remains: alt text coverage on every image, one H1 per page, meta
-    description lengths, and whether the sitemap lists all 23 urls with
-    correct lastmod.
-  - 4.2 Keyword intent split: informational, navigational, commercial,
-    transactional. 3.3_keywords.md mapped both buyer sets without volume.
-    Investigate a free volume source (Search Console impressions once the
-    export lands, or Bing Webmaster keyword research) and classify the 3.3
-    phrases by intent, then map each intent to a page that should own it.
-  - 4.3 Backlinks by channel: blogs, articles, classified ads, social
-    bookmarking, micro-blogging. 3.4_backlinks.md already flagged Medium,
-    Quora and Tumblr as nofollow, the class the vendor called spam.
-    Investigate which of the vendor's listed channels pass link equity at
-    all, and which Google's link-spam text in 3.7_policy_quotes.md names
-    as a violation. Expected result: most of this list is what to avoid.
-  - 4.4 Social media optimization: Twitter, LinkedIn, Pinterest, Instagram,
-    Facebook, infographic per service plus transcript and hashtags.
-    Investigate which channels the regulated buyer actually uses (the
-    discovery brief already settled on LinkedIn), and what a one-page
-    per-service graphic would cost to produce in-house. Release 3 adds
-    the social profile links; this item decides which profiles exist.
-  - 4.5 "Google standards" and error removal: overlaps Release 2 and the
-    ISKPRO audit. Investigate only what neither covers: broken internal
-    and outbound links (crawl the 23 pages), mobile usability, and Core
-    Web Vitals field data once the PageSpeed API key exists.
-  - 4.6 Monthly progress report: define the in-house equivalent. Which
-    numbers, from which free sources (Search Console, Bing Webmaster,
-    Cloudflare analytics, Scarf), on what cadence, written to `stats\`
-    with the export date in the filename. Sets the baseline before any
-    of the above changes anything.
-  - 4.7 Team of 5 to 6 (seven roles listed): no investigation, recorded as
-    a claim. The roles map to the personas and workers this framework
-    already runs.
-  The vendor's authority-score roadmap (on-page, technical, off-page,
-  content marketing, local SEO) is generic and every line of it is already
-  covered by 4.1 to 4.6, 3.5, 3.6 or the remediation releases. Do not
-  research it as a separate item.
-  The vendor's own claims, for due diligence only, since Jon is not hiring:
-  - Google Partner agency ID 8609367258: verifiable on Google's Partners
-    directory. A Partner badge is a Google Ads spend and certification
-    status, not an SEO credential.
-  - Ranks for "Best SMO and SEO Company in USA" and similar: the vendor
-    chose the terms; check the terms' actual volume before treating the
-    ranking as evidence of anything.
-  - 30 to 60 percent traffic increase in 4 to 6 months, guaranteed: from a
-    stated base of 0 organic traffic any increase is a large percentage.
-    Record the base first (4.6).
-  - Address 30 N Gould St #6573, Sheridan, WY: a registered-agent and
-    virtual-mailbox address, the type 3.6 and 3.7 found ineligible for a
-    Google Business Profile. Note the contrast with Jon's coworking
-    address decision; no action.
-  - Trustpilot, Google and Clutch reviews: read before any future call,
-    not needed now.
-  - Pricing page https://digitalguider.com/pricing/seo-pricing/: capture
-    the published package prices once as the cost baseline the in-house
-    program is measured against.
-  Open decision, for Jon, when Step 5 starts: which of 4.1 to 4.6 to run
-  first. Recommendation: 4.6 first, because every other item needs the
-  baseline it defines, and it is blocked on the Search Console export.
-- Pilot the Evidence Readiness Baseline with the first qualified buyer. The
-  offer and delivery brief were built on 2026-08-30 and the site changes went
-  live on 2026-08-31, verified on the deployed page. The pilot should keep one
-  defined review boundary and test whether the scope, evidence inventory,
-  findings, and prioritized action list are useful without a maturity score.
-  After the pilot, decide duration,
-  sample size, fixed price, payment terms, and whether the offer remains
-  standalone. Delivery brief:
-  `C:\Code_data\tectori\EVIDENCE_READINESS_BASELINE_OFFER_2026-08-30.md`.
-- Optional, small: two pages carry structured data with no `@id`. The
-  `FAQPage` node in `docs/faq.html` and the founder `Person` node nested in
-  the `docs/index.html` Organization block both lack one. Neither is a
-  defect and neither breaks anything today. Giving the index.html founder
-  an `@id` would let `about.html#person` reference one canonical Person
-  instead of declaring its own, which is the shape Jon considered and set
-  aside on 2026-08-24 to keep that release inside its nine pages. Found by
-  the verification pass on 2026-08-24, both pre-existing, both deliberately
-  left alone.
+- **EXPORT-GSC, get the Search Console export.** Four items cannot be measured
+  without it. Jon verifies the property at search.google.com/search-console for
+  `www.tectori.com`, exports Performance (queries, pages, 16 months) and Links,
+  and drops both in `C:\Code_data\tectori\stats\` with the export date in the
+  filename. Bing Webmaster export the same way if the property exists. No worker
+  can do this; it needs Jon's Google account.
+  `score: kind=ops gain=3/10/30 p=0.8 hours=0.25/0.5/1 rev=two-way conf=assessed id=export-gsc`
+  `return: likelihood 1 in 1 per request, 1 occasion (the export is pulled once), so about once now, from the four board items that name it as their blocker; impact without it KEYWORD-BASELINE, BACKLINK-CHANNELS, MEASURE-BASELINE and the vendor's 0-ranked-keywords claim all stall or produce estimates Jon has already refused, 3 to 30 h of research that cannot be graded above opinion; evidence the four items below that cite it, the brief Step 5 item 1, and C:\Code_data\tectori\stats\ read on 2026-09-06 holding no export`
+  - worker: none, owner task, 0.25/0.5/1 h
+
+- **MEASURE-BASELINE, define the monthly measurement routine.** Digital Guider
+  4.6 plus brief Step 5 topic 6. Which numbers, from which free sources (Search
+  Console, Bing Webmaster, Cloudflare Web Analytics, Scarf), on what cadence,
+  written to `C:\Code_data\tectori\stats\` with the export date in the filename,
+  and a twenty minute runbook Jon can follow. Sets the before-number for every
+  remediation item.
+  `score: kind=ops gain=3/12/40 p=0.6 hours=0.5/1/2 rev=two-way conf=assessed id=measure-baseline`
+  `return: likelihood 1 in 1 per measurement cycle, about 12 cycles a year if the routine is monthly, so about 12 a year, from the four free sources already live on the site; impact without a baseline the 16 remediation items ship on faith, a win and noise look identical, and the vendor's 30 to 60 percent traffic claim has no base to be measured against, 3 to 40 h of misdirected work over the year; evidence brief Step 5 topic 6, the archived Digital Guider 4.6 record, and the Cloudflare beacon plus Scarf pixel confirmed live on 22 pages in the 2026-08-23 deploy`
+  - worker: sonnet 1/2/4 h
+
+- **ONPAGE-AUDIT, close the on-page audit residue.** Digital Guider 4.1. Most of
+  it was measured on 2026-09-06 and is clean: alt text on 53 of 53 images, exactly
+  one H1 on all 24 pages, 23 sitemap loc elements. What remains is meta description
+  length (SEO-07 covers the four under 120 characters, this item covers privacy.html
+  at 189 over the 160 truncation point) and whether every sitemap lastmod matches
+  the file's real last change.
+  `score: kind=docs gain=0.5/2/6 p=0.5 hours=0.25/0.5/1 rev=two-way conf=measured id=onpage-audit`
+  `return: likelihood 1 in 1 per audit, 1 occasion this year, so about once, from the 2026-09-06 sweep of all 24 pages in docs/; impact the residue is one over-length description and unverified lastmod values, 0.5 to 6 h if found later inside a larger regression instead of now; evidence the 2026-09-06 measurement over C:\Code\projects\tectori\docs counting 53 of 53 images with alt, one H1 per page, 23 parsed sitemap locs, and description lengths from 98 to 189 characters`
+  - worker: haiku 0.5/1/2 h
+
+- **KEYWORD-BASELINE, rank and intent baseline.** Digital Guider 4.2 plus brief
+  Step 5 topic 2. Classify the 3.3 phrases as informational, navigational,
+  commercial or transactional, map each intent to the page that should own it,
+  and record which queries the site already appears for and at what position.
+  Blocked on EXPORT-GSC; the free volume alternatives are Search Console
+  impressions and Bing Webmaster keyword research, nothing paid.
+  `score: kind=feature gain=5/18/60 p=0.35 hours=0.5/1.5/3 rev=two-way conf=opinion id=keyword-baseline flags=blocked`
+  `return: likelihood 1 in 3 that the intent map changes which page owns a term and that change earns an impression, 1 occasion this year, so about once in three years on current inputs, estimated because no volume number exists for any phrase; impact without it the site keeps competing with itself on the compliance terms and the vCISO term stays absent, worth 5 to 60 h of Jon's attention if a term he could own goes to someone else; evidence 3.3_keywords.md which mapped both buyer sets and reported no volume numbers, and the empty stats directory read 2026-09-06`
+  - worker: sonnet 1.5/3/6 h
+
+- **BACKLINK-CHANNELS, classify link channels and the existing profile.**
+  Digital Guider 4.3 plus brief Step 5 topic 4. Which of the vendor's listed
+  channels (blogs, articles, classified ads, social bookmarking, micro-blogging)
+  pass link equity at all and which Google's link-spam text in 3.7 names as a
+  violation. The classification runs now; the profile half needs EXPORT-GSC.
+  Expected result: most of the vendor's list is what to avoid.
+  `score: kind=docs gain=2/8/25 p=0.4 hours=0.5/1/2 rev=two-way conf=assessed id=backlink-channels`
+  `return: likelihood 1 in 1 per channel decision, about 5 channel decisions a year as Jon is offered link services, so about 5 a year, from the five channels the vendor named in the follow-up email; impact one wrong channel choice buys links Google's own text calls spam, 2 to 25 h to unwind through a disavow plus the ranking cost while it stands; evidence 3.4_backlinks.md which already found Medium, Quora and Tumblr nofollow, and the verbatim link-spam quotes in 3.7_policy_quotes.md from Wayback snapshots dated 2025-12-30 to 2026-08-11`
+  - worker: sonnet 1/2/4 h
+
+- **SOCIAL-CHANNELS, decide which social profiles exist.** Digital Guider 4.4.
+  Which channels the regulated buyer actually uses, what a one-page per-service
+  graphic costs to produce in-house, and therefore which of Facebook, X, Instagram
+  and YouTube are worth creating. The discovery brief already settled on LinkedIn.
+  This item decides the profile set that SEO-13 then links.
+  `score: kind=docs gain=1/5/20 p=0.35 hours=0.25/0.75/1.5 rev=two-way conf=opinion id=social-channels`
+  `return: likelihood 1 in 3 that the answer changes which profiles Jon creates, 1 occasion this year, so about once in three years, estimated because no audience data for this site exists yet; impact creating four profiles nobody in the regulated buyer set reads costs 1 to 20 h of setup and upkeep and leaves four dead sameAs links on the Organization node; evidence the archived Digital Guider 4.4 record naming six channels, and the discovery brief's LinkedIn decision of 2026-08-22`
+  - worker: sonnet 0.75/1.5/3 h
+
+- **CRAWL-HEALTH, crawl the site for broken links and mobile usability.**
+  Digital Guider 4.5, limited to what Release 2 and the ISKPRO audit do not
+  already cover: broken internal and outbound links across the 23 indexable
+  pages, mobile usability at the three widths in ui-standards.md, and Core Web
+  Vitals field data once a PageSpeed API key exists. Run it once before Release
+  4 and once after, because Release 4 rewrites every internal href.
+  `score: kind=prevent gain=0.5/3/12 freq=1 p=0.3 hours=0.25/0.75/1.5 rev=two-way conf=assessed id=crawl-health`
+  `return: likelihood about 1 broken link a year across roughly 1000 internal hrefs, from the 2026-09-06 count of 39 to 50 .html hrefs on each of 24 pages, with p 0.3 that one is already broken since no crawl has ever run and the two verification passes on 2026-08-24 and 2026-08-31 are too few trials to bound; impact a dead link costs a visitor the page they came for and costs 0.5 to 12 h to notice and repair, at the high end if it sits on a service page for a quarter; evidence the 2026-09-06 href count over C:\Code\projects\tectori\docs, and Release 4 in the remediation brief which rewrites every one of them`
+  - worker: haiku 1/2/4 h
+
+- **POSITIONING, resolve the startup and vCISO divergence.** From 3.3. The site
+  is written for regulated organizations; the sales call described Series A to B
+  startups and growth SMBs; the term vCISO appears nowhere on the site. Decide
+  whether the site serves one buyer or both, and if both, which pages carry which
+  language. A proposal for Jon, no public copy changes in this item.
+  `score: kind=feature gain=5/20/80 p=0.3 hours=0.5/2/4 rev=two-way conf=opinion id=positioning`
+  `return: likelihood 1 in 3 that a positioning change wins a buyer the current copy loses, 1 occasion this year, so about once in three years, estimated because the site has no traffic baseline; impact the wrong buyer reads every page, and the most searched term for the fractional service is missing from the site entirely, worth 5 to 80 h of Jon's attention if a fractional engagement goes elsewhere; evidence 3.3_keywords.md sections on the two buyer sets, the FFIEC and HIPAA lead on service-compliance-risk.html, and a 2026-09-06 grep finding no occurrence of vCISO in docs/`
+  - worker: sonnet 2/4/8 h
+
+- **EVIDENCE-PILOT, run the Evidence Readiness Baseline with the first buyer.**
+  Keep one defined review boundary and test whether the scope, evidence inventory,
+  findings and prioritized action list are useful without a maturity score. After
+  the pilot, decide duration, sample size, fixed price, payment terms, and whether
+  the offer stays standalone. Brief at
+  `C:\Code_data\tectori\EVIDENCE_READINESS_BASELINE_OFFER_2026-08-30.md`. Blocked
+  on a qualified buyer; no worker can start it.
+  `score: kind=feature gain=20/80/300 p=0.2 hours=2/6/16 rev=two-way conf=opinion id=evidence-pilot flags=external,blocked`
+  `return: likelihood 1 in 5 that a qualified buyer appears and takes the pilot this year, 1 occasion this year, so about once in five years at the current inbound rate, estimated because the site has produced no recorded inquiry; impact the offer stays unpriced and untested, so the first real buyer becomes the experiment, worth 20 to 300 h across a mispriced or misscoped first engagement; evidence the 2026-08-30 offer brief, the site changes verified live on 2026-08-31, and no inquiry recorded in the Cloudflare or Scarf data since 2026-08-23`
+  - worker: none, owner task, 6/12/24 h
+
+- **JSONLD-IDS, give the two nodes without an @id one.** The `FAQPage` node in
+  `docs/faq.html` and the founder `Person` node nested in the `docs/index.html`
+  Organization block both lack an `@id`. Neither is a defect. Giving the index
+  founder an `@id` lets `about.html#person` reference one canonical Person instead
+  of declaring its own. Jon considered and set this aside on 2026-08-24 to keep
+  that release inside its nine pages. Spec amendment first.
+  `score: kind=debt gain=0.5/1.5/5 p=0.3 freq=2 hours=0.25/0.5/1 rev=two-way conf=assessed id=jsonld-ids`
+  `return: likelihood about 2 touches of the JSON-LD a year, from the four releases in the current brief that each amend a node, with p 0.3 that a touch actually trips over the missing @id; impact a second Person declaration drifts from the first, so a crawler sees two people, 0.5 to 5 h to notice and reconcile; evidence the 2026-08-24 verification pass that found both, and jsonld_spec_2026-08-24.md which governs all eleven pages carrying JSON-LD`
+  - worker: haiku 0.5/1/2 h
+
+- **ANALYTICS-CHECK, confirm the beacon and pixel in a browser.** Open a public
+  page and `login.html` with the network tab showing. Confirm the Cloudflare beacon
+  and the Scarf pixel fire on the first and neither fires on the second. Fetching
+  the deployed HTML already proved the tags ship and both endpoints answer, so this
+  is a browser confirmation, not a suspected problem. Ignore the 2026-08-23 Scarf
+  hit; it came from this workstation.
+  `score: kind=ops gain=0.5/2/8 p=0.4 hours=0.15/0.25/0.5 rev=two-way conf=assessed id=analytics-check`
+  `return: likelihood 1 in 1 per check, 1 occasion this year, so about once, from the single unverified claim left in the 2026-08-23 analytics deploy; impact if the beacon does not fire, every number MEASURE-BASELINE reports is empty and nobody knows why, 0.5 to 8 h of chasing a measurement gap that is really a deploy gap; evidence the 2026-08-23 deploy at 1f6b705, the deployed HTML fetch confirming both tags on 22 pages, and login.html confirmed carrying neither`
+  - worker: none, owner task, 0.25/0.25/0.5 h
+
+- **LI-PROFILES, publish the LinkedIn company page and personal profile edits.**
+  Five company page items and six personal profile items as paste-ready copy from
+  `C:\Code_data\tectori\Paste_Copy_2026-08-22.md`. The HCA line is Jon's to confirm
+  and uses the March 2026 layoff framing, never "engagement concluded". Nothing
+  unconfirmed goes on a public profile.
+  `score: kind=feature gain=5/20/60 p=0.5 hours=0.5/1.5/3 rev=two-way conf=opinion id=li-profiles flags=external`
+  `return: likelihood 1 in 2 that a complete company page is what a referred buyer checks before contacting, about 5 checks a year at the current referral rate, so about 2 a year, estimated because LinkedIn page views are not yet recorded; impact an empty company page reads as an inactive practice to the one buyer who looks, 5 to 60 h if it costs a referred engagement; evidence Paste_Copy_2026-08-22.md sections for the eleven items, and the archived discovery brief where Jon approved the sequence on 2026-08-22`
+  - worker: sonnet 1/2/4 h
+
+- **LI-LAUNCH-POST, publish the launch post and reshare it.** Post from
+  `C:\Code_data\tectori\Posts for Tectori.txt` to the company page, Jon reshares
+  from his personal profile the same day, then features it. The Fortivra
+  announcement is the second page post. Runs after LI-PROFILES; a launch post on an
+  empty page wastes the launch.
+  `score: kind=feature gain=3/12/40 p=0.5 hours=0.25/0.75/1.5 rev=one-way conf=opinion id=li-launch-post flags=external`
+  `return: likelihood 1 in 2 that the post reaches someone in Jon's network who becomes a conversation, 1 occasion this year, so about once every two years, estimated because no post has been published from the page; impact the practice stays unannounced to the network that already knows Jon, 3 to 40 h if the first inbound conversation is what it would have started; evidence Posts for Tectori.txt drafted 2026-08-19, and the archived discovery brief Step 3 approved by Jon on 2026-08-22`
+  - worker: haiku 0.5/1/2 h
+
+- **LI-CHECKLIST-ASSET, publish the examiner-questions checklist.** Drafted in
+  `C:\Code_data\tectori\Paste_Copy_2026-08-22.md` section 6 and approved by Jon on
+  2026-08-22. Post it from the company page a few weeks after the launch post, then
+  feature it. Runs after LI-LAUNCH-POST.
+  `score: kind=feature gain=2/10/40 p=0.4 hours=0.25/0.75/1.5 rev=one-way conf=opinion id=li-checklist-asset flags=external`
+  `return: likelihood 1 in 3 that a checklist post earns a saved or shared response that reaches a buyer, about 1 post a year, so about once in three years, estimated because the page has no engagement history; impact the one genuinely useful asset the practice has stays unpublished, 2 to 40 h if it is what would have started an audit-readiness conversation; evidence Paste_Copy_2026-08-22.md section 6, approved by Jon 2026-08-22 and recorded in the archived discovery item`
+  - worker: haiku 0.5/1/2 h
 
 ## Questions for Jon
 

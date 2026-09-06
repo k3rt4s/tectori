@@ -2,6 +2,17 @@
 
 Tectori website changes are recorded here.
 
+## 2026-09-06
+
+- Scored every unshipped item on the board and in the remediation brief with
+  `ai_development/docs/board-scoring.md`, 31 items, `--strict` clean. Added a
+  `## Scored index` to the top of the remediation brief so the brief's SEO
+  features carry blocks, archived the shipped work, closed research and
+  decision records to `BOARD_ARCHIVE_2026.md`, and rewrote the board as
+  Current state, In Progress, Pending and Questions for Jon. The developer
+  review list is at `C:\Code_data\tectori\board_review_2026-09-06.md`.
+  Nothing under `docs/` changed and nothing moved on the strength of a score.
+
 ## 2026-09-03
 
 - Researched the 2026-09-03 SEO sales call before any site change. Seven
