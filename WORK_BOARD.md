@@ -20,6 +20,65 @@ Records, not work. Nothing here is dispatchable.
   beacon), and title, canonical, robots, sitemap, HTTPS, OG and X cards are all
   present. Those were audit findings SEO-10 and SEO-11; they have no items.
 
+## Lanes
+
+Records and pointers, not work. The 2026-09-06 grouping run split the 31 scored
+items into eight lanes that can run at the same time. The dispatch brief for
+each lane is a separate file; the brief carries the worker-ready detail, the
+board carries the score and the pointer, so the board stays a working surface.
+
+Every lane inherits `C:\Code_data\tectori\lanes\LANE_RULES_2026-09-06.md`.
+Lane reports land in `C:\Code_data\tectori\lanes\out\`.
+
+| Lane                       | Brief                               | Items                                                                                                                                                                                                                               |
+| -------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1, site build              | `LANE_1_SITE.md`                    | seo-01-address, seo-03-jsonld-address, seo-07-descriptions, seo-09-scarf-style, seo-08-llmstxt, seo-04-images, seo-05-person, jsonld-ids, seo-06-home-links, onpage-audit, seo-16-contact-form, seo-13-social, seo-14-extensionless |
+| 2, GBP and links           | `LANE_2_GBP_AND_LINKS.md`           | seo-02-gbp, seo-12-link-earning                                                                                                                                                                                                     |
+| 3, measurement             | `LANE_3_MEASUREMENT.md`             | measure-baseline, plus the export spec that unblocks export-gsc                                                                                                                                                                     |
+| 4, positioning             | `LANE_4_POSITIONING.md`             | positioning, keyword-baseline classification half                                                                                                                                                                                   |
+| 5, competitors and content | `LANE_5_COMPETITORS_AND_CONTENT.md` | competitors, content-plan                                                                                                                                                                                                           |
+| 6, channels                | `LANE_6_CHANNELS.md`                | backlink-channels, social-channels                                                                                                                                                                                                  |
+| 7, crawl health            | `LANE_7_CRAWL_HEALTH.md`            | crawl-health, the before-crawl                                                                                                                                                                                                      |
+| 8, LinkedIn copy           | `LANE_8_LINKEDIN.md`                | li-profiles, li-launch-post, li-checklist-asset, copy only                                                                                                                                                                          |
+
+Not dispatchable, Jon's own: EXPORT-GSC, ANALYTICS-CHECK, EVIDENCE-PILOT.
+
+Only Lane 1 writes to this repo. Lanes 2 to 8 read it and write only to
+`C:\Code_data\tectori\`. That is what makes eight concurrent lanes safe: the
+2026-09-06 measurement found `docs/index.html` touched by eleven separate items,
+25 "Nashville, Tennessee" lines across 24 files, 67 `href="index.html"`, 117
+`contact@tectori.com` across 23 pages and 39 to 50 `.html` hrefs per page, so the
+repo work cannot be parallelized and everything else does not touch the repo.
+
+No lane edits this board or `CHANGELOG.md`. The session that reads the lane
+reports folds them into both.
+
+### Decisions taken on 2026-09-06, do not re-open
+
+- Push gate: nothing is pushed. A merge to `main` deploys through GitHub Pages,
+  so a push is a go-live. Lane 1 commits to `feature/board-2026-09-06-site` and
+  stops; Jon reads the diff before anything reaches the site.
+- SEO-16 form service: Formspree, built against the literal placeholder
+  `https://formspree.io/f/REPLACE_WITH_FORM_ID`. The form is inert until Jon
+  creates the form and supplies the ID. Recommended over Web3Forms as the more
+  established of the two free options; both give a third party sight of every
+  inquiry, which is the cost of a static site with no server.
+- SEO-15 Meta pixel: deferred. It scored 1.3, the lowest of the three blocked
+  items, and it puts a third-party tracker on all 23 public pages for a campaign
+  that is not planned.
+- SEO-13 social links: limited to the two profiles already in the tree,
+  `https://www.linkedin.com/company/tectori` (in the `index.html` sameAs) and
+  `https://github.com/k3rt4s` (host of the seven repos linked from
+  `tools.html`). No Facebook, X, Instagram or YouTube until SOCIAL-CHANNELS
+  answers whether they should exist. No personal profile URL; none is recorded
+  in the tree.
+- Copy approval: worker-written copy is committed to the branch tonight rather
+  than held for review, and every new sentence is listed in the Lane 1 spec file
+  for Jon to read with the diff. The no-push gate is what makes this safe.
+- Commit grouping: one commit per item, message citing the SEO ID.
+- A worker whose work fails verification twice stops that item; the lane records
+  what it found and the default it would have taken, and continues.
+
 ## In Progress
 
 - **Score and group the lane.** Score every unshipped item, group the items by

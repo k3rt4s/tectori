@@ -13,6 +13,14 @@ Tectori website changes are recorded here.
   review list is at `C:\Code_data\tectori\board_review_2026-09-06.md`.
   Nothing under `docs/` changed and nothing moved on the strength of a score.
 
+- Grouped the 31 scored items into eight lanes that can run concurrently and
+  wrote one dispatch brief per lane under `C:\Code_data\tectori\lanes\`, with the shared
+  rules in `LANE_RULES_2026-09-06.md`. Only Lane 1 writes to this repo; the
+  other seven read it and write to the data root, which is what makes eight
+  concurrent lanes safe. Recorded the run decisions in a Lanes section on the
+  board: nothing is pushed, Formspree for SEO-16 with a placeholder form ID,
+  SEO-15 deferred, SEO-13 limited to the two profiles already in the tree.
+
 ## 2026-09-03
 
 - Researched the 2026-09-03 SEO sales call before any site change. Seven
