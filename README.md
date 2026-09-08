@@ -8,7 +8,7 @@ a static website for low-cost hosting.
 
 ## Quick Start
 
-Run `python -m http.server 8000 --directory docs` from the repository root, then open `http://127.0.0.1:8000/` to review the site locally.
+Run `python scripts/serve_docs.py --port 8000` from the repository root, then open `http://127.0.0.1:8000/` to review the site locally. Internal links use extensionless paths, so do not review by opening the HTML file directly.
 
 ## Layout
 
