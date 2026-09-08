@@ -1,7 +1,5 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-06 11:26
-
 ## Current state
 
 Records, not work. Nothing here is dispatchable.
@@ -24,82 +22,22 @@ Records, not work. Nothing here is dispatchable.
   the homepage keyword consistency finding and the page text-depth finding,
   now tracked as SEO-17 and SEO-18. The extracted text is
   `C:\Code_data\tectori\audit_for_tectori_1_text_2026-09-08.txt`.
-
-## Lanes
-
-Records and pointers, not work. The 2026-09-06 grouping run split the 31 scored
-items into eight lanes that can run at the same time. The dispatch brief for
-each lane is a separate file; the brief carries the worker-ready detail, the
-board carries the score and the pointer, so the board stays a working surface.
-
-Every lane inherits `C:\Code_data\tectori\lanes\LANE_RULES_2026-09-06.md`.
-Lane reports land in `C:\Code_data\tectori\lanes\out\`.
-
-| Lane                       | Brief                               | Items                                                                                                                                                                                                                               |
-| -------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1, site build              | `LANE_1_SITE.md`                    | seo-01-address, seo-03-jsonld-address, seo-07-descriptions, seo-09-scarf-style, seo-08-llmstxt, seo-04-images, seo-05-person, jsonld-ids, seo-06-home-links, onpage-audit, seo-16-contact-form, seo-13-social, seo-14-extensionless |
-| 2, GBP and links           | `LANE_2_GBP_AND_LINKS.md`           | seo-02-gbp, seo-12-link-earning                                                                                                                                                                                                     |
-| 3, measurement             | `LANE_3_MEASUREMENT.md`             | measure-baseline, plus the export spec that unblocks export-gsc                                                                                                                                                                     |
-| 4, positioning             | `LANE_4_POSITIONING.md`             | positioning, keyword-baseline classification half                                                                                                                                                                                   |
-| 5, competitors and content | `LANE_5_COMPETITORS_AND_CONTENT.md` | competitors, content-plan                                                                                                                                                                                                           |
-| 6, channels                | `LANE_6_CHANNELS.md`                | backlink-channels, social-channels                                                                                                                                                                                                  |
-| 7, crawl health            | `LANE_7_CRAWL_HEALTH.md`            | crawl-health, the before-crawl                                                                                                                                                                                                      |
-| 8, LinkedIn copy           | `LANE_8_LINKEDIN.md`                | li-profiles, li-launch-post, li-checklist-asset, copy only                                                                                                                                                                          |
-
-Not dispatchable, Jon's own: EXPORT-GSC, ANALYTICS-CHECK, EVIDENCE-PILOT.
-
-Only Lane 1 writes to this repo. Lanes 2 to 8 read it and write only to
-`C:\Code_data\tectori\`. That is what makes eight concurrent lanes safe: the
-2026-09-06 measurement found `docs/index.html` touched by eleven separate items,
-25 "Nashville, Tennessee" lines across 24 files, 67 `href="index.html"`, 117
-`contact@tectori.com` across 23 pages and 39 to 50 `.html` hrefs per page, so the
-repo work cannot be parallelized and everything else does not touch the repo.
-
-No lane edits this board or `CHANGELOG.md`. The session that reads the lane
-reports folds them into both.
-
-### Decisions taken on 2026-09-06, do not re-open
-
-- Push gate: nothing is pushed. A merge to `main` deploys through GitHub Pages,
-  so a push is a go-live. Lane 1 commits to `feature/board-2026-09-06-site` and
-  stops; Jon reads the diff before anything reaches the site.
-- SEO-16 form service: Formspree, built against the literal placeholder
-  `https://formspree.io/f/REPLACE_WITH_FORM_ID`. The form is inert until Jon
-  creates the form and supplies the ID. Recommended over Web3Forms as the more
-  established of the two free options; both give a third party sight of every
-  inquiry, which is the cost of a static site with no server.
-- SEO-15 Meta pixel: deferred. It scored 1.3, the lowest of the three blocked
-  items, and it puts a third-party tracker on all 23 public pages for a campaign
-  that is not planned.
-- SEO-13 social links: limited to the two profiles already in the tree,
-  `https://www.linkedin.com/company/tectori` (in the `index.html` sameAs) and
-  `https://github.com/k3rt4s` (host of the seven repos linked from
-  `tools.html`). No Facebook, X, Instagram or YouTube until SOCIAL-CHANNELS
-  answers whether they should exist. No personal profile URL; none is recorded
-  in the tree.
-- Copy approval: worker-written copy is committed to the branch tonight rather
-  than held for review, and every new sentence is listed in the Lane 1 spec file
-  for Jon to read with the diff. The no-push gate is what makes this safe.
-- Commit grouping: one commit per item, message citing the SEO ID.
-- A worker whose work fails verification twice stops that item; the lane records
-  what it found and the default it would have taken, and continues.
+- The eight-lane run completed on 2026-09-08. Reports and generated artifacts
+  live under `C:\Code_data\tectori\lanes\out\`; status files live under
+  `C:\Code_data\tectori\lanes\status\`. Lane 1 made 14 unpushed commits on
+  `feature/board-2026-09-06-site`. Lanes 2 through 8 made no repo changes.
 
 ## In Progress
 
-- **Dispatch the eight lane sessions.** Confirm with Jon, then paste one prompt
-  per lane from `C:\Code_data\tectori\lanes\PROMPTS_2026-09-06.md` into eight
-  separate sessions. Start Lane 1 first because it cuts
-  `feature/board-2026-09-06-site`; after that, lanes 2 through 8 may run
-  concurrently. Do not run the lanes in this thread unless Jon explicitly asks.
-  When every lane has reported to `C:\Code_data\tectori\lanes\out\` and
-  `C:\Code_data\tectori\lanes\status\`, run the morning-session prompt from
-  `PROMPTS_2026-09-06.md`: fold the lane reports into this board and
-  `CHANGELOG.md`, clear the `ACTIVE THREAD` marker, remove the `## Lanes`
-  section once closed out, and show Jon the
-  `feature/board-2026-09-06-site` diff plus the new copy listed in
-  `LANE_1_SPECS_2026-09-06.md` before anything merges to `main`.
-  `score: kind=ops gain=4/15/45 p=0.8 hours=0.1/0.25/0.5 rev=two-way conf=assessed id=dispatch-lanes`
-  `return: likelihood 1 in 1 per lane run, 1 occasion this cycle, so about once now, from the eight approved dispatch prompts already written and waiting; impact without dispatch the scored 31-item remediation set remains prepared but unrun, delaying the one-night concurrent lane plan back into serial follow-up work worth 4 to 45 h of Jon's attention; evidence C:\Code_data\tectori\lanes\PROMPTS_2026-09-06.md, the empty out and status directories checked 2026-09-08, and board_review_2026-09-06.md showing the eight-lane dependency split`
+- **REVIEW-GO-LIVE, review the feature branch before merge.** Show Jon the
+  `feature/board-2026-09-06-site` diff and the copy log at
+  `C:\Code_data\tectori\lanes\out\LANE_1_SPECS_2026-09-06.md`. Decide whether
+  to fix MOBILE-HERO-CLIPPING before merge, whether to replace the Formspree
+  placeholder before merge, and whether to run pre-push review. The merge to
+  `main` is the go-live and nothing pushes without Jon's explicit yes asked as
+  its own question after review.
+  `score: kind=ops gain=4/15/45 p=0.8 hours=0.25/0.5/1 rev=one-way conf=assessed id=review-go-live`
+  `return: likelihood 1 in 1 before this release can ship, 1 occasion now, from Lane 1 completing 14 unpushed feature-branch commits; impact without review the branch either stays unmerged or ships copy, a Formspree placeholder and a known mobile clipping residual without Jon's go-live gate, worth 4 to 45 h of avoided rework and public correction; evidence C:\Code_data\tectori\lanes\out\LANE_1_REPORT_2026-09-06.md, C:\Code_data\tectori\lanes\out\LANE_1_SPECS_2026-09-06.md, and git branch feature/board-2026-09-06-site`
 
 ## Owner-Only Tasks
 
@@ -113,6 +51,13 @@ reports folds them into both.
   `score: kind=ops gain=3/10/30 p=0.8 hours=0.25/0.5/1 rev=two-way conf=assessed id=export-gsc`
   `return: likelihood 1 in 1 per request, 1 occasion, so about once now, from the four board items that name it as their blocker; impact without it KEYWORD-BASELINE, BACKLINK-CHANNELS, MEASURE-BASELINE and the vendor's 0-ranked-keywords claim all stall or produce estimates Jon has already refused, 3 to 30 h of research that cannot be graded above opinion; evidence the four items below that cite it, the brief Step 5 item 1, and C:\Code_data\tectori\stats\ read on 2026-09-06 holding no export`
   - worker: none, owner task, 0.25/0.5/1 h
+  - Jon steps:
+    1. Open `C:\Code_data\tectori\stats\EXPORT_SPEC_2026-09-06.md`.
+    2. Export Google Search Console Performance queries, Performance pages and
+       Links for `www.tectori.com`.
+    3. Save the files in `C:\Code_data\tectori\stats\` with the export date in
+       each filename.
+    4. Export the same Bing Webmaster files if the Bing property exists.
 
 - **ANALYTICS-CHECK, confirm the beacon and pixel in a browser.** Open a public
   page and `login.html` with the network tab showing. Confirm the Cloudflare
@@ -133,6 +78,19 @@ reports folds them into both.
   - worker: none, owner task, 6/12/24 h
 
 ## Post-Lane Queue
+
+- **MOBILE-HERO-CLIPPING, fix 390px page-hero text clipping.** Lane 1 found
+  existing right-edge clipping in 390px screenshots for `index.html`,
+  `solutions.html`, and `contact.html`. This is independent of the SEO lane
+  items and should be fixed before go-live if Jon wants the branch visually
+  clean on mobile. Inspect the screenshots under
+  `C:\Code_data\tectori\stats\seo04_lighthouse_2026-09-08\` and
+  `C:\Code_data\tectori\stats\seo16_contact_2026-09-08\`, patch the shared hero
+  layout rather than per-page text, and verify at 390px, 768px, 1366px and
+  1920px before merge.
+  `score: kind=bug gain=1/4/12 p=1 hours=0.5/1/2 rev=two-way conf=measured id=mobile-hero-clipping`
+  `return: likelihood already observed in 390px screenshots on 3 public pages during Lane 1 verification, so once now; impact without it mobile visitors can see clipped hero copy on high-value public pages, 1 to 12 h of lost trust or cleanup if shipped and noticed later; evidence Lane 1 report and screenshots under C:\Code_data\tectori\stats\seo04_lighthouse_2026-09-08\ and C:\Code_data\tectori\stats\seo16_contact_2026-09-08\`
+  - worker: haiku 1/2/4 h; candidate before merge
 
 - **SEO-17-KEYWORD-SIGNALS, align homepage keywords across tags.** After Lane 4
   reports POSITIONING and KEYWORD-BASELINE, pick the homepage's owning terms and
@@ -155,12 +113,28 @@ reports folds them into both.
 
 ## Questions for Jon
 
-- The five resumes outside this repo say Internal PCI Qualified Security
+1. **Local versus national targeting.** Lane 4 kept Nashville as location proof
+   only and did not make Nashville-modified keywords page targets. Decide later
+   whether Tectori should target local Nashville search terms or stay national
+   except for NAP/location proof.
+2. **Google Business Profile category.** Lane 2 could not verify whether
+   `Computer Security Service`, `Computer Consultant`, or `Business Management
+   Consultant` are categories Google currently offers. In the Google interface,
+   choose only from categories Google actually offers.
+3. **Google Business Profile video verification.** Lane 2 included the video
+   rule from a lower-confidence source and marked home-business specifics
+   unresolved. Follow whatever verification method Google offers in the GBP
+   interface.
+4. **LinkedIn personal headline.** Lane 8 did not write a paste-ready personal
+   profile headline because the source marked the current headline as
+   `CONFIRM`. Default it would take if confirmed: append `PCI, HIPAA, SOC 2,
+   HITRUST, ISO 42001, NIST AI RMF` to the existing headline.
+5. The five resumes outside this repo say Internal PCI Qualified Security
   Assessor. PCI SSC issues Internal Security Assessor (ISA) to employees and
   reserves Qualified Security Assessor for external assessor companies. The
   site says ISA. The resumes should be corrected to match, which is work in
   another folder, not in this repo.
-- The executive resume claims a client outcome delivered through an MSP
+6. The executive resume claims a client outcome delivered through an MSP
   partner, a 140,000 email index cut 80 percent and 37 percent in license
   savings. The site claims no client results anywhere and case-study.html
   says so explicitly. Jon chose on 2026-08-23 to leave it off the site.

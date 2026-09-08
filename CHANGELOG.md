@@ -2,6 +2,33 @@
 
 Tectori website changes are recorded here.
 
+## 2026-09-08
+
+- Cleaned and reorganized `WORK_BOARD.md` for the lane run: removed stale
+  dispatch-era detail from the live Pending section, recorded the 2026-09-08
+  ISKPRO audit review, added SEO-17 and SEO-18 for the two audit findings not
+  already covered, and kept the board under the active-work surface limit.
+- Dispatched and closed the eight lane sessions from
+  `C:\Code_data\tectori\lanes\PROMPTS_2026-09-06.md`. Lane outputs landed under
+  `C:\Code_data\tectori\lanes\out\` and status files under
+  `C:\Code_data\tectori\lanes\status\`.
+- Built the SEO site lane on `feature/board-2026-09-06-site`, unpushed and not
+  merged: address and Organization PostalAddress, longer meta descriptions,
+  Scarf style cleanup, `llms.txt`, image weight reduction and lazy loading,
+  richer Person JSON-LD, canonical JSON-LD IDs, root home links, on-page audit
+  residue, Formspree placeholder contact form, existing social profile links,
+  and extensionless public URLs. The copy/spec log is
+  `C:\Code_data\tectori\lanes\out\LANE_1_SPECS_2026-09-06.md`.
+- Wrote non-repo lane deliverables: Google Business Profile checklist, link
+  earning plan, measurement routine and export spec, positioning recommendation,
+  keyword intent map, competitor gap list, content plan, backlink channel
+  classification, social channel decision, before-crawl results, and LinkedIn
+  copy packs.
+- Folded lane reports back into the board, cleared the active thread marker,
+  removed the lane dispatch table, and added the measured mobile hero clipping
+  residual as a pre-merge candidate. Nothing was pushed; merging to `main`
+  remains the go-live gate.
+
 ## 2026-09-06
 
 - Scored every unshipped item on the board and in the remediation brief with
