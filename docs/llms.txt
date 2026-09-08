@@ -4,25 +4,25 @@ Tectori connects cloud, security, compliance, evidence, and responsible AI work 
 
 ## Pages
 - /: Tectori connects cloud, security, compliance, evidence, and responsible AI work for regulated organizations that need technology to hold up under review.
-- /services.html: Tectori's six consulting service lines, from fractional CIO and CISO leadership to cloud, cybersecurity, compliance, IT operations, and agentic AI.
-- /about.html: Meet Jonathan Bowker, Tectori's founder and principal consultant, with 20 years across enterprise IT, security, risk, teaching, and regulated technology.
-- /solutions.html: Explore Tectori's founder-built product brands for compliance, operations, file intelligence, security, and architecture.
-- /tools.html: Free, open source tools from Tectori for IT operations, security programs, incident response, and evidence review. Licensed for reuse and hosted on GitHub.
-- /audit-ready-it.html: Build audit readiness into cloud governance, security controls, compliance mapping, documentation, and operating evidence.
-- /ai-governance.html: Plan AI governance with use-case approval, data boundaries, monitoring, documentation, rollback paths, and clear human accountability.
-- /case-study.html: A real Azure Container Apps reference implementation showing versioned delivery, operating safeguards, documentation, and recovery-minded engineering.
-- /how-we-work.html: Tectori's founder-led engagement model, documentation habits, remote delivery approach, communication expectations, and current hiring status.
-- /faq.html: Answers about Tectori's audit-ready IT, cybersecurity, compliance, fractional leadership, AI governance, and technology solutions.
-- /contact.html: Contact Tectori about cloud governance, cybersecurity, compliance, IT operations, fractional leadership, or AI governance.
-- /privacy.html: How the Tectori website handles visitor information. No cookies and no forms that transmit data. One script counts page views. One pixel identifies the organization a visitor connects from.
-- /terms.html: The terms that govern use of the Tectori website, including informational content without warranty and Tennessee governing law.
-- /accessibility.html: Tectori's accessibility target is WCAG 2.1 AA, with semantic HTML, keyboard navigation, and a direct email path to report issues.
+- /services: Tectori's six consulting service lines, from fractional CIO and CISO leadership to cloud, cybersecurity, compliance, IT operations, and agentic AI.
+- /about: Meet Jonathan Bowker, Tectori's founder and principal consultant, with 20 years across enterprise IT, security, risk, teaching, and regulated technology.
+- /solutions: Explore Tectori's founder-built product brands for compliance, operations, file intelligence, security, and architecture.
+- /tools: Free, open source tools from Tectori for IT operations, security programs, incident response, and evidence review. Licensed for reuse and hosted on GitHub.
+- /audit-ready-it: Build audit readiness into cloud governance, security controls, compliance mapping, documentation, and operating evidence.
+- /ai-governance: Plan AI governance with use-case approval, data boundaries, monitoring, documentation, rollback paths, and clear human accountability.
+- /case-study: A real Azure Container Apps reference implementation showing versioned delivery, operating safeguards, documentation, and recovery-minded engineering.
+- /how-we-work: Tectori's founder-led engagement model, documentation habits, remote delivery approach, communication expectations, and current hiring status.
+- /faq: Answers about Tectori's audit-ready IT, cybersecurity, compliance, fractional leadership, AI governance, and technology solutions.
+- /contact: Contact Tectori about cloud governance, cybersecurity, compliance, IT operations, fractional leadership, or AI governance.
+- /privacy: How the Tectori website handles visitor information. No cookies and no forms that transmit data. One script counts page views. One pixel identifies the organization a visitor connects from.
+- /terms: The terms that govern use of the Tectori website, including informational content without warranty and Tennessee governing law.
+- /accessibility: Tectori's accessibility target is WCAG 2.1 AA, with semantic HTML, keyboard navigation, and a direct email path to report issues.
 - /login.html: Sign in to the Tectori client portal for project workspaces, evidence requests, and review status.
-- /service-fractional-leadership.html: Part time CIO and CISO leadership covering technology strategy, security program ownership, budget and vendor oversight, and board and examiner communication.
-- /service-cloud-architecture.html: Azure architecture reviews, governance baselines, deployment patterns, and operational runbooks for cloud environments that must stand up to review.
-- /service-cybersecurity.html: Security control design and ownership, hardening baselines, and identity and access management across Active Directory, Azure, and Microsoft 365.
-- /service-compliance-risk.html: Requirement to policy to control mapping, gap analysis, risk registers, third party risk, and business continuity planning for FFIEC and HIPAA regulated organizations.
-- /service-it-operations.html: Repeatable and documented administration for Windows, Active Directory, Azure, IIS, and Microsoft 365, with dry runs, plan records, and rollback reporting.
-- /service-agentic-ai.html: Governed AI automation with approval gates, monitoring, decision records, and human accountability, aligned with ISO/IEC 42001 and the NIST AI Risk Management Framework.
-- /resources.html: Reading paths for an exam, an AI rollout, or a fractional leadership decision, plus the free tools and a plain-language glossary of the terms used across the site.
-- /trust.html: Who you are engaging, how client data is handled and returned, how the practice itself is secured, the third parties this site uses, and how to report a security problem.
+- /service-fractional-leadership: Part time CIO and CISO leadership covering technology strategy, security program ownership, budget and vendor oversight, and board and examiner communication.
+- /service-cloud-architecture: Azure architecture reviews, governance baselines, deployment patterns, and operational runbooks for cloud environments that must stand up to review.
+- /service-cybersecurity: Security control design and ownership, hardening baselines, and identity and access management across Active Directory, Azure, and Microsoft 365.
+- /service-compliance-risk: Requirement to policy to control mapping, gap analysis, risk registers, third party risk, and business continuity planning for FFIEC and HIPAA regulated organizations.
+- /service-it-operations: Repeatable and documented administration for Windows, Active Directory, Azure, IIS, and Microsoft 365, with dry runs, plan records, and rollback reporting.
+- /service-agentic-ai: Governed AI automation with approval gates, monitoring, decision records, and human accountability, aligned with ISO/IEC 42001 and the NIST AI Risk Management Framework.
+- /resources: Reading paths for an exam, an AI rollout, or a fractional leadership decision, plus the free tools and a plain-language glossary of the terms used across the site.
+- /trust: Who you are engaging, how client data is handled and returned, how the practice itself is secured, the third parties this site uses, and how to report a security problem.
