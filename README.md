@@ -8,7 +8,7 @@ a static website for low-cost hosting.
 
 ## Quick Start
 
-Open `docs/index.html` in a browser to review the site locally.
+Run `python -m http.server 8000 --directory docs` from the repository root, then open `http://127.0.0.1:8000/` to review the site locally.
 
 ## Layout
 
