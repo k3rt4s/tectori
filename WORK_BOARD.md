@@ -31,13 +31,17 @@ Records, not work. Nothing here is dispatchable.
 
 - **REVIEW-GO-LIVE, review the feature branch before merge.** Show Jon the
   `feature/board-2026-09-06-site` diff and the copy log at
-  `C:\Code_data\tectori\lanes\out\LANE_1_SPECS_2026-09-06.md`. Decide whether
-  to fix MOBILE-HERO-CLIPPING before merge, whether to replace the Formspree
-  placeholder before merge, and whether to run pre-push review. The merge to
-  `main` is the go-live and nothing pushes without Jon's explicit yes asked as
-  its own question after review.
+  `C:\Code_data\tectori\lanes\out\LANE_1_SPECS_2026-09-06.md`. The mobile hero
+  clipping residual is fixed and the Formspree endpoint is wired. Decide
+  whether to run pre-push review before merge. The merge to `main` is the
+  go-live and nothing pushes without Jon's explicit yes asked as its own
+  question after review.
   `score: kind=ops gain=4/15/45 p=0.8 hours=0.25/0.5/1 rev=one-way conf=assessed id=review-go-live`
   `return: likelihood 1 in 1 before this release can ship, 1 occasion now, from Lane 1 completing 14 unpushed feature-branch commits; impact without review the branch either stays unmerged or ships copy, a Formspree placeholder and a known mobile clipping residual without Jon's go-live gate, worth 4 to 45 h of avoided rework and public correction; evidence C:\Code_data\tectori\lanes\out\LANE_1_REPORT_2026-09-06.md, C:\Code_data\tectori\lanes\out\LANE_1_SPECS_2026-09-06.md, and git branch feature/board-2026-09-06-site`
+  - 2026-09-09 checkpoint: MOBILE-HERO-CLIPPING was fixed and the live
+    Formspree endpoint `https://formspree.io/f/mljeabad` was applied on the
+    feature branch. Browser verification artifacts are under
+    `C:\Code_data\tectori\stats\mobile_hero_form_2026-09-09\`.
 
 ## Owner-Only Tasks
 
@@ -78,19 +82,6 @@ Records, not work. Nothing here is dispatchable.
   - worker: none, owner task, 6/12/24 h
 
 ## Post-Lane Queue
-
-- **MOBILE-HERO-CLIPPING, fix 390px page-hero text clipping.** Lane 1 found
-  existing right-edge clipping in 390px screenshots for `index.html`,
-  `solutions.html`, and `contact.html`. This is independent of the SEO lane
-  items and should be fixed before go-live if Jon wants the branch visually
-  clean on mobile. Inspect the screenshots under
-  `C:\Code_data\tectori\stats\seo04_lighthouse_2026-09-08\` and
-  `C:\Code_data\tectori\stats\seo16_contact_2026-09-08\`, patch the shared hero
-  layout rather than per-page text, and verify at 390px, 768px, 1366px and
-  1920px before merge.
-  `score: kind=bug gain=1/4/12 p=1 hours=0.5/1/2 rev=two-way conf=measured id=mobile-hero-clipping`
-  `return: likelihood already observed in 390px screenshots on 3 public pages during Lane 1 verification, so once now; impact without it mobile visitors can see clipped hero copy on high-value public pages, 1 to 12 h of lost trust or cleanup if shipped and noticed later; evidence Lane 1 report and screenshots under C:\Code_data\tectori\stats\seo04_lighthouse_2026-09-08\ and C:\Code_data\tectori\stats\seo16_contact_2026-09-08\`
-  - worker: haiku 1/2/4 h; candidate before merge
 
 - **SEO-17-KEYWORD-SIGNALS, align homepage keywords across tags.** After Lane 4
   reports POSITIONING and KEYWORD-BASELINE, pick the homepage's owning terms and

@@ -2,6 +2,18 @@
 
 Tectori website changes are recorded here.
 
+## 2026-09-09
+
+- Wired the public contact form to the live Formspree endpoint and removed the
+  placeholder language from Contact and Privacy. The site stays on plain HTML
+  form POSTs, which matches the GitHub Pages hosting model without adding a
+  JavaScript dependency.
+- Fixed the measured 390px mobile hero clipping residual on the homepage,
+  Solutions and Contact by tightening the shared mobile hero layout and
+  full-width button behavior. Browser verification covered 390x844, 768x1024,
+  1366x768 and 1920x1080, with artifacts under
+  `C:\Code_data\tectori\stats\mobile_hero_form_2026-09-09\`.
+
 ## 2026-09-08
 
 - Cleaned and reorganized `WORK_BOARD.md` for the lane run: removed stale

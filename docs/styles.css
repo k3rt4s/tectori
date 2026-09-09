@@ -256,14 +256,16 @@ h3 { font-size: 1.25rem; }
   .brand img { width: 148px; }
   .hero, .hero-content { min-height: 620px; }
   .hero-scrim { background: linear-gradient(90deg, rgba(39, 49, 56, 0.97), rgba(39, 49, 56, 0.68)); }
-  .hero-content { justify-content: flex-end; padding-top: 64px; padding-bottom: 58px; }
-  .hero h1 { font-size: 2.27rem; }
+  .hero-content { justify-content: flex-end; width: 100%; min-width: 0; padding: 64px 20px 58px; }
+  .hero h1 { max-width: 100%; font-size: 2.05rem; }
   .hero-copy, .page-lead { font-size: 1.06rem; }
-  .hero-actions, .hero-actions .button, .action-row, .action-row .button { width: 100%; }
+  .hero-actions, .action-row { width: 100%; min-width: 0; }
+  .hero-actions .button, .action-row .button { width: 100%; max-width: 100%; white-space: normal; text-align: center; }
   .section, .content-section { width: min(100% - 40px, 1480px); padding: 68px 0; }
   .dark-band, .soft-band, .band, .cta-band, .resilience-band { padding: 68px 20px; }
   .page-hero { padding: 76px 20px 70px; background-image: linear-gradient(90deg, rgba(39, 49, 56, 0.75) 0%, rgba(39, 49, 56, 0.55) 100%), url("assets/tectori-band.jpg"); }
-  .page-hero h1 { font-size: 2rem; }
+  .page-hero-inner { width: 100%; min-width: 0; }
+  .page-hero h1 { max-width: 100%; font-size: 1.88rem; }
   .proof-strip, .solution-grid, .service-grid, .path-grid, .fact-grid, .practice-grid, .principles, .flow-grid, .credential-list, .resilience-grid, .site-footer { grid-template-columns: 1fr; }
   .proof-strip div { min-height: 0; border-right: 0; border-bottom: 1px solid var(--line); }
   .proof-strip div:last-child { border-bottom: 0; }
