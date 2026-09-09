@@ -15,6 +15,11 @@ Tectori website changes are recorded here.
   full-width button behavior. Browser verification covered 390x844, 768x1024,
   1366x768 and 1920x1080, with artifacts under
   `C:\Code_data\tectori\stats\mobile_hero_form_2026-09-09\`.
+- Ran the pre-push review over `origin/main..HEAD`. The first pass produced two
+  useful Formspree/accessibility follow-ups, both fixed above. The rerun's
+  remaining extensionless URL concern was rejected after all sitemap URLs on the
+  live GitHub Pages site returned 200. Review logs and the live URL check live
+  under `C:\Code_data\tectori\reviews\`.
 
 ## 2026-09-08
 
