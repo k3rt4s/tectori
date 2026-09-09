@@ -1,5 +1,7 @@
 # WORK_BOARD
 
+ACTIVE THREAD: 2026-09-09 09:55
+
 ## Current state
 
 Records, not work. Nothing here is dispatchable.
@@ -42,6 +44,9 @@ Records, not work. Nothing here is dispatchable.
     Formspree endpoint `https://formspree.io/f/mljeabad` was applied on the
     feature branch. Browser verification artifacts are under
     `C:\Code_data\tectori\stats\mobile_hero_form_2026-09-09\`.
+  - 2026-09-09 checkpoint: Jon approved running pre-push review with "go".
+    Run the review, triage findings, and still do not merge or push without a
+    separate explicit yes.
 
 ## Owner-Only Tasks
 
