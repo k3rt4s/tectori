@@ -1,7 +1,5 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-09 09:55
-
 ## Current state
 
 Records, not work. Nothing here is dispatchable.
@@ -28,6 +26,11 @@ Records, not work. Nothing here is dispatchable.
   live under `C:\Code_data\tectori\lanes\out\`; status files live under
   `C:\Code_data\tectori\lanes\status\`. Lane 1 made 14 unpushed commits on
   `feature/board-2026-09-06-site`. Lanes 2 through 8 made no repo changes.
+- Pre-push review ran on 2026-09-09 over `origin/main..HEAD`. The first pass
+  raised two small Formspree/accessibility follow-ups that were fixed and
+  committed; the rerun's remaining extensionless URL concern was rejected after
+  every sitemap URL on the live GitHub Pages site returned 200. Logs live under
+  `C:\Code_data\tectori\reviews\`.
 
 ## In Progress
 
@@ -45,8 +48,8 @@ Records, not work. Nothing here is dispatchable.
     feature branch. Browser verification artifacts are under
     `C:\Code_data\tectori\stats\mobile_hero_form_2026-09-09\`.
   - 2026-09-09 checkpoint: Jon approved running pre-push review with "go".
-    Run the review, triage findings, and still do not merge or push without a
-    separate explicit yes.
+    Review ran, real findings were fixed, and remaining findings were triaged.
+    Still do not merge or push without a separate explicit yes.
 
 ## Owner-Only Tasks
 
