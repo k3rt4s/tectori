@@ -1,7 +1,5 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-09 10:20
-
 ## Current state
 
 Records, not work. Nothing here is dispatchable.
@@ -46,6 +44,12 @@ Records, not work. Nothing here is dispatchable.
   `main`.
   `score: kind=feature gain=2/8/30 p=0.25 hours=1/2/4 rev=two-way conf=assessed id=seo-18-content-depth`
   `return: likelihood 1 in 4 that adding substantive content to a thin or under-answering page wins an impression or keeps a buyer on the page this year, 1 occasion this year, so about once in four years, estimated because the audit flags thin content but the measured homepage count is already 584 words; impact without it the homepage and any similarly thin page keep answering at summary depth while competitor pages may answer the buyer's next question, 2 to 30 h if that costs an inquiry; evidence Audit for Tectori (1).pdf page 7, the 2026-09-08 extracted text at C:\Code_data\tectori\audit_for_tectori_1_text_2026-09-08.txt, and Lane 5's competitor/content-plan work`
+  - 2026-09-09 checkpoint: homepage buyer-path section drafted on
+    `feature/seo-18-content-depth`; approximate homepage word count rose from
+    605 to 766. Copy review is
+    `C:\Code_data\tectori\seo18_content_depth_2026-09-09\COPY_REVIEW.md`.
+    Verification artifacts are in the same data folder. Do not merge or push
+    before Jon reviews the copy and explicitly approves.
 
 ## Owner-Only Tasks
 

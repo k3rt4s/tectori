@@ -4,6 +4,11 @@ Tectori website changes are recorded here.
 
 ## 2026-09-09
 
+- Drafted SEO-18 content depth work on `feature/seo-18-content-depth`, not
+  merged: added a compact homepage buyer-path section for exam readiness, cloud
+  review, fractional leadership, and AI governance. The approximate homepage
+  word count rose from 605 to 766; copy-review and verification artifacts live
+  under `C:\Code_data\tectori\seo18_content_depth_2026-09-09\`.
 - Wired the public contact form to the live Formspree endpoint and removed the
   placeholder language from Contact and Privacy. The site stays on plain HTML
   form POSTs, which matches the GitHub Pages hosting model without adding a

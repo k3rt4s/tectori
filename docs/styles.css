@@ -135,6 +135,7 @@ h3 { font-size: 1.25rem; }
 
 .service-grid, .path-grid, .fact-grid, .flow-grid, .practice-grid { display: grid; gap: 18px; }
 .service-grid, .path-grid, .fact-grid, .practice-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.buyer-path-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .flow-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); margin-top: 38px; }
 .service-card, .path-card, .flow-step { min-height: 250px; padding: 24px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
 .path-card { display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
@@ -223,7 +224,7 @@ h3 { font-size: 1.25rem; }
 @media (max-width: 1180px) {
   .desktop-nav { display: none; }
   .nav-menu { display: block; }
-  .solution-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .solution-grid, .buyer-path-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .flow-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .portfolio-item { grid-template-columns: 120px 1fr; }
   .portfolio-item img { width: 120px; height: 120px; }
