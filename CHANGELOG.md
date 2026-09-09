@@ -28,6 +28,12 @@ Tectori website changes are recorded here.
 - Merged `feature/board-2026-09-06-site` into `main` and pushed `main` to
   origin on Jon's explicit go-live approval. GitHub Pages deploys from `main`
   and `docs/`.
+- Refreshed the two stale `docs/llms.txt` page descriptions for `/privacy`
+  and `/accessibility`. Both lines were generated before the Formspree form
+  landed and before the Accessibility report path changed, so the privacy
+  line still told LLM crawlers the site had no forms that transmit data.
+  Each line is now regenerated from that page's own meta description, and a
+  re-check of all 23 described pages shows zero remaining drift.
 
 ## 2026-09-08
 
