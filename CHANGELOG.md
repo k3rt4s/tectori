@@ -7,7 +7,9 @@ Tectori website changes are recorded here.
 - Wired the public contact form to the live Formspree endpoint and removed the
   placeholder language from Contact and Privacy. The site stays on plain HTML
   form POSTs, which matches the GitHub Pages hosting model without adding a
-  JavaScript dependency.
+  JavaScript dependency. The pre-push review follow-up made the honeypot input
+  explicitly hidden to assistive technology and added the phone fallback to the
+  Accessibility report path.
 - Fixed the measured 390px mobile hero clipping residual on the homepage,
   Solutions and Contact by tightening the shared mobile hero layout and
   full-width button behavior. Browser verification covered 390x844, 768x1024,
