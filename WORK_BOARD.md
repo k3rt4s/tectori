@@ -1,5 +1,7 @@
 # WORK_BOARD
 
+ACTIVE THREAD: 2026-09-09 10:20
+
 ## Current state
 
 Records, not work. Nothing here is dispatchable.
@@ -37,7 +39,13 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-No active repo work.
+- **SEO-18-CONTENT-DEPTH, add substance where the audit finds thin content.**
+  Use Lane 5's competitor/content plan, measure the current word counts for all
+  indexable pages, and add only buyer-useful sections where the plan identifies
+  a real gap. Start with the homepage. New copy is reviewed before any merge to
+  `main`.
+  `score: kind=feature gain=2/8/30 p=0.25 hours=1/2/4 rev=two-way conf=assessed id=seo-18-content-depth`
+  `return: likelihood 1 in 4 that adding substantive content to a thin or under-answering page wins an impression or keeps a buyer on the page this year, 1 occasion this year, so about once in four years, estimated because the audit flags thin content but the measured homepage count is already 584 words; impact without it the homepage and any similarly thin page keep answering at summary depth while competitor pages may answer the buyer's next question, 2 to 30 h if that costs an inquiry; evidence Audit for Tectori (1).pdf page 7, the 2026-09-08 extracted text at C:\Code_data\tectori\audit_for_tectori_1_text_2026-09-08.txt, and Lane 5's competitor/content-plan work`
 
 ## Owner-Only Tasks
 
@@ -87,16 +95,6 @@ No active repo work.
   `score: kind=feature gain=1/4/15 p=0.3 hours=0.5/1.5/3 rev=two-way conf=assessed id=seo-17-keyword-signals`
   `return: likelihood 1 in 3 that aligning the homepage to the chosen owning terms changes how a search or LLM result interprets the page this year, 1 occasion this year, so about once in three years, estimated because the audit reports tag distribution but no traffic volume; impact without it the homepage keeps signaling mostly brand and generic evidence/review/work terms instead of the terms Jon chooses to own, 1 to 15 h if that loses an inquiry; evidence Audit for Tectori (1).pdf pages 6 to 7, the 2026-09-08 extracted text at C:\Code_data\tectori\audit_for_tectori_1_text_2026-09-08.txt, and Lane 4's pending keyword-intent work`
   - worker: sonnet 1.5/3/6 h; depends on Lane 4
-
-- **SEO-18-CONTENT-DEPTH, add substance where the audit finds thin content.**
-  After Lane 5 reports COMPETITORS and CONTENT-PLAN, measure word counts for all
-  23 indexable pages and add only buyer-useful sections where the plan
-  identifies a real gap. Start with the homepage, which the audit measured at
-  584 words while still flagging low text volume. New copy is reviewed before
-  any merge to `main`.
-  `score: kind=feature gain=2/8/30 p=0.25 hours=1/2/4 rev=two-way conf=assessed id=seo-18-content-depth`
-  `return: likelihood 1 in 4 that adding substantive content to a thin or under-answering page wins an impression or keeps a buyer on the page this year, 1 occasion this year, so about once in four years, estimated because the audit flags thin content but the measured homepage count is already 584 words; impact without it the homepage and any similarly thin page keep answering at summary depth while competitor pages may answer the buyer's next question, 2 to 30 h if that costs an inquiry; evidence Audit for Tectori (1).pdf page 7, the 2026-09-08 extracted text at C:\Code_data\tectori\audit_for_tectori_1_text_2026-09-08.txt, and Lane 5's pending competitor/content-plan work`
-  - worker: sonnet 2/4/8 h; depends on Lane 5
 
 ## Questions for Jon
 
