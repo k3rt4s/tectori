@@ -24,7 +24,7 @@ Records, not work. Nothing here is dispatchable.
   `C:\Code_data\tectori\audit_for_tectori_1_text_2026-09-08.txt`.
 - The eight-lane run completed on 2026-09-08. Reports and generated artifacts
   live under `C:\Code_data\tectori\lanes\out\`; status files live under
-  `C:\Code_data\tectori\lanes\status\`. Lane 1 made 14 unpushed commits on
+  `C:\Code_data\tectori\lanes\status\`. Lane 1's repo changes shipped through
   `feature/board-2026-09-06-site`. Lanes 2 through 8 made no repo changes.
 - Pre-push review ran on 2026-09-09 over `origin/main..HEAD`. The first pass
   raised two small Formspree/accessibility follow-ups that were fixed and
@@ -34,22 +34,15 @@ Records, not work. Nothing here is dispatchable.
 - Go-live completed on 2026-09-09: `feature/board-2026-09-06-site` was
   fast-forward merged into `main` and `main` was pushed to origin. GitHub Pages
   deploys from `main` and `docs/`.
+- SEO-18 completed on 2026-09-09: the homepage now includes a buyer-path
+  section for exam readiness, cloud review, fractional leadership, and AI
+  governance. The approximate homepage word count rose from 605 to 766.
+  Copy-review and verification artifacts live under
+  `C:\Code_data\tectori\seo18_content_depth_2026-09-09\`.
 
 ## In Progress
 
-- **SEO-18-CONTENT-DEPTH, add substance where the audit finds thin content.**
-  Use Lane 5's competitor/content plan, measure the current word counts for all
-  indexable pages, and add only buyer-useful sections where the plan identifies
-  a real gap. Start with the homepage. New copy is reviewed before any merge to
-  `main`.
-  `score: kind=feature gain=2/8/30 p=0.25 hours=1/2/4 rev=two-way conf=assessed id=seo-18-content-depth`
-  `return: likelihood 1 in 4 that adding substantive content to a thin or under-answering page wins an impression or keeps a buyer on the page this year, 1 occasion this year, so about once in four years, estimated because the audit flags thin content but the measured homepage count is already 584 words; impact without it the homepage and any similarly thin page keep answering at summary depth while competitor pages may answer the buyer's next question, 2 to 30 h if that costs an inquiry; evidence Audit for Tectori (1).pdf page 7, the 2026-09-08 extracted text at C:\Code_data\tectori\audit_for_tectori_1_text_2026-09-08.txt, and Lane 5's competitor/content-plan work`
-  - 2026-09-09 checkpoint: homepage buyer-path section drafted on
-    `feature/seo-18-content-depth`; approximate homepage word count rose from
-    605 to 766. Copy review is
-    `C:\Code_data\tectori\seo18_content_depth_2026-09-09\COPY_REVIEW.md`.
-    Verification artifacts are in the same data folder. Do not merge or push
-    before Jon reviews the copy and explicitly approves.
+No active repo work.
 
 ## Owner-Only Tasks
 
