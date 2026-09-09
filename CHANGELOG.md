@@ -20,6 +20,9 @@ Tectori website changes are recorded here.
   remaining extensionless URL concern was rejected after all sitemap URLs on the
   live GitHub Pages site returned 200. Review logs and the live URL check live
   under `C:\Code_data\tectori\reviews\`.
+- Merged `feature/board-2026-09-06-site` into `main` and pushed `main` to
+  origin on Jon's explicit go-live approval. GitHub Pages deploys from `main`
+  and `docs/`.
 
 ## 2026-09-08
 

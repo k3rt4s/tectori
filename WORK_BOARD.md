@@ -31,25 +31,13 @@ Records, not work. Nothing here is dispatchable.
   committed; the rerun's remaining extensionless URL concern was rejected after
   every sitemap URL on the live GitHub Pages site returned 200. Logs live under
   `C:\Code_data\tectori\reviews\`.
+- Go-live completed on 2026-09-09: `feature/board-2026-09-06-site` was
+  fast-forward merged into `main` and `main` was pushed to origin. GitHub Pages
+  deploys from `main` and `docs/`.
 
 ## In Progress
 
-- **REVIEW-GO-LIVE, review the feature branch before merge.** Show Jon the
-  `feature/board-2026-09-06-site` diff and the copy log at
-  `C:\Code_data\tectori\lanes\out\LANE_1_SPECS_2026-09-06.md`. The mobile hero
-  clipping residual is fixed and the Formspree endpoint is wired. Decide
-  whether to run pre-push review before merge. The merge to `main` is the
-  go-live and nothing pushes without Jon's explicit yes asked as its own
-  question after review.
-  `score: kind=ops gain=4/15/45 p=0.8 hours=0.25/0.5/1 rev=one-way conf=assessed id=review-go-live`
-  `return: likelihood 1 in 1 before this release can ship, 1 occasion now, from Lane 1 completing 14 unpushed feature-branch commits; impact without review the branch either stays unmerged or ships copy, a Formspree placeholder and a known mobile clipping residual without Jon's go-live gate, worth 4 to 45 h of avoided rework and public correction; evidence C:\Code_data\tectori\lanes\out\LANE_1_REPORT_2026-09-06.md, C:\Code_data\tectori\lanes\out\LANE_1_SPECS_2026-09-06.md, and git branch feature/board-2026-09-06-site`
-  - 2026-09-09 checkpoint: MOBILE-HERO-CLIPPING was fixed and the live
-    Formspree endpoint `https://formspree.io/f/mljeabad` was applied on the
-    feature branch. Browser verification artifacts are under
-    `C:\Code_data\tectori\stats\mobile_hero_form_2026-09-09\`.
-  - 2026-09-09 checkpoint: Jon approved running pre-push review with "go".
-    Review ran, real findings were fixed, and remaining findings were triaged.
-    Still do not merge or push without a separate explicit yes.
+No active repo work.
 
 ## Owner-Only Tasks
 
