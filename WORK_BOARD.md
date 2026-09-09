@@ -39,6 +39,10 @@ Records, not work. Nothing here is dispatchable.
   governance. The approximate homepage word count rose from 605 to 766.
   Copy-review and verification artifacts live under
   `C:\Code_data\tectori\seo18_content_depth_2026-09-09\`.
+- SEO-18 pre-push review ran on 2026-09-09 over `main..HEAD`. The
+  root-relative link and mobile grid notes were triaged as non-blocking against
+  the custom-domain deploy and shared `.path-grid` mobile rule. The review log
+  and triage note live under `C:\Code_data\tectori\reviews\`.
 
 ## In Progress
 
