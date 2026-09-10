@@ -10,6 +10,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DOCS_ROOT = PROJECT_ROOT / "docs"
 LLMS_FILE = DOCS_ROOT / "llms.txt"
+LINE_END = b"\r\n"
 
 # The opening quote is captured and the same quote is required to close, so an
 # apostrophe inside the description does not truncate the match.
@@ -45,6 +46,34 @@ def entries() -> list[tuple[int, str, str]]:
         if match:
             found.append((number, match.group(1), " ".join(match.group(2).split())))
     return found
+
+
+def summary() -> tuple[int, str] | None:
+    """Return the line number and text of the llms.txt summary paragraph under the title."""
+    for number, line in enumerate(LLMS_FILE.read_text(encoding="utf-8").splitlines(), start=1):
+        if line.startswith("# "):
+            continue
+        if line.startswith("## "):
+            return None
+        if line.strip():
+            return number, " ".join(line.split())
+    return None
+
+
+def rewrite_summary(description: str) -> None:
+    """Replace the llms.txt summary paragraph, preserving CRLF line endings."""
+    found = summary()
+    if found is None:
+        raise SystemExit("could not find the llms.txt summary paragraph")
+    number, current = found
+    raw = LLMS_FILE.read_bytes()
+    old = current.encode("utf-8") + LINE_END
+    if raw.count(old) != 1:
+        raise SystemExit(f"llms.txt:{number}: the summary text is not unique in the file")
+    raw = raw.replace(old, description.encode("utf-8") + LINE_END, 1)
+    if b"\n" in raw.replace(LINE_END, b""):
+        raise SystemExit("refusing to write: the rewrite introduced a bare newline")
+    LLMS_FILE.write_bytes(raw)
 
 
 def rewrite(fixes: dict[str, str]) -> None:
@@ -95,15 +124,37 @@ def main() -> int:
             print(f"  llms.txt:  {described}")
             print(f"  {page.name}: {current}")
 
-    if drifted and args.fix:
-        rewrite(drifted)
-        count = len(drifted)
-        noun = "entry" if count == 1 else "entries"
-        print(f"\nrewrote {count} {noun} from the pages' meta descriptions")
-        drifted = {}
+    # The summary paragraph under the title repeats the homepage meta
+    # description, so it drifts the same way the page entries do.
+    home = meta_description(page_for("/"))
+    found = summary()
+    summary_drift = False
+    if home is None or found is None:
+        print("llms.txt: could not compare the summary paragraph to the homepage")
+        problems += 1
+    else:
+        number, described = found
+        checked += 1
+        if described != home:
+            summary_drift = True
+            print(f"llms.txt:{number}: the summary paragraph has drifted")
+            print(f"  llms.txt:   {described}")
+            print(f"  index.html: {home}")
 
-    print(f"\nchecked {checked} entries, {len(drifted)} drifted, {problems} other problems")
-    return 1 if drifted or problems else 0
+    if args.fix and (drifted or summary_drift):
+        fixed = len(drifted) + (1 if summary_drift else 0)
+        if drifted:
+            rewrite(drifted)
+            drifted = {}
+        if summary_drift:
+            rewrite_summary(home)
+            summary_drift = False
+        noun = "line" if fixed == 1 else "lines"
+        print(f"\nrewrote {fixed} {noun} from the pages' meta descriptions")
+
+    stale = len(drifted) + (1 if summary_drift else 0)
+    print(f"\nchecked {checked} lines, {stale} drifted, {problems} other problems")
+    return 1 if stale or problems else 0
 
 
 if __name__ == "__main__":

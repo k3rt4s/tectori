@@ -33,9 +33,9 @@ Run `python scripts/serve_docs.py --port 8000` from the repository root, then op
   successful submission. It is noindex and stays out of `docs/sitemap.xml`,
   `docs/llms.txt`, and the navigation, and is reached only through the form.
 - `scripts/check_llms_drift.py` compares every `docs/llms.txt` page
-  description against that page's meta description, since `llms.txt` copies
-  them with no generator and drifts silently. `--fix` rewrites the drifted
-  entries from the pages.
+  description, and the file's summary paragraph, against the corresponding
+  page's meta description. `llms.txt` copies them with no generator behind
+  it and drifts silently. `--fix` rewrites the drifted lines from the pages.
 - `SEARCH_SETUP.md` covers Google, Bing, and search-grounded assistant setup.
 - `WORK_BOARD.md` tracks active project work.
 - `CHANGELOG.md` records completed changes.
