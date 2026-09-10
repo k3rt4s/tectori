@@ -1,0 +1,57 @@
+# THEORY
+
+What a session needs to believe before it changes anything in this repo.
+
+## Invariants
+
+- Every file in the tree uses CRLF. A scripted edit that writes LF corrupts the
+  diff for the whole file. After any splice, confirm the bare-LF count is zero.
+- Contact details appear character for character and are never reformatted:
+  `(615) 829-6802`, `https://www.tectori.com`, and
+  `201 Summit View Dr, Suite 305, Brentwood, TN 37027`.
+- The site claims no clients, client counts, testimonials, ratings, prices or
+  results, and carries no `Review`, `AggregateRating` or `offers` markup.
+- Copy never implies employees beyond the founder, and never frames the
+  practice as one person either.
+- The credential is Internal Security Assessor (ISA). Qualified Security
+  Assessor is a different thing and is not Tectori's.
+- `docs/login.html` carries no tracking tags and holds the tree's only CSP.
+- The only `noindex` pages are `docs/404.html` and `docs/thank-you.html`, and
+  both stay out of `docs/sitemap.xml`, `docs/llms.txt` and the navigation.
+
+## Load-bearing constraints
+
+- GitHub Pages serves both `/page` and `/page.html` with 200. Canonicals are
+  extensionless, and old `.html` inbound links still resolve. Search Console
+  reporting "Alternate page with proper canonical tag" is that behavior, not a
+  defect to chase.
+- `docs/llms.txt` duplicates every page's meta description in 24 places and no
+  generator produces it, so it goes stale silently. Run
+  `python scripts/check_llms_drift.py` after any meta description change, and
+  `--fix` to repair it.
+- The contact form is a plain HTML POST to Formspree with no JavaScript, which
+  is what the static hosting supports. Its `_next` field needs an absolute URL.
+- The hero uses `min-height`, not `height`, so copy that wraps to another line
+  grows the hero rather than being clipped.
+
+## Decisions that look wrong
+
+- "IT that holds up under audit and scales with your ambition." is the brand
+  tagline, not homepage copy. It is the footer line and the social image alt
+  text on every page as well as the homepage H1. Changing it in one place
+  means changing it in all of them, which is a brand decision.
+- The displayed phone number is plain characters inside a `nowrap` span rather
+  than `&nbsp;` and `&#8209;`. Those entities put U+00A0 and U+2011 into text a
+  visitor copies, which some dialers and CRM fields reject. Do not reintroduce
+  them as a line-break fix; the span already prevents the break.
+- `docs/404.html` deliberately has no canonical, and its links and assets are
+  root-absolute so it renders when Pages serves it for a deep path. That is why
+  it needs a local server rather than a `file://` open to review.
+
+## Known soft spots
+
+- Nashville is location proof only. Whether Tectori targets local search or
+  stays national is undecided, so nothing should be built as if it were.
+- Nothing about the analytics beacon or the Scarf pixel has been observed in a
+  browser. What is verified is that the tags ship on public pages, that they
+  are absent from `login.html`, and that both endpoints answer.
