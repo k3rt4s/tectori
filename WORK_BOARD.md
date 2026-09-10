@@ -44,6 +44,26 @@ Records, not work. Nothing here is dispatchable.
   the custom-domain deploy and shared `.path-grid` mobile rule. The review log
   and triage note live under `C:\Code_data\tectori\reviews\`.
 
+- Peer review of the 2026-09-08 lane changes ran on 2026-09-09 over the
+  merged tree, not a diff: 1142 internal links resolved with none broken, all
+  30 fetched live URLs returned 200, and every canonical resolved correctly,
+  including the old `.html` forms that still answer for inbound links. The
+  predicted SEO-14 defect did not occur, because `sitemap.xml` moved to the
+  extensionless URLs together with the canonicals. Exactly one live `noindex`
+  exists, `404.html`, which is deliberate and is in neither `sitemap.xml` nor
+  `llms.txt`. Three real findings came out of it, all now closed: the stale
+  `llms.txt` descriptions, the Formspree landing page, and the phone number
+  character encoding.
+- Decided on 2026-09-09, both by Jon: a successful contact form submission
+  lands on a Tectori confirmation page rather than Formspree's, and the
+  displayed phone number uses plain characters inside a `nowrap` span rather
+  than `&nbsp;` and `&#8209;`. Recorded so a later thread does not reopen
+  either as a defect or reintroduce the entities as a line-break fix.
+- The ten spent lane briefs were archived on 2026-09-09 to
+  `C:\Code_data\tectori\lanes\spent_2026-09-09\` with a README saying the
+  folder is a record and not instructions, and the dead lane PID file was
+  removed. Nothing in `lanes/` is dispatchable now.
+
 ## In Progress
 
 No active repo work.

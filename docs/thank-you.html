@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<!-- Tectori's accessibility statement sets a WCAG 2.1 AA target and a direct reporting path. -->
+<!-- Tectori's form confirmation page tells a visitor the message arrived and offers the faster paths. -->
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Accessibility | Tectori</title>
+    <title>Message sent | Tectori</title>
     <meta
       name="description"
-      content="Tectori's accessibility target is WCAG 2.1 AA, with semantic HTML, keyboard navigation, and a direct contact path to report issues.">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta property="og:title" content="Tectori accessibility statement">
-    <meta
-      property="og:description"
-      content="The accessibility target and current state of the Tectori website.">
+      content="Your message reached Tectori. Call for anything active or urgent, or keep reading about how Tectori works.">
+    <meta name="robots" content="noindex, follow">
+    <meta property="og:title" content="Message sent | Tectori">
+    <meta property="og:description" content="Your message reached Tectori.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.tectori.com/accessibility">
+    <meta property="og:url" content="https://www.tectori.com/thank-you">
     <meta
       property="og:image"
       content="https://www.tectori.com/assets/tectori-social.png">
@@ -23,20 +21,19 @@
     <meta property="og:image:alt" content="Tectori, IT that holds up under audit and scales with your ambition">
     <meta property="og:site_name" content="Tectori">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="canonical" href="https://www.tectori.com/accessibility">
-    <link rel="icon" href="assets/tectori-favicon.png">
-    <link rel="stylesheet" href="styles.css?v=20260906">
+    <link rel="icon" href="/assets/tectori-favicon.png">
+    <link rel="stylesheet" href="/styles.css?v=20260906">
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
     <div class="utility-bar">
       <span>Nashville, serving organizations nationwide</span>
-      <div><a href="tel:+16158296802"><span class="nowrap">(615) 829-6802</span></a><a href="login.html">Client login</a>
+      <div><a href="tel:+16158296802"><span class="nowrap">(615) 829-6802</span></a><a href="/login.html">Client login</a>
       </div>
     </div>
     <header class="site-header" aria-label="Primary">
       <a class="brand" href="/" aria-label="Tectori home"
-        ><img src="assets/tectori-logo.png" alt="Tectori"></a>
+        ><img src="/assets/tectori-logo.png" alt="Tectori"></a>
       <nav class="desktop-nav" aria-label="Site navigation">
         <a href="/services">Services</a
         ><a href="/solutions">Solutions</a
@@ -59,7 +56,7 @@
           ><a href="/case-study">Case study</a><a href="/about">About</a
           ><a href="/how-we-work">How we work</a
           ><a href="/faq">FAQ</a
-          ><a href="login.html">Client login</a
+          ><a href="/login.html">Client login</a
           ><a href="/contact">Contact</a>
         </nav>
       </details>
@@ -67,47 +64,40 @@
     <main id="main-content">
       <section class="page-hero" aria-labelledby="page-title">
         <div class="page-hero-inner">
-          <p class="eyebrow">Accessibility</p>
-          <h1 id="page-title">The site should work for everyone who visits it.</h1>
-          <p class="page-lead">Effective date: September 9, 2025</p>
+          <p class="eyebrow">Message sent</p>
+          <h1 id="page-title">Your message reached Tectori.</h1>
+          <p class="page-lead">
+            It goes to Tectori through Formspree and is used to respond to your
+            inquiry. If the matter is active or urgent, call
+            <a href="tel:+16158296802"><span class="nowrap">(615) 829-6802</span></a>
+            rather than waiting on the form.
+          </p>
         </div>
       </section>
-      <section class="content-section narrow" aria-labelledby="target-title">
-        <div class="prose">
-          <h2 id="target-title">The target</h2>
-          <p>
-            Tectori's target for this website is Web Content Accessibility
-            Guidelines (WCAG) 2.1 level AA. The site is reviewed against that
-            target as content changes.
-          </p>
-          <h2>What the site does today</h2>
-          <p>
-            Pages use semantic HTML with landmarks, headings, and labeled
-            navigation. Every page starts with a skip to content link.
-            Images carry text alternatives. Form fields on the login preview
-            have visible labels. Navigation, including the mobile menu, works
-            with a keyboard. Text and background colors are chosen for
-            contrast and readability.
-          </p>
-          <h2>Known limits</h2>
-          <p>
-            The site is reviewed with automated checks and manual testing
-            rather than a formal external audit. Some issues may not be
-            caught before a visitor finds them.
-          </p>
-          <h2>Report an issue</h2>
-          <p>
-            If any part of this site is hard to use with assistive
-            technology, use the contact page or call <span class="nowrap">(615) 829-6802</span>
-            to tell Tectori directly. Reports go straight to the founder and
-            are treated as defects, not feedback for a backlog.
-          </p>
+      <section class="section" aria-labelledby="explore-title">
+        <div class="section-heading">
+          <p class="eyebrow">While you wait</p>
+          <h2 id="explore-title">Three things worth reading.</h2>
+        </div>
+        <div class="path-grid">
+          <a class="path-card" href="/how-we-work"><span class="path-kicker">Engagement</span><div><h3>How we work</h3><p>The engagement model, the documentation habits, and what to expect from the first conversation onward.</p></div><span class="text-link">See how we work</span></a>
+          <a class="path-card" href="/tools"><span class="path-kicker">No cost</span><div><h3>Free tools</h3><p>Practical tools you can use without talking to anyone first.</p></div><span class="text-link">Open the free tools</span></a>
+          <a class="path-card" href="/services"><span class="path-kicker">Consulting</span><div><h3>Services</h3><p>Six service lines, from fractional leadership to cloud, security, compliance, IT operations, and governed AI.</p></div><span class="text-link">See the service lines</span></a>
+        </div>
+      </section>
+      <section class="cta-band">
+        <div class="cta-inner">
+          <div><p class="eyebrow">Need an answer sooner</p><h2>A call is the fastest path.</h2></div>
+          <div class="action-row">
+            <a class="button primary" href="tel:+16158296802">Call <span class="nowrap">(615) 829-6802</span></a>
+            <a class="button secondary" href="/faq">Read the FAQ</a>
+          </div>
         </div>
       </section>
     </main>
     <footer class="site-footer">
       <div class="footer-brand">
-        <img loading="lazy" src="assets/tectori-logo.png" alt="Tectori"><span
+        <img loading="lazy" src="/assets/tectori-logo.png" alt="Tectori"><span
           >IT that holds up under audit and scales with your ambition.</span
         >
       </div>
@@ -120,7 +110,7 @@
         ><a href="/ai-governance">AI governance</a
         ><a href="/case-study">Case study</a><a href="/about">About</a
         ><a href="/how-we-work">How we work</a><a href="/faq">FAQ</a
-        ><a href="/contact">Contact</a><a href="login.html">Client login</a
+        ><a href="/contact">Contact</a><a href="/login.html">Client login</a
         ><a href="/trust">Trust</a
         ><a href="/privacy">Privacy</a><a href="/terms">Terms</a
         ><a href="/accessibility">Accessibility</a>
