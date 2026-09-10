@@ -36,10 +36,14 @@ What a session needs to believe before it changes anything in this repo.
 
 ## Decisions that look wrong
 
-- "IT that holds up under audit and scales with your ambition." is the brand
-  tagline, not homepage copy. It is the footer line and the social image alt
-  text on every page as well as the homepage H1. Changing it in one place
-  means changing it in all of them, which is a brand decision.
+- "Audit-ready IT that scales with your ambition." is the brand tagline, not
+  homepage copy. It is the footer line and the social image alt text on each
+  of the 24 content pages, 48 occurrences, and the homepage adds two more in
+  its H1 and `og:description`. `login.html` is the only page without it.
+  Changing it in one place means changing it in every place, a brand call.
+- The homepage eyebrow reads "Built to be reviewed" rather than naming
+  audit-readiness, because the H1 directly below it already opens with
+  "Audit-ready".
 - The displayed phone number is plain characters inside a `nowrap` span rather
   than `&nbsp;` and `&#8209;`. Those entities put U+00A0 and U+2011 into text a
   visitor copies, which some dialers and CRM fields reject. Do not reintroduce
