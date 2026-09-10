@@ -106,15 +106,11 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Verify the tagline change on the live site once GitHub Pages finishes
-deploying, then close this out. Fetch `https://www.tectori.com/` and confirm
-the H1 reads "Audit-ready IT that scales with your ambition." and the eyebrow
-reads "Built to be reviewed", then spot-check the footer on two other pages.
-If anything still shows the old line, Pages has not finished; wait and refetch
-rather than changing files.
-
-After that this board has no active repo work. The remaining items are
-owner-only and are listed below.
+Nothing is in progress. Every scored repo item on this board has shipped and
+has been verified on the live site. The remaining items are owner-only and are
+listed below; none of them can be moved without Jon. If you are a fresh thread
+opening this board, do not invent repo work from what you notice in the tree.
+Ask Jon what he wants next.
 
 ## Owner-Only Tasks
 
