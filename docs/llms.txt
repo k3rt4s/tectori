@@ -1,9 +1,9 @@
 # Tectori
 
-Tectori connects cloud, security, compliance, evidence, and responsible AI work for regulated organizations that need technology to hold up under review.
+Tectori connects cloud, security, compliance, evidence, and governed AI for regulated and growing organizations that need technology to hold up under review.
 
 ## Pages
-- /: Tectori connects cloud, security, compliance, evidence, and responsible AI work for regulated organizations that need technology to hold up under review.
+- /: Tectori connects cloud, security, compliance, evidence, and governed AI for regulated and growing organizations that need technology to hold up under review.
 - /services: Tectori's six consulting service lines, from fractional CIO and CISO leadership to cloud, cybersecurity, compliance, IT operations, and agentic AI.
 - /about: Meet Jonathan Bowker, Tectori's founder and principal consultant, with 20 years across enterprise IT, security, risk, teaching, and regulated technology.
 - /solutions: Explore Tectori's founder-built product brands for compliance, operations, file intelligence, security, and architecture.
