@@ -35,6 +35,19 @@ Tectori website changes are recorded here.
   Each line is now regenerated from that page's own meta description, and a
   re-check of all 23 described pages shows zero remaining drift.
 
+- Sent successful contact form submissions to a Tectori confirmation page
+  instead of the generic Formspree page. `docs/thank-you.html` is new, built
+  on the 404 template, marked `noindex, follow`, and deliberately absent from
+  `sitemap.xml` and `llms.txt`. The form gained a `_next` hidden field. The
+  site keeps its plain HTML POST with no JavaScript dependency.
+- Replaced the entity-encoded displayed phone number with plain characters.
+  All 57 occurrences across 23 pages used `&nbsp;` and `&#8209;`, so a
+  visitor copying the number received U+00A0 and U+2011 rather than a space
+  and a hyphen, which some dialers and CRM fields reject. Each occurrence is
+  now `(615) 829-6802` inside a `nowrap` span, so the rendered result and the
+  line-break behavior are unchanged and the copied text matches the written
+  number exactly. Every `tel:` link was already correct and is untouched.
+
 ## 2026-09-08
 
 - Cleaned and reorganized `WORK_BOARD.md` for the lane run: removed stale
