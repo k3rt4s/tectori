@@ -63,10 +63,47 @@ Records, not work. Nothing here is dispatchable.
   `C:\Code_data\tectori\lanes\spent_2026-09-09\` with a README saying the
   folder is a record and not instructions, and the dead lane PID file was
   removed. Nothing in `lanes/` is dispatchable now.
+- SEO-17 completed on 2026-09-09 and held for review, not merged. The homepage
+  Organization schema has always said "regulated and growing organizations"
+  while the meta description said only "regulated organizations" and the first
+  body paragraph said "the business." Both now name the same audience, and the
+  description moved from "responsible AI work" to "governed AI," the term the
+  site already uses ten times across nine pages against one use of the other.
+  The work sits on `feature/seo17-homepage-keyword-signals`, pushed to origin.
+  The item's own rule is that new copy is reviewed before any merge to `main`.
+  The worker also proposed an H1 rewrite, rejected on evidence and recorded as
+  question 7 below: that sentence is the brand tagline in the footer and social
+  image alt text of all 25 pages. Proposal:
+  `C:\Code_data\tectori\seo17_keyword_signals_proposal_2026-09-09.md`.
+- `scripts/check_llms_drift.py` shipped on 2026-09-09 as the root-cause fix for
+  the stale `llms.txt` descriptions. `llms.txt` copies every page's meta
+  description with no generator behind it, so it drifts silently whenever a
+  description changes. The script compares all 24 copied lines against the
+  pages and exits non-zero on any mismatch; `--fix` rewrites them. Run it after
+  any meta description change. Its first real use caught a second stale copy of
+  the homepage description in the file's summary paragraph, which the first
+  version did not read, so the check now covers that line too.
+- Rollback for tonight's work, per action. `aeb8928` and `b291bb2` add a script
+  plus README and CHANGELOG text and change no page, so reverting either alters
+  nothing a visitor sees. The SEO-17 branch is unmerged, so dropping it needs
+  no revert: delete the branch here and on origin. If it is merged and Jon then
+  wants it out, reverting its two commits restores the previous description,
+  hero paragraph and `llms.txt` lines exactly.
 
 ## In Progress
 
-No active repo work.
+Review the SEO-17 homepage copy with Jon, then merge or drop it. The work is
+finished and verified on `feature/seo17-homepage-keyword-signals`, which is
+pushed to origin and rebased on `main`. Nothing about it is live. Show Jon the
+two-file diff (`git diff main..feature/seo17-homepage-keyword-signals`), which
+changes only the homepage meta description, the hero paragraph and the two
+`docs/llms.txt` lines that copy the description. The board item requires his
+read before any merge to `main`. If he approves, fast-forward merge, push
+`main`, and confirm the live homepage description changed. If he does not,
+delete the branch here and on origin; nothing needs reverting.
+
+Ask him at the same time about question 7 below, the H1 brand tagline, because
+it is the part of SEO-17 that was deliberately not done.
 
 ## Owner-Only Tasks
 
@@ -108,14 +145,7 @@ No active repo work.
 
 ## Post-Lane Queue
 
-- **SEO-17-KEYWORD-SIGNALS, align homepage keywords across tags.** After Lane 4
-  reports POSITIONING and KEYWORD-BASELINE, pick the homepage's owning terms and
-  revise only the title, meta description, H1/H2/H3 text and first-screen body
-  copy needed to make those terms appear naturally. New copy is reviewed before
-  any merge to `main`.
-  `score: kind=feature gain=1/4/15 p=0.3 hours=0.5/1.5/3 rev=two-way conf=assessed id=seo-17-keyword-signals`
-  `return: likelihood 1 in 3 that aligning the homepage to the chosen owning terms changes how a search or LLM result interprets the page this year, 1 occasion this year, so about once in three years, estimated because the audit reports tag distribution but no traffic volume; impact without it the homepage keeps signaling mostly brand and generic evidence/review/work terms instead of the terms Jon chooses to own, 1 to 15 h if that loses an inquiry; evidence Audit for Tectori (1).pdf pages 6 to 7, the 2026-09-08 extracted text at C:\Code_data\tectori\audit_for_tectori_1_text_2026-09-08.txt, and Lane 4's pending keyword-intent work`
-  - worker: sonnet 1.5/3/6 h; depends on Lane 4
+No pending items. Every scored lane feature has shipped.
 
 ## Questions for Jon
 
@@ -145,3 +175,12 @@ No active repo work.
   savings. The site claims no client results anywhere and case-study.html
   says so explicitly. Jon chose on 2026-08-23 to leave it off the site.
   Recorded so a later thread does not rediscover it as a gap.
+7. **Homepage H1 versus the site-wide brand tagline.** SEO-17 proposed changing
+   the homepage H1 from "IT that holds up under audit and scales with your
+   ambition." to "Audit-ready IT that scales with your ambition." so the exact
+   title-tag phrase appears in an H1. It was not done, because that sentence is
+   the brand tagline in the footer and the social image alt text of all 25
+   pages, so the homepage would say one thing at the top and another at the
+   bottom. Three options: leave it as it is, change it on the homepage only and
+   accept the divergence, or change the tagline across all 25 pages. The third
+   is a brand change, not an SEO edit.
