@@ -2,6 +2,25 @@
 
 Tectori website changes are recorded here.
 
+## 2026-09-10
+
+- Replaced the brand tagline across the site. "IT that holds up under audit and
+  scales with your ambition." became "Audit-ready IT that scales with your
+  ambition." in all 50 places it appears: the footer line and the social image
+  alt text on each of the 24 content pages, 48 occurrences, and two more in
+  the homepage H1 and its `og:description`. `login.html` never carried it. Jon
+  chose the new line and chose to change it everywhere rather than on the
+  homepage alone, so the site states one tagline instead of two.
+- Changed the homepage eyebrow from "Audit-ready technology" to "Built to be
+  reviewed", because the H1 directly below it now opens with "Audit-ready" and
+  the first screen would otherwise say the word twice in two lines.
+- Merged SEO-17 after review. The homepage meta description and hero paragraph
+  now name "regulated and growing organizations," the audience the page's
+  Organization schema has always described, and the description uses "governed
+  AI," the site's own term, in place of "responsible AI work." The pre-push
+  review raised only its recurring objection to a data-root path in the
+  changelog, which CORE-01 requires, so it was rejected.
+
 ## 2026-09-09
 
 - Completed SEO-18 content depth work: added a compact homepage buyer-path

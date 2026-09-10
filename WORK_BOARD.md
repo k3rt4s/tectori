@@ -89,21 +89,32 @@ Records, not work. Nothing here is dispatchable.
   no revert: delete the branch here and on origin. If it is merged and Jon then
   wants it out, reverting its two commits restores the previous description,
   hero paragraph and `llms.txt` lines exactly.
+- SEO-17 merged to `main` and pushed on 2026-09-10 after Jon's review. The
+  homepage meta description and hero paragraph now name "regulated and growing
+  organizations," and the description uses "governed AI" rather than
+  "responsible AI work." The pre-push review's only flag was its recurring
+  objection to a data-root path in the changelog, which CORE-01 requires.
+- Decided on 2026-09-10 by Jon, closing question 7: the brand tagline is
+  "Audit-ready IT that scales with your ambition." It replaced "IT that holds
+  up under audit and scales with your ambition." in all 50 places: the footer
+  line and social image alt text on each of the 24 content pages, 48 of those
+  occurrences, and two more in the homepage H1 and its `og:description`. Jon
+  chose site-wide over homepage-only so the site states one tagline. The
+  homepage eyebrow became "Built to be reviewed" in the same change, because
+  the H1 below it now opens with "Audit-ready." Recorded so a later thread
+  does not read the new line as drift from the old one.
 
 ## In Progress
 
-Review the SEO-17 homepage copy with Jon, then merge or drop it. The work is
-finished and verified on `feature/seo17-homepage-keyword-signals`, which is
-pushed to origin and rebased on `main`. Nothing about it is live. Show Jon the
-two-file diff (`git diff main..feature/seo17-homepage-keyword-signals`), which
-changes only the homepage meta description, the hero paragraph and the two
-`docs/llms.txt` lines that copy the description. The board item requires his
-read before any merge to `main`. If he approves, fast-forward merge, push
-`main`, and confirm the live homepage description changed. If he does not,
-delete the branch here and on origin; nothing needs reverting.
+Verify the tagline change on the live site once GitHub Pages finishes
+deploying, then close this out. Fetch `https://www.tectori.com/` and confirm
+the H1 reads "Audit-ready IT that scales with your ambition." and the eyebrow
+reads "Built to be reviewed", then spot-check the footer on two other pages.
+If anything still shows the old line, Pages has not finished; wait and refetch
+rather than changing files.
 
-Ask him at the same time about question 7 below, the H1 brand tagline, because
-it is the part of SEO-17 that was deliberately not done.
+After that this board has no active repo work. The remaining items are
+owner-only and are listed below.
 
 ## Owner-Only Tasks
 
@@ -175,12 +186,3 @@ No pending items. Every scored lane feature has shipped.
   savings. The site claims no client results anywhere and case-study.html
   says so explicitly. Jon chose on 2026-08-23 to leave it off the site.
   Recorded so a later thread does not rediscover it as a gap.
-7. **Homepage H1 versus the site-wide brand tagline.** SEO-17 proposed changing
-   the homepage H1 from "IT that holds up under audit and scales with your
-   ambition." to "Audit-ready IT that scales with your ambition." so the exact
-   title-tag phrase appears in an H1. It was not done, because that sentence is
-   the brand tagline in the footer and the social image alt text of all 25
-   pages, so the homepage would say one thing at the top and another at the
-   bottom. Three options: leave it as it is, change it on the homepage only and
-   accept the divergence, or change the tagline across all 25 pages. The third
-   is a brand change, not an SEO edit.
