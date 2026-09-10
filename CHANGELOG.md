@@ -4,6 +4,14 @@ Tectori website changes are recorded here.
 
 ## 2026-09-10
 
+- Verified the tagline change on the live site after the GitHub Pages deploy.
+  The homepage H1 reads "Audit-ready IT that scales with your ambition.", the
+  eyebrow reads "Built to be reviewed", `og:description` matches the tagline,
+  and the footer line is correct on `/about`, `/services` and `/contact`. The
+  old line returns zero matches on all six pages checked. SEO-17 is live too:
+  the deployed meta description, the llms.txt summary and the llms.txt `/`
+  entry all carry the new audience wording.
+
 - Replaced the brand tagline across the site. "IT that holds up under audit and
   scales with your ambition." became "Audit-ready IT that scales with your
   ambition." in all 50 places it appears: the footer line and the social image
