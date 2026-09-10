@@ -37,9 +37,12 @@ Tectori website changes are recorded here.
 - Added `scripts/check_llms_drift.py` so the `llms.txt` drift that was fixed
   above cannot recur unnoticed. `llms.txt` copies every page's meta
   description with no generator behind it, so it goes stale silently whenever
-  a description changes. The script compares all 23 entries against the pages
-  and exits non-zero on any mismatch, and `--fix` rewrites the drifted lines
-  from the pages themselves. README documents it under Layout.
+  a description changes. The script compares all 24 copied lines, the 23 page
+  entries plus the file's summary paragraph, against the pages and exits
+  non-zero on any mismatch. `--fix` rewrites the drifted lines from the pages
+  themselves. The summary paragraph was added to the check after the first
+  real use found it holding a second stale copy of the homepage description.
+  README documents the script under Layout.
 - Sent successful contact form submissions to a Tectori confirmation page
   instead of the generic Formspree page. `docs/thank-you.html` is new, built
   on the 404 template, marked `noindex, follow`, and deliberately absent from
