@@ -34,6 +34,18 @@ Tectori website changes are recorded here.
   line still told LLM crawlers the site had no forms that transmit data.
   Each line is now regenerated from that page's own meta description, and a
   re-check of all 23 described pages shows zero remaining drift.
+- SEO-17: named the homepage's audience the same way its Organization schema
+  always has. The schema said "regulated and growing organizations" while the
+  meta description said only "regulated organizations" and the first
+  paragraph of body copy said "the business," so the growth buyer who is not
+  yet audited had nothing to recognize on the page they land on first. The
+  description also moved from "responsible AI work" to "governed AI," the
+  term the site already uses ten times across nine pages. The title tag, the
+  H1 and the eyebrow are unchanged: the H1 is the brand tagline repeated in
+  the footer and social image alt text of all 25 pages, so rewording it is a
+  brand decision rather than a keyword one. The proposal and the term
+  analysis live at
+  `C:\Code_data\tectori\seo17_keyword_signals_proposal_2026-09-09.md`.
 - Added `scripts/check_llms_drift.py` so the `llms.txt` drift that was fixed
   above cannot recur unnoticed. `llms.txt` copies every page's meta
   description with no generator behind it, so it goes stale silently whenever
