@@ -29,6 +29,13 @@ Run `python scripts/serve_docs.py --port 8000` from the repository root, then op
   navigation. Its links and assets are root-absolute so the page still renders
   when Pages serves it for a deep path, which means it needs a server rather
   than a `file://` open to review locally.
+- `docs/thank-you.html` is the page the contact form redirects to after a
+  successful submission. It is noindex and stays out of `docs/sitemap.xml`,
+  `docs/llms.txt`, and the navigation, and is reached only through the form.
+- `scripts/check_llms_drift.py` compares every `docs/llms.txt` page
+  description against that page's meta description, since `llms.txt` copies
+  them with no generator and drifts silently. `--fix` rewrites the drifted
+  entries from the pages.
 - `SEARCH_SETUP.md` covers Google, Bing, and search-grounded assistant setup.
 - `WORK_BOARD.md` tracks active project work.
 - `CHANGELOG.md` records completed changes.
