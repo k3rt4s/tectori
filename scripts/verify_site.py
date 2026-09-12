@@ -964,6 +964,168 @@ def check_privacy_statement(pages: list[Path], docs_root: Path) -> bool:
     return ok
 
 
+# The two accessibility claims the check above leaves alone, because they are
+# about how a page behaves rather than how it is marked up.
+KEYBOARD_CLAIM = "Navigation, including the mobile menu, works with a keyboard."
+LABEL_CLAIM = "Form fields on the login preview have visible labels."
+# The mobile menu is a details element with a summary, which a browser opens
+# from the keyboard on its own. A button and a script would look the same to
+# every other check here and to anyone using a mouse.
+MENU_RE = re.compile(
+    r'<details[^>]*\bclass\s*=\s*(["\'])[^"\']*\bnav-menu\b[^"\']*\1[^>]*>'
+    r"(.*?)</details>",
+    re.IGNORECASE | re.DOTALL,
+)
+ANY_TAG_RE = re.compile(r"<[a-zA-Z][^>]*>", re.DOTALL)
+INLINE_HANDLER_RE = re.compile(r"\son[a-z]+\s*=", re.IGNORECASE)
+TABINDEX_RE = re.compile(r'\btabindex\s*=\s*["\']?(-?\d+)', re.IGNORECASE)
+FIELD_RE = re.compile(r"<(input|select|textarea)\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+LABEL_RE = re.compile(r"<label\b([^>]*)>(.*?)</label\s*>", re.IGNORECASE | re.DOTALL)
+# Field types a visitor does not type into, which carry their own name.
+UNLABELLED_TYPES = ("hidden", "submit", "button", "reset", "image")
+# Class names that take a label out of the page while leaving it in the
+# markup. The claim is that the labels are visible, not that they exist.
+HIDDEN_LABEL_CLASSES = ("sr-only", "visually-hidden", "screen-reader-only", "hidden")
+# login.html is rendered without the shared header, so it has no mobile menu
+# to operate. Naming it here rather than skipping every page without one is
+# what stops the menu disappearing from all twenty-four of the others.
+NO_MENU = "login.html"
+
+
+def check_keyboard_operable(pages: list[Path], docs_root: Path) -> bool:
+    """The menu opens and the login form is labelled without a mouse in the room.
+
+    The accessibility statement says the navigation including the mobile menu
+    works with a keyboard, and that the login preview's fields have visible
+    labels. Both are true because of a choice that is invisible once made: the
+    menu is a details element the browser opens on its own, and the labels are
+    ordinary text beside the inputs. Replacing the details with a div and a
+    click handler, or moving the labels into placeholder attributes, would
+    leave the page valid, reachable, byte identical to the build and passing
+    every other check here, while the statement went on promising something
+    the page had stopped doing.
+    """
+    problems: list[str] = []
+    statement = docs_root / "accessibility.html"
+    if not statement.is_file():
+        print(
+            "[FAIL] the menu and the login form work without a mouse: "
+            "accessibility.html is missing, so the promises cannot be read"
+        )
+        return False
+
+    statement_text = " ".join(statement.read_text(encoding="utf-8").split())
+    for claim in (KEYBOARD_CLAIM, LABEL_CLAIM):
+        if statement_text.count(claim) != 1:
+            problems.append(
+                f"accessibility.html no longer states {claim!r} exactly once, "
+                "so either the promise was reworded, in which case update this "
+                "check, or it was withdrawn, in which case say what a visitor "
+                "without a mouse gets instead"
+            )
+
+    menus = 0
+    for page in pages:
+        text = page.read_text(encoding="utf-8")
+        found = MENU_RE.findall(text)
+        if page.name == NO_MENU:
+            if found:
+                problems.append(
+                    f"{page.name}: carries a mobile menu, and this check "
+                    "expects none here because the page is rendered without "
+                    "the shared header; decide which is true"
+                )
+        elif len(found) != 1:
+            problems.append(
+                f"{page.name}: has {len(found)} mobile menus built from a "
+                "details element rather than one, so the menu either went "
+                "missing or is now something a keyboard may not open"
+            )
+        else:
+            menus += 1
+            inside = found[0][1]
+            for element in ("<summary", "<nav"):
+                if element not in inside.lower():
+                    problems.append(
+                        f"{page.name}: the mobile menu has no {element}> "
+                        "inside it, so there is nothing for a keyboard to "
+                        "open or to move through"
+                    )
+
+        for tag in ANY_TAG_RE.findall(text):
+            if INLINE_HANDLER_RE.search(tag):
+                problems.append(
+                    f"{page.name}: an element carries an inline event handler, "
+                    "so part of the page works only when script runs and only "
+                    "for whichever events it was given"
+                )
+                break
+        for match in TABINDEX_RE.finditer(text):
+            if int(match.group(1)) > 0:
+                problems.append(
+                    f"{page.name}: an element has tabindex {match.group(1)}, "
+                    "which moves it ahead of everything else and reorders the "
+                    "page for anyone moving through it by keyboard"
+                )
+
+    fields = 0
+    login = docs_root / NO_MENU
+    if not login.is_file():
+        problems.append(f"{NO_MENU} is not in the tree, so its form cannot be read")
+    else:
+        login_text = login.read_text(encoding="utf-8")
+        labels = {}
+        for attributes, inner in LABEL_RE.findall(login_text):
+            target = re.search(r'\bfor\s*=\s*(["\'])(.*?)\1', attributes, re.IGNORECASE)
+            if target:
+                labels[target.group(2)] = (attributes, inner)
+        for element, attributes in FIELD_RE.findall(login_text):
+            kind = re.search(r'\btype\s*=\s*(["\'])(.*?)\1', attributes, re.IGNORECASE)
+            if kind and kind.group(2).lower() in UNLABELLED_TYPES:
+                continue
+            fields += 1
+            identifier = re.search(
+                r'\bid\s*=\s*(["\'])(.*?)\1', attributes, re.IGNORECASE
+            )
+            if not identifier:
+                problems.append(
+                    f"{NO_MENU}: a <{element}> has no id, so no label can name it"
+                )
+                continue
+            if identifier.group(2) not in labels:
+                problems.append(
+                    f"{NO_MENU}: nothing labels {identifier.group(2)!r}, so the "
+                    "visitor is told what to type by the box's position alone"
+                )
+                continue
+            label_attributes, inner = labels[identifier.group(2)]
+            if not re.sub(r"<[^>]*>", "", inner).strip():
+                problems.append(
+                    f"{NO_MENU}: the label for {identifier.group(2)!r} has no text"
+                )
+            classes = re.search(
+                r'\bclass\s*=\s*(["\'])(.*?)\1', label_attributes, re.IGNORECASE
+            )
+            named = set((classes.group(2) if classes else "").split())
+            hidden = named.intersection(HIDDEN_LABEL_CLASSES)
+            if hidden:
+                problems.append(
+                    f"{NO_MENU}: the label for {identifier.group(2)!r} carries "
+                    f"{sorted(hidden)}, which takes it out of the page, and the "
+                    "statement promises a visible one"
+                )
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] the menu and the login form work "
+        f"without a mouse: {menus} menus across {len(pages)} pages and "
+        f"{fields} login fields checked, {len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_accessibility_statement(pages: list[Path], docs_root: Path) -> bool:
     """The accessibility page's checkable claims are true of every page.
 
@@ -1752,6 +1914,7 @@ def main() -> int:
         check_robots_policy(pages, docs_root),
         check_privacy_statement(pages, docs_root),
         check_accessibility_statement(pages, docs_root),
+        check_keyboard_operable(pages, docs_root),
         check_stated_urls_resolve(pages, docs_root),
         check_contact_form(pages, docs_root),
         check_cname(docs_root),
