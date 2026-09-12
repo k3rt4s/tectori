@@ -4,6 +4,20 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `verify_site.py` measures the privacy policy against the tree. The policy
+  tells a visitor that the site sets no cookies, stores nothing on their
+  device and loads nothing from a third party beyond the two companies it
+  names. The identity check reads the same hosts to answer a different
+  question, whose accounts these are, so a host added to the allowlist for a
+  good reason passes it while making this page a false statement. The new
+  check reads every URL the browser fetches on its own and every file for
+  cookie and storage calls. The three sentences are read from the page, so
+  rewording or withdrawing a promise fails rather than leaving a check
+  enforcing something the site no longer says. Proved against a copy with a
+  web font linked, the font host allowed in `site.json` and one
+  `localStorage` write added: the committed checks passed it 16 of 16, this
+  one names both.
+
 - `verify_site.py` measures the accessibility page against the tree. That
   page is a public statement about how the site treats people using
   assistive technology, it is the only page here whose sentences promise a
