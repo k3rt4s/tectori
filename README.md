@@ -8,7 +8,10 @@ a static website for low-cost hosting.
 
 ## Quick Start
 
-Run `python scripts/serve_docs.py --port 8000` from the repository root, then open `http://127.0.0.1:8000/` to review the site locally. Internal links use extensionless paths, so do not review by opening the HTML file directly.
+Run `python scripts/serve_docs.py --port 8000` from the repository root,
+then open `http://127.0.0.1:8000/` to review the site locally. Internal
+links use extensionless paths, so do not review by opening the HTML file
+directly.
 
 ## Layout
 
@@ -57,9 +60,17 @@ Run `python scripts/serve_docs.py --port 8000` from the repository root, then op
   and `llms.txt` cover the same pages with matching descriptions, only the
   two documented pages are noindex, the contact details are character for
   character, the analytics tags are on every page except `login.html`, and
-  no ratings markup or Qualified Security Assessor claim appears. It takes
+  no ratings markup or Qualified Security Assessor claim appears. Its tenth
+  check compares the third-party identifiers and every external host in the
+  tree against `site/content/site.json`, so a stale analytics token or form
+  endpoint fails here rather than shipping. It takes
   `--dir` so it can verify a generated build as well as `docs/`, and exits
   non-zero on any failure so it can gate a deploy.
+- `PERMISSIONS.md` lists everything the site needs to build, deploy, and
+  serve: runtime, filesystem paths, every outbound host, the operator
+  accounts, the DNS records, and a from-scratch deploy runbook. It replaced
+  `docs/hosting.md`, which was an operations note published as part of the
+  live site.
 - `SEARCH_SETUP.md` covers Google, Bing, and search-grounded assistant setup.
 - `THEORY.md` holds the working mental model: the invariants, the
   constraints the site is bent around, and the changes that look like fixes
@@ -69,5 +80,8 @@ Run `python scripts/serve_docs.py --port 8000` from the repository root, then op
 
 ## Configuration
 
-No local secrets or runtime settings are required. Hosting setup notes live in
-`docs/hosting.md`.
+No local secrets or runtime settings are required. The values that belong to
+the business rather than to the site's structure, the brand name, the contact
+strings, the domain, and the three third-party identifiers, are declared once
+in `site/content/site.json`. `PERMISSIONS.md` covers hosting, DNS, and the
+from-scratch deploy.
