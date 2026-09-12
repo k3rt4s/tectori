@@ -4,6 +4,18 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `verify_site.py` reads `robots.txt`, which nothing did. It is the one file
+  that can take the business off the internet without changing a page: a
+  tree whose robots.txt tells Googlebot to stay out passed all seventeen
+  checks, because every other check treats the tree as pages that link to
+  each other. The new check parses the file into crawler groups and fails a
+  Disallow rule that covers pages the site wants found, a group given no
+  Allow rule at all, a missing catch-all group, and a Sitemap line that
+  names a URL this site is not published at or a file this tree does not
+  publish. The sentence the file opens with is read from the file, so
+  narrowing the policy on purpose fails here rather than leaving the check
+  enforcing a promise the file stopped making.
+
 - `verify_site.py` measures the privacy policy against the tree. The policy
   tells a visitor that the site sets no cookies, stores nothing on their
   device and loads nothing from a third party beyond the two companies it
