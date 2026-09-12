@@ -4,6 +4,17 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `scripts/check_checks_wired.py` requires every check in this repository to
+  be run by something: every `check_*.py` script by `check_site.py`, and every
+  `check_` function in `verify_site.py` by the list its `main` evaluates. A
+  check that exists and is wired to nothing prints nothing, which reads
+  exactly like a check that passed, and thirteen scripts and nineteen
+  functions is past the point where a missing line would be noticed. The two
+  scripts the runner leaves out are named with their reasons, and the README
+  sentence explaining the second is read rather than trusted. It caught itself
+  on its first run, before it was wired in. `check_site.py` now runs thirteen
+  checks by default and fourteen with `--full`.
+
 - `scripts/check_no_network_calls.py` requires the scripts that can reach the
   network to be exactly the two `PERMISSIONS.md` names, reading every script
   for the modules and fetching programs that open a socket. The manifest said
