@@ -6,10 +6,10 @@ What a session needs to believe before it changes anything in this repo.
 
 - `docs/` is generated output, not source. `scripts/build_site.py` renders every
   page from `site/`, and `CNAME`, `robots.txt`, `sitemap.xml` and `llms.txt`
-  with them, and copies the stylesheet, the script and the images out of
-  `site/static/`. There are no exceptions and nothing under `docs/` is an
-  input: a hand edit there is overwritten by the next build. Rebuild with
-  `--out docs` and run `scripts/check_site.py` before any deploy.
+  with them, renders the stylesheet and the script out of `site/static/` and
+  copies the images beside them. There are no exceptions and nothing under
+  `docs/` is an input: a hand edit there is overwritten by the next build.
+  Rebuild with `--out docs` and run `scripts/check_site.py` before a deploy.
 - Line endings belong to the repository, not to whoever clones it.
   `.gitattributes` pins them: blobs LF, working copies CRLF except
   `.gitignore`, `.env.example`, `CLAUDE.md`, `docs/CNAME` and the one `.svg`. A
@@ -19,7 +19,7 @@ What a session needs to believe before it changes anything in this repo.
   once in `site/content/site.json`, and each reaches a page through a token,
   never as a literal. A fragment that writes one out instead is invisible to
   every check, because the built tree is correct for this owner either way;
-  only `rehearse_rebrand.py` catches it, by changing all fifteen and failing on
+  only `rehearse_rebrand.py` catches it, by changing all eighteen and failing
   any built line still carrying an old one. Tokens resolve in `pages.json`
   after it is parsed rather than on its raw text, and the JSON-LD address is
   derived from the one declared string by `address_parts`.

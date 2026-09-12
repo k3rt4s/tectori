@@ -17,6 +17,18 @@ DEFAULT_OUT = os.path.join(
 # are deliberately shaped unlike this site's: a different area code format, a
 # longer street line, a two word brand. A fixture that resembles the original
 # can pass by accident.
+# Every image site.json names. The hero pair and the band image joined the
+# other three on 2026-09-12; until then the stylesheet and the home page
+# fragment carried their filenames, so a new owner edited two files by hand.
+ASSET_KEYS = (
+    "logo_filename",
+    "social_image_filename",
+    "favicon_filename",
+    "hero_webp_filename",
+    "hero_png_filename",
+    "band_image_filename",
+)
+
 FIXTURE = {
     "brand_name": "Northvale Grove",
     "tagline": "Evidence-first IT for teams under review",
@@ -24,6 +36,9 @@ FIXTURE = {
     "logo_filename": "northvale-logo.png",
     "social_image_filename": "northvale-social.png",
     "favicon_filename": "northvale-favicon.png",
+    "hero_webp_filename": "northvale-hero.webp",
+    "hero_png_filename": "northvale-hero.png",
+    "band_image_filename": "northvale-band.jpg",
     "phone_display": "(312) 555-0148",
     "phone_tel_uri": "tel:+13125550148",
     "phone_schema": "+1-312-555-0148",
@@ -119,7 +134,7 @@ def rename_assets(out_dir, original):
     # for the reason a removed page's file is: a build writes and never deletes.
     source = os.path.join(out_dir, "site", "static", "assets")
     published = os.path.join(out_dir, "docs", "assets")
-    for key in ("logo_filename", "social_image_filename", "favicon_filename"):
+    for key in ASSET_KEYS:
         os.rename(
             os.path.join(source, original[key]),
             os.path.join(source, FIXTURE[key]),
@@ -137,7 +152,7 @@ def filename_residue(out_dir, original):
     # it always had, which every check passes because nothing links to it.
     old_names = {
         original[key]
-        for key in ("logo_filename", "social_image_filename", "favicon_filename")
+        for key in ASSET_KEYS
     }
     hits = []
     for dir_path, _dir_names, file_names in os.walk(out_dir):

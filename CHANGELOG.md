@@ -4,6 +4,20 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- The last three images a new owner had to rename by hand are declared values
+  now. The hero pair and the band image were written as filenames in
+  `site/pages/index.body.frag` and `site/static/styles.css`, so runbook step 2
+  told a new owner to edit two files, and the rehearsal could not fail on a
+  name they missed. `site.json` declares all six images, the stylesheet and
+  the script are rendered through the same token substitution as a fragment
+  rather than copied, and the rehearsal renames all six. 18 declared values,
+  zero residue in a rebranded clone. Mutation tested by restoring one literal
+  filename to the stylesheet, which fails with the file, the line and the
+  value named.
+- Rendering the stylesheet made it output, so `--check` compares it. The byte
+  comparison covered the 29 generated files and nothing else, which left a
+  third of the published tree unverified. It compares all 43 now, including
+  the images. Mutation tested by adding one space to `docs/styles.css`.
 - The stylesheet, the script and the twelve images moved from `docs/` to
   `site/static/`, which was the last source living inside the build output.
   The build had been walking `docs/`, skipping what it had just generated and
