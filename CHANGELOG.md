@@ -4,6 +4,17 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `scripts/check_no_network_calls.py` requires the scripts that can reach the
+  network to be exactly the two `PERMISSIONS.md` names, reading every script
+  for the modules and fetching programs that open a socket. The manifest said
+  nothing in this repository makes a network call, which its own ingress line
+  and `scripts/check_live_deploy.py` both contradicted; it now names the two
+  and says the claim is measured. The standard library check permits `urllib`
+  because `urllib` is standard library, so on a mutated copy a script that
+  imported it passed all ten committed checks and failed only this one.
+  `check_site.py` now runs twelve checks by default and thirteen with
+  `--full`.
+
 - `scripts/check_permissions_hosts.py` requires the network egress section of
   `PERMISSIONS.md` and `allowed_external_hosts` in `site/content/site.json` to
   name the same hosts in both directions. The manifest is the document a

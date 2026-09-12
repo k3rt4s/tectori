@@ -85,8 +85,17 @@ the ordinary rights of the user running the command.
 
 ## Network egress
 
-Nothing in this repository makes a network call. The egress below is either a
-visitor's browser acting on the published markup, or the operator pushing.
+No build, check, or deploy step in this repository makes a network call, and
+the egress below is either a visitor's browser acting on the published markup
+or the operator pushing. Two scripts here can reach the network and nothing
+else can: `scripts/check_live_deploy.py` fetches the published site over
+HTTPS to compare it against the tree, and `scripts/serve_docs.py` binds a
+loopback port to preview `docs/`. Neither is part of a build or a deploy.
+
+That last sentence is measured rather than asserted. Every script is read for
+the modules and the programs that open a socket, and a third script gaining
+the ability fails a check instead of quietly widening what this repository
+does.
 
 What a published page causes a visitor's browser to fetch, all on port 443
 over HTTPS:

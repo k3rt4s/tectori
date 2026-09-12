@@ -110,6 +110,14 @@ def main():
         "the egress manifest names the declared hosts",
         [script("check_permissions_hosts.py")],
     ))
+    # That reads the hosts a visitor's browser reaches. The other half of the
+    # same promise is what the repository itself contacts, and the standard
+    # library check permits urllib, so a script could start fetching and
+    # every check here would still pass.
+    results.append(run(
+        "only the named scripts reach the network",
+        [script("check_no_network_calls.py")],
+    ))
     # And every check reads the tree, not how the tree reaches the site. The
     # deploy job is the only route there, and deleting the one line that makes
     # it wait would leave every check passing while a red run shipped again.

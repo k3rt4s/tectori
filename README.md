@@ -112,6 +112,13 @@ against it with the same result it gives against the live site.
   request nobody expects. It reads the sentence in the manifest that promises
   the two agree, so withdrawing the promise fails rather than leaving this
   check enforcing something the document no longer says.
+- `scripts/check_no_network_calls.py` reads every script for the modules and
+  the fetching programs that open a socket, and requires the set that can
+  reach the network to be exactly the two `PERMISSIONS.md` names. The
+  standard library check permits `urllib` because `urllib` is standard
+  library, so a script that started fetching would pass every other check
+  here. Until 2026-09-12 the manifest said nothing in the repository made a
+  network call, which its own ingress line contradicted.
 - `scripts/check_stdlib_only.py` reads every script's imports and requires
   each one to name a standard library module. `PERMISSIONS.md` promises that
   a clone runs on a machine with nothing installed, which is why there is no
@@ -150,7 +157,7 @@ against it with the same result it gives against the live site.
   serves whatever is on `main` whether they passed or not. It also fetches
   the extensionless path of every page, because a host that serves files
   literally returns all 43 files correctly and 404s on every link on every
-  page. It needs the network, so it is not one of the eleven.
+  page. It needs the network, so it is not one of the twelve.
 - `PERMISSIONS.md` lists everything the site needs to build, deploy, and
   serve: runtime, filesystem paths, every outbound host, the operator
   accounts, the DNS records, and a from-scratch deploy runbook. It replaced
@@ -232,7 +239,7 @@ credentials and career for step 5 to rewrite.
    missed. To
    see steps 1 to 4 and this one run end to end before you do them
    yourself, run `python scripts/check_site.py --full`, which adds the
-   rehearsal as a twelfth check.
+   rehearsal as a thirteenth check.
 7. Follow the runbook in `PERMISSIONS.md` for the repository, the Pages
    settings, the DNS records and the accounts behind the three third-party
    services.
