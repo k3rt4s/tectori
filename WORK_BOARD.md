@@ -55,14 +55,16 @@ board has shipped, so the night's work is the reproducibility layer.
   mutating a title in the content model and confirming the build named the
   page, reported the byte offset and exited 1, then restored. The build
   never writes into `docs/`, so rollback is dropping the commit.
-- **REPRO-4, tie the JSON-LD mirror to the page, in progress.** A worker is
-  adding a ninth check to `scripts/verify_site.py`: each page's JSON-LD
-  `name` and `description` must equal its title and meta description, with
-  the service pages excepted because theirs name the service. Found while
-  reviewing the generator: the title lives in the content model and the
-  JSON-LD lives in a separate fragment, so a title edit silently leaves the
-  JSON-LD behind, which is the defect SEO-17 was merged to fix. Additive,
-  rollback is dropping the commit.
+- **REPRO-4, tie the JSON-LD mirror to the page, done.** `verify_site.py`
+  now runs nine checks. The ninth enforces that a page's JSON-LD `name` and
+  `description` equal its title and meta description on the nine pages where
+  the tree already mirrors them. The six service pages have only their
+  description enforced, because their JSON-LD `name` and `serviceType` name
+  the service by design. `index.html` and `faq.html` are exempt and named as
+  exempt, so a page carrying JSON-LD that matches no rule is reported as a
+  gap in the check rather than skipped. Committed at f386b54. Verified by
+  mutation in a scratch tree, not by its own passing run. Rollback is
+  dropping the commit.
 - **REPRO-5, make the chrome editable in one place, in progress.** The
   generator is faithful but stores 28 chrome fragments, because the hand
   written HTML indents the same markup differently page to page. A worker is
