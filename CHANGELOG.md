@@ -4,6 +4,19 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `scripts/check_live_deploy.py` reads what a visitor actually gets. Nothing
+  did before: the checks read the tree about to be deployed, and the workflow
+  reports on a commit without gating Pages, which serves whatever is on `main`
+  whether anything passed or not. A build can be right, a push can succeed,
+  and the site can still be serving last week. It fetches all 43 files and
+  compares them byte for byte, and it also fetches the extensionless path of
+  every page, because every internal link and canonical in the tree uses that
+  form and a host that serves files literally returns all 43 files correctly
+  while 404ing on every link on every page. `CNAME` is expected to 404, since
+  Pages consumes it. Run against the live site on 2026-09-12: 42 of 42 served
+  files identical, 24 extensionless paths resolving to the same bytes.
+  Mutation tested against a plain file server on localhost, which reports all
+  43 files present, 24 dead links, and `CNAME` served when it should not be.
 - `scripts/check_source_only_build.py` is a sixth check and asks whether the
   source is sufficient on its own. Every other check reads a tree that
   already contains `docs/`, so none of them could see that `docs/` was an
