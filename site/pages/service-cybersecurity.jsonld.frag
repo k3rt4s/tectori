@@ -4,13 +4,13 @@
         "@graph": [
           {
             "@type": "Service",
-            "@id": "https://www.tectori.com/service-cybersecurity#service",
+            "@id": "{{SITE_URL}}/service-cybersecurity#service",
             "name": "Cybersecurity",
-            "url": "https://www.tectori.com/service-cybersecurity",
+            "url": "{{SITE_URL}}/service-cybersecurity",
             "description": "Security control design and ownership, hardening baselines, and identity and access management across Active Directory, Azure, and Microsoft 365.",
             "serviceType": "Cybersecurity",
             "provider": {
-              "@id": "https://www.tectori.com/#organization"
+              "@id": "{{SITE_URL}}/#organization"
             },
             "areaServed": {
               "@type": "Country",
@@ -19,25 +19,25 @@
           },
           {
             "@type": "BreadcrumbList",
-            "@id": "https://www.tectori.com/service-cybersecurity#breadcrumb",
+            "@id": "{{SITE_URL}}/service-cybersecurity#breadcrumb",
             "itemListElement": [
               {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "https://www.tectori.com/"
+                "item": "{{SITE_URL}}/"
               },
               {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Services",
-                "item": "https://www.tectori.com/services"
+                "item": "{{SITE_URL}}/services"
               },
               {
                 "@type": "ListItem",
                 "position": 3,
                 "name": "Cybersecurity",
-                "item": "https://www.tectori.com/service-cybersecurity"
+                "item": "{{SITE_URL}}/service-cybersecurity"
               }
             ]
           }

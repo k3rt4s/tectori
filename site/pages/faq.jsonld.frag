@@ -68,6 +68,6 @@
             }
           }
         ],
-        "@id": "https://www.tectori.com/faq#faqpage"
+        "@id": "{{SITE_URL}}/faq#faqpage"
       }
     </script>

@@ -78,11 +78,16 @@ drift check, the verifier and both gates in one command.
   both built from this one list, in this order, so the two files cannot
   disagree about which pages the site has. A new page is added here once.
 - `content/pages.json`: one entry per generated page. Each entry carries the
-  head fields that vary (the leading HTML comment, title, meta description,
-  robots value, og:title, og:description, og:type, og:url, og:image,
-  og:image:alt, canonical href, favicon href, and stylesheet href) as plain
-  values. There is exactly one canonical rendering per head field; no
-  per-field wrapping variant is stored. The remaining fields are the real,
+  head fields that genuinely vary from page to page: the leading HTML
+  comment, title, meta description, robots value, og:title, og:description,
+  og:type, og:url, the canonical href, and the stylesheet href. There is
+  exactly one canonical rendering per head field; no per-field wrapping
+  variant is stored. `og:url` and the canonical are stored as site relative
+  paths and the build prefixes the site URL, so the domain lives in
+  `site.json` alone. og:image, its alt text and the favicon href were the
+  same on all 24 pages and are no longer stored at all; they are derived
+  from the filenames and the brand in `site.json`. The remaining fields are
+  the real,
   page-specific chrome differences: `root_absolute` (true only for
   `404.html` and `thank-you.html`, whose asset and login links are
   root-absolute rather than relative), `current_nav` (which nav item, if

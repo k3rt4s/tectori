@@ -83,7 +83,11 @@ directly.
 ## Configuration
 
 No local secrets or runtime settings are required. The values that belong to
-the business rather than to the site's structure, the brand name, the contact
-strings, the domain, and the three third-party identifiers, are declared once
-in `site/content/site.json`. `PERMISSIONS.md` covers hosting, DNS, and the
-from-scratch deploy.
+the business rather than to the site's structure, the brand name, the tagline,
+the contact strings, the domain, the logo, social card and favicon filenames,
+and the three third-party identifiers, are declared once in
+`site/content/site.json`. The domain in particular is a single value: changing
+`site_url` moves 166 occurrences across a rebuilt tree, and the only file it
+cannot reach, the hand-authored `docs/login.html`, fails a check rather than
+shipping stale. `PERMISSIONS.md` covers hosting, DNS, and the from-scratch
+deploy.

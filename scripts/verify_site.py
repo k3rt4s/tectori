@@ -532,7 +532,11 @@ def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
         "Scarf pixel id": third_party["scarf_pixel_id"],
         "Formspree endpoint": third_party["formspree_endpoint"],
     }
-    allowed_hosts = set(SITE["allowed_external_hosts"])
+    # The site's own host is allowed because it is declared in site_url, not
+    # because it is listed here. Listing it would mean a rebrand left the old
+    # domain allowed, and a page that kept a stale absolute URL would pass.
+    own_host = SITE["site_url"].split("://", 1)[1].rstrip("/")
+    allowed_hosts = set(SITE["allowed_external_hosts"]) | {own_host}
 
     problems: list[str] = []
     found_ids = {label: 0 for label in expected_ids}
