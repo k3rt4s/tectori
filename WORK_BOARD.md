@@ -102,12 +102,29 @@ the productization layer he named, not leftover board work.
   fixed and mutation tested; the arm now checks two occurrences instead of
   none.
 
-The next step this thread is taking is PROD-7, the one thing a buyer needs
-that the repo still does not have: an ordered account of what to change to
-make the site theirs, and what to run to prove they got it right. Every
-piece of it is now true and checkable, which was not the case before
-tonight. It goes in `README.md` rather than a new file, because a new owner
-reads the README first and a document nobody opens is worth nothing.
+- **PROD-7 shipped, and it was proved rather than written.** `README.md`
+  now carries a make-this-site-yours runbook: six ordered steps ending in
+  the rebuild and the checks. Rather than describe the steps and trust
+  them, this thread executed them on a clone at
+  `C:\Code_data\tectori\reproducible\northvale\`, rebranding the site to a
+  fictional business. The clone passes all ten checks and holds no trace of
+  the previous owner. Two defects surfaced that no amount of reading would
+  have: `--out docs` crashed on copying a file onto itself, so there was no
+  supported way to rebuild the published tree in place, and the identity
+  check ignored hostnames written as prose, which is how `login.html` names
+  the domain in its link home. Both are fixed and the second is mutation
+  tested on the clone.
+
+The board holds no dispatchable item and no unshipped repo work. What is
+left is the part a session cannot decide alone: whether this becomes a
+product someone buys, a template repository, or a hosted service, which
+changes what gets built next. Until Jon says which, the useful work is
+hardening what exists. The next step this thread is taking is to re-read
+`THEORY.md` against the tree as it now stands. It is 98 lines against the
+framework's 60-line guidance, and several of its constraints were written
+before the generator existed and now describe a tree that no longer works
+that way. A theory file that is too long to read and partly wrong is worse
+than a short one, and it is the first file the next thread loads.
 
 ## Owner-Only Tasks
 

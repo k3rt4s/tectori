@@ -4,6 +4,22 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Added a make-this-site-yours runbook to `README.md`: six ordered steps
+  covering the declared values, the images, the one hand-authored page, the
+  copy, the rebuild and the hosting setup, ending in the checks that prove
+  the result. The steps were rehearsed against a clone rather than reasoned
+  about. A fictional business replacing every declared value reaches a tree
+  that passes all ten checks and names the previous owner nowhere.
+- Made `python scripts/build_site.py --out docs` rebuild the published tree
+  in place. The static-file copy raised when a file was its own destination,
+  so there had been no supported way to regenerate `docs/` without a
+  scratch directory and a manual copy back.
+- Widened the declared-identity check to hostnames written as prose rather
+  than inside a URL. The rehearsal found one: the link back to the home page
+  on `login.html` names the domain in lowercase with no `www`, so a rebrand
+  that fixed every href would still have shipped a page sending readers to
+  the previous owner's site. Mutation tested on the rehearsal clone, where
+  it is the only failure the tenth check reports.
 - Fixed the contact-details check, which had one arm comparing nothing. Its
   near-miss patterns were written out beside the values they check, so they
   would have gone on looking for a previous owner's phone number after a
