@@ -10,10 +10,11 @@ tree byte for byte. It does not define new content, and it never writes into
 
 ## Running a build
 
-From the repo root, using the workspace's `ai_development` venv:
+From the repo root. The scripts import only the standard library, so any
+Python 3 on the path runs them and no virtual environment is needed:
 
 ```text
-C:\Code\venvs\ai_development\Scripts\python.exe scripts\build_site.py --check
+python scripts/build_site.py --check
 ```
 
 `--check` builds every page into a temporary directory, compares each one
@@ -23,10 +24,13 @@ output, that comparison is expected to pass, and it is the everyday gate: any
 content change should show up in `docs/` only after the generator puts it
 there.
 
-Run with no flags to write the site to the default output directory,
-`C:\Code_data\tectori\reproducible\build_out\`, or pass `--out <dir>` to pick
-another location. Either way the output is a complete deployable tree: the 24
-generated pages plus every other file `docs/` carries, copied unchanged.
+`--out <dir>` builds the site into that directory instead. It has no default,
+so a build writes nothing until it is told where. `--out docs` rebuilds the
+published tree in place; any other directory gets a copy. Either way the
+output is a complete deployable tree of 43 files: the 24 generated pages,
+`login.html`, `CNAME`, `robots.txt`, `sitemap.xml`, `llms.txt`, the stylesheet
+and the script rendered from `static/`, and the twelve images copied beside
+them.
 
 ## Which gate applies when
 
@@ -48,8 +52,7 @@ answered.
   so nothing needs copying by hand.
 
 ```text
-C:\Code\venvs\ai_development\Scripts\python.exe `
-  scripts\compare_render.py docs\ <output-dir>
+python scripts/compare_render.py docs <output-dir>
 ```
 
 Render equality is sound for this site only because every chrome container

@@ -7,11 +7,13 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT = os.path.join(
-    "C:" + chr(92) + "Code_data", "tectori", "reproducible", "rehearsal"
-)
+# The system temporary directory, not a path on the machine this site was
+# built on. The clone is throwaway generated data and must land outside the
+# repo, and the check below enforces that wherever --out points.
+DEFAULT_OUT = os.path.join(tempfile.gettempdir(), "tectori-rehearsal")
 
 # A business that does not exist, on a domain that cannot resolve. The values
 # are deliberately shaped unlike this site's: a different area code format, a
