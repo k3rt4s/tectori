@@ -204,16 +204,28 @@ def check_links(pages: list[Path], docs_root: Path) -> bool:
 
 
 def check_pages_are_reachable(pages: list[Path], docs_root: Path) -> bool:
-    """Every indexed page is linked to from some other page, so a visitor can get there."""
+    """Every indexed page can be reached from the home page by following links."""
     # check_links asks whether the links point at pages that exist. This asks
-    # the other direction, whether the pages have links pointing at them. A
-    # page added to pages.json and never put in the nav or a footer builds
-    # cleanly, resolves, and appears in the sitemap and llms.txt, so it is
-    # indexed and unreachable at the same time and every other check passes.
-    # Self links do not count: the nav on each page links to that page.
-    linked: set[str] = set()
+    # the other direction, whether a visitor who arrives at the home page can
+    # get to a page at all. A page added to pages.json and never put in the
+    # nav or a footer builds cleanly, resolves, and appears in the sitemap and
+    # llms.txt, so it is indexed and unreachable at the same time while every
+    # other check passes.
+    #
+    # Counting incoming links instead, which is what this did until 2026-09-12,
+    # is the weaker question and passes a tree that is wrong: two new pages
+    # that link to each other and to nothing else each supply the other's only
+    # incoming link, so both look linked to while neither is reachable from
+    # anywhere a visitor starts. Walking out from the home page is the only
+    # form of the question a page cannot answer on its own behalf.
+    home = (docs_root / "index.html").resolve()
+    known = {page.resolve() for page in pages}
+    names = {page.resolve(): page.name for page in pages}
+
+    edges: dict[Path, set[Path]] = {}
     for page in pages:
         text = page.read_text(encoding="utf-8")
+        out: set[Path] = set()
         for match in ANCHOR_RE.finditer(text):
             value = html_lib.unescape(match.group(2)).strip()
             try:
@@ -222,21 +234,34 @@ def check_pages_are_reachable(pages: list[Path], docs_root: Path) -> bool:
                 continue
             if kind != "internal" or target is None:
                 continue
-            if target.resolve() == page.resolve():
-                continue
-            linked.add(target.name)
+            resolved = target.resolve()
+            # A page linking to itself is the nav, and it carries nobody.
+            if resolved in known and resolved != page.resolve():
+                out.add(resolved)
+        edges[page.resolve()] = out
+
+    reached: set[Path] = set()
+    queue = [home] if home in known else []
+    while queue:
+        current = queue.pop()
+        if current in reached:
+            continue
+        reached.add(current)
+        queue.extend(edges.get(current, ()))
 
     # The two noindex pages are reached by a redirect and by a 404, not by a
     # link, which is why they are the two the sitemap check also exempts.
-    expected = {page.name for page in pages} - NOINDEX_ALLOWED
-    unreachable = sorted(expected - linked)
-    ok = not unreachable
+    expected = {path for path in known if names[path] not in NOINDEX_ALLOWED}
+    unreachable = sorted(names[path] for path in expected - reached)
+    ok = not unreachable and home in known
     print(
-        f"[{'PASS' if ok else 'FAIL'}] every indexed page is linked to: "
-        f"{len(expected)} pages, {len(unreachable)} reachable from nothing"
+        f"[{'PASS' if ok else 'FAIL'}] every indexed page is reachable from the "
+        f"home page: {len(expected)} pages, {len(unreachable)} reachable from nothing"
     )
+    if home not in known:
+        print("       there is no index.html, so nothing has a starting point")
     for name in unreachable[:20]:
-        print(f"       {name}: no other page links to it")
+        print(f"       {name}: no path of links from the home page reaches it")
     return ok
 
 
