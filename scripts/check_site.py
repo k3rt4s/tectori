@@ -59,6 +59,13 @@ def main():
         "the tree is internally consistent as a site",
         [script("verify_site.py")],
     ))
+    # Every check above reads a tree that already contains docs/, so none of
+    # them can tell whether the source is sufficient on its own. This one
+    # builds from a copy of site/ and scripts/ with no docs/ anywhere.
+    results.append(run(
+        "the source alone reproduces docs/",
+        [script("check_source_only_build.py")],
+    ))
 
     # The render comparison needs a real built tree, so build one into a
     # temporary directory rather than the default output location, which a
@@ -76,7 +83,7 @@ def main():
     finally:
         shutil.rmtree(tmp_dir, ignore_errors=True)
 
-    # Off the default path on purpose. The five checks above read the tree
+    # Off the default path on purpose. The six checks above read the tree
     # that is about to deploy and are what a deploy should wait for. The
     # rehearsal answers a different question, whether someone else could make
     # this site theirs, and it writes a whole clone outside the repo to do it.
