@@ -4,6 +4,16 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `WORK_BOARD.md` split at 268 lines, against the 200 line threshold at which
+  a board stops being read. The 132 lines of completed work in In Progress
+  moved verbatim into `BOARD_ARCHIVE_2026.md`, which leaves the board at 144.
+  Three things were carried across rather than archived with the bullets that
+  stated them, because each is a standing decision a fresh thread would
+  otherwise reopen: that `THEORY.md` stops above 60 lines on purpose, that a
+  push to `main` runs the checks on a clean machine without gating the deploy,
+  and that the buyer read is a finished record rather than a repeatable task.
+  Read for buried questions, the archived sections held one, the service page
+  copy read, and it was already on the board as COPY-SERVICE.
 - `THEORY.md` cut from 107 lines to 88. The standard is 60, and the file had
   grown every time a session learned something. The test applied per bullet
   was whether it states a constraint a session could break without noticing,
