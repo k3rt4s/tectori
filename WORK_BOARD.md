@@ -1,6 +1,6 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-12 04:05. An orchestrator session is live in this
+ACTIVE THREAD: 2026-09-12 04:50. An orchestrator session is live in this
 working copy and is running unattended. Do not work this tree until the
 marker is cleared.
 
@@ -83,12 +83,29 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   the same clone rebuilds to an empty diff. THEORY.md carried the invariant
   as a repository property when it was a machine property; that is corrected.
 
-The next step this thread is taking is to cut THEORY.md back under the 60
-line standard. It is 95 lines and the framework's own reason for the limit is
-that a longer one stops being read, which matters more here than usual: it is
-the file a buyer reads to find out what they must not break. The cut is by
-merging what repeats and dropping what the code now enforces on its own,
-never by dropping a constraint that is still load bearing.
+- **The checks run somewhere other than this laptop now.**
+  `.github/workflows/verify.yml` runs the five checks and the rebrand
+  rehearsal on a clean Linux machine for every push and pull request, and
+  adds one check that did not exist: `docs/` must be byte identical to what
+  the build produces, where `check_site.py` proves only that it renders
+  identically. Mutation tested by inserting one space before a `</body>`,
+  which the render check passes and the byte check fails. The whole sequence
+  was run in a clean clone before it was committed. Nothing in it gates the
+  deploy: Pages publishes from `main` and `docs/` either way.
+- **THEORY.md was cut from 95 lines to 87 and stopped there.** The framework
+  standard is 60. What came out was the incident narrative that belongs in
+  `CHANGELOG.md` and the restatements of mechanics the checks already print
+  in their own output. What is left is a constraint per bullet that a session
+  could break without noticing, so reaching 60 would have meant deleting one.
+  Treat the gap as a decision, not a task still open.
+
+The next step this thread is taking is to find out whether the workflow
+actually ran and passed on GitHub, since a workflow that has never run is a
+file rather than a check. After that, the productization work with the most
+left in it is the first-run experience: `README.md` tells a new owner how to
+rebrand the site, and nothing yet tells them how to stand up their own copy
+from nothing, which is the difference between a repository they can read and
+a product they can host.
 
 ## Owner-Only Tasks
 

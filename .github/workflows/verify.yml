@@ -1,0 +1,55 @@
+# Runs this site's own checks on a clean machine for every push and pull request.
+#
+# The checks have always existed; what this adds is somewhere they run that is
+# not the author's laptop. The line-ending defect fixed on 2026-09-12 is the
+# case in point: it was invisible on a Windows working copy and obvious on the
+# first Linux checkout, and all five checks passed while it was present.
+#
+# GitHub Pages deploys from main and docs/, and it does so whether or not this
+# workflow passes. Nothing here gates the deploy. It reports.
+
+name: Verify the site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      # The build scripts import only the standard library, so there is
+      # nothing to install and no lockfile to go stale.
+      - name: Confirm nothing needs installing
+        run: python -c "import sys; print(sys.version)"
+
+      - name: Run the five checks
+        run: python scripts/check_site.py
+
+      # check_site.py proves the built tree renders identically to docs/.
+      # This proves it is byte identical, which is a different claim: a hand
+      # edit to whitespace, an entity, or a line ending renders the same and
+      # fails here. It is also the check that would have caught the line
+      # endings, because this runner is where that defect was visible.
+      - name: Confirm docs/ is exactly what the build produces
+        run: |
+          python scripts/build_site.py --out docs
+          git diff --exit-code -- docs/
+
+      # Clones the tree outside the repo, rebrands it to a fixture business and
+      # re-runs the checks, so the claim that a new owner could take this over
+      # is tested rather than asserted. It is off the default path locally
+      # because it takes about a minute; here that does not matter.
+      - name: Rehearse a rebrand
+        run: python scripts/rehearse_rebrand.py --out "${{ runner.temp }}/rehearsal"

@@ -4,6 +4,19 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Added `.github/workflows/verify.yml`, so the checks run somewhere that is
+  not the author's laptop. Every push and pull request runs the five checks,
+  then the rebrand rehearsal, on a clean Linux machine. It adds one check
+  that did not exist: `docs/` must be byte identical to what the build
+  produces, where `check_site.py` proves only that it renders identically.
+  Mutation tested by inserting one space before a `</body>` tag, which the
+  render check passes and the byte check fails. Nothing in it gates the
+  deploy; Pages publishes from `main` and `docs/` either way.
+- Cut `THEORY.md` from 95 lines to 87 by removing what the checks already
+  enforce in their own output and the incident narrative this file now
+  carries. It is still over the 60 line standard, and the remainder was not
+  cut because every bullet left is a constraint a session could break
+  without noticing.
 - Added `.gitattributes`, so line endings are a property of this repository
   rather than of whoever clones it. The tree had none, and this working copy
   set `core.autocrlf` locally, which is why the CRLF invariant held here and
