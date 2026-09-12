@@ -13,7 +13,11 @@ What a session needs to believe before it changes anything in this repo.
   diff for the whole file. After any splice, confirm the bare-LF count is zero.
 - Contact details appear character for character and are never reformatted:
   `(615) 829-6802`, `https://www.tectori.com`, and
-  `201 Summit View Dr, Suite 305, Brentwood, TN 37027`.
+  `201 Summit View Dr, Suite 305, Brentwood, TN 37027`. Those three strings,
+  the brand name, the tagline, the social URLs and the three third-party
+  identifiers are declared once in `site/content/site.json`. The build renders
+  the chrome from it and `scripts/verify_site.py` checks a built tree against
+  it, so neither the site nor its checks can be changed alone.
 - The site claims no clients, client counts, testimonials, ratings, prices or
   results, and carries no `Review`, `AggregateRating` or `offers` markup.
 - Copy never implies employees beyond the founder, and never frames the
