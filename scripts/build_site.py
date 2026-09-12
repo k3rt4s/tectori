@@ -100,15 +100,38 @@ def load_pages():
     return json.loads(raw.decode("utf-8"))
 
 
+def attr(value):
+    """Return a content-model string safe to place inside a double quoted HTML attribute."""
+    # Deliberately not the standard library helper, whose quoted mode also
+    # rewrites the apostrophe. Six page titles carry one, and rewriting it would
+    # change the shipped bytes of pages that are otherwise unchanged. Inside a
+    # double quoted attribute only these three characters can end the value or
+    # begin a new markup construct.
+    return (
+        value.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace('"', "&quot;")
+    )
+
+
+def text(value):
+    """Return a content-model string safe to place in HTML text content."""
+    return (
+        value.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
+
+
 def render_head_field_inline(name_or_property, key, value):
-    return ("    <meta " + key + '="' + name_or_property + '" content="' + value + '">' + CRLF).encode("utf-8")
+    return ("    <meta " + key + '="' + name_or_property + '" content="' + attr(value) + '">' + CRLF).encode("utf-8")
 
 
 def render_meta_description(value):
     return (
         "    <meta" + CRLF
         + '      name="description"' + CRLF
-        + '      content="' + value + '"' + CRLF
+        + '      content="' + attr(value) + '"' + CRLF
         + "    >" + CRLF
     ).encode("utf-8")
 
@@ -192,7 +215,7 @@ def render_page(entry, cache):
     out.append(("  <head>" + CRLF).encode("utf-8"))
     out.append(('    <meta charset="utf-8">' + CRLF).encode("utf-8"))
     out.append(('    <meta name="viewport" content="width=device-width, initial-scale=1">' + CRLF).encode("utf-8"))
-    out.append(("    <title>" + entry["title"] + "</title>" + CRLF).encode("utf-8"))
+    out.append(("    <title>" + text(entry["title"]) + "</title>" + CRLF).encode("utf-8"))
     out.append(render_meta_description(entry["description"]))
     out.append(render_head_field_inline("robots", "name", entry["robots"]))
     out.append(render_head_field_inline("og:title", "property", entry["og_title"]))
@@ -206,9 +229,9 @@ def render_page(entry, cache):
     out.append(('    <meta property="og:site_name" content="Tectori">' + CRLF).encode("utf-8"))
     out.append(('    <meta name="twitter:card" content="summary_large_image">' + CRLF).encode("utf-8"))
     if entry["canonical"]:
-        out.append(('    <link rel="canonical" href="' + entry["canonical"] + '">' + CRLF).encode("utf-8"))
-    out.append(('    <link rel="icon" href="' + entry["favicon_href"] + '">' + CRLF).encode("utf-8"))
-    out.append(('    <link rel="stylesheet" href="' + entry["stylesheet_href"] + '">' + CRLF).encode("utf-8"))
+        out.append(('    <link rel="canonical" href="' + attr(entry["canonical"]) + '">' + CRLF).encode("utf-8"))
+    out.append(('    <link rel="icon" href="' + attr(entry["favicon_href"]) + '">' + CRLF).encode("utf-8"))
+    out.append(('    <link rel="stylesheet" href="' + attr(entry["stylesheet_href"]) + '">' + CRLF).encode("utf-8"))
     if entry["jsonld_fragment"]:
         out.append(load_fragment(entry["jsonld_fragment"]))
     out.append(("  </head>" + CRLF).encode("utf-8"))
@@ -226,8 +249,39 @@ def render_page(entry, cache):
     return b"".join(out)
 
 
+REQUIRED_ENTRY_KEYS = (
+    "output", "comment", "title", "description", "robots", "og_title",
+    "og_description", "og_type", "og_url", "og_image", "og_image_alt",
+    "canonical", "favicon_href", "stylesheet_href", "jsonld_fragment",
+    "body_fragment", "current_nav", "contact_label", "footer_order",
+    "footer_omit", "root_absolute",
+)
+
+
+def validate(entries):
+    """Fail with the offending page and field named, rather than a KeyError mid render."""
+    problems = []
+    for index, entry in enumerate(entries):
+        where = entry.get("output") or f"entry {index}"
+        for key in REQUIRED_ENTRY_KEYS:
+            if key not in entry:
+                problems.append(f"{where}: missing required field {key!r}")
+        order = entry.get("footer_order")
+        if order is not None and order not in FOOTER_ORDERS:
+            problems.append(f"{where}: footer_order {order!r} is not one of {sorted(FOOTER_ORDERS)}")
+        omit = entry.get("footer_omit")
+        if omit and omit not in dict(FOOTER_LINKS):
+            problems.append(f"{where}: footer_omit {omit!r} is not a footer link key")
+    if problems:
+        print("The content model is not valid, so nothing was built:")
+        for problem in problems:
+            print(f"  {problem}")
+        sys.exit(2)
+
+
 def build(out_dir):
     entries = load_pages()
+    validate(entries)
     cache = {}
     os.makedirs(out_dir, exist_ok=True)
     written = []
@@ -238,6 +292,29 @@ def build(out_dir):
             f.write(data)
         written.append(entry["output"])
     return written
+
+
+def copy_static_files(out_dir, written):
+    """Copy every file in docs/ the generator does not produce, so the output is a deployable tree."""
+    # Listing the exceptions instead of the inclusions is what keeps this from
+    # decaying. A stylesheet, an image or a robots.txt added to docs/ later is
+    # carried across without anyone remembering to name it here. login.html is
+    # among them: it shares no chrome with any page and carries the only CSP, so
+    # the generator does not model it, and an output tree missing it is not a
+    # site.
+    generated = set(written)
+    copied = []
+    for dir_path, _dir_names, file_names in os.walk(DOCS_DIR):
+        rel_dir = os.path.relpath(dir_path, DOCS_DIR)
+        for file_name in file_names:
+            rel = file_name if rel_dir == os.curdir else os.path.join(rel_dir, file_name)
+            if rel.replace(os.sep, '/') in generated:
+                continue
+            destination = os.path.join(out_dir, rel)
+            os.makedirs(os.path.dirname(destination), exist_ok=True)
+            shutil.copyfile(os.path.join(dir_path, file_name), destination)
+            copied.append(rel)
+    return sorted(copied)
 
 
 def compare(out_dir, written):
@@ -284,6 +361,8 @@ def main():
     else:
         written = build(args.out)
         print(f"Wrote {len(written)} pages to {args.out}")
+        copied = copy_static_files(args.out, written)
+        print(f"Copied {len(copied)} files docs/ carries that the generator does not build")
 
 
 if __name__ == "__main__":
