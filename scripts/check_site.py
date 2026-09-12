@@ -66,6 +66,14 @@ def main():
         "the source alone reproduces docs/",
         [script("check_source_only_build.py")],
     ))
+    # The check above proves the source is sufficient on this machine, which
+    # has a Python that has had things installed into it. A dependency added
+    # to a script is invisible to it, and to every other check here, until a
+    # buyer clones the repository onto a machine that has nothing.
+    results.append(run(
+        "the scripts need nothing installed",
+        [script("check_stdlib_only.py")],
+    ))
     # And every check above reads the tree rather than what the repository
     # says about it. A README that names the wrong count is what a new owner
     # follows, and nothing else here reads a sentence.
