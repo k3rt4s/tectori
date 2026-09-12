@@ -43,6 +43,7 @@ ROBOTS_RE = re.compile(
     re.IGNORECASE | re.DOTALL,
 )
 ATTR_RE = re.compile(r'(?:href|src)\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
+SRCSET_RE = re.compile(r'srcset\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
 SCRIPT_BLOCK_RE = re.compile(rb"<script\b.*?</script>", re.IGNORECASE | re.DOTALL)
 TAG_RE = re.compile(rb"<[^>]+>")
 BEACON_MARKER = b"cloudflareinsights.com/beacon.min.js"
@@ -142,6 +143,24 @@ def resolve_internal(url_value: str, current_file: Path, docs_root: Path):
     return "internal", candidate
 
 
+def link_values(text: str):
+    """Yield every URL a page points at, including each candidate in a srcset.
+
+    A srcset is a comma separated list of candidates, each a URL followed by
+    an optional width or density descriptor. Nothing scanned them until
+    2026-09-12, and the home page serves its hero as a webp that way, so a
+    renamed or deleted file behind it would have shipped as a broken image to
+    every browser that prefers webp while all ten checks passed.
+    """
+    for match in ATTR_RE.finditer(text):
+        yield match.group(2)
+    for match in SRCSET_RE.finditer(text):
+        for candidate in match.group(2).split(","):
+            candidate = candidate.strip()
+            if candidate:
+                yield candidate.split()[0]
+
+
 def check_links(pages: list[Path], docs_root: Path) -> bool:
     """Every href and src that points inside the site resolves to a file that exists."""
     checked = 0
@@ -151,8 +170,8 @@ def check_links(pages: list[Path], docs_root: Path) -> bool:
     broken_examples: list[str] = []
     for page in pages:
         text = page.read_text(encoding="utf-8")
-        for match in ATTR_RE.finditer(text):
-            value = html_lib.unescape(match.group(2)).strip()
+        for raw in link_values(text):
+            value = html_lib.unescape(raw).strip()
             try:
                 kind, target = resolve_internal(value, page, docs_root)
             except Exception:
@@ -220,8 +239,8 @@ def check_noindex_and_navigation(pages: list[Path]) -> bool:
     link_targets = {"404.html", "thank-you.html", "/404", "/404.html", "/thank-you"}
     for page in pages:
         text = page.read_text(encoding="utf-8")
-        for match in ATTR_RE.finditer(text):
-            value = html_lib.unescape(match.group(2)).strip().split("#", 1)[0].split("?", 1)[0]
+        for raw in link_values(text):
+            value = html_lib.unescape(raw).strip().split("#", 1)[0].split("?", 1)[0]
             if value in link_targets:
                 problems.append(f"{page.name}: links to {value!r}")
 

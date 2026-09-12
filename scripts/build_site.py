@@ -557,7 +557,7 @@ def main():
             identical, differing = compare(tmp_dir, written)
         finally:
             shutil.rmtree(tmp_dir, ignore_errors=True)
-        print(f"Pages generated: {len(written)}")
+        print(f"Files generated: {len(written)}, the 24 pages plus CNAME, robots.txt, sitemap.xml and llms.txt")
         print(f"Identical to docs/: {identical}")
         print(f"Differing from docs/: {len(differing)}")
         for name, reason in differing:
@@ -565,9 +565,19 @@ def main():
         sys.exit(0 if not differing else 1)
     else:
         written = build(args.out)
-        print(f"Wrote {len(written)} pages to {args.out}")
+        print(f"Wrote {len(written)} files to {args.out}, the 24 pages plus CNAME, robots.txt, sitemap.xml and llms.txt")
         copied = copy_static_files(args.out, written)
-        print(f"Copied {len(copied)} files docs/ carries that the generator does not build")
+        print(
+            f"Copied {len(copied)} files docs/ carries that the generator does not build"
+        )
+        if not copied:
+            # Building with --out docs is the in-place rebuild, where every
+            # static file is already its own destination. A reader who has
+            # only seen the 15 of a build into a scratch directory should
+            # not have to work out why this run copied none.
+            print(
+                "        none to copy, because this build wrote into the directory it reads them from"
+            )
 
 
 if __name__ == "__main__":

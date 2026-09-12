@@ -71,8 +71,9 @@ What a session needs to believe before it changes anything in this repo.
   `&nbsp;` and `&#8209;` entities put U+00A0 and U+2011 into text a visitor
   copies, which some dialers and CRM fields reject, and the span already
   prevents the line break they were added to fix.
-- Tectori is nationally targeted and Nashville is location proof, decided by
-  Jon on 2026-09-11. No location pages, no LocalBusiness schema, no
+- Tectori is nationally targeted and Nashville is location proof, decided on
+  2026-09-11 by Jon Bowker, who owns the practice and the site. No location
+  pages, no LocalBusiness schema, no
   Nashville-modified keyword targets, and the nationwide wording stands.
   `contact`, `about` and `service-fractional-leadership` name Nashville in
   their title and meta description, which is proof rather than drift toward
