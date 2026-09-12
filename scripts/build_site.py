@@ -135,6 +135,8 @@ SITE_TOKENS = {
     "{{TAGLINE}}": SITE["tagline"],
     "{{SITE_URL}}": SITE["site_url"],
     "{{SITE_HOST}}": SITE["site_url"].split("://", 1)[1].rstrip("/"),
+    "{{SITE_APEX}}": SITE["site_url"].split("://", 1)[1].rstrip("/").split("www.", 1)[-1],
+    "{{FAVICON_FILENAME}}": SITE["favicon_filename"],
     "{{PHONE_DISPLAY}}": SITE["phone_display"],
     "{{PHONE_TEL_URI}}": SITE["phone_tel_uri"],
     "{{POSTAL_ADDRESS}}": SITE["postal_address"],
@@ -418,19 +420,41 @@ STATIC_PAGE_DESCRIPTION = re.compile(
     rb'name="description"\s*content="(.*?)"', re.DOTALL
 )
 
+# Pages rendered from a fragment of their own rather than assembled from the
+# shared chrome. login.html shares no header, navigation or footer with any
+# other page and carries the tree's only Content-Security-Policy, so the
+# content model has nothing to say about it. It still goes through the token
+# substitution every other fragment goes through, which is the whole reason it
+# lives here rather than being hand maintained inside the output directory:
+# until 2026-09-12 it was a source file sitting in docs/, and a rebrand
+# reached it only through a hand written list of substitutions kept in
+# rehearse_rebrand.py that nothing checked.
+VERBATIM_PAGES = (
+    ("login.html", os.path.join("pages", "login.page.frag")),
+)
 
-def static_page_description(path):
-    """Return the meta description of a page the generator does not render, read from docs/.
 
-    login.html is hand authored and has no entry in the content model, so its
-    own markup is the only source of truth for its description. Reading it here
-    is what keeps llms.txt from carrying a second, silently diverging copy.
+def render_verbatim_pages():
+    """Return each verbatim page's output name mapped to its rendered bytes."""
+    return {name: load_fragment(source) for name, source in VERBATIM_PAGES}
+
+
+def static_page_description(path, verbatim):
+    """Return the meta description of a verbatim page, read from its rendered markup.
+
+    login.html has no entry in the content model, so its own markup is the only
+    source of truth for its description. Reading it here is what keeps llms.txt
+    from carrying a second, silently diverging copy.
     """
     name = path.lstrip("/") or "index.html"
     if not name.endswith(".html"):
         name += ".html"
-    with open(os.path.join(DOCS_DIR, name), "rb") as f:
-        raw = f.read()
+    raw = verbatim.get(name)
+    if raw is None:
+        raise ValueError(
+            f"{name} is in public_pages.json but is neither in the content "
+            "model nor a verbatim page, so llms.txt has no description for it"
+        )
     match = STATIC_PAGE_DESCRIPTION.search(raw)
     if match is None:
         raise ValueError(f"{name}: no meta description for its llms.txt line")
@@ -489,7 +513,7 @@ def render_sitemap(public_pages):
     return (CRLF.join(lines) + CRLF).encode("utf-8")
 
 
-def render_llms(public_pages, entries):
+def render_llms(public_pages, entries, verbatim):
     """Return llms.txt, one line per public page carrying that page's own meta description."""
     # This file was maintained by hand and drifted silently, which is what
     # scripts/check_llms_drift.py exists to catch. Building it from the same
@@ -510,7 +534,7 @@ def render_llms(public_pages, entries):
     ]
     for page in public_pages:
         path = page["path"]
-        description = by_path.get(path) or static_page_description(path)
+        description = by_path.get(path) or static_page_description(path, verbatim)
         lines.append(f"- {path}: {description}")
     return (CRLF.join(lines) + CRLF).encode("utf-8")
 
@@ -528,6 +552,12 @@ def build(out_dir):
             f.write(data)
         written.append(entry["output"])
 
+    verbatim = render_verbatim_pages()
+    for name, data in verbatim.items():
+        with open(os.path.join(out_dir, name), "wb") as f:
+            f.write(data)
+        written.append(name)
+
     # The four non-HTML files that carry the site's own domain or repeat its
     # page descriptions. Generating them is what makes the domain a one value
     # change and what stops llms.txt drifting from the pages it describes.
@@ -536,7 +566,7 @@ def build(out_dir):
         ("CNAME", render_cname()),
         ("robots.txt", render_robots()),
         ("sitemap.xml", render_sitemap(public_pages)),
-        ("llms.txt", render_llms(public_pages, entries)),
+        ("llms.txt", render_llms(public_pages, entries, verbatim)),
     ):
         with open(os.path.join(out_dir, name), "wb") as f:
             f.write(data)
@@ -548,10 +578,8 @@ def copy_static_files(out_dir, written):
     """Copy every file in docs/ the generator does not produce, so the output is a deployable tree."""
     # Listing the exceptions instead of the inclusions is what keeps this from
     # decaying. A stylesheet, an image or a font added to docs/ later is
-    # carried across without anyone remembering to name it here. login.html is
-    # among them: it shares no chrome with any page and carries the only CSP, so
-    # the generator does not model it, and an output tree missing it is not a
-    # site.
+    # carried across without anyone remembering to name it here. What is left
+    # is genuinely static: the stylesheet, the script, the images and the fonts.
     generated = set(written)
     copied = []
     for dir_path, _dir_names, file_names in os.walk(DOCS_DIR):
@@ -608,7 +636,7 @@ def main():
             identical, differing = compare(tmp_dir, written)
         finally:
             shutil.rmtree(tmp_dir, ignore_errors=True)
-        print(f"Files generated: {len(written)}, the 24 pages plus CNAME, robots.txt, sitemap.xml and llms.txt")
+        print(f"Files generated: {len(written)}, the 24 modelled pages, login.html, and CNAME, robots.txt, sitemap.xml and llms.txt")
         print(f"Identical to docs/: {identical}")
         print(f"Differing from docs/: {len(differing)}")
         for name, reason in differing:
@@ -616,7 +644,7 @@ def main():
         sys.exit(0 if not differing else 1)
     else:
         written = build(args.out)
-        print(f"Wrote {len(written)} files to {args.out}, the 24 pages plus CNAME, robots.txt, sitemap.xml and llms.txt")
+        print(f"Wrote {len(written)} files to {args.out}, the 24 modelled pages, login.html, and CNAME, robots.txt, sitemap.xml and llms.txt")
         copied = copy_static_files(args.out, written)
         print(
             f"Copied {len(copied)} files docs/ carries that the generator does not build"

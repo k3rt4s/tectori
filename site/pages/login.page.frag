@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!-- Tectori's client login page renders the portal sign-in and transmits or stores nothing entered into it. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Client sign in | Tectori</title>
+    <meta
+      name="description"
+      content="Sign in to the Tectori client portal for project workspaces, evidence requests, and review status.">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <link rel="canonical" href="{{SITE_URL}}/login.html">
+    <link rel="icon" href="assets/{{FAVICON_FILENAME}}">
+    <link rel="stylesheet" href="styles.css?v=20260906">
+    <script src="site.js?v=20260820" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#login-form">Skip to sign in</a>
+    <main class="login-page">
+      <section class="login-brand" aria-labelledby="portal-title">
+        <a href="/" aria-label="Return to Tectori home"
+          ><img
+            class="login-brand-logo"
+            src="assets/{{LOGO_FILENAME}}"
+            alt="Tectori"></a>
+        <div class="login-message">
+          <p class="eyebrow">Control desk</p>
+          <h1 id="portal-title">
+            Clear work. Visible evidence. Named ownership.
+          </h1>
+          <p>
+            The client portal keeps controls, supporting records, open
+            decisions, and accountability in one practical view.
+          </p>
+        </div>
+        <a class="login-back" href="/">Return to {{SITE_APEX}}</a>
+      </section>
+      <section class="login-panel" aria-labelledby="login-title">
+        <div class="login-card">
+          <p class="eyebrow">Client portal</p>
+          <h2 id="login-title">Sign in</h2>
+          <p>
+            Access project workspaces, evidence requests, and review status.
+          </p>
+          <form
+            class="login-form"
+            id="login-form"
+            autocomplete="off"
+            novalidate
+          >
+            <div class="form-field">
+              <label for="username">Email or username</label
+              ><input
+                id="username"
+                type="text"
+                autocomplete="off"
+                spellcheck="false"
+                required>
+            </div>
+            <div class="form-field">
+              <label for="password">Password</label
+              ><input
+                id="password"
+                type="password"
+                autocomplete="new-password"
+                required>
+            </div>
+            <button class="button primary" type="submit">Sign in</button>
+            <p
+              class="form-message"
+              id="login-message"
+              role="alert"
+              hidden
+            ></p>
+          </form>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

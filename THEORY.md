@@ -4,8 +4,8 @@ What a session needs to believe before it changes anything in this repo.
 
 ## Invariants
 
-- `docs/` is generated output, not source. Every page except `docs/login.html`
-  is rendered by `scripts/build_site.py` from `site/`, and so are `CNAME`,
+- `docs/` is generated output, not source. Every page is rendered by
+  `scripts/build_site.py` from `site/`, and so are `CNAME`,
   `robots.txt`, `sitemap.xml` and `llms.txt`. Edit the content model or a
   fragment and rebuild with `--out docs`; a hand edit is overwritten by the
   next build. Run `scripts/check_site.py` before any deploy.
@@ -39,7 +39,11 @@ What a session needs to believe before it changes anything in this repo.
   Assessor (ISA); Qualified Security Assessor is a different thing and is not
   Tectori's. `verify_site.py` catches the markup and the wrong credential. It
   cannot read prose, so the rest of this holds only if a writer keeps it.
-- `docs/login.html` carries no tracking tags and holds the tree's only CSP.
+- `login.html` carries no tracking tags and holds the tree's only CSP. It is
+  rendered from `site/pages/login.page.frag` without the shared chrome, which
+  is what `VERBATIM_PAGES` in the build is for; it shares no header,
+  navigation or footer with any other page, so the content model has nothing
+  to say about it, but it still goes through token substitution.
   `docs/404.html` and `docs/thank-you.html` are the only `noindex` pages and
   stay out of `sitemap.xml`, `llms.txt` and the navigation.
 
@@ -51,10 +55,8 @@ What a session needs to believe before it changes anything in this repo.
   than a defect to chase.
 - The domain is one value. Nothing under `site/` spells it out but `site_url`:
   canonicals and og:url are stored as site-relative paths and the fragments
-  carry `{{SITE_URL}}` and `{{SITE_HOST}}`. Changing it moves 166 occurrences.
-  The one file it cannot reach is the hand-authored `docs/login.html`, which
-  names the domain in a canonical and again as prose in its link home;
-  `verify_site.py` fails on both rather than letting a stale domain ship.
+  carry `{{SITE_URL}}`, `{{SITE_HOST}}` and `{{SITE_APEX}}`. Changing it moves
+  166 occurrences and reaches every file.
 - Each page's JSON-LD `name` and `description` repeat the visible title and
   meta description word for word, so a one-line edit to either is a two-line
   edit. A service page is the deliberate exception: its `name` and

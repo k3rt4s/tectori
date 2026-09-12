@@ -1,6 +1,6 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-12 06:15. An orchestrator session is live in this
+ACTIVE THREAD: 2026-09-12 07:00. An orchestrator session is live in this
 working copy and is running unattended. Do not work this tree until the
 marker is cleared.
 
@@ -141,14 +141,22 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   a token, and no check can see a violation because the tree is correct for
   this owner either way. The incident narrative went to `CHANGELOG.md`.
 
-The next step this thread is taking is the one part of the tree the rehearsal
-still steps around rather than through: `docs/login.html` is the only page the
-generator does not model, so `rehearse_rebrand.py` rebrands it by an explicit
-list of substitutions of its own. That list is a second copy of the
-substitution map, maintained by hand, and nothing fails when it falls behind.
-Either the generator models the page or the rehearsal stops special-casing it;
-read the page first and decide which, because it is the page that carries the
-tree's only CSP and no analytics tags, and both are constraints worth keeping.
+- **The login page is generated and the rehearsal no longer special-cases**
+  **it.** It was source living inside the build output, rebranded by a hand
+  written list of substitutions in `rehearse_rebrand.py` that duplicated the
+  build's own token map and that nothing checked. It is now
+  `site/pages/login.page.frag`, rendered through the same substitution as
+  every other fragment but without the shared chrome it never had, which is
+  what `VERBATIM_PAGES` is for. Its CSP and its absence of analytics tags are
+  unchanged and still checked. `docs/login.html` is byte identical.
+
+The next step this thread is taking is to read `verify_site.py` the way the
+build was just read. Its checks confirm that declared values are present, and
+the defect class this thread has found twice is a value that is present and
+also somewhere it should not be. The question for each of the ten checks is
+what a tree would have to look like to pass it while being wrong, and whether
+that tree is one a new owner could plausibly produce. Work the checks that
+fail that question, and leave the ones that do not.
 
 ## Owner-Only Tasks
 

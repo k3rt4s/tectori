@@ -120,31 +120,6 @@ def rename_assets(out_dir, original):
         )
 
 
-def rewrite_login(out_dir, original):
-    """Apply runbook step 3: the one page the generator does not model.
-
-    Every substitution here is one the README names in that step. Doing them by
-    an explicit list rather than a blanket sweep of the whole clone is the
-    point: a value hard coded somewhere else in the tree stays visible to the
-    residue scan instead of being tidied away before it is measured.
-    """
-    path = os.path.join(out_dir, "docs", "login.html")
-    with open(path, "rb") as f:
-        raw = f.read()
-    pairs = [
-        (original["logo_filename"], FIXTURE["logo_filename"]),
-        (original["favicon_filename"], FIXTURE["favicon_filename"]),
-        (original["site_url"], FIXTURE["site_url"]),
-        (host_of(original["site_url"]), host_of(FIXTURE["site_url"])),
-        (apex_of(original["site_url"]), apex_of(FIXTURE["site_url"])),
-        (original["brand_name"], FIXTURE["brand_name"]),
-    ]
-    for old, new in pairs:
-        raw = raw.replace(old.encode("utf-8"), new.encode("utf-8"))
-    with open(path, "wb") as f:
-        f.write(raw)
-
-
 def run(out_dir, args):
     """Run one of the repo's own scripts inside the clone and return the result."""
     return subprocess.run(
@@ -236,8 +211,7 @@ def main():
     clone(out_dir)
     rewrite_site_json(out_dir)
     rename_assets(out_dir, original)
-    rewrite_login(out_dir, original)
-    print("Applied the three mechanical runbook steps")
+    print("Applied the two mechanical runbook steps")
 
     build = run(out_dir, [os.path.join("scripts", "build_site.py"), "--out", "docs"])
     if build.returncode != 0:
