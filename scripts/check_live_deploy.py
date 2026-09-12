@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Fetch every file in docs/ from the live site and report any that differs from what was published."""
 
-# Nothing else answers whether a deploy landed. The six checks read the tree
-# about to be deployed and say nothing about the host, and the workflow that
-# publishes it reports that the artifact was accepted, not that the domain and
-# the certificate answer with it. A build can be perfect, the push can
-# succeed, the deploy can go green, and the site can still be serving last
+# Nothing else answers whether a deploy landed. The offline checks read the
+# tree about to be deployed and say nothing about the host, and the workflow
+# that publishes it reports that the artifact was accepted, not that the
+# domain and the certificate answer with it. A build can be perfect, the push
+# can succeed, the deploy can go green, and the site can still be serving last
 # week because a cache is stale or the domain moved. This is the only check
 # that reads what a visitor actually gets, so it needs the network and is not
 # part of check_site.py.

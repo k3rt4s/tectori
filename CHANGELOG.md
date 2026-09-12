@@ -4,6 +4,22 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `scripts/check_deploy_gate.py` reads the workflow and confirms the deploy
+  job still waits for the verify job, still uploads `docs/`, and still
+  refuses pull requests. Every other check reads the built tree; none of them
+  reads how that tree reaches the site, and the deploy job is now the only
+  route there. Deleting the one line that makes it wait would leave every
+  check passing, every run green, and a broken tree shipping on the next
+  push, which is the state this repository was in earlier the same day.
+  Mutation tested against four edits to the workflow, dropping the `needs`
+  line, uploading a different directory, letting pull requests deploy, and
+  removing the deploy step; all four fail and name what is wrong. The other
+  half of the gate is a repository setting that cannot be read offline, and
+  getting it wrong fails the deploy job loudly rather than shipping quietly.
+- The guides no longer count the checks. `README.md` and `PERMISSIONS.md`
+  said six of six and the workflow step was named for the number, so adding
+  one meant finding every place the old count was written down. `check_site.py`
+  already printed the count it actually ran.
 - The checks now gate the deploy. GitHub Pages published `main` and `docs/`
   on its own, so `verify.yml` ran alongside the go-live rather than in front
   of it and a red run meant a broken tree was already being served. The

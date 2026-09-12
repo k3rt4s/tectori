@@ -99,6 +99,12 @@ directly.
   is derived from one declared value everywhere. It counts rather than fails
   on the old brand name, because most of those are body copy a new owner
   rewrites. Nothing in the repository is modified by a run.
+- `scripts/check_deploy_gate.py` reads `.github/workflows/verify.yml` and
+  confirms the deploy job still waits for the checks, uploads `docs/`, and
+  refuses pull requests. It is the only check that reads how the tree reaches
+  the site rather than the tree itself, and the deploy job is the one thing
+  here whose removal is silent: delete the line that makes it wait and every
+  other check still passes while a failing run ships.
 - `scripts/check_live_deploy.py` fetches every file in `docs/` from the live
   site and reports any that differs. It is the only check that reads what a
   visitor gets: the others read the tree about to be deployed, and Pages
@@ -169,8 +175,8 @@ previous owner nowhere.
    them. `build_site.py --check` names anything in `docs/` the build did not
    write, so a file you forget fails a check rather than staying on the site.
 5. Rebuild in place with `python scripts/build_site.py --out docs`, then run
-   `python scripts/check_site.py`. All six must pass before the tree is
-   worth deploying. One of the six is `scripts/verify_site.py`, which is
+   `python scripts/check_site.py`. Every check must pass before the tree is
+   worth deploying. One of them is `scripts/verify_site.py`, which is
    thirteen checks of its own that read the built tree as a site rather than
    as a set of files, and it is the one that catches a value you missed. To
    see steps 1 to 3 and this one run end to end before you do them
