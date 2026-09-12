@@ -15,6 +15,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(SCRIPT_DIR)
 SITE_DIR = os.path.join(REPO_ROOT, "site")
 DOCS_DIR = os.path.join(REPO_ROOT, "docs")
+STATIC_DIR = os.path.join(REPO_ROOT, "site", "static")
 DEFAULT_OUT = r"C:\Code_data\tectori\reproducible\build_out"
 
 # Desktop nav order, shared by every page. The trailing "Contact" link is
@@ -574,29 +575,22 @@ def build(out_dir):
     return written
 
 
-def copy_static_files(out_dir, written):
-    """Copy every file in docs/ the generator does not produce, so the output is a deployable tree."""
-    # Listing the exceptions instead of the inclusions is what keeps this from
-    # decaying. A stylesheet, an image or a font added to docs/ later is
-    # carried across without anyone remembering to name it here. What is left
-    # is genuinely static: the stylesheet, the script, the images and the fonts.
-    generated = set(written)
+def copy_static_files(out_dir):
+    """Copy every file under site/static into the output, so the result is a deployable tree."""
+    # These are source. They used to live in docs/ and be copied from there
+    # to there, which made docs/ an input to its own build: a clone that
+    # deleted the output directory could not rebuild, and a hand edit to the
+    # stylesheet survived every rebuild while README said it would not. The
+    # whole directory is copied rather than a named list, so a font or an
+    # image added later ships without anyone remembering to name it here.
     copied = []
-    for dir_path, _dir_names, file_names in os.walk(DOCS_DIR):
-        rel_dir = os.path.relpath(dir_path, DOCS_DIR)
+    for dir_path, _dir_names, file_names in os.walk(STATIC_DIR):
+        rel_dir = os.path.relpath(dir_path, STATIC_DIR)
         for file_name in file_names:
             rel = file_name if rel_dir == os.curdir else os.path.join(rel_dir, file_name)
-            if rel.replace(os.sep, '/') in generated:
-                continue
-            source = os.path.join(dir_path, file_name)
             destination = os.path.join(out_dir, rel)
-            # Building with --out docs is how the published tree is updated in
-            # place, and every static file is then its own destination. Copying
-            # a file onto itself raises rather than doing nothing, so skip it.
-            if os.path.exists(destination) and os.path.samefile(source, destination):
-                continue
             os.makedirs(os.path.dirname(destination), exist_ok=True)
-            shutil.copyfile(source, destination)
+            shutil.copyfile(os.path.join(dir_path, file_name), destination)
             copied.append(rel)
     return sorted(copied)
 
@@ -645,18 +639,11 @@ def main():
     else:
         written = build(args.out)
         print(f"Wrote {len(written)} files to {args.out}, the 24 modelled pages, login.html, and CNAME, robots.txt, sitemap.xml and llms.txt")
-        copied = copy_static_files(args.out, written)
+        copied = copy_static_files(args.out)
         print(
-            f"Copied {len(copied)} files docs/ carries that the generator does not build"
+            f"Copied {len(copied)} static files from site/static, the stylesheet, "
+            "the script and the images"
         )
-        if not copied:
-            # Building with --out docs is the in-place rebuild, where every
-            # static file is already its own destination. A reader who has
-            # only seen the 15 of a build into a scratch directory should
-            # not have to work out why this run copied none.
-            print(
-                "        none to copy, because this build wrote into the directory it reads them from"
-            )
 
 
 if __name__ == "__main__":

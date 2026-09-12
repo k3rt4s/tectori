@@ -112,12 +112,42 @@ def rewrite_site_json(out_dir):
 
 def rename_assets(out_dir, original):
     """Apply runbook step 2: rename the three images site.json declares by name."""
-    assets = os.path.join(out_dir, "docs", "assets")
+    # The images are source under site/static and the build copies them into
+    # the output. Renaming the copy alone leaves the source under the old name
+    # and the next build puts it back, so the rebranded tree would still ship a
+    # file named for the previous owner. The stale copy in the output is deleted
+    # for the reason a removed page's file is: a build writes and never deletes.
+    source = os.path.join(out_dir, "site", "static", "assets")
+    published = os.path.join(out_dir, "docs", "assets")
     for key in ("logo_filename", "social_image_filename", "favicon_filename"):
         os.rename(
-            os.path.join(assets, original[key]),
-            os.path.join(assets, FIXTURE[key]),
+            os.path.join(source, original[key]),
+            os.path.join(source, FIXTURE[key]),
         )
+        stale = os.path.join(published, original[key])
+        if os.path.isfile(stale):
+            os.remove(stale)
+
+
+def filename_residue(out_dir, original):
+    """Return every file in the rebranded tree still named for one of the old images."""
+    # A declared value can survive as a filename as well as as a line of text,
+    # and the scan below reads content only. An image the new owner never
+    # replaced is the previous owner's logo sitting in the tree under the name
+    # it always had, which every check passes because nothing links to it.
+    old_names = {
+        original[key]
+        for key in ("logo_filename", "social_image_filename", "favicon_filename")
+    }
+    hits = []
+    for dir_path, _dir_names, file_names in os.walk(out_dir):
+        if ".git" in dir_path.split(os.sep):
+            continue
+        for file_name in sorted(file_names):
+            if file_name in old_names:
+                rel = os.path.relpath(os.path.join(dir_path, file_name), out_dir)
+                hits.append("asset filename: " + rel.replace(os.sep, "/"))
+    return hits
 
 
 def run(out_dir, args):
@@ -225,7 +255,7 @@ def main():
         if line.startswith("[") or "passed" in line:
             print(f"  {line.rstrip()}")
 
-    residue = value_residue(out_dir, original)
+    residue = value_residue(out_dir, original) + filename_residue(out_dir, original)
     brand_hits = brand_residue(out_dir, original)
     checked = len(declared_values(original))
     print(

@@ -1,7 +1,7 @@
 # Generated site content model
 
-Holds the content model and chrome templates that `scripts/build_site.py`
-renders into the 24 generated pages under `docs/*.html`.
+Holds the content model, the chrome templates and the static files that
+`scripts/build_site.py` renders and copies into `docs/`.
 
 Each page is rendered from one canonical chrome template plus per-page data.
 `docs/` holds the output of that build, so the generator reproduces the live
@@ -53,7 +53,7 @@ C:\Code\venvs\ai_development\Scripts\python.exe `
 ```
 
 Render equality is sound for this site only because every chrome container
-is a flex or grid box in `styles.css`, where whitespace-only text between
+is a flex or grid box in `static/styles.css`, where whitespace-only text between
 children generates no boxes, and because no page contains a `<pre>` element.
 A change that breaks either of those assumptions invalidates the gate.
 

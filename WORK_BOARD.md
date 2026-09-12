@@ -55,6 +55,10 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   rebrand rehearsal and a byte comparison of `docs/` against what the build
   produces. It does not gate the deploy: Pages publishes from `main` and
   `docs/` either way, so a red run means a broken tree is already live.
+- **`docs/` is output with no exceptions, and that is now literally true.**
+  The stylesheet, the script and the images are source under `site/static/`.
+  A tree with no `docs/` at all builds a complete deployable site; before
+  2026-09-12 it built the pages and silently shipped no styling.
 - **The buyer read of the repository is done and its findings are fixed.**
   The report is at
   `C:\Code_data\tectori\reproducible\buyer_read_2026-09-12.md`. It is a
