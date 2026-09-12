@@ -4,6 +4,20 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- A new check reads `docs/CNAME`, which no check read before. The identity
+  check scans `.html`, `.xml` and `.txt`, and CNAME has no extension, so the
+  one file GitHub Pages reads itself to decide which domain serves the tree
+  was the only file in the output nothing verified. It must name the declared
+  host and end in a single bare LF, because Pages reads it literally and a
+  CRLF makes the host a different string. Mutation tested both ways.
+- Read the remaining six checks for the same defect class and found nothing
+  worth adding. Recorded why rather than leaving it looking unexamined: a
+  canonical pointing at the wrong page is already caught, because
+  `sitemap.xml` is generated from `public_pages.json` independently of the
+  canonicals the check compares it against, so the two disagree. The
+  forbidden-claims check is a fixed list of strings and cannot be made to
+  read prose. The link check skips external URLs, and fetching them would
+  make the run depend on other people's servers.
 - A new check: the phone number is one number everywhere. `site.json`
   declares the phone three times, as it is displayed, as a `tel:` URI and in
   the form schema.org wants, and nothing made the three agree. A new owner
