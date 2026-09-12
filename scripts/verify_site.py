@@ -578,6 +578,110 @@ def stated_urls(value, prefix: str):
             yield from stated_urls(item, prefix)
 
 
+SKIP_LINK_RE = re.compile(
+    r'<a[^>]*?\bclass\s*=\s*(["\'])[^"\']*\bskip-link\b[^"\']*\1[^>]*?>',
+    re.IGNORECASE,
+)
+HREF_RE = re.compile(r'\bhref\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
+IMG_RE = re.compile(r"<img\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+NAV_RE = re.compile(r"<nav\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+ID_ATTR_RE = re.compile(r'\bid\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
+
+# The sentences on the accessibility page that a tree can be measured against.
+# Each is read from the page itself, so a claim that is reworded or withdrawn
+# fails here rather than leaving a check enforcing a promise the site no longer
+# makes, and a promise made with no check behind it is the thing this repository
+# keeps finding.
+ACCESSIBILITY_CLAIMS = (
+    "Every page starts with a skip to content link.",
+    "Images carry text alternatives.",
+    "Pages use semantic HTML with landmarks, headings, and labeled navigation.",
+)
+
+
+def check_accessibility_statement(pages: list[Path], docs_root: Path) -> bool:
+    """The accessibility page's checkable claims are true of every page.
+
+    This page is a public statement about how the site treats people who use
+    assistive technology, and it is the one page here whose sentences carry a
+    promise to a visitor rather than a description of a service. Nothing
+    measured it. An image added without an alt attribute, a heading level
+    removed in a copy edit, or a skip link whose target id was renamed each
+    leaves the statement saying something the tree stopped doing, and the
+    visitor who finds out is the one who could least afford it.
+    """
+    problems: list[str] = []
+    statement = docs_root / "accessibility.html"
+    if not statement.is_file():
+        print("[FAIL] the accessibility statement is true: accessibility.html is missing")
+        return False
+    text = " ".join(statement.read_text(encoding="utf-8").split())
+    for claim in ACCESSIBILITY_CLAIMS:
+        if text.count(claim) != 1:
+            problems.append(
+                f"accessibility.html no longer states {claim!r} exactly once, "
+                "so either the promise was reworded, in which case update this "
+                "check, or it was withdrawn, in which case delete the part of "
+                "this check that enforces it"
+            )
+
+    images = 0
+    for page in pages:
+        page_text = page.read_text(encoding="utf-8")
+        identifiers = {
+            match.group(2) for match in ID_ATTR_RE.finditer(page_text)
+        }
+
+        skip = SKIP_LINK_RE.search(page_text)
+        if not skip:
+            problems.append(f"{page.name}: has no skip link")
+        else:
+            href = HREF_RE.search(skip.group(0))
+            target = href.group(2) if href else ""
+            if not target.startswith("#"):
+                problems.append(
+                    f"{page.name}: the skip link points at {target!r} rather "
+                    "than at a place on this page"
+                )
+            elif target[1:] not in identifiers:
+                problems.append(
+                    f"{page.name}: the skip link points at {target!r}, and "
+                    "nothing on the page carries that id, so it skips nowhere"
+                )
+
+        for match in IMG_RE.finditer(page_text):
+            images += 1
+            if not re.search(r'\balt\s*=', match.group(1), re.IGNORECASE):
+                problems.append(
+                    f"{page.name}: an <img> has no alt attribute, so a screen "
+                    "reader reads its filename to the visitor"
+                )
+
+        if not re.search(r"<main\b", page_text, re.IGNORECASE):
+            problems.append(f"{page.name}: has no <main> landmark")
+        headings = len(re.findall(r"<h1\b", page_text, re.IGNORECASE))
+        if headings != 1:
+            problems.append(
+                f"{page.name}: has {headings} <h1> headings rather than one"
+            )
+        for match in NAV_RE.finditer(page_text):
+            if "aria-label" not in match.group(1).lower():
+                problems.append(
+                    f"{page.name}: a <nav> has no aria-label, so a visitor "
+                    "moving between landmarks cannot tell which one it is"
+                )
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] the accessibility statement is true "
+        f"where it is checkable: {len(pages)} pages and {images} images "
+        f"checked, {len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_stated_urls_resolve(pages: list[Path], docs_root: Path) -> bool:
     """Every URL a page states in a meta tag or its JSON-LD names a file that exists.
 
@@ -1168,6 +1272,7 @@ def main() -> int:
         check_llms_txt(docs_root),
         check_noindex_and_navigation(pages, docs_root),
         check_contact_details(pages),
+        check_accessibility_statement(pages, docs_root),
         check_stated_urls_resolve(pages, docs_root),
         check_contact_form(pages, docs_root),
         check_cname(docs_root),

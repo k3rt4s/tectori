@@ -4,6 +4,20 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `verify_site.py` measures the accessibility page against the tree. That
+  page is a public statement about how the site treats people using
+  assistive technology, it is the only page here whose sentences promise a
+  visitor something rather than describe a service, and nothing checked it.
+  Three of its claims are measurable and now are: every page carries a skip
+  link whose target id exists on that page, every `<img>` carries an alt
+  attribute, and every page has a `<main>`, exactly one `<h1>` and an
+  aria-label on each `<nav>`. The three sentences are read from the page
+  itself, so rewording or withdrawing a promise fails rather than leaving a
+  check enforcing something the site no longer says. Proved against a copy
+  with one alt attribute deleted, one skip link retargeted at an id that
+  does not exist and one claim reworded: the committed checks passed it 15
+  of 15, this one names all three.
+
 - `verify_site.py` resolves the URLs a page states outside a link. The link
   check reads `href` and `src`, which is what a visitor clicks; the social
   card image, `og:url` and the `image`, `url` and `@id` values inside the
