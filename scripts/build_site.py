@@ -637,6 +637,25 @@ def compare(out_dir, written):
     return identical, differing
 
 
+def orphans(written):
+    """Return every file under docs/ the build did not write, newest build first."""
+    # compare() walks the list of files the build produced, so a file that
+    # stopped being generated is invisible to it: a build writes files and
+    # never deletes them. Remove a page from pages.json or rename an image in
+    # site.json and the old file stays in docs/, keeps its URL, and keeps
+    # serving the previous content. Every check passed while that was true.
+    expected = set(written)
+    stale = []
+    for dir_path, _dir_names, file_names in os.walk(DOCS_DIR):
+        for file_name in sorted(file_names):
+            rel = os.path.relpath(
+                os.path.join(dir_path, file_name), DOCS_DIR
+            ).replace(os.sep, "/")
+            if rel not in expected:
+                stale.append(rel)
+    return sorted(stale)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", help="output directory for the built site")
@@ -669,7 +688,13 @@ def main():
         print(f"Differing from docs/: {len(differing)}")
         for name, reason in differing:
             print(f"  DIFFERS: {name}: {reason}")
-        sys.exit(0 if not differing else 1)
+        stale = orphans(written)
+        print(f"In docs/ but not written by this build: {len(stale)}")
+        for name in stale:
+            print(
+                f"  ORPHAN: {name}: no longer generated, delete it by hand"
+            )
+        sys.exit(0 if not differing and not stale else 1)
     else:
         written = build(args.out)
         print(f"Wrote {len(written)} files to {args.out}, the 24 modelled pages, login.html, and CNAME, robots.txt, sitemap.xml and llms.txt")

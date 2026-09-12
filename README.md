@@ -134,8 +134,8 @@ previous owner nowhere.
    rename one. The hero is two files, a `.webp` offered through a `srcset`
    and a `.png` behind it, and a browser that prefers webp never loads the
    png. Renaming leaves the old name in `docs/assets/`, because a build writes
-   files and never deletes them, so delete it there by hand. The rehearsal
-   fails on an image left behind under its old name.
+   files and never deletes them, so delete it there by hand. Both the rehearsal
+   and `build_site.py --check` fail on an image left behind under its old name.
 3. Rewrite the brand name in `site/pages/login.page.frag`, which carries it
    five times as prose. Nothing else on that page needs touching: the
    filenames and both forms of the domain come from `site.json` like
@@ -153,7 +153,8 @@ previous owner nowhere.
    unchecked. Adding or removing a page means editing
    `site/content/public_pages.json` too, and deleting a removed page's file
    from `docs/` by hand, because a rebuild writes files and never deletes
-   them.
+   them. `build_site.py --check` names anything in `docs/` the build did not
+   write, so a file you forget fails a check rather than staying on the site.
 5. Rebuild in place with `python scripts/build_site.py --out docs`, then run
    `python scripts/check_site.py`. All five must pass before the tree is
    worth deploying. One of the five is `scripts/verify_site.py`, which is

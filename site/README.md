@@ -17,12 +17,18 @@ Python 3 on the path runs them and no virtual environment is needed:
 python scripts/build_site.py --check
 ```
 
-`--check` builds every page into a temporary directory, compares each one
-against the matching file in `docs/` byte for byte, deletes the temporary
-tree, and exits non-zero on any difference. Since `docs/` now holds generator
+`--check` builds the whole tree into a temporary directory, compares each
+file against the matching one in `docs/` byte for byte, deletes the temporary
+tree, and exits non-zero on any difference. Since `docs/` holds generator
 output, that comparison is expected to pass, and it is the everyday gate: any
 content change should show up in `docs/` only after the generator puts it
 there.
+
+It also names any file in `docs/` the build did not write. A build writes
+files and never deletes them, so a page dropped from `pages.json` or an image
+renamed in `site.json` leaves its old file behind, still at its old URL and
+still serving the old content. Comparing generated files alone could not see
+that, because the stale file is not one of them. Delete what it names by hand.
 
 `--out <dir>` builds the site into that directory instead. It has no default,
 so a build writes nothing until it is told where. `--out docs` rebuilds the
