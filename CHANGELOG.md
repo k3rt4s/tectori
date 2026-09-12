@@ -4,6 +4,22 @@ Tectori website changes are recorded here.
 
 ## 2026-09-11
 
+- Added `scripts/verify_site.py`, one command that verifies a built site
+  tree without knowing its history. Eight checks: internal links resolve,
+  each page has one title, one description and at most one canonical, the
+  sitemap matches each page's own canonical, `llms.txt` covers the same
+  page set with descriptions that have not drifted, only `404.html` and
+  `thank-you.html` are noindex and neither is linked, the phone number,
+  address and site URL appear character for character, `login.html` carries
+  no analytics while every other page carries both tags, and no ratings
+  markup or Qualified Security Assessor claim exists anywhere. It takes
+  `--dir` so it can verify a generated build as well as `docs/`, and exits
+  non-zero on any failure. All eight pass against the current tree, which
+  proves little on its own, so they were tested by mutation against a
+  scratch copy in the data root: a broken internal link, a reformatted
+  phone number, a drifted `llms.txt` description and an injected Review
+  type were each caught. Not yet merged to `main`; it sits on
+  `feature/repro-generator` with the generator work.
 - Verified the Nashville change on the live site after the GitHub Pages
   deploy. `/contact`, `/about` and `/service-fractional-leadership` each
   serve the new title and meta description and the matching JSON-LD copy,
