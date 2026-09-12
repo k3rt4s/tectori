@@ -162,8 +162,12 @@ against it with the same result it gives against the live site.
   each of those is derived from one declared value everywhere. It counts
   rather than fails on the old brand name, the old job title and the eleven
   biography strings, and names the pages carrying them, because those are body
-  copy a new owner rewrites rather than rebrands. Nothing in the repository is
-  modified by a run.
+  copy a new owner rewrites rather than rebrands. Before it clones anything it
+  reads the content model in both directions: a value declared in `site.json`
+  or `founder.json` that no fixture replaces stops the run, because such a
+  value is skipped twice, never rewritten and never looked for afterwards, so
+  the rehearsal would report a clean rebrand while the fixture tree still
+  carried it. Nothing in the repository is modified by a run.
 - `scripts/check_deploy_gate.py` reads `.github/workflows/verify.yml` and
   confirms the deploy job still waits for the checks, uploads `docs/`, and
   refuses pull requests. It is the only check that reads how the tree reaches

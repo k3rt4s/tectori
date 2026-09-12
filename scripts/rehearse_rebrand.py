@@ -87,7 +87,52 @@ FOUNDER_FIXTURE = {
 # exactly as brand_name is and for the same reason.
 FOUNDER_COPY = ("job_title",)
 
+# Why each declared value the fixtures above leave alone is left alone. A key
+# in neither a fixture nor this table is a value the rehearsal skips twice: it
+# is never replaced, and value_residue never looks for it afterwards, so the
+# fixture tree can still carry the previous owner's data and this script will
+# call the rebrand clean. Reading the content model in one direction is how
+# the founder's four identity fields went unwatched until 2026-09-12, and
+# adding a fifth would have gone unwatched the same way.
+UNREBRANDED = {
+    ("site.json", "comment"): "documentation rather than a value a page renders",
+    ("site.json", "allowed_external_hosts"): (
+        "the hosts a browser is permitted to reach, which name the third "
+        "party services themselves rather than whoever owns the site"
+    ),
+    ("founder.json", "comment"): "documentation rather than a value a page renders",
+    ("founder.json", "biography_strings"): (
+        "the previous owner's credentials, schools and employers, which are "
+        "copy for runbook step 5 and are counted rather than replaced"
+    ),
+}
+
 TEXT_SUFFIXES = {".html", ".xml", ".txt", ".css", ".js", ""}
+
+
+def fixture_gaps(original, founder):
+    """Return every declared value neither fixture replaces and nothing excuses."""
+    # The two nested groups are covered by the rows below them rather than by
+    # a fixture of their own, so the top level row treats them as replaced.
+    covered = [
+        ("site.json", original, set(FIXTURE) | {"third_party", "social"}),
+        ("site.json third_party", original["third_party"], set(THIRD_PARTY_FIXTURE)),
+        ("site.json social", original["social"], set(SOCIAL_FIXTURE)),
+        ("founder.json", founder, set(FOUNDER_FIXTURE)),
+    ]
+    gaps = []
+    for label, config, fixture_keys in covered:
+        root = label.split(" ")[0]
+        for key in config:
+            if key in fixture_keys or (root, key) in UNREBRANDED:
+                continue
+            gaps.append(
+                f"{label} declares {key!r} and no fixture replaces it, so a "
+                "rebrand would leave it as it is and the scan below would "
+                "never look for it. Add it to the fixture, or add it to "
+                "UNREBRANDED with the reason it stays."
+            )
+    return gaps
 
 
 def clone(out_dir):
@@ -267,9 +312,11 @@ def founder_values(founder):
     # and a rehearsal that failed on them would be failing on the one thing
     # nobody can automate.
     return {
-        "founder." + key: founder[key]
-        for key in FOUNDER_FIXTURE
-        if key not in FOUNDER_COPY and isinstance(founder.get(key), str)
+        "founder." + key: value
+        for key, value in founder.items()
+        if key not in FOUNDER_COPY
+        and ("founder.json", key) not in UNREBRANDED
+        and isinstance(value, str)
     }
 
 
@@ -338,6 +385,14 @@ def main():
 
     original = read_json(os.path.join(REPO_ROOT, "site", "content", "site.json"))
     founder = read_json(os.path.join(REPO_ROOT, "site", "content", "founder.json"))
+    gaps = fixture_gaps(original, founder)
+    if gaps:
+        print("The fixture and the content model have diverged:")
+        for gap in gaps:
+            print(f"  {gap}")
+        raise SystemExit(
+            "refusing to rehearse a rebrand that would prove less than it claims"
+        )
     print(f"Cloning to {out_dir}")
     clone(out_dir)
     rewrite_site_json(out_dir)
