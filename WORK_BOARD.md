@@ -46,16 +46,24 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
 `CHANGELOG.md`; the working notes are in `BOARD_ARCHIVE_2026.md` under the
 2026-09-12 heading. Nothing below there is a next action.
 
-The next step this thread is taking is to read the site as a buyer would
-rather than as its builder. Every check in this repo answers whether the
-tree is internally consistent; none answers whether a stranger handed the
-repository could get it running. The specific question is what the first
-hour looks like for someone who clones it with no context: whether the
-README's opening says what this is, whether the runbook's step 4 gives
-enough to rewrite the copy safely, and whether anything assumes a reader
-who was here tonight. That is a reading task with a written result, not a
-build, and it is the last thing between the current state and a product
-that can change hands.
+- **The buyer read is done and its findings are fixed.** A worker with no
+  context read the repository as someone who had just bought it. Its report
+  is at
+  `C:\Code_data\tectori\reproducible\buyer_read_2026-09-12.md`. Five findings, all
+  real, all fixed: the README buried the one fact that stops a new owner
+  losing work, the runbook described the hero as one file when it is two,
+  step 4 sent the reader into the checker's source, the build's own output
+  said 28 pages when 24 are pages, and `THEORY.md` named Jon without ever
+  saying who he is. The read also surfaced a defect no document could:
+  the link check never looked at `srcset`, so the home page hero's webp was
+  unverified.
+
+The next step this thread is taking is to give `scripts/check_site.py` a
+`--full` mode that also runs the rebrand rehearsal. Today the repository
+proves two different things with two different commands, and only one of
+them is the one a reader is told to run before deploying. The rehearsal is
+slower and writes outside the repo, so it should stay off the default path
+and be one flag away rather than a thing you have to know about.
 
 ## Owner-Only Tasks
 

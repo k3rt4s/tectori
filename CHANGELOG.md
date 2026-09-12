@@ -4,6 +4,24 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Fixed a gap in the link check. It matched `href` and `src` only, so the
+  home page hero, which is offered as a webp through a `srcset` with a png
+  behind it, was never checked. A renamed or deleted webp would have shipped
+  as a broken image to every browser that prefers the format while all ten
+  checks passed. Both scans now read srcset candidates, which took the link
+  count from 1190 to 1191, and the check fires when the target is renamed.
+- Rewrote the README opening after a cold read of the repository found that
+  the most important fact arrives 43 lines too late. A reader who stops
+  after the quick start does not yet know `docs/` is generated output, so
+  the first thing they edit is the thing the next build overwrites. That
+  paragraph is now the third one on the page.
+- Corrected two things the runbook got wrong or left out. The hero is two
+  files rather than one, and step 4 sent the reader to find the nine
+  mirrored pages in the checker's source instead of naming them.
+- Made the build say what it counted. It reported 28 pages written when 24
+  are pages and four are `CNAME`, `robots.txt`, `sitemap.xml` and
+  `llms.txt`, and it reported copying zero static files during an in-place
+  rebuild without saying why that number differs from the usual 15.
 - Added `scripts/rehearse_rebrand.py`, which turns the reproducibility
   claim into something the repository re-proves on demand. It clones the
   tree to the data root, rebrands it to a fixture business by the runbook's

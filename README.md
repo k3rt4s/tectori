@@ -6,6 +6,12 @@ Tectori is the source project for the public business website at
 The site presents Tectori's IT and security consulting services and is built as
 a static website for low-cost hosting.
 
+Read this before editing anything. `docs/` is the last build's output, not
+the source. You edit `site/`, then rebuild. The one exception is
+`docs/login.html`, which is hand authored and which the generator leaves
+alone. A hand edit to any other file under `docs/` is overwritten by the next
+build with no warning at the time you make it.
+
 ## Quick Start
 
 Run `python scripts/serve_docs.py --port 8000` from the repository root,
@@ -116,9 +122,11 @@ previous owner nowhere.
    on the count.
 2. Replace the images in `docs/assets/` and name them to match step 1. The
    logo, social card and favicon are the three the build reads from
-   `site.json`. The hero and band images are referenced by name from
-   `site/pages/index.body.frag` and `docs/styles.css` instead, so those two
-   files need editing if you rename them.
+   `site.json`. The band image and both hero files are referenced by name
+   from `site/pages/index.body.frag` and `docs/styles.css` instead, so those
+   two files need editing if you rename them. The hero is two files, a
+   `.webp` offered through a `srcset` and a `.png` behind it, and a browser
+   that prefers webp never loads the png.
 3. Edit `docs/login.html` by hand. It is the one page the generator does not
    model. It carries five uses of the brand name, both asset filenames, the
    domain as a full URL in its canonical, and the domain again as plain text
@@ -128,13 +136,16 @@ previous owner nowhere.
    in the tree.
 4. Rewrite the copy. It lives in `site/pages/<slug>.body.frag` for the visible
    text, `site/pages/<slug>.jsonld.frag` for the structured data, and the
-   title, description and og fields in `site/content/pages.json`. On the nine
-   pages that keep them in sync, the JSON-LD `name` and `description` repeat
-   the title and meta description word for word and a check enforces it, so
-   those change together. Adding or removing
-   a page means editing `site/content/public_pages.json` too, and deleting a
-   removed page's file from `docs/` by hand, because a rebuild writes files
-   and never deletes them.
+   title, description and og fields in `site/content/pages.json`. On nine
+   pages the JSON-LD `name` and `description` repeat the title and meta
+   description word for word and a check enforces it, so those change
+   together: `about`, `contact`, `services` and the six `service-*` pages.
+   The service pages are a partial exception, with their JSON-LD naming the
+   service rather than the page. `index` and `faq` are deliberately
+   unchecked. Adding or removing a page means editing
+   `site/content/public_pages.json` too, and deleting a removed page's file
+   from `docs/` by hand, because a rebuild writes files and never deletes
+   them.
 5. Rebuild in place with `python scripts/build_site.py --out docs`, then run
    `python scripts/check_site.py`. All five must pass before the tree is
    worth deploying. One of the five is `scripts/verify_site.py`, which is
