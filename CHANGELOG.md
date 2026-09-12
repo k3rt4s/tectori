@@ -4,6 +4,17 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `build_site.py` requires each content entry's canonical and og:url to name
+  the page that entry writes. A canonical copied from the entry beside it
+  tells a search engine the page is a different page, which drops it from the
+  index and credits its content elsewhere, and the tree that ships looks
+  right because the link resolves. The build did refuse it, one stage later
+  and for the wrong reason: llms.txt could not find a description for the
+  output path and reported that the page was not in the content model, which
+  is the one thing it was. Proved by pointing tools.html's canonical at
+  /thank-you and confirming the committed build blamed the content model
+  while this one names the canonical.
+
 - `build_site.py` refuses a content model where two entries write the same
   file. Copying an entry to start a new page and leaving `output` unchanged
   deletes the first page by overwriting it, and every count still matched:
