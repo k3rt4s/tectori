@@ -4,6 +4,14 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Audited every claim in `THEORY.md` against the tree and rewrote it. One
+  was wrong: the line-ending invariant named `docs/CNAME` as the only file
+  that is not CRLF, and three more at the repo root are pure LF. Two were
+  stale, describing a drift check that can no longer fail and a generated
+  file set that has since grown. The file went from 98 lines to 88 by
+  removing repetition rather than constraints, which is still over the
+  framework's 60-line guidance; what is left is load-bearing, and cutting
+  further would mean dropping something a session needs to know.
 - Added a make-this-site-yours runbook to `README.md`: six ordered steps
   covering the declared values, the images, the one hand-authored page, the
   copy, the rebuild and the hosting setup, ending in the checks that prove

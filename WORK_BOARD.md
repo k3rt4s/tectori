@@ -119,12 +119,22 @@ The board holds no dispatchable item and no unshipped repo work. What is
 left is the part a session cannot decide alone: whether this becomes a
 product someone buys, a template repository, or a hosted service, which
 changes what gets built next. Until Jon says which, the useful work is
-hardening what exists. The next step this thread is taking is to re-read
-`THEORY.md` against the tree as it now stands. It is 98 lines against the
-framework's 60-line guidance, and several of its constraints were written
-before the generator existed and now describe a tree that no longer works
-that way. A theory file that is too long to read and partly wrong is worse
-than a short one, and it is the first file the next thread loads.
+hardening what exists.
+
+- **The `THEORY.md` audit is done.** Every claim in it was checked against
+  the tree. One was wrong, the line-ending invariant, which named
+  `docs/CNAME` as the only non-CRLF file when three at the repo root are
+  pure LF too. Two were stale. It is 88 lines now rather than 98, still
+  over the framework's 60-line guidance, and the rest is load-bearing.
+
+The next step this thread is taking is PROD-8, turning tonight's rebrand
+rehearsal into a script anything can run. The rehearsal proved the product
+is reproducible once, by hand, on 2026-09-12, and that proof decays with
+the next change to the build. A `scripts/rehearse_rebrand.py` that clones
+to the data root, rewrites every declared value to a fixture business,
+rebuilds and runs the checks turns a claim a buyer has to take on trust
+into one the repo re-proves on demand. It found two real defects the first
+time it was run by hand, which is the argument for running it again.
 
 ## Owner-Only Tasks
 
