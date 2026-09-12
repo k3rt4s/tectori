@@ -4,6 +4,15 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `verify_site.py` gained a twenty-first check, on the one page that asks a
+  visitor for a password. The first sentence of `login.html` says the page
+  transmits or stores nothing entered into it, and the only
+  Content-Security-Policy in the tree is what makes that true. Nothing read
+  either. The check requires the promise sentence, the five directives that
+  enforce it, a form with no `action`, and no fetch, beacon, cookie or storage
+  call in any script the page loads. Deleting the policy element outright
+  passed all twenty committed checks on a mutated copy.
+
 - `scripts/check_documented_commands.py` requires every `python scripts/...`
   command in `README.md`, `PERMISSIONS.md` and `SEARCH_SETUP.md` to name a
   script that exists and to pass only options that script's parser accepts.
