@@ -113,6 +113,7 @@ SITE_TOKENS = {
     "{{GITHUB_URL}}": SITE["social"]["github"],
     "{{CLOUDFLARE_BEACON_TOKEN}}": SITE["third_party"]["cloudflare_beacon_token"],
     "{{SCARF_PIXEL_ID}}": SITE["third_party"]["scarf_pixel_id"],
+    "{{FORMSPREE_ENDPOINT}}": SITE["third_party"]["formspree_endpoint"],
 }
 
 

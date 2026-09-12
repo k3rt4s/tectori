@@ -30,6 +30,17 @@ FIXTURE = {
     "postal_address": "8800 North Wacker Drive, Suite 1200, Chicago, IL 60606",
 }
 
+# The accounts a new owner opens in their own name. These are nested under
+# "third_party" rather than declared at the top level, which is the only
+# reason they are a second dict. They matter more than they look: the form
+# endpoint decides whose inbox a visitor's message lands in, so a rebrand
+# that misses it sends the new owner's enquiries to the previous one.
+THIRD_PARTY_FIXTURE = {
+    "cloudflare_beacon_token": "0123456789abcdef0123456789abcdef",
+    "scarf_pixel_id": "00000000-0000-4000-8000-000000000000",
+    "formspree_endpoint": "https://formspree.io/f/xnorthvale",
+}
+
 TEXT_SUFFIXES = {".html", ".xml", ".txt", ".css", ".js", ""}
 
 
@@ -69,6 +80,14 @@ def rewrite_site_json(out_dir):
                 "than it claims"
             )
         config[key] = value
+    for key, value in THIRD_PARTY_FIXTURE.items():
+        if key not in config["third_party"]:
+            raise KeyError(
+                f"site.json declares no third_party.{key!r}, so the fixture "
+                "and the content model have diverged and this rehearsal would "
+                "prove less than it claims"
+            )
+        config["third_party"][key] = value
     text = json.dumps(config, indent=2, ensure_ascii=False)
     with open(path, "wb") as f:
         f.write((text.replace("\n", "\r\n") + "\r\n").encode("utf-8"))

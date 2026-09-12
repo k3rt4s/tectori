@@ -21,7 +21,7 @@
               >Call <span class="nowrap">(615) 829-6802</span></a
             >
           </div>
-          <form class="contact-form" action="https://formspree.io/f/mljeabad" method="POST">
+          <form class="contact-form" action="{{FORMSPREE_ENDPOINT}}" method="POST">
             <input type="hidden" name="_next" value="{{SITE_URL}}/thank-you">
             <div class="form-field">
               <label for="contact-name">Name</label>

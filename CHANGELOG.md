@@ -4,6 +4,25 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- The Formspree endpoint is declared once now. It was in
+  `site/content/site.json` and hard-coded again in
+  `site/pages/contact.body.frag`, so a new owner who changed the declared
+  value, as `THEORY.md` and the runbook both told them to, got a contact form
+  still posting to the previous owner's inbox. Two of the three third-party
+  values were already tokenized; this was the one that was missed. The
+  fragment now carries `{{FORMSPREE_ENDPOINT}}` and the build resolves it.
+  `docs/` is byte identical before and after.
+- The failure was loud rather than silent, which is why it was still here:
+  changing only `site.json` fails the identity check with "the declared
+  Formspree endpoint appears 0 times, expected 1". Nothing shipped wrong.
+  What was wrong was the claim that the value lived in one place.
+- Extended `rehearse_rebrand.py` to rebrand the three `third_party` values
+  too, so the claim is tested rather than asserted. Mutation tested by
+  restoring the hard-coded endpoint: the rehearsal prints REHEARSAL FAILED
+  and exits 1, which fails `check_site.py --full` and the workflow.
+- Corrected step 7 of the grant runbook in `PERMISSIONS.md`. It told a new
+  owner to put the endpoint in `docs/contact.html`, which is build output the
+  next build overwrites.
 - Added `.github/workflows/verify.yml`, so the checks run somewhere that is
   not the author's laptop. Every push and pull request runs the five checks,
   then the rebrand rehearsal, on a clean Linux machine. It adds one check

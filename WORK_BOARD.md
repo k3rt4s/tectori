@@ -1,6 +1,6 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-12 04:50. An orchestrator session is live in this
+ACTIVE THREAD: 2026-09-12 05:30. An orchestrator session is live in this
 working copy and is running unattended. Do not work this tree until the
 marker is cleared.
 
@@ -99,13 +99,35 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   could break without noticing, so reaching 60 would have meant deleting one.
   Treat the gap as a decision, not a task still open.
 
-The next step this thread is taking is to find out whether the workflow
-actually ran and passed on GitHub, since a workflow that has never run is a
-file rather than a check. After that, the productization work with the most
-left in it is the first-run experience: `README.md` tells a new owner how to
-rebrand the site, and nothing yet tells them how to stand up their own copy
-from nothing, which is the difference between a repository they can read and
-a product they can host.
+- **The workflow ran and passed, twice.** Run 34678242856 went green on a
+  Linux runner in five seconds with all five checks, the byte comparison and
+  the rebrand rehearsal. It annotated itself with a Node 20 deprecation for
+  `actions/checkout@v4` and `actions/setup-python@v5`, so both moved to the
+  majors running on Node 24 and run 34678296950 went green with no
+  annotation. A workflow that has never run is a file, not a check; this one
+  has run.
+- **The Formspree endpoint was declared twice and is declared once now.** The
+  contact fragment hard-coded the URL alongside the declared value in
+  `site/content/site.json`, so a new owner following the runbook got a form
+  still posting to the previous owner's inbox. It failed loudly rather than
+  shipping wrong, which is why it survived: the identity check already
+  catches the mismatch. What was wrong was `THEORY.md`'s claim that the value
+  lived in one place. The fragment carries a token now, `docs/` is byte
+  identical, and `rehearse_rebrand.py` rebrands all three `third_party`
+  values so the claim is tested. Mutation tested both ways.
+- **The from-scratch deployment runbook already existed.** The note above
+  said nothing told a new owner how to stand up their own copy. That was
+  wrong: `PERMISSIONS.md` carries a ten step grant runbook covering Pages,
+  DNS, HTTPS, the form and the analytics accounts. Reading it is what found
+  the endpoint defect, because its step 7 named a generated file.
+
+The next step this thread is taking is to read the remaining nine values in
+`site/content/site.json` the way the Formspree endpoint was read, asking of
+each whether changing it alone actually reaches every page that shows it.
+The rehearsal now covers all of them, so the question is whether any is
+covered only by accident, for example because the fixture value happens to
+appear somewhere the token does not. That is a reading task against the
+build's substitution map, not a rebuild.
 
 ## Owner-Only Tasks
 
