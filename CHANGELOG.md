@@ -4,6 +4,24 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `scripts/check_doc_claims.py` reads the twelve countable claims `README.md`
+  and `PERMISSIONS.md` make about this tree and compares each against the
+  tree, and `check_site.py` runs it. Every other check reads the site; this
+  one reads what the repository says about the site, which is what a new
+  owner follows and what three fixes today were correcting by hand. It found
+  two counts already wrong: the README said the live deploy check was not one
+  of six when there were seven, and that `--full` adds the rehearsal as a
+  seventh check when it is the eighth. A claim whose sentence it cannot find
+  is a failure rather than a pass, so a rewording that removes a claim is
+  caught in the same way a wrong number is.
+- The rebrand rehearsal applies runbook step 4 as well, rewriting the brand
+  name in `site/pages/login.page.frag`, which is the one page carrying it as
+  prose rather than through a token. It applies all four mechanical steps
+  now. The prompt for it was the new documentation check failing inside the
+  rebranded clone: the README's count of brand-name occurrences on that page
+  was right for this owner and wrong for a half-rebranded one, which is a
+  fair thing for a check to object to.
+
 - The runbook in `README.md` gained the founder's identity as step 2, between
   the business values and the images, and the steps after it are renumbered.
   A new owner following the old list in order rebranded the business and

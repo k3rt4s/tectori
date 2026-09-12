@@ -66,6 +66,13 @@ def main():
         "the source alone reproduces docs/",
         [script("check_source_only_build.py")],
     ))
+    # And every check above reads the tree rather than what the repository
+    # says about it. A README that names the wrong count is what a new owner
+    # follows, and nothing else here reads a sentence.
+    results.append(run(
+        "the documentation's counts match the tree",
+        [script("check_doc_claims.py")],
+    ))
     # And every check reads the tree, not how the tree reaches the site. The
     # deploy job is the only route there, and deleting the one line that makes
     # it wait would leave every check passing while a red run shipped again.
