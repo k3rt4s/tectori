@@ -147,7 +147,7 @@
           >
         </div>
       </section>
-      <section class="soft-band cyan" aria-labelledby="baseline-title">
+      <section class="soft-band" aria-labelledby="baseline-title">
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">When a template is not enough</p>

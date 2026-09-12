@@ -45,7 +45,7 @@
         </div>
       </section>
 
-      <section class="soft-band cyan" aria-labelledby="regulated-title">
+      <section class="soft-band" aria-labelledby="regulated-title">
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">Regulated environments</p>

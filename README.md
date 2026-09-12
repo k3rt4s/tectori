@@ -126,6 +126,12 @@ against it with the same result it gives against the live site.
   passes. Two scripts are deliberately left out and it names both with the
   reason, and it reads the README sentence that explains the second one, so
   the count a reader sees and the set that runs cannot drift apart.
+- `scripts/check_class_names.py` requires every class name in `docs/` to have
+  a rule in `site/static/styles.css`. A class the stylesheet never defines
+  renders as nothing: the page is still valid, still reachable, still builds
+  byte for byte, and simply does not look the way the markup asks for. It
+  found three on the day it was written, one of them on ten pages, and none
+  of them had ever existed in the stylesheet.
 - `scripts/check_stdlib_only.py` reads every script's imports and requires
   each one to name a standard library module. `PERMISSIONS.md` promises that
   a clone runs on a machine with nothing installed, which is why there is no
@@ -164,7 +170,7 @@ against it with the same result it gives against the live site.
   serves whatever is on `main` whether they passed or not. It also fetches
   the extensionless path of every page, because a host that serves files
   literally returns all 43 files correctly and 404s on every link on every
-  page. It needs the network, so it is not one of the thirteen.
+  page. It needs the network, so it is not one of the fourteen.
 - `PERMISSIONS.md` lists everything the site needs to build, deploy, and
   serve: runtime, filesystem paths, every outbound host, the operator
   accounts, the DNS records, and a from-scratch deploy runbook. It replaced
@@ -246,7 +252,7 @@ credentials and career for step 5 to rewrite.
    missed. To
    see steps 1 to 4 and this one run end to end before you do them
    yourself, run `python scripts/check_site.py --full`, which adds the
-   rehearsal as a fourteenth check.
+   rehearsal as a fifteenth check.
 7. Follow the runbook in `PERMISSIONS.md` for the repository, the Pages
    settings, the DNS records and the accounts behind the three third-party
    services.
