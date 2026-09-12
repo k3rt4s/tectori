@@ -4,6 +4,17 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `build_site.py` refuses two entries that share a title, a description, an
+  og:title, an og:description, a body fragment or a slug. That is what
+  copying a page entry and editing half of it leaves behind: the fields a
+  page is thought of by get changed, the description and the body fragment do
+  not. The JSON-LD mirror check catches it on the nine pages that carry
+  structured data. Proved on two that do not: giving `how-we-work.html` the
+  description of `ai-governance.html` built cleanly and passed all nineteen
+  checks, which is a search engine choosing one of the two pages and dropping
+  the other. `contact_label` is deliberately shared by most pages and is not
+  part of the rule.
+
 - `build_site.py` refuses a content model field that is present and blank.
   The required-key rule asks whether a field is there, which is a different
   question from whether it says anything, and an entry carrying

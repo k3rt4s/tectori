@@ -414,6 +414,17 @@ MUST_CARRY_TEXT = (
 MAY_BE_NULL = ("canonical", "current_nav", "jsonld_fragment", "footer_omit")
 
 
+# Fields that tell a reader, or a search engine, which page this is. Two
+# entries carrying one value is what copying an entry and editing half of it
+# produces, and the tree that results is valid in every other way: both pages
+# exist, both resolve, both are linked to. `contact_label` is deliberately
+# shared, because most pages offer the same call to action, so it is not here.
+UNIQUE_ACROSS_ENTRIES = (
+    "title", "description", "og_title", "og_description", "body_fragment",
+    "slug",
+)
+
+
 def output_paths(entry):
     """Return the site relative paths that name an entry's own page, or None."""
     output = entry.get("output")
@@ -445,6 +456,29 @@ def validate(entries):
                     "it, so one of the two pages would not exist"
                 )
             seen[output] = index
+    # The copied entry, caught on what the copy kept rather than on what it
+    # changed. An editor duplicating a page entry changes the output, the
+    # title and the canonical, because those are the fields a page is thought
+    # of by; the description and the body fragment are the ones left behind.
+    # Two pages then carry one description, which is a search engine picking
+    # one of them and dropping the other, or one body fragment, which is the
+    # same page published at two addresses. Nothing downstream can tell,
+    # because each page is individually correct.
+    for key in UNIQUE_ACROSS_ENTRIES:
+        first: dict = {}
+        for index, entry in enumerate(entries):
+            value = entry.get(key)
+            if not isinstance(value, str) or not value.strip():
+                continue
+            where = entry.get("output") or f"entry {index}"
+            if value in first:
+                problems.append(
+                    f"{where}: {key} {value!r} is already used by "
+                    f"{first[value]}, and this field has to tell the two "
+                    "pages apart"
+                )
+            else:
+                first[value] = where
     for index, entry in enumerate(entries):
         where = entry.get("output") or f"entry {index}"
         for key in REQUIRED_ENTRY_KEYS:
