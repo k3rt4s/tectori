@@ -60,10 +60,19 @@ A change that breaks either of those assumptions invalidates the gate.
 After any meta description change, run `scripts\check_llms_drift.py --fix`.
 `docs/llms.txt` copies all 24 descriptions and has no generator behind it.
 Then run `scripts\verify_site.py`, which checks the built tree as a site
-rather than as a set of files.
+rather than as a set of files. `scripts\check_site.py` runs the build, the
+drift check, the verifier and both gates in one command.
 
 ## What the content model holds
 
+- `content/site.json`: the values that belong to the business rather than to
+  the site's structure. Brand name, tagline, site URL, logo filename, the
+  three contact strings, the Cloudflare beacon token, the Scarf pixel id,
+  the Formspree endpoint, the social URLs, and the allowlist of external
+  hosts the tree may reference, each with the reason it is there.
+  `build_site.py` renders the chrome from these and `verify_site.py` checks
+  a built tree against them, so a stale value fails a check instead of
+  shipping quietly. Changing one here changes every page it appears on.
 - `content/pages.json`: one entry per generated page. Each entry carries the
   head fields that vary (the leading HTML comment, title, meta description,
   robots value, og:title, og:description, og:type, og:url, og:image,
@@ -89,8 +98,9 @@ rather than as a set of files.
   `skip-link.frag` and `tail.frag` are identical across all 24 generated
   pages and stored once, as before. `header.frag`, `footer.frag`, and
   `utility-bar.frag` are each a single canonical template with a handful of
-  `{{TOKEN}}` placeholders that `build_site.py` fills in from the nav and
-  footer-link tables in that script plus the per-page fields above. There is
+  `{{TOKEN}}` placeholders that `build_site.py` fills in from `site.json`,
+  from the nav and footer-link tables in that script, and from the per-page
+  fields above. A placeholder left unresolved fails the build. There is
   one header template, one footer template, and one utility-bar template,
   not 14, 10, and 4 stored formatting variants.
 

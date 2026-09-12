@@ -1,0 +1,34 @@
+{
+  "comment": "Identity and third-party values the site declares once. scripts/build_site.py renders from them and scripts/verify_site.py checks the built tree against them, so a value that is wrong here fails a check rather than shipping quietly.",
+  "brand_name": "Tectori",
+  "tagline": "Audit-ready IT that scales with your ambition",
+  "site_url": "https://www.tectori.com",
+  "logo_filename": "tectori-logo.png",
+  "phone_display": "(615) 829-6802",
+  "phone_tel_uri": "tel:+16158296802",
+  "phone_schema": "+1-615-829-6802",
+  "postal_address": "201 Summit View Dr, Suite 305, Brentwood, TN 37027",
+  "third_party": {
+    "cloudflare_beacon_token": "9ea243eed148403aaf9b554084155c4e",
+    "scarf_pixel_id": "e8caa0dc-9305-4f99-9bbb-9d5ec7fddc42",
+    "formspree_endpoint": "https://formspree.io/f/mljeabad"
+  },
+  "social": {
+    "linkedin": "https://www.linkedin.com/company/tectori",
+    "github": "https://github.com/k3rt4s"
+  },
+  "allowed_external_hosts": {
+    "static.cloudflareinsights.com": "the page view beacon, on every page but login.html",
+    "static.scarf.sh": "the page view pixel, on every page but login.html",
+    "www.cloudflare.com": "the beacon vendor's own privacy page, linked from privacy.html",
+    "about.scarf.sh": "the pixel vendor's own explanation page, linked from privacy.html",
+    "formspree.io": "the contact form endpoint",
+    "www.linkedin.com": "the company profile, linked from the footer",
+    "github.com": "the company profile and the open source repositories on tools.html",
+    "docs.github.com": "GitHub's own documentation, linked from resources.html",
+    "genai.owasp.org": "the OWASP GenAI project, linked from resources.html",
+    "schema.org": "the JSON-LD vocabulary, which is a namespace rather than a fetch",
+    "www.sitemaps.org": "the sitemap XML namespace, which is a namespace rather than a fetch",
+    "www.tectori.com": "the site's own absolute URLs in canonicals, og:url and JSON-LD"
+  }
+}
