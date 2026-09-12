@@ -4,6 +4,16 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `verify_site.py` resolves the URLs a page states outside a link. The link
+  check reads `href` and `src`, which is what a visitor clicks; the social
+  card image, `og:url` and the `image`, `url` and `@id` values inside the
+  structured data are read by a crawler and by whatever renders a link in a
+  chat window, and they fail out of sight. The social image is named in a
+  meta tag on all 24 pages and nowhere else, so renaming that one file left
+  every check passing and every share of this site blank. 99 stated URLs are
+  now resolved. Proved by renaming it in a copy of `docs/`: the committed
+  checks passed 14 of 14, this one names all 24 pages.
+
 - `verify_site.py` reads the contact form, which nothing did. The identity
   check confirms the Formspree endpoint appears in the tree, which it would
   even if the form were not posting to it, and every other check treats the
