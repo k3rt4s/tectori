@@ -119,6 +119,13 @@ against it with the same result it gives against the live site.
   library, so a script that started fetching would pass every other check
   here. Until 2026-09-12 the manifest said nothing in the repository made a
   network call, which its own ingress line contradicted.
+- `scripts/check_checks_wired.py` requires every `check_*.py` script to be
+  run by `check_site.py`, and every `check_` function in `verify_site.py` to
+  appear in the list `main` evaluates. A check that is written and wired to
+  nothing produces no output, which is indistinguishable from a check that
+  passes. Two scripts are deliberately left out and it names both with the
+  reason, and it reads the README sentence that explains the second one, so
+  the count a reader sees and the set that runs cannot drift apart.
 - `scripts/check_stdlib_only.py` reads every script's imports and requires
   each one to name a standard library module. `PERMISSIONS.md` promises that
   a clone runs on a machine with nothing installed, which is why there is no
@@ -157,7 +164,7 @@ against it with the same result it gives against the live site.
   serves whatever is on `main` whether they passed or not. It also fetches
   the extensionless path of every page, because a host that serves files
   literally returns all 43 files correctly and 404s on every link on every
-  page. It needs the network, so it is not one of the twelve.
+  page. It needs the network, so it is not one of the thirteen.
 - `PERMISSIONS.md` lists everything the site needs to build, deploy, and
   serve: runtime, filesystem paths, every outbound host, the operator
   accounts, the DNS records, and a from-scratch deploy runbook. It replaced
@@ -239,7 +246,7 @@ credentials and career for step 5 to rewrite.
    missed. To
    see steps 1 to 4 and this one run end to end before you do them
    yourself, run `python scripts/check_site.py --full`, which adds the
-   rehearsal as a thirteenth check.
+   rehearsal as a fourteenth check.
 7. Follow the runbook in `PERMISSIONS.md` for the repository, the Pages
    settings, the DNS records and the accounts behind the three third-party
    services.

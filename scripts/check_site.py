@@ -118,6 +118,13 @@ def main():
         "only the named scripts reach the network",
         [script("check_no_network_calls.py")],
     ))
+    # And every check above runs because a line here says so. A check written
+    # and never added to this list, or a function in verify_site.py never put
+    # in its results, reports nothing and looks exactly like one that passes.
+    results.append(run(
+        "every check here is run by something",
+        [script("check_checks_wired.py")],
+    ))
     # And every check reads the tree, not how the tree reaches the site. The
     # deploy job is the only route there, and deleting the one line that makes
     # it wait would leave every check passing while a red run shipped again.
