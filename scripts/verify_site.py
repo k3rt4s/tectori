@@ -1997,6 +1997,152 @@ BARE_HOST_RE = re.compile(
 ABSOLUTE_URL_RE = re.compile(r'https?://[^\s"<>)]+')
 
 
+# A node that carries an @id based on this page and a url pointing at another
+# page, which is correct rather than a mistake. The table is held to the tree in
+# both directions: an unlisted node whose url points elsewhere fails, and a row
+# here that no longer describes a node in the tree fails too, so an excuse
+# cannot outlive the thing it excused.
+JSONLD_URL_ELSEWHERE = {
+    ("index.html", "#jonathan-bowker"): (
+        "the founder is defined once, beside the organization that declares "
+        "him, and the page about him is the about page rather than the home "
+        "page the node sits on"
+    ),
+}
+
+
+def jsonld_nodes(node):
+    """Yield every object inside a parsed JSON-LD document."""
+    if isinstance(node, dict):
+        yield node
+        for value in node.values():
+            yield from jsonld_nodes(value)
+    elif isinstance(node, list):
+        for value in node:
+            yield from jsonld_nodes(value)
+
+
+def check_jsonld_identifies_its_own_page(pages: list[Path], docs_root: Path) -> bool:
+    """Structured data a page defines names that page, and every reference in it resolves.
+
+    The mirror check reads name and description, and the stated-URL check reads
+    whether a URL names a file that exists. Neither asks whose page it is. Six
+    service pages carry near identical structured data, and a seventh begun by
+    copying one of them ships a Service node whose @id, url and breadcrumb tail
+    all name the page it was copied from: the name and description are edited
+    because they are visible in the copy, the identifiers are not because
+    nothing renders them. Every URL in it resolves, so every check passes, and a
+    crawler is told two pages are the same thing while a visitor sees two.
+
+    The reference half is the same defect from the other side. A node that is
+    only an @id points at something defined elsewhere in the tree, and renaming
+    the thing it points at leaves a dangling reference that no parser complains
+    about and no page shows.
+    """
+    problems: list[str] = []
+    defined: dict[str, str] = {}
+    referenced: dict[str, str] = {}
+    excused: set[tuple[str, str]] = set()
+    checked = 0
+
+    for page in pages:
+        raw = page.read_bytes()
+        match = LDJSON_RE.search(raw)
+        if match is None:
+            continue
+        try:
+            data = json.loads(match.group(2).decode("utf-8"))
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            # The mirror check owns structured data that does not parse.
+            continue
+        path = canonical_path(raw)
+        if path is None:
+            problems.append(
+                f"{page.name}: carries structured data and no canonical link, "
+                "so there is nothing to say which page the data is about"
+            )
+            continue
+        canonical = SITE_PREFIX.rstrip("/") + path
+
+        for node in jsonld_nodes(data):
+            identifier = node.get("@id")
+            if isinstance(identifier, str):
+                if set(node) - {"@id"}:
+                    checked += 1
+                    owner = defined.get(identifier)
+                    if owner is not None:
+                        problems.append(
+                            f"{page.name}: defines {identifier!r}, which "
+                            f"{owner} already defines, so one of the two is a "
+                            "copy nobody edited and a crawler reading both "
+                            "cannot tell which is meant"
+                        )
+                    defined[identifier] = page.name
+                    base, _, fragment = identifier.partition("#")
+                    if base != canonical:
+                        problems.append(
+                            f"{page.name}: defines {identifier!r}, which names "
+                            f"{base!r} rather than {canonical!r}, the page it "
+                            "is published on"
+                        )
+                    else:
+                        url = node.get("url")
+                        key = (page.name, "#" + fragment)
+                        if key in JSONLD_URL_ELSEWHERE:
+                            excused.add(key)
+                            if isinstance(url, str) and url == canonical:
+                                problems.append(
+                                    f"{page.name}: {identifier!r} is excused "
+                                    "here for naming another page, and it now "
+                                    "names its own, so the excuse is stale"
+                                )
+                        elif isinstance(url, str) and url != canonical:
+                            problems.append(
+                                f"{page.name}: {identifier!r} gives its url as "
+                                f"{url!r} rather than {canonical!r}, the page "
+                                "it is published on"
+                            )
+                else:
+                    referenced.setdefault(identifier, page.name)
+
+            if node.get("@type") == "BreadcrumbList":
+                items = node.get("itemListElement")
+                if not isinstance(items, list) or not items:
+                    problems.append(f"{page.name}: a BreadcrumbList lists nothing")
+                    continue
+                last = items[-1]
+                item = last.get("item") if isinstance(last, dict) else None
+                if item != canonical:
+                    problems.append(
+                        f"{page.name}: its breadcrumb ends at {item!r} rather "
+                        f"than at {canonical!r}, so the trail a search result "
+                        "shows is for a different page"
+                    )
+
+    for identifier, page_name in sorted(referenced.items()):
+        if identifier not in defined:
+            problems.append(
+                f"{page_name}: points at {identifier!r}, which nothing in this "
+                "site defines, so the reference resolves to nothing"
+            )
+    for key in sorted(set(JSONLD_URL_ELSEWHERE) - excused):
+        problems.append(
+            f"{key[1]!r} on {key[0]} is excused here for naming another page "
+            "and no node in the tree matches it, so this list has drifted from "
+            "the pages"
+        )
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] structured data names the page it is "
+        f"published on: {checked} defined nodes and {len(referenced)} "
+        f"references checked, {len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
     """Third-party ids in the tree are the declared ones, and every external host is allowed.
 
@@ -2156,6 +2302,7 @@ def main() -> int:
         check_login_promise(docs_root),
         check_no_forbidden_claims(pages),
         check_jsonld_mirrors_title(pages),
+        check_jsonld_identifies_its_own_page(pages, docs_root),
         check_declared_identity(pages, docs_root),
     ]
 
