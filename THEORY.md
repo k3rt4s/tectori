@@ -31,6 +31,12 @@ What a session needs to believe before it changes anything in this repo.
   `--fix` to repair it.
 - The contact form is a plain HTML POST to Formspree with no JavaScript, which
   is what the static hosting supports. Its `_next` field needs an absolute URL.
+- Each page's JSON-LD `name` and `description` repeat the visible title and
+  meta description word for word. They change together or the page starts
+  describing itself two ways, which is the defect SEO-17 was merged to fix.
+  A one line edit to a title or a description is therefore a two line edit.
+  The exception is a service page, whose JSON-LD `name` and `serviceType`
+  name the service rather than the page.
 - The hero uses `min-height`, not `height`, so copy that wraps to another line
   grows the hero rather than being clipped.
 
@@ -48,14 +54,19 @@ What a session needs to believe before it changes anything in this repo.
   than `&nbsp;` and `&#8209;`. Those entities put U+00A0 and U+2011 into text a
   visitor copies, which some dialers and CRM fields reject. Do not reintroduce
   them as a line-break fix; the span already prevents the break.
+- Tectori is nationally targeted and Nashville is location proof, decided by
+  Jon on 2026-09-11. There are no location pages, no LocalBusiness schema and
+  no Nashville modified keyword targets, and the nationwide wording on all 24
+  pages stands. Three pages are a deliberate exception: `contact`, `about`
+  and `service-fractional-leadership` name Nashville in their title and meta
+  description. That is not drift toward local targeting. Reopen the question
+  only if the Search Console export shows real local query volume.
 - `docs/404.html` deliberately has no canonical, and its links and assets are
   root-absolute so it renders when Pages serves it for a deep path. That is why
   it needs a local server rather than a `file://` open to review.
 
 ## Known soft spots
 
-- Nashville is location proof only. Whether Tectori targets local search or
-  stays national is undecided, so nothing should be built as if it were.
 - Nothing about the analytics beacon or the Scarf pixel has been observed in a
   browser. What is verified is that the tags ship on public pages, that they
   are absent from `login.html`, and that both endpoints answer.

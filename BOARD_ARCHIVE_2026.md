@@ -289,3 +289,115 @@ the vendor's team, recorded here and not investigated.
   Open decision, for Jon, when Step 5 starts: which of 4.1 to 4.6 to run
   first. Recommendation: 4.6 first, because every other item needs the
   baseline it defines, and it is blocked on the Search Console export.
+
+## Archived 2026-09-11: the Current state records from the board
+
+Archived verbatim from the WORK_BOARD.md Current state section on
+2026-09-11, when the board was trimmed. Every line below is a record of
+work already shipped, research already closed or a decision already taken.
+None of it is a next action. The live facts a session still needs were
+carried forward to the board at the same time.
+
+## Current state
+
+Records, not work. Nothing here is dispatchable.
+
+- The lane was scored on 2026-09-06 with `ai_development/docs/board-scoring.md`.
+  The scored index for the unshipped SEO remediation features lives at the top
+  of `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-09-05_remediation.md`, which
+  remains the build brief for Releases 1 to 4. The review the developer reads is
+  `C:\Code_data\tectori\board_review_2026-09-06.md`.
+- Shipped work and closed research were archived verbatim to
+  `BOARD_ARCHIVE_2026.md` on 2026-09-06: the 404 and structured data release,
+  the content release, the analytics deploy, the 2026-09-03 SEO call research,
+  the ISKPRO decision record, the discovery and demand session, and the Digital
+  Guider follow-up email record. Read it for evidence, never for instructions.
+- Verified on 2026-09-05, no action: SPF exists, analytics exists (Cloudflare
+  beacon), and title, canonical, robots, sitemap, HTTPS, OG and X cards are all
+  present. Those were audit findings SEO-10 and SEO-11; they have no items.
+- Reviewed `C:\Users\JDBow\Downloads\Audit for Tectori (1).pdf` on
+  2026-09-08. Its 18 recommendations are covered by existing lane items except
+  the homepage keyword consistency finding and the page text-depth finding,
+  now tracked as SEO-17 and SEO-18. The extracted text is
+  `C:\Code_data\tectori\audit_for_tectori_1_text_2026-09-08.txt`.
+- The eight-lane run completed on 2026-09-08. Reports and generated artifacts
+  live under `C:\Code_data\tectori\lanes\out\`; status files live under
+  `C:\Code_data\tectori\lanes\status\`. Lane 1's repo changes shipped through
+  `feature/board-2026-09-06-site`. Lanes 2 through 8 made no repo changes.
+- Pre-push review ran on 2026-09-09 over `origin/main..HEAD`. The first pass
+  raised two small Formspree/accessibility follow-ups that were fixed and
+  committed; the rerun's remaining extensionless URL concern was rejected after
+  every sitemap URL on the live GitHub Pages site returned 200. Logs live under
+  `C:\Code_data\tectori\reviews\`.
+- Go-live completed on 2026-09-09: `feature/board-2026-09-06-site` was
+  fast-forward merged into `main` and `main` was pushed to origin. GitHub Pages
+  deploys from `main` and `docs/`.
+- SEO-18 completed on 2026-09-09: the homepage now includes a buyer-path
+  section for exam readiness, cloud review, fractional leadership, and AI
+  governance. The approximate homepage word count rose from 605 to 766.
+  Copy-review and verification artifacts live under
+  `C:\Code_data\tectori\seo18_content_depth_2026-09-09\`.
+- SEO-18 pre-push review ran on 2026-09-09 over `main..HEAD`. The
+  root-relative link and mobile grid notes were triaged as non-blocking against
+  the custom-domain deploy and shared `.path-grid` mobile rule. The review log
+  and triage note live under `C:\Code_data\tectori\reviews\`.
+
+- Peer review of the 2026-09-08 lane changes ran on 2026-09-09 over the
+  merged tree, not a diff: 1142 internal links resolved with none broken, all
+  30 fetched live URLs returned 200, and every canonical resolved correctly,
+  including the old `.html` forms that still answer for inbound links. The
+  predicted SEO-14 defect did not occur, because `sitemap.xml` moved to the
+  extensionless URLs together with the canonicals. Exactly one live `noindex`
+  exists, `404.html`, which is deliberate and is in neither `sitemap.xml` nor
+  `llms.txt`. Three real findings came out of it, all now closed: the stale
+  `llms.txt` descriptions, the Formspree landing page, and the phone number
+  character encoding.
+- Decided on 2026-09-09, both by Jon: a successful contact form submission
+  lands on a Tectori confirmation page rather than Formspree's, and the
+  displayed phone number uses plain characters inside a `nowrap` span rather
+  than `&nbsp;` and `&#8209;`. Recorded so a later thread does not reopen
+  either as a defect or reintroduce the entities as a line-break fix.
+- The ten spent lane briefs were archived on 2026-09-09 to
+  `C:\Code_data\tectori\lanes\spent_2026-09-09\` with a README saying the
+  folder is a record and not instructions, and the dead lane PID file was
+  removed. Nothing in `lanes/` is dispatchable now.
+- SEO-17 completed on 2026-09-09 and held for review, not merged. The homepage
+  Organization schema has always said "regulated and growing organizations"
+  while the meta description said only "regulated organizations" and the first
+  body paragraph said "the business." Both now name the same audience, and the
+  description moved from "responsible AI work" to "governed AI," the term the
+  site already uses ten times across nine pages against one use of the other.
+  The work sits on `feature/seo17-homepage-keyword-signals`, pushed to origin.
+  The item's own rule is that new copy is reviewed before any merge to `main`.
+  The worker also proposed an H1 rewrite, rejected on evidence and recorded as
+  question 7 below: that sentence is the brand tagline in the footer and social
+  image alt text of all 25 pages. Proposal:
+  `C:\Code_data\tectori\seo17_keyword_signals_proposal_2026-09-09.md`.
+- `scripts/check_llms_drift.py` shipped on 2026-09-09 as the root-cause fix for
+  the stale `llms.txt` descriptions. `llms.txt` copies every page's meta
+  description with no generator behind it, so it drifts silently whenever a
+  description changes. The script compares all 24 copied lines against the
+  pages and exits non-zero on any mismatch; `--fix` rewrites them. Run it after
+  any meta description change. Its first real use caught a second stale copy of
+  the homepage description in the file's summary paragraph, which the first
+  version did not read, so the check now covers that line too.
+- Rollback for tonight's work, per action. `aeb8928` and `b291bb2` add a script
+  plus README and CHANGELOG text and change no page, so reverting either alters
+  nothing a visitor sees. The SEO-17 branch is unmerged, so dropping it needs
+  no revert: delete the branch here and on origin. If it is merged and Jon then
+  wants it out, reverting its two commits restores the previous description,
+  hero paragraph and `llms.txt` lines exactly.
+- SEO-17 merged to `main` and pushed on 2026-09-10 after Jon's review. The
+  homepage meta description and hero paragraph now name "regulated and growing
+  organizations," and the description uses "governed AI" rather than
+  "responsible AI work." The pre-push review's only flag was its recurring
+  objection to a data-root path in the changelog, which CORE-01 requires.
+- Decided on 2026-09-10 by Jon, closing question 7: the brand tagline is
+  "Audit-ready IT that scales with your ambition." It replaced "IT that holds
+  up under audit and scales with your ambition." in all 50 places: the footer
+  line and social image alt text on each of the 24 content pages, 48 of those
+  occurrences, and two more in the homepage H1 and its `og:description`. Jon
+  chose site-wide over homepage-only so the site states one tagline. The
+  homepage eyebrow became "Built to be reviewed" in the same change, because
+  the H1 below it now opens with "Audit-ready." Recorded so a later thread
+  does not read the new line as drift from the old one.
