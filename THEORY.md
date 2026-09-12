@@ -21,7 +21,11 @@ What a session needs to believe before it changes anything in this repo.
   third-party identifiers. The build renders from it and `verify_site.py`
   checks a built tree against it, so the site and its checks cannot be changed
   one without the other. The contact strings appear character for character
-  and are never reformatted.
+  and are never reformatted. "Declared once" was an aspiration until
+  2026-09-12: the Formspree endpoint was also hard-coded in the contact
+  fragment, so a new owner who changed only `site.json` got a form still
+  posting to the previous owner's inbox. `rehearse_rebrand.py` now changes
+  every one of these values and fails if any does not reach the built pages.
 - The site claims no clients, client counts, testimonials, ratings, prices or
   results. Copy never implies employees beyond the founder, and never frames
   the practice as one person either. The credential is Internal Security

@@ -202,9 +202,12 @@ On a fresh environment, in order.
    expecting the custom domain to answer.
 6. Enable HTTPS enforcement in the Pages settings once the certificate is
    issued.
-7. If the contact form is wanted, create the Formspree form, then put its
-   endpoint in `third_party.formspree_endpoint` in `site/content/site.json`
-   and in the form action on `docs/contact.html`.
+7. If the contact form is wanted, create the Formspree form and put its
+   endpoint in `third_party.formspree_endpoint` in `site/content/site.json`.
+   That is the only place it is written. This step told you to also edit the
+   form action on `docs/contact.html` until 2026-09-12, which was wrong twice
+   over: `docs/` is build output and the next build overwrites it, and the
+   value was genuinely in two places because the fragment hard-coded it.
 8. If page view counting is wanted, create the Cloudflare Web Analytics site
    and the Scarf pixel, then put the beacon token and the pixel id in
    `third_party` in `site/content/site.json` and rebuild, so every page picks
