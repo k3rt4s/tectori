@@ -1,5 +1,9 @@
 # WORK_BOARD
 
+ACTIVE THREAD: 2026-09-11 23:15. An orchestrator session is live in this
+working copy and is running unattended. Do not work this tree until the
+marker is cleared.
+
 ## Current state
 
 Records, not work. Nothing here is dispatchable.
@@ -28,11 +32,30 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Nothing is in progress. Every scored repo item on this board has shipped and
-has been verified on the live site. The remaining items are owner-only and are
-listed below; none of them can be moved without Jon. If you are a fresh thread
-opening this board, do not invent repo work from what you notice in the tree.
-Ask Jon what he wants next.
+Jon set this session unattended on 2026-09-11 at about 23:10. Standing
+instruction for the night: do not prompt him, take the recommended path,
+use workers, merge and push as needed, do not stop until he stops it, and
+do no work that does not score well enough to be worth doing. The approval
+covers this night only and expires with it.
+
+The objective he named is to finish the board so the site can become a
+reproducible product that can be sold or hosted. Every repo item on this
+board has shipped, so the night's work is the reproducibility layer.
+
+- **REPRO-1, measure the duplication.** A worker is surveying how much of
+  the 25 pages is repeated chrome and exactly which fields vary per page.
+  The report lands at
+  `C:\Code_data\tectori\reproducible\duplication_survey_2026-09-11.md`.
+  Read only, no repo change, so nothing to roll back.
+- **REPRO-2, build the generator, planned.** Templates plus a content model
+  under a new directory, and a build script that regenerates `docs/` from
+  them. The correctness test is that a build leaves `git status` clean,
+  meaning the generator reproduces all 25 live pages byte for byte. Until
+  that test passes the generator does not ship. Rollback is deleting the
+  new directory and script, because `docs/` is unchanged by definition.
+- **REPRO-3, one verification command, planned.** Internal link check, the
+  llms.txt drift check, and a sitemap and llms.txt coverage check, behind a
+  single script so a buyer or a host can verify a build. Additive only.
 
 ## Owner-Only Tasks
 

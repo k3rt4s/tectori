@@ -4,6 +4,13 @@ Tectori website changes are recorded here.
 
 ## 2026-09-11
 
+- Verified the Nashville change on the live site after the GitHub Pages
+  deploy. `/contact`, `/about` and `/service-fractional-leadership` each
+  serve the new title and meta description and the matching JSON-LD copy,
+  two occurrences per page, and the live `llms.txt` carries the three
+  updated lines. The first check was written badly and passed on the word
+  Nashville alone, which every page already carried in its utility line, so
+  it was replaced with a check on the exact new strings.
 - Added Nashville to the title and meta description of `contact`, `about`
   and `service-fractional-leadership`, and to the JSON-LD `name` and
   `description` that mirror them on those pages. Nashville had appeared only
