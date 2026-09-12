@@ -4,6 +4,11 @@ What a session needs to believe before it changes anything in this repo.
 
 ## Invariants
 
+- `docs/*.html` is generated output, not source. Every page except
+  `docs/login.html` is rendered by `scripts/build_site.py` from `site/`. Edit
+  the content model or a fragment and rebuild; a hand edit to `docs/` is
+  overwritten by the next build and is caught by `scripts/check_site.py`,
+  which is the one command to run before any deploy.
 - Every file in the tree uses CRLF. A scripted edit that writes LF corrupts the
   diff for the whole file. After any splice, confirm the bare-LF count is zero.
 - Contact details appear character for character and are never reformatted:
@@ -37,6 +42,12 @@ What a session needs to believe before it changes anything in this repo.
   A one line edit to a title or a description is therefore a two line edit.
   The exception is a service page, whose JSON-LD `name` and `serviceType`
   name the service rather than the page.
+- Render equality, not byte equality, is what `scripts/compare_render.py`
+  proves, and it is sound here only because every chrome container is a flex
+  or grid box in `docs/styles.css`, where whitespace-only text between
+  children generates no boxes, and because no page contains a `pre` element.
+  A change that breaks either assumption invalidates that gate, so reformatting
+  must then be proved some other way.
 - The hero uses `min-height`, not `height`, so copy that wraps to another line
   grows the hero rather than being clipped.
 
