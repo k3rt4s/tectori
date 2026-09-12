@@ -4,6 +4,26 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Tokenized 48 hard-coded identity values across 13 fragments. The phone
+  number, the mailing address, the LinkedIn and GitHub profiles and the logo
+  filename were written as literals in the page bodies while only the footer
+  and the utility bar used the tokens, so a new owner who changed
+  `site/content/site.json` published a site showing the previous owner's
+  phone number on eleven pages and address on three, and linking to their
+  profiles from every page. Measured against a rebranded clone, not
+  inferred. `docs/` is byte identical before and after.
+- The build now resolves tokens in `site/content/pages.json` too, which let
+  the tagline in the homepage H1 and the `og:description` come from the
+  declared value. The JSON-LD postal address is derived from the one
+  declared string by `address_parts` rather than declared a second time in
+  four schema.org fields.
+- Widened the rehearsal's residue scan from the domain alone to all fifteen
+  values a new owner replaces, and gave the fixture the two social URLs it
+  never changed. That gap is why the profiles read as clean: the scan was
+  not looking and the fixture was not changing them. Mutation tested by
+  restoring one literal phone number, which the scan reports by value and
+  line and which fails the rehearsal, `check_site.py --full` and the
+  workflow.
 - The Formspree endpoint is declared once now. It was in
   `site/content/site.json` and hard-coded again in
   `site/pages/contact.body.frag`, so a new owner who changed the declared

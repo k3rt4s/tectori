@@ -5,18 +5,18 @@
         "@id": "{{SITE_URL}}/#organization",
         "name": "Tectori",
         "url": "{{SITE_URL}}/",
-        "logo": "{{SITE_URL}}/assets/tectori-logo.png",
+        "logo": "{{SITE_URL}}/assets/{{LOGO_FILENAME}}",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "201 Summit View Dr, Suite 305",
-          "addressLocality": "Brentwood",
-          "addressRegion": "TN",
-          "postalCode": "37027",
+          "streetAddress": "{{ADDRESS_STREET}}",
+          "addressLocality": "{{ADDRESS_LOCALITY}}",
+          "addressRegion": "{{ADDRESS_REGION}}",
+          "postalCode": "{{ADDRESS_POSTAL_CODE}}",
           "addressCountry": "US"
         },
         "sameAs": [
-          "https://www.linkedin.com/company/tectori",
-          "https://github.com/k3rt4s"
+          "{{LINKEDIN_URL}}",
+          "{{GITHUB_URL}}"
         ],
         "description": "Founder-led cloud, cybersecurity, compliance, IT operations, fractional leadership, and AI governance consulting for regulated and growing organizations.",
         "founder": {
@@ -25,7 +25,7 @@
           "jobTitle": "Founder and Principal Consultant",
           "url": "{{SITE_URL}}/about",
           "@id": "{{SITE_URL}}/#jonathan-bowker",
-          "sameAs": "https://github.com/k3rt4s",
+          "sameAs": "{{GITHUB_URL}}",
           "hasCredential": [
             {
               "@type": "EducationalOccupationalCredential",
@@ -67,7 +67,7 @@
         "contactPoint": {
           "@type": "ContactPoint",
           "contactType": "business inquiries",
-          "telephone": "+1-615-829-6802",
+          "telephone": "{{PHONE_SCHEMA}}",
           "url": "{{SITE_URL}}/contact"
         },
         "knowsAbout": [

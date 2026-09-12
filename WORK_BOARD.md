@@ -1,6 +1,6 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-12 05:30. An orchestrator session is live in this
+ACTIVE THREAD: 2026-09-12 06:15. An orchestrator session is live in this
 working copy and is running unattended. Do not work this tree until the
 marker is cleared.
 
@@ -121,13 +121,34 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   DNS, HTTPS, the form and the analytics accounts. Reading it is what found
   the endpoint defect, because its step 7 named a generated file.
 
-The next step this thread is taking is to read the remaining nine values in
-`site/content/site.json` the way the Formspree endpoint was read, asking of
-each whether changing it alone actually reaches every page that shows it.
-The rehearsal now covers all of them, so the question is whether any is
-covered only by accident, for example because the fixture value happens to
-appear somewhere the token does not. That is a reading task against the
-build's substitution map, not a rebuild.
+- **Eight of the fifteen declared values never reached the pages, and all
+  fifteen do now.** The reading task above turned into a measurement: a
+  rebranded clone still showed the previous owner's phone number on eleven
+  pages, their address on three, and their LinkedIn and GitHub on every page,
+  with all six checks green. Only the footer and the utility bar used the
+  tokens; the page bodies wrote the literals out. 48 occurrences across 13
+  fragments now carry tokens, `docs/` is byte identical, and a rebranded clone
+  measures zero residue across all fifteen.
+- **The rehearsal was measuring the domain and nothing else.** Its residue
+  scan covered the old domain alone, so the seven values that are not derived
+  from the domain could not fail it, and its fixture never changed the two
+  social URLs at all. Both are fixed: the scan now covers every declared value
+  and reports the value, file and line of each survivor. Mutation tested by
+  restoring one literal phone number, which fails the rehearsal,
+  `check_site.py --full` and the workflow.
+- **THEORY.md is 98 lines, up from 87.** The declared-values bullet absorbed
+  a constraint that did not exist before: a value must reach the page through
+  a token, and no check can see a violation because the tree is correct for
+  this owner either way. The incident narrative went to `CHANGELOG.md`.
+
+The next step this thread is taking is the one part of the tree the rehearsal
+still steps around rather than through: `docs/login.html` is the only page the
+generator does not model, so `rehearse_rebrand.py` rebrands it by an explicit
+list of substitutions of its own. That list is a second copy of the
+substitution map, maintained by hand, and nothing fails when it falls behind.
+Either the generator models the page or the rehearsal stops special-casing it;
+read the page first and decide which, because it is the page that carries the
+tree's only CSP and no analytics tags, and both are constraints worth keeping.
 
 ## Owner-Only Tasks
 

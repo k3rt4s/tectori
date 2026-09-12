@@ -36,7 +36,7 @@
           <h2 id="tools-title">Seven tools you can use today.</h2>
         </div>
         <div class="path-grid">
-          <a class="path-card" href="https://github.com/k3rt4s/ops-toolkit"
+          <a class="path-card" href="{{GITHUB_URL}}/ops-toolkit"
             ><span class="path-kicker">PowerShell &middot; MIT</span>
             <div>
               <h3>Ops Toolkit</h3>
@@ -50,7 +50,7 @@
           >
           <a
             class="path-card"
-            href="https://github.com/k3rt4s/security-program-templates"
+            href="{{GITHUB_URL}}/security-program-templates"
             ><span class="path-kicker">Markdown &middot; CC BY 4.0</span>
             <div>
               <h3>Security Program Templates</h3>
@@ -65,7 +65,7 @@
           >
           <a
             class="path-card"
-            href="https://github.com/k3rt4s/email-evidence-tools"
+            href="{{GITHUB_URL}}/email-evidence-tools"
             ><span class="path-kicker">Python &middot; MIT</span>
             <div>
               <h3>Email Evidence Tools</h3>
@@ -80,7 +80,7 @@
           >
           <a
             class="path-card"
-            href="https://github.com/k3rt4s/medbill-dispute-kit"
+            href="{{GITHUB_URL}}/medbill-dispute-kit"
             ><span class="path-kicker">Python &middot; MIT</span>
             <div>
               <h3>Medical Bill Dispute Kit</h3>
@@ -95,7 +95,7 @@
           >
           <a
             class="path-card"
-            href="https://github.com/k3rt4s/security-lab-notes"
+            href="{{GITHUB_URL}}/security-lab-notes"
             ><span class="path-kicker">Reference &middot; Unlicense</span>
             <div>
               <h3>Security Lab Notes</h3>
@@ -110,7 +110,7 @@
           >
           <a
             class="path-card"
-            href="https://github.com/k3rt4s/landing-gear"
+            href="{{GITHUB_URL}}/landing-gear"
             ><span class="path-kicker">Markdown &middot; Unlicense</span>
             <div>
               <h3>Landing Gear</h3>
@@ -129,7 +129,7 @@
           >
           <a
             class="path-card"
-            href="https://github.com/k3rt4s/legal-selfhelp-kit"
+            href="{{GITHUB_URL}}/legal-selfhelp-kit"
             ><span class="path-kicker">Markdown &middot; MIT</span>
             <div>
               <h3>Legal Self-Help Kit</h3>

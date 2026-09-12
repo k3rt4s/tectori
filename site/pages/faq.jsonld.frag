@@ -56,7 +56,7 @@
             "name": "Where is Tectori located?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Tectori is based at 201 Summit View Dr, Suite 305, Brentwood, TN 37027, and works remotely with organizations nationwide."
+              "text": "Tectori is based at {{POSTAL_ADDRESS}}, and works remotely with organizations nationwide."
             }
           },
           {
@@ -64,7 +64,7 @@
             "name": "How do I start a conversation with Tectori?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Use the contact form or call (615) 829-6802 with the business outcome, technology or compliance constraint, current state, and decision or deadline in view."
+              "text": "Use the contact form or call {{PHONE_DISPLAY}} with the business outcome, technology or compliance constraint, current state, and decision or deadline in view."
             }
           }
         ],

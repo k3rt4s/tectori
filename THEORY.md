@@ -21,11 +21,18 @@ What a session needs to believe before it changes anything in this repo.
   third-party identifiers. The build renders from it and `verify_site.py`
   checks a built tree against it, so the site and its checks cannot be changed
   one without the other. The contact strings appear character for character
-  and are never reformatted. "Declared once" was an aspiration until
-  2026-09-12: the Formspree endpoint was also hard-coded in the contact
-  fragment, so a new owner who changed only `site.json` got a form still
-  posting to the previous owner's inbox. `rehearse_rebrand.py` now changes
-  every one of these values and fails if any does not reach the built pages.
+  and are never reformatted. Each of them reaches a page through a token and
+  never as a literal. A fragment that writes the value out instead is the
+  defect class that made "declared once" untrue until 2026-09-12, and no
+  check can see it: the built tree is correct for this owner either way. Only
+  `rehearse_rebrand.py` catches it, by changing all fifteen and failing on any
+  built line still carrying an old one. Tokens resolve in `pages.json` too,
+  after it is parsed rather than on its raw text, and the JSON-LD address is
+  derived from the one declared string by `address_parts`.
+- The brand name is the one declared value a rebrand is not expected to
+  clear. It is body copy a new owner rewrites, so the rehearsal counts it
+  rather than failing on it, and tokenizing it in prose would make the copy
+  unreadable to whoever edits it.
 - The site claims no clients, client counts, testimonials, ratings, prices or
   results. Copy never implies employees beyond the founder, and never frames
   the practice as one person either. The credential is Internal Security

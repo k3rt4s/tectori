@@ -17,8 +17,8 @@
             matters most, and any deadline already in view.
           </p>
           <div class="action-row">
-            <a class="button dark" href="tel:+16158296802"
-              >Call <span class="nowrap">(615) 829-6802</span></a
+            <a class="button dark" href="{{PHONE_TEL_URI}}"
+              >Call <span class="nowrap">{{PHONE_DISPLAY}}</span></a
             >
           </div>
           <form class="contact-form" action="{{FORMSPREE_ENDPOINT}}" method="POST">
@@ -44,12 +44,12 @@
             </p>
             <button class="button primary" type="submit">Send message</button>
           </form>
-          <p>Business address: 201 Summit View Dr, Suite 305, Brentwood, TN 37027.</p>
+          <p>Business address: {{POSTAL_ADDRESS}}.</p>
           <p>
             You can also find Tectori on
             <a
               class="text-link"
-              href="https://www.linkedin.com/company/tectori"
+              href="{{LINKEDIN_URL}}"
               >LinkedIn</a
             >.
           </p>
