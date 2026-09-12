@@ -3,12 +3,10 @@
 Holds the content model and chrome templates that `scripts/build_site.py`
 renders into the 24 generated pages under `docs/*.html`.
 
-The build renders each page from one canonical chrome template plus
-per-page data. It is not byte-identical to the hand-authored `docs/*.html`
-(the source formatting was inconsistent from page to page), but it is
-render-identical: same tags in the same order, same attributes, same text
-and comments once whitespace runs are collapsed. `scripts/compare_render.py`
-proves that. The build never writes into `docs/`.
+Each page is rendered from one canonical chrome template plus per-page data.
+`docs/` holds the output of that build, so the generator reproduces the live
+tree byte for byte. It does not define new content, and it never writes into
+`docs/`.
 
 ## Running a build
 
@@ -18,24 +16,51 @@ From the repo root, using the workspace's `ai_development` venv:
 C:\Code\venvs\ai_development\Scripts\python.exe scripts\build_site.py --check
 ```
 
-`--check` builds every page into a temporary directory and compares each one
-against the matching file in `docs/` byte for byte. That comparison is
-expected to report differences now that the chrome is reformatted; it exists
-to prove the build is deterministic and to show exactly where formatting
-diverges from the hand-authored source, not as the acceptance test. Run with
-no flags to write the generated pages to the default output directory,
-`C:\Code_data\tectori\reproducible\build_out\`, or pass `--out <dir>` to pick
-another location.
+`--check` builds every page into a temporary directory, compares each one
+against the matching file in `docs/` byte for byte, deletes the temporary
+tree, and exits non-zero on any difference. Since `docs/` now holds generator
+output, that comparison is expected to pass, and it is the everyday gate: any
+content change should show up in `docs/` only after the generator puts it
+there.
 
-To prove render equality against `docs/`, build to a directory, copy
-`docs/login.html` into it unchanged (it is not generated), and run:
+Run with no flags to write the site to the default output directory,
+`C:\Code_data\tectori\reproducible\build_out\`, or pass `--out <dir>` to pick
+another location. Either way the output is a complete deployable tree: the 24
+generated pages plus every other file `docs/` carries, copied unchanged.
+
+## Which gate applies when
+
+Two gates exist because two kinds of change need two different questions
+answered.
+
+- **Everyday content and data changes** use `--check`. Editing a title, a
+  meta description, a body fragment, or a nav entry should reproduce `docs/`
+  byte for byte once `docs/` is rebuilt, so any unexplained byte difference
+  is a defect.
+- **Deliberate reformatting of the templates** uses `scripts/compare_render.py`.
+  Reindenting a chrome template or rewrapping an attribute changes bytes on
+  purpose, and byte equality would report a failure that is not one. Render
+  equality is the right question there. It compares tag order, attributes
+  as an order-insensitive mapping, comments, and whitespace-collapsed text
+  across every page present in both directories, and exits non-zero on any
+  difference or on any page present in one directory and not the other.
+  Build with `--out` first. The output tree already contains `login.html`,
+  so nothing needs copying by hand.
 
 ```text
-C:\Code\venvs\ai_development\Scripts\python.exe scripts\compare_render.py docs\ <output-dir>
+C:\Code\venvs\ai_development\Scripts\python.exe `
+  scripts\compare_render.py docs\ <output-dir>
 ```
 
-It exits 0 only if every one of the 25 pages present in both directories is
-render-identical.
+Render equality is sound for this site only because every chrome container
+is a flex or grid box in `styles.css`, where whitespace-only text between
+children generates no boxes, and because no page contains a `<pre>` element.
+A change that breaks either of those assumptions invalidates the gate.
+
+After any meta description change, run `scripts\check_llms_drift.py --fix`.
+`docs/llms.txt` copies all 24 descriptions and has no generator behind it.
+Then run `scripts\verify_site.py`, which checks the built tree as a site
+rather than as a set of files.
 
 ## What the content model holds
 
@@ -74,7 +99,8 @@ render-identical.
 - `docs/login.html` shares no chrome with any other page (no utility bar,
   header, nav, footer, beacon, or pixel; it carries the tree's only CSP and
   its own skip-link target). It is out of scope for this generator by
-  design, per THEORY.md.
+  design, per THEORY.md. A build copies it into the output unchanged, so
+  the output is still a complete site.
 
 All other 24 pages, including `docs/404.html` and `docs/thank-you.html`,
-are generated and render-identical to `docs/`.
+are generated and byte-identical to `docs/`.
