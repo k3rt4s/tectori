@@ -4,6 +4,20 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `scripts/check_lastmod.py` compares every date in `docs/sitemap.xml`
+  against the commit history of the page's own body fragment, and 22 of the
+  23 were wrong. The sitemap was telling every crawler that nothing had
+  changed since 8 or 9 September while nearly every page had been rewritten
+  since. Dates are the one thing here nothing can derive: a build reads no
+  history and has to produce the same bytes from source alone, so they are
+  hand written and decay in silence. The dates are corrected and the check
+  runs inside `check_site.py`, which now runs ten by default and eleven with
+  `--full`. It is the only check that reads git, so it refuses to run against
+  a clone with one commit of history rather than passing against a question
+  it cannot answer, the workflow checks out full history for it, and the
+  rebrand rehearsal skips it by name because its fixture is a copy of the
+  tree with no repository beside it.
+
 - `build_site.py` refuses two entries that share a title, a description, an
   og:title, an og:description, a body fragment or a slug. That is what
   copying a page entry and editing half of it leaves behind: the fields a

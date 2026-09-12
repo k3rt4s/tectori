@@ -34,7 +34,13 @@ jobs:
       # These majors are the ones running on Node 24. The previous pair,
       # checkout@v4 and setup-python@v5, still work and annotate every run
       # with a Node 20 deprecation notice.
+      # Full history, because one of the checks reads the commit dates of
+      # the page sources to tell whether the sitemap's dates are still
+      # true. A one commit clone answers every one of those questions with
+      # the same date, and the check refuses to run rather than pass on it.
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v6
         with:

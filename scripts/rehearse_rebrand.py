@@ -353,7 +353,13 @@ def main():
         raise SystemExit("the rebranded tree does not build")
     print(build.stdout.strip())
 
-    checks = run(out_dir, [os.path.join("scripts", "check_site.py")])
+    # The fixture is a copy of the tree with no .git beside it, so the one
+    # check that reads commit dates has nothing to read. It is skipped by
+    # name rather than left to fail, which would say the rebrand broke
+    # something it did not touch.
+    checks = run(
+        out_dir, [os.path.join("scripts", "check_site.py"), "--no-history"]
+    )
     for line in checks.stdout.splitlines():
         if line.startswith("[") or "passed" in line:
             print(f"  {line.rstrip()}")
