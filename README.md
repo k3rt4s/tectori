@@ -85,8 +85,13 @@ directly.
   endpoint fails here rather than shipping. It takes
   `--dir` so it can verify a generated build as well as `docs/`, and exits
   non-zero on any failure so it can gate a deploy.
+- `scripts/check_source_only_build.py` builds from a copy of `site/` and
+  `scripts/` with no `docs/` anywhere and requires the result to match
+  `docs/` byte for byte. Every other check reads a tree that already has
+  `docs/` in it, so none of them can tell whether the source is sufficient.
+  Until 2026-09-12 it was not, and nothing said so.
 - `scripts/rehearse_rebrand.py` proves the site is reproducible instead of
-  claiming it. It clones the tree to the data root, applies the three
+  claiming it. It clones the tree to a temporary directory, applies the three
   mechanical steps of the runbook below against a fixture business, rebuilds,
   runs every check, and then reports how much of the original identity
   survived. It fails if the old domain appears even once, because the domain
@@ -156,13 +161,13 @@ previous owner nowhere.
    them. `build_site.py --check` names anything in `docs/` the build did not
    write, so a file you forget fails a check rather than staying on the site.
 5. Rebuild in place with `python scripts/build_site.py --out docs`, then run
-   `python scripts/check_site.py`. All five must pass before the tree is
-   worth deploying. One of the five is `scripts/verify_site.py`, which is
+   `python scripts/check_site.py`. All six must pass before the tree is
+   worth deploying. One of the six is `scripts/verify_site.py`, which is
    twelve checks of its own that read the built tree as a site rather than as
    a set of files, and it is the one that catches a value you missed. To
    see steps 1 to 3 and this one run end to end before you do them
    yourself, run `python scripts/check_site.py --full`, which adds the
-   rehearsal as a sixth check.
+   rehearsal as a seventh check.
 6. Follow the runbook in `PERMISSIONS.md` for the repository, the Pages
    settings, the DNS records and the accounts behind the three third-party
    services.

@@ -4,6 +4,14 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `scripts/check_source_only_build.py` is a sixth check and asks whether the
+  source is sufficient on its own. Every other check reads a tree that
+  already contains `docs/`, so none of them could see that `docs/` was an
+  input to its own build; the proof that it no longer is was a measurement
+  taken by hand once. This copies `site/` and `scripts/` somewhere else,
+  builds there, and requires all 43 files to match `docs/` byte for byte.
+  Mutation tested by moving `site/static/styles.css` aside, which fails
+  naming the file.
 - `THEORY.md` records what the tree needs from a host. Every internal link and
   canonical is extensionless, which GitHub Pages resolves and a literal file
   server does not, so moving the site to an S3 bucket or a default nginx would

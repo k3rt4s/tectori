@@ -3,7 +3,7 @@
 # The checks have always existed; what this adds is somewhere they run that is
 # not the author's laptop. The line-ending defect fixed on 2026-09-12 is the
 # case in point: it was invisible on a Windows working copy and obvious on the
-# first Linux checkout, and all five checks passed while it was present.
+# first Linux checkout, and every check passed while it was present.
 #
 # GitHub Pages deploys from main and docs/, and it does so whether or not this
 # workflow passes. Nothing here gates the deploy. It reports.
@@ -37,7 +37,7 @@ jobs:
       - name: Confirm nothing needs installing
         run: python -c "import sys; print(sys.version)"
 
-      - name: Run the five checks
+      - name: Run the six checks
         run: python scripts/check_site.py
 
       # check_site.py proves the built tree renders identically to docs/.
