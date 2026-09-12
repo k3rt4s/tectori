@@ -1,6 +1,6 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-12 01:20. An orchestrator session is live in this
+ACTIVE THREAD: 2026-09-12 02:40. An orchestrator session is live in this
 working copy and is running unattended. Do not work this tree until the
 marker is cleared.
 
@@ -52,28 +52,25 @@ the productization layer he named, not leftover board work.
   change is one edit rather than 14. `scripts/check_site.py` runs all five
   checks in one command; run it before any deploy. Nothing here is
   dispatchable, it is the record of what changed under you.
-- **PROD-1, inventory the business-specific values, dispatched.** A worker is
-  surveying every literal in the repo that belongs to this business rather
-  than to the site's structure: brand name, tagline, phone, address, domain,
-  the Cloudflare beacon token, the Scarf pixel id, the Formspree endpoint,
-  social URLs, brand asset filenames and the accent color. It classifies each
-  as configuration, content or structural and reports how many files a
-  rebrand touches today versus how many it would touch if the configuration
-  bucket were driven from one file. Read only, writes one report to
-  `C:\Code_data\tectori\reproducible\identity_constants_2026-09-12.md`, so
-  there is nothing to roll back.
-- **PROD-2, the permissions manifest, queued behind PROD-1.** The repo has no
-  `PERMISSIONS.md`, which the framework standard at
-  `C:\Code\ai_development\docs\permissions-manifest.md` requires of every app.
-  For a site meant to be sold or hosted it is the document that tells a buyer
-  what external services the site touches and what a from-scratch deploy
-  needs: GitHub Pages and the CNAME, Formspree, Cloudflare Insights, Scarf,
-  and the DNS records. PROD-1's third-party identifier section is its
-  evidence, which is why it waits.
+- **PROD-1 shipped.** The survey at
+  `C:\Code_data\tectori\reproducible\identity_constants_2026-09-12.md` is a record
+  now, not a specification. Its own conclusion was that a full templating
+  layer is not worth building, because the files carrying configuration are
+  mostly the same files carrying the content a new owner must rewrite anyway.
+  What was worth building is the narrow part: the third-party identifiers now
+  live in `site/content/site.json` and `verify_site.py` checks a built tree
+  against them, so a stale analytics token or form endpoint fails a check
+  instead of shipping. Merged at 96bdee7 and pushed.
+- **PROD-2 shipped.** `PERMISSIONS.md` is at the repo root, written to the
+  framework standard. `docs/hosting.md` is gone; it was an operations note
+  living inside the published site and served at a live URL.
 
-If you are the thread picking this up and PROD-1's report exists, your next
-action is to read it and decide which of its findings move into a single site
-configuration file, then write `PERMISSIONS.md` from its third-party section.
+No dispatchable item remains. The next step this thread is taking is PROD-3,
+the rebrand rehearsal: clone the tree to the data root, replace every value
+in `site/content/site.json` with a fictional business, rebuild, and measure
+what still names Tectori and in how many files. That converts the survey's
+estimate of what a rebrand costs into a measured number and shows whether
+the product is actually reproducible. Nothing in the repo is touched by it.
 
 ## Owner-Only Tasks
 
