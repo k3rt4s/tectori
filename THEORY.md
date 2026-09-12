@@ -24,6 +24,9 @@ What a session needs to believe before it changes anything in this repo.
   failing any built line still carrying an old value. Tokens resolve in
   `pages.json` after it is parsed rather than on its raw text, and the JSON-LD
   address is derived from the one declared string by `address_parts`.
+  The rule binds the checks too. A declared value written as a literal into
+  `verify_site.py` passes everything here and fails the rehearsal, so run
+  `check_site.py --full` before pushing any check that names one.
 - The brand name is the exception, and the founder's job title and biography
   are the other half of it. They are body copy a new owner rewrites, so the
   rehearsal counts them and names the pages rather than failing on them, and
