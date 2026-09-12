@@ -681,6 +681,52 @@ def anchor_targets(text: str) -> set[str]:
     return names
 
 
+ID_REFERENCE_RE = re.compile(
+    r'\s(aria-labelledby|aria-describedby|aria-controls|aria-owns|for|list)'
+    r'\s*=\s*(["\'])(.*?)\2',
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+def check_id_references(pages: list[Path]) -> bool:
+    """Every attribute that names another element finds it on the same page.
+
+    The check above reads the half of a link that says which section. This
+    reads the same relationship where it is invisible: a heading that names
+    the section it labels, a label that names its input, a control that names
+    what it opens. A renamed id leaves the markup valid, the page reachable
+    and the build byte identical, and takes the accessible name off the
+    element, so a screen reader announces an unlabelled region and a sighted
+    visitor sees nothing at all. This site publishes an accessibility
+    statement, which makes the silent version the expensive one.
+    """
+    problems: list[str] = []
+    checked = 0
+    for page in pages:
+        text = page.read_text(encoding="utf-8")
+        ids = {match.group(2) for match in ID_ATTR_RE.finditer(text)}
+        for match in ID_REFERENCE_RE.finditer(text):
+            attribute = match.group(1).lower()
+            for name in match.group(3).split():
+                checked += 1
+                if name in ids:
+                    continue
+                problems.append(
+                    f"{page.name}: {attribute}=\"{name}\" names an element "
+                    "this page does not carry, so the label, the description "
+                    "or the control it points at is silently nothing"
+                )
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] every attribute that names an element "
+        f"finds it: {checked} checked, {len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_fragments_resolve(pages: list[Path], docs_root: Path) -> bool:
     """Every link to a place on a page lands on something that is there.
 
@@ -1592,6 +1638,7 @@ def main() -> int:
         check_noindex_and_navigation(pages, docs_root),
         check_contact_details(pages),
         check_fragments_resolve(pages, docs_root),
+        check_id_references(pages),
         check_robots_policy(pages, docs_root),
         check_privacy_statement(pages, docs_root),
         check_accessibility_statement(pages, docs_root),

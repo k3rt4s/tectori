@@ -4,6 +4,18 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `verify_site.py` gained a twentieth check. Every attribute that names
+  another element by id, `aria-labelledby`, `aria-describedby`,
+  `aria-controls`, `aria-owns`, `for` and `list`, has to find that element on
+  the same page. The fragment check added earlier reads the half of a link
+  that says which section; this reads the same relationship where it is
+  invisible, and a renamed heading id takes the accessible name off a region
+  while leaving the markup valid, the page reachable and the build byte
+  identical. On a mutated copy with one labelled heading renamed, the
+  committed verifier passed 19 of 19 and this one named the page and the
+  attribute. Nothing in the tree was wrong on the day it was written: 116
+  references, all resolving.
+
 - `scripts/check_class_names.py` requires every class name a published page
   uses to have a rule in `site/static/styles.css`, and three did not. `cyan`
   sat beside `soft-band` on ten pages and has never existed in the stylesheet,
