@@ -88,9 +88,39 @@ FOOTER_ORDERS = {
 }
 
 
+def load_site_config():
+    path = os.path.join(SITE_DIR, "content", "site.json")
+    with open(path, "rb") as f:
+        return json.loads(f.read().decode("utf-8"))
+
+
+SITE = load_site_config()
+
+# Every value below appears on all 24 generated pages, so declaring it once is
+# what stops the same phone number or analytics id existing in 24 places that
+# can disagree. verify_site.py checks a built tree against the same file, so a
+# value that is wrong here fails a check rather than shipping quietly.
+SITE_TOKENS = {
+    "{{BRAND_NAME}}": SITE["brand_name"],
+    "{{TAGLINE}}": SITE["tagline"],
+    "{{SITE_URL}}": SITE["site_url"],
+    "{{PHONE_DISPLAY}}": SITE["phone_display"],
+    "{{PHONE_TEL_URI}}": SITE["phone_tel_uri"],
+    "{{POSTAL_ADDRESS}}": SITE["postal_address"],
+    "{{LINKEDIN_URL}}": SITE["social"]["linkedin"],
+    "{{GITHUB_URL}}": SITE["social"]["github"],
+    "{{CLOUDFLARE_BEACON_TOKEN}}": SITE["third_party"]["cloudflare_beacon_token"],
+    "{{SCARF_PIXEL_ID}}": SITE["third_party"]["scarf_pixel_id"],
+}
+
+
 def load_fragment(rel_path):
     with open(os.path.join(SITE_DIR, rel_path), "rb") as f:
-        return f.read()
+        raw = f.read()
+    text = raw.decode("utf-8")
+    for token, value in SITE_TOKENS.items():
+        text = text.replace(token, value)
+    return text.encode("utf-8")
 
 
 def load_pages():
@@ -168,7 +198,7 @@ def render_mobile_nav(entry, indent):
 def render_header(entry):
     tmpl = load_fragment("fragments/header.frag").decode("utf-8")
     brand_current = ' aria-current="page"' if entry["current_nav"] == "home" else ""
-    logo_src = "/assets/tectori-logo.png" if entry["root_absolute"] else "assets/tectori-logo.png"
+    logo_src = ("/assets/" if entry["root_absolute"] else "assets/") + SITE["logo_filename"]
     tmpl = tmpl.replace("{{BRAND_CURRENT}}", brand_current)
     tmpl = tmpl.replace("{{LOGO_SRC}}", logo_src)
     tmpl = tmpl.replace("{{DESKTOP_NAV_ITEMS}}", render_desktop_nav(entry, "        "))
@@ -178,7 +208,7 @@ def render_header(entry):
 
 def render_footer(entry):
     tmpl = load_fragment("fragments/footer.frag").decode("utf-8")
-    logo_src = "/assets/tectori-logo.png" if entry["root_absolute"] else "assets/tectori-logo.png"
+    logo_src = ("/assets/" if entry["root_absolute"] else "assets/") + SITE["logo_filename"]
     login_href = "/login.html" if entry["root_absolute"] else "login.html"
     order = FOOTER_ORDERS[entry["footer_order"]]
     omit = entry["footer_omit"]
@@ -226,7 +256,7 @@ def render_page(entry, cache):
     out.append(('    <meta property="og:image:width" content="1200">' + CRLF).encode("utf-8"))
     out.append(('    <meta property="og:image:height" content="630">' + CRLF).encode("utf-8"))
     out.append(render_head_field_inline("og:image:alt", "property", entry["og_image_alt"]))
-    out.append(('    <meta property="og:site_name" content="Tectori">' + CRLF).encode("utf-8"))
+    out.append(('    <meta property="og:site_name" content="' + attr(SITE["brand_name"]) + '">' + CRLF).encode("utf-8"))
     out.append(('    <meta name="twitter:card" content="summary_large_image">' + CRLF).encode("utf-8"))
     if entry["canonical"]:
         out.append(('    <link rel="canonical" href="' + attr(entry["canonical"]) + '">' + CRLF).encode("utf-8"))
@@ -246,7 +276,18 @@ def render_page(entry, cache):
     out.append(CRLF.encode())
     out.append(render_footer(entry))
     out.append(cached_fragment("tail"))
-    return b"".join(out)
+    page = b"".join(out)
+    # A mistyped placeholder would otherwise render as literal braces on a live
+    # page and pass every other check, since nothing else in the tree uses this
+    # syntax. Checking the finished page catches both the site tokens filled in
+    # load_fragment and the chrome placeholders filled after it.
+    if b"{{" in page:
+        offset = page.index(b"{{")
+        context = page[max(0, offset - 40):offset + 40].decode("utf-8", "replace")
+        raise ValueError(
+            f"{entry['output']}: unresolved placeholder near: {context.strip()}"
+        )
+    return page
 
 
 REQUIRED_ENTRY_KEYS = (
