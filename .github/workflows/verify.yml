@@ -23,9 +23,12 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # These majors are the ones running on Node 24. The previous pair,
+      # checkout@v4 and setup-python@v5, still work and annotate every run
+      # with a Node 20 deprecation notice.
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
 
