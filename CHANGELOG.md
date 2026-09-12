@@ -4,6 +4,14 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Page weight measured across every page and left alone. The home page is
+  about 646 KB across 11 files and `solutions` is 555 KB. A naive count reads
+  the home page as 2.1 MB by adding the 1.5 MB hero PNG, which no browser
+  fetches: it sits behind a `picture` element as the fallback for an 85 KB
+  WebP. The remainder is six lazy loaded solution marks below the fold. Re-
+  encoding would mean an image library the build refuses to depend on and a
+  change to `docs/` that cannot be reviewed without a browser, so nothing
+  changed. Recorded so the measurement is not repeated.
 - `CLAUDE.md` and `.gitignore` still named absolute paths on this machine, a
   day after the board recorded that nothing did. `CLAUDE.md` was one line
   pointing at a rule file no one else has, so it is now instructions a session

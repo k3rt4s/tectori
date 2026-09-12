@@ -71,6 +71,16 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   The stylesheet, the script and the images are source under `site/static/`.
   A tree with no `docs/` at all builds a complete deployable site; before
   2026-09-12 it built the pages and silently shipped no styling.
+- **Page weight was measured on 2026-09-12 and needs nothing.** The heaviest
+  page is the home page at about 646 KB across 11 files, and `solutions` is
+  555 KB. The hero ships through a `picture` element, so a browser fetches the
+  85 KB WebP and never the 1.5 MB PNG beside it, and counting the fallback is
+  what makes a naive measurement read 2.1 MB. Most of the rest is six solution
+  marks at about 78 KB each, all of them lazy loaded and below the fold. The
+  only heavy thing above the fold is the 118 KB logo. Re-encoding any of it
+  would mean an image library, which the build refuses on purpose, and a
+  change to `docs/` that cannot be reviewed without a browser, so none of it
+  was done. Treat this as measured rather than as a task.
 - **The buyer read of the repository is done and its findings are fixed.**
   The report is at
   `C:\Code_data\tectori\reproducible\buyer_read_2026-09-12.md`. It is a
