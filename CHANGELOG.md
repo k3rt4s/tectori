@@ -4,6 +4,16 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `scripts/check_permissions_hosts.py` requires the network egress section of
+  `PERMISSIONS.md` and `allowed_external_hosts` in `site/content/site.json` to
+  name the same hosts in both directions. The manifest is the document a
+  buyer's firewall allowlist is built from and the config is what the tree is
+  checked against, and nothing read the manifest, so the two could disagree
+  with every check passing: a host added to the config only is an outbound
+  call no operator has been told about, and a host dropped from the manifest
+  only is a request their firewall blocks. Proved both ways on a mutated copy.
+  `check_site.py` now runs eleven checks by default and twelve with `--full`.
+
 - `scripts/check_lastmod.py` compares every date in `docs/sitemap.xml`
   against the commit history of the page's own body fragment, and 22 of the
   23 were wrong. The sitemap was telling every crawler that nothing had

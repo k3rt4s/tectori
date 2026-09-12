@@ -102,6 +102,14 @@ def main():
         "the documentation's counts match the tree",
         [script("check_doc_claims.py")],
     ))
+    # That one reads counts. The permissions manifest makes a different kind
+    # of claim, a list of the hosts this site talks to, and a buyer builds a
+    # firewall rule from it. Nothing read it, so the manifest and the config
+    # could disagree and every check would still pass.
+    results.append(run(
+        "the egress manifest names the declared hosts",
+        [script("check_permissions_hosts.py")],
+    ))
     # And every check reads the tree, not how the tree reaches the site. The
     # deploy job is the only route there, and deleting the one line that makes
     # it wait would leave every check passing while a red run shipped again.
