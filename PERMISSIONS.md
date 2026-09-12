@@ -199,7 +199,10 @@ On a fresh environment, in order.
 5. Add the DNS records above at the registrar. Allow for propagation before
    expecting the custom domain to answer.
 6. Enable HTTPS enforcement in the Pages settings once the certificate is
-   issued.
+   issued. Then run `python scripts/check_live_deploy.py`, which fetches
+   every file from the live site and compares it against `docs/`. Until it
+   passes, nothing has confirmed the deploy landed: Pages serves whatever is
+   on `main` and reports nothing back to the repository.
 7. If the contact form is wanted, create the Formspree form and put its
    endpoint in `third_party.formspree_endpoint` in `site/content/site.json`.
    That is the only place it is written. This step told you to also edit the
@@ -226,7 +229,7 @@ python scripts/check_site.py
 ```
 
 Six of six must pass. The third of those runs `scripts/verify_site.py`,
-whose tenth check confirms the beacon token, the pixel id, and the form
+whose last check confirms the beacon token, the pixel id, and the form
 endpoint in the built tree are the declared ones at the expected count, and
 that no page references a host outside the allowlist.
 
