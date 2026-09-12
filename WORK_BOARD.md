@@ -1,6 +1,6 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-11 23:15. An orchestrator session is live in this
+ACTIVE THREAD: 2026-09-12 01:20. An orchestrator session is live in this
 working copy and is running unattended. Do not work this tree until the
 marker is cleared.
 
@@ -33,47 +33,47 @@ Records, not work. Nothing here is dispatchable.
 ## In Progress
 
 Jon set this session unattended on 2026-09-11 at about 23:10. Standing
-instruction for the night: do not prompt him, take the recommended path,
-use workers, merge and push as needed, do not stop until he stops it, and
-do no work that does not score well enough to be worth doing. The approval
-covers this night only and expires with it.
+instruction for the night: do not prompt him, take the recommended path, use
+workers, merge and push as needed, do not stop until he stops it, and do no
+work that does not score well enough to be worth doing. The approval covers
+this night only and expires with it. The objective he named is to finish the
+board so the site can become a reproducible product that can be sold or
+hosted.
 
-The objective he named is to finish the board so the site can become a
-reproducible product that can be sold or hosted. Every repo item on this
-board has shipped, so the night's work is the reproducibility layer.
+Every repo item that was on this board has shipped. The reproducibility lane
+shipped on 2026-09-12 and is recorded in CHANGELOG.md, so the work below is
+the productization layer he named, not leftover board work.
 
-- **REPRO lane, all five items done, on `feature/repro-generator`, not yet
-  merged.** The lane is complete as built. Its evidence, its rollback and the
-  one thing left to do are below. If you are the thread that picks this up,
-  your next action is the merge and push named at the end of this section.
-  - REPRO-1 measured the duplication. 84,011 of 289,004 bytes, 29.1 percent of
-    the tree, were repeated chrome. The report is at
-    `C:\Code_data\tectori\reproducible\duplication_survey_2026-09-11.md`.
-  - REPRO-2 built the generator. `site/` holds the content model, `scripts/
-    build_site.py` renders it. Committed at 00425f0.
-  - REPRO-3 built `scripts/verify_site.py`, one command, now nine checks.
-    Committed at 4ba4a9b.
-  - REPRO-4 tied the JSON-LD mirror to the page as that ninth check, with the
-    exempt pages named so an uncovered page is reported rather than skipped.
-    Committed at f386b54.
-  - REPRO-5 collapsed the 28 stored chrome formatting variants to one template
-    per piece and made `docs/` the generator's own output, so a nav or footer
-    change is one edit rather than 14. Committed at 2e4f6dc. Hardened at
-    03f13ab after a pre-push review: the content model is validated with the
-    offending page and field named, interpolated values are escaped, and a
-    build copies every file `docs/` carries that it does not generate, so the
-    output is a complete deployable tree rather than pages alone.
-  - Verified four ways, none of them the scripts' own passing run.
-    `build_site.py --check` reports 24 of 24 pages byte-identical to `docs/`,
-    `verify_site.py` passes 9 of 9, `check_llms_drift.py` reports no drift, and
-    `compare_render.py` finds the built tree render-identical. The full built
-    tree compares byte-identical to `docs/` across all 44 files. Every new
-    check was tested by mutation against a scratch copy.
-  - The pre-push review log for 2e4f6dc is at
-    `C:\Code_data\tectori\reviews\pre_push_2026-09-12_normalization.md`.
-  - Rollback: `docs/` differs from what was deployed only in whitespace, and
-    reverting 2e4f6dc restores the hand-authored bytes. Everything else on the
-    branch is additive.
+- **The reproducibility lane shipped and is live.** Merged at 5c5d0ca and
+  pushed to `main`, which is the go-live. All 24 generated pages plus
+  `login.html` were fetched from `https://www.tectori.com` afterwards and
+  `scripts/compare_render.py` found all 25 render-identical to the repo tree.
+  `docs/` is now the output of `scripts/build_site.py`, so a nav or footer
+  change is one edit rather than 14. `scripts/check_site.py` runs all five
+  checks in one command; run it before any deploy. Nothing here is
+  dispatchable, it is the record of what changed under you.
+- **PROD-1, inventory the business-specific values, dispatched.** A worker is
+  surveying every literal in the repo that belongs to this business rather
+  than to the site's structure: brand name, tagline, phone, address, domain,
+  the Cloudflare beacon token, the Scarf pixel id, the Formspree endpoint,
+  social URLs, brand asset filenames and the accent color. It classifies each
+  as configuration, content or structural and reports how many files a
+  rebrand touches today versus how many it would touch if the configuration
+  bucket were driven from one file. Read only, writes one report to
+  `C:\Code_data\tectori\reproducible\identity_constants_2026-09-12.md`, so
+  there is nothing to roll back.
+- **PROD-2, the permissions manifest, queued behind PROD-1.** The repo has no
+  `PERMISSIONS.md`, which the framework standard at
+  `C:\Code\ai_development\docs\permissions-manifest.md` requires of every app.
+  For a site meant to be sold or hosted it is the document that tells a buyer
+  what external services the site touches and what a from-scratch deploy
+  needs: GitHub Pages and the CNAME, Formspree, Cloudflare Insights, Scarf,
+  and the DNS records. PROD-1's third-party identifier section is its
+  evidence, which is why it waits.
+
+If you are the thread picking this up and PROD-1's report exists, your next
+action is to read it and decide which of its findings move into a single site
+configuration file, then write `PERMISSIONS.md` from its third-party section.
 
 ## Owner-Only Tasks
 
