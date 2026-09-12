@@ -91,3 +91,52 @@ and the three third-party identifiers, are declared once in
 cannot reach, the hand-authored `docs/login.html`, fails a check rather than
 shipping stale. `PERMISSIONS.md` covers hosting, DNS, and the from-scratch
 deploy.
+
+## Making this site yours
+
+In order. Steps 1 to 3 are mechanical and the checks catch a mistake in any
+of them. Step 4 is the real work and no tool can do it. These steps were
+rehearsed against a clone on 2026-09-12: a fictional business replacing every
+declared value reaches a tree that passes all ten checks and names the
+previous owner nowhere.
+
+1. Rewrite every value in `site/content/site.json`: the brand name, tagline,
+   site URL, the three asset filenames, the three contact strings, the
+   Cloudflare beacon token, the Scarf pixel id, the Formspree endpoint, the
+   social URLs, and the external host allowlist. Delete an entry from
+   `third_party` only by also removing what emits it, or a check will fail
+   on the count.
+2. Replace the images in `docs/assets/` and name them to match step 1. The
+   logo, social card and favicon are the three the build reads from
+   `site.json`. The hero and band images are referenced by name from
+   `site/pages/index.body.frag` and `docs/styles.css` instead, so those two
+   files need editing if you rename them.
+3. Edit `docs/login.html` by hand. It is the one page the generator does not
+   model. It carries five uses of the brand name, both asset filenames, the
+   domain as a full URL in its canonical, and the domain again as plain text
+   in the link back to the home page. That last one is easy to miss because
+   it is lowercase and has no `www`; the identity check fails on it rather
+   than letting it ship. The page also holds the only Content-Security-Policy
+   in the tree.
+4. Rewrite the copy. It lives in `site/pages/<slug>.body.frag` for the visible
+   text, `site/pages/<slug>.jsonld.frag` for the structured data, and the
+   title, description and og fields in `site/content/pages.json`. On the nine
+   pages that keep them in sync, the JSON-LD `name` and `description` repeat
+   the title and meta description word for word and a check enforces it, so
+   those change together. Adding or removing
+   a page means editing `site/content/public_pages.json` too, and deleting a
+   removed page's file from `docs/` by hand, because a rebuild writes files
+   and never deletes them.
+5. Rebuild in place with `python scripts/build_site.py --out docs`, then run
+   `python scripts/check_site.py`. All five must pass before the tree is
+   worth deploying. One of the five is `scripts/verify_site.py`, which is
+   ten checks of its own that read the built tree as a site rather than as
+   a set of files, and it is the one that catches a value you missed.
+6. Follow the runbook in `PERMISSIONS.md` for the repository, the Pages
+   settings, the DNS records and the accounts behind the three third-party
+   services.
+
+What the checks cannot tell you is whether the copy is true of your business.
+Several constraints in `THEORY.md` are commitments this site made about what
+it will not claim, and `verify_site.py` enforces some of them literally. Read
+that file before you decide which ones you are keeping.

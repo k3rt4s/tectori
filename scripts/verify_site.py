@@ -558,6 +558,22 @@ def check_jsonld_mirrors_title(pages: list[Path]) -> bool:
     return ok
 
 
+# A hostname written as plain prose rather than inside a URL. The visible
+# sentences on privacy.html, terms.html and login.html name the domain this
+# way, so a rebrand that fixed every href would still ship a page telling the
+# reader to go to the previous owner's site. The TLD list is deliberately
+# short: it covers what this tree uses and keeps ordinary prose from matching.
+BARE_HOST_RE = re.compile(
+    r'(?<![A-Za-z0-9._/-])'
+    r'((?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:com|net|org|io|dev|gov|edu|co|ai|app))'
+    r'(?![A-Za-z0-9-])'
+)
+
+# Stripped before the bare-host scan so an ordinary link is not reported as a
+# plain-text mention; the URL hosts are already checked by URL_HOST_RE.
+ABSOLUTE_URL_RE = re.compile(r'https?://[^\s"<>)]+')
+
+
 def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
     """Third-party ids in the tree are the declared ones, and every external host is allowed.
 
@@ -579,6 +595,9 @@ def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
     # domain allowed, and a page that kept a stale absolute URL would pass.
     own_host = SITE["site_url"].split("://", 1)[1].rstrip("/")
     allowed_hosts = set(SITE["allowed_external_hosts"]) | {own_host}
+    # Prose names the domain without its www, which is the same site and not a
+    # second identity, so the apex form is allowed wherever the full host is.
+    allowed_bare = allowed_hosts | {own_host.split("www.", 1)[-1]}
 
     problems: list[str] = []
     found_ids = {label: 0 for label in expected_ids}
@@ -602,6 +621,11 @@ def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
             if host not in allowed_hosts:
                 problems.append(
                     f"{path.name}: links to {host!r}, which site.json does not allow"
+                )
+        for host in set(BARE_HOST_RE.findall(ABSOLUTE_URL_RE.sub(" ", text))):
+            if host not in allowed_bare:
+                problems.append(
+                    f"{path.name}: names {host!r} as text, which site.json does not allow"
                 )
 
     # The beacon token and the pixel id ride on every page but login.html; the

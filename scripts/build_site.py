@@ -509,9 +509,15 @@ def copy_static_files(out_dir, written):
             rel = file_name if rel_dir == os.curdir else os.path.join(rel_dir, file_name)
             if rel.replace(os.sep, '/') in generated:
                 continue
+            source = os.path.join(dir_path, file_name)
             destination = os.path.join(out_dir, rel)
+            # Building with --out docs is how the published tree is updated in
+            # place, and every static file is then its own destination. Copying
+            # a file onto itself raises rather than doing nothing, so skip it.
+            if os.path.exists(destination) and os.path.samefile(source, destination):
+                continue
             os.makedirs(os.path.dirname(destination), exist_ok=True)
-            shutil.copyfile(os.path.join(dir_path, file_name), destination)
+            shutil.copyfile(source, destination)
             copied.append(rel)
     return sorted(copied)
 
