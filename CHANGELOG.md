@@ -4,6 +4,21 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `verify_site.py` gained a twenty-fourth check, which requires the structured
+  data a page defines to name that page. Six service pages carry near identical
+  JSON-LD, and a seventh begun by copying one of them ships a node whose `@id`,
+  `url` and breadcrumb tail all name the page it was copied from: the name and
+  the description get edited because they are visible in the copy, the
+  identifiers do not because nothing renders them. The mirror check reads name
+  and description, the stated-URL check reads whether a URL names a file that
+  exists, and neither asks whose page it is, so that tree passed everything.
+  The check also holds the other half of the same defect, a node that is only an
+  `@id` pointing at something no page defines, which is what a reference written
+  by hand instead of from the placeholder produces. Both were built as mutated
+  copies: copying the cybersecurity identifiers onto the IT operations page and
+  hand writing the founder reference on the about page each passed all committed
+  checks, and the new one names the page and the identifier in both cases.
+
 - The body text on the resilience band sat at 4.40 to 1 against the gold
   behind it, and the accessibility statement names WCAG 2.1 level AA, which
   asks for 4.5 to 1 for ordinary text. The colour is now
