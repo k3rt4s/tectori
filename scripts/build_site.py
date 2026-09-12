@@ -4,6 +4,7 @@
 import argparse
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -320,6 +321,114 @@ def validate(entries):
         sys.exit(2)
 
 
+def load_public_pages():
+    """Return the ordered public page list that sitemap.xml and llms.txt are both built from."""
+    path = os.path.join(SITE_DIR, "content", "public_pages.json")
+    with open(path, "rb") as f:
+        return json.loads(f.read().decode("utf-8"))
+
+
+STATIC_PAGE_DESCRIPTION = re.compile(
+    rb'name="description"\s*content="(.*?)"', re.DOTALL
+)
+
+
+def static_page_description(path):
+    """Return the meta description of a page the generator does not render, read from docs/.
+
+    login.html is hand authored and has no entry in the content model, so its
+    own markup is the only source of truth for its description. Reading it here
+    is what keeps llms.txt from carrying a second, silently diverging copy.
+    """
+    name = path.lstrip("/") or "index.html"
+    if not name.endswith(".html"):
+        name += ".html"
+    with open(os.path.join(DOCS_DIR, name), "rb") as f:
+        raw = f.read()
+    match = STATIC_PAGE_DESCRIPTION.search(raw)
+    if match is None:
+        raise ValueError(f"{name}: no meta description for its llms.txt line")
+    return " ".join(match.group(1).decode("utf-8").split())
+
+
+CANONICAL_ORIGIN = re.compile(r"^https?://[^/]+")
+
+
+def descriptions_by_path(entries):
+    """Map each generated page's site-relative canonical path to its meta description."""
+    # Strip whatever origin the canonical carries rather than only the
+    # configured one. The canonicals in pages.json still spell the domain out,
+    # so matching on site_url alone would silently produce an empty map the
+    # moment site_url changed, and llms.txt would lose every description it
+    # should have kept.
+    by_path = {}
+    for entry in entries:
+        canonical = entry.get("canonical")
+        if not canonical:
+            continue
+        path = CANONICAL_ORIGIN.sub("", canonical)
+        by_path[path or "/"] = entry["description"]
+    return by_path
+
+
+def render_cname():
+    """Return the CNAME file: the site URL's hostname alone."""
+    # One bare LF, not CRLF. GitHub Pages reads this file itself, and it is the
+    # one file in the tree that is not CRLF, which is a good reason to generate
+    # it rather than leave it to a hand edit that would normalize it.
+    host = SITE["site_url"].split("://", 1)[1].rstrip("/")
+    return (host + chr(10)).encode("utf-8")
+
+
+def render_robots():
+    """Return robots.txt with the brand name and the sitemap URL filled in."""
+    return load_fragment(os.path.join("fragments", "robots.frag"))
+
+
+def render_sitemap(public_pages):
+    """Return sitemap.xml listing every public page in the declared order."""
+    brand = SITE["brand_name"]
+    site_url = SITE["site_url"]
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        f"<!-- {brand}'s sitemap lists canonical public pages and their latest significant update. -->",
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    for page in public_pages:
+        lines.append("  <url>")
+        lines.append(f'    <loc>{site_url}{page["path"]}</loc>')
+        lines.append(f'    <lastmod>{page["lastmod"]}</lastmod>')
+        lines.append("  </url>")
+    lines.append("</urlset>")
+    return (CRLF.join(lines) + CRLF).encode("utf-8")
+
+
+def render_llms(public_pages, entries):
+    """Return llms.txt, one line per public page carrying that page's own meta description."""
+    # This file was maintained by hand and drifted silently, which is what
+    # scripts/check_llms_drift.py exists to catch. Building it from the same
+    # descriptions the pages are rendered from removes the drift rather than
+    # reporting it.
+    by_path = descriptions_by_path(entries)
+    if "/" not in by_path:
+        raise ValueError(
+            "llms.txt: no page canonical resolves to /, so the file would have "
+            "no site description; check the canonical on the home page entry"
+        )
+    lines = [
+        f"# {SITE['brand_name']}",
+        "",
+        by_path["/"],
+        "",
+        "## Pages",
+    ]
+    for page in public_pages:
+        path = page["path"]
+        description = by_path.get(path) or static_page_description(path)
+        lines.append(f"- {path}: {description}")
+    return (CRLF.join(lines) + CRLF).encode("utf-8")
+
+
 def build(out_dir):
     entries = load_pages()
     validate(entries)
@@ -332,13 +441,27 @@ def build(out_dir):
         with open(out_path, "wb") as f:
             f.write(data)
         written.append(entry["output"])
+
+    # The four non-HTML files that carry the site's own domain or repeat its
+    # page descriptions. Generating them is what makes the domain a one value
+    # change and what stops llms.txt drifting from the pages it describes.
+    public_pages = load_public_pages()
+    for name, data in (
+        ("CNAME", render_cname()),
+        ("robots.txt", render_robots()),
+        ("sitemap.xml", render_sitemap(public_pages)),
+        ("llms.txt", render_llms(public_pages, entries)),
+    ):
+        with open(os.path.join(out_dir, name), "wb") as f:
+            f.write(data)
+        written.append(name)
     return written
 
 
 def copy_static_files(out_dir, written):
     """Copy every file in docs/ the generator does not produce, so the output is a deployable tree."""
     # Listing the exceptions instead of the inclusions is what keeps this from
-    # decaying. A stylesheet, an image or a robots.txt added to docs/ later is
+    # decaying. A stylesheet, an image or a font added to docs/ later is
     # carried across without anyone remembering to name it here. login.html is
     # among them: it shares no chrome with any page and carries the only CSP, so
     # the generator does not model it, and an output tree missing it is not a

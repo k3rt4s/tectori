@@ -4,6 +4,20 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Generated `docs/CNAME`, `docs/robots.txt`, `docs/sitemap.xml` and
+  `docs/llms.txt` from the content model instead of copying them across.
+  The domain now comes from `site/content/site.json` and the public page
+  list from the new `site/content/public_pages.json`, which both the sitemap
+  and llms.txt are built from, so the two cannot disagree about which pages
+  the site has. The build is byte-identical to the shipped tree, 28 of 28.
+- Ended the `llms.txt` drift hazard rather than continuing to report it.
+  Each line now carries the page's own meta description, taken from the same
+  field the page is rendered from. `scripts/check_llms_drift.py` is kept as a
+  second opinion but can no longer fail.
+- Mutation tested the four generated files by rewriting the site URL to a
+  fictional domain and changing one meta description. CNAME, the robots
+  sitemap line, all 23 sitemap locations and the changed llms.txt line all
+  followed, with zero occurrences of the old domain in any of the four.
 - Declared the site's identity in `site/content/site.json`: brand name,
   tagline, site URL, logo filename, the three contact strings, the Cloudflare
   beacon token, the Scarf pixel id, the Formspree endpoint, the social URLs,

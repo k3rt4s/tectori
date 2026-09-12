@@ -57,9 +57,9 @@ is a flex or grid box in `styles.css`, where whitespace-only text between
 children generates no boxes, and because no page contains a `<pre>` element.
 A change that breaks either of those assumptions invalidates the gate.
 
-After any meta description change, run `scripts\check_llms_drift.py --fix`.
-`docs/llms.txt` copies all 24 descriptions and has no generator behind it.
-Then run `scripts\verify_site.py`, which checks the built tree as a site
+A meta description change now flows into `docs/llms.txt` on the next build,
+so `scripts\check_llms_drift.py` no longer has to be run by hand.
+Run `scripts\verify_site.py`, which checks the built tree as a site
 rather than as a set of files. `scripts\check_site.py` runs the build, the
 drift check, the verifier and both gates in one command.
 
@@ -73,6 +73,10 @@ drift check, the verifier and both gates in one command.
   `build_site.py` renders the chrome from these and `verify_site.py` checks
   a built tree against them, so a stale value fails a check instead of
   shipping quietly. Changing one here changes every page it appears on.
+- `content/public_pages.json`: the ordered list of public pages, each with
+  the date it last changed meaningfully. `sitemap.xml` and `llms.txt` are
+  both built from this one list, in this order, so the two files cannot
+  disagree about which pages the site has. A new page is added here once.
 - `content/pages.json`: one entry per generated page. Each entry carries the
   head fields that vary (the leading HTML comment, title, meta description,
   robots value, og:title, og:description, og:type, og:url, og:image,
@@ -94,6 +98,8 @@ drift check, the verifier and both gates in one command.
   real content and the part a person is most likely to edit.
 - `pages/<slug>.jsonld.frag`: the raw `<script type="application/ld+json">`
   block for the 11 pages that carry one, verbatim.
+- `fragments/robots.frag`: the robots.txt body, with the brand name and the
+  sitemap URL left as tokens so both follow `site.json`.
 - `fragments/`: the shared chrome, reduced to one template per piece.
   `skip-link.frag` and `tail.frag` are identical across all 24 generated
   pages and stored once, as before. `header.frag`, `footer.frag`, and
@@ -113,4 +119,9 @@ drift check, the verifier and both gates in one command.
   the output is still a complete site.
 
 All other 24 pages, including `docs/404.html` and `docs/thank-you.html`,
-are generated and byte-identical to `docs/`.
+are generated and byte-identical to `docs/`. So are the four non-page
+files that carry the domain or repeat the page descriptions: `CNAME`,
+`robots.txt`, `sitemap.xml` and `llms.txt`. `CNAME` is the one file the
+build writes with a bare LF, because GitHub Pages reads it directly.
+Everything else in `docs/`, the stylesheet, the script, the images and
+`login.html`, is copied across unchanged.

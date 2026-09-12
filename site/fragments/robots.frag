@@ -1,0 +1,32 @@
+# {{BRAND_NAME}}'s robots policy permits every named crawler, covering search, answer-engine, user-directed retrieval, and model training.
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: *
+Allow: /
+
+Sitemap: {{SITE_URL}}/sitemap.xml
