@@ -46,7 +46,17 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
 `CHANGELOG.md`; the working notes are in `BOARD_ARCHIVE_2026.md` under the
 2026-09-12 heading. Nothing below there is a next action.
 
-- **`THEORY.md` stops above the 60 line standard on purpose.** It is 88
+Everything shipped after that point came from hunting one defect class rather
+than from this board, and the entries are in `CHANGELOG.md` under the same
+date. The class is stated in `THEORY.md`: a check that confirms a declared
+thing is present cannot see a thing that should not be there. Every defect
+found in this tree has been an instance of it, and the way to find the next
+one is to take a check and ask what a tree would look like that passes it
+while being wrong. That question is what produced the stale-file report, the
+reachability check, the source-only build, the live deploy check, the deploy
+gate, the 404 probe, and the two machine paths nobody had noticed.
+
+- **`THEORY.md` stops above the 60 line standard on purpose.** It is over 100
   lines. Every bullet left states a constraint no check can see, so reaching
   60 would mean deleting one, and an earlier attempt at that did exactly
   that and had to put it back. Treat the gap as a decision, not a task.
