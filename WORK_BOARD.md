@@ -86,14 +86,28 @@ the productization layer he named, not leftover board work.
   `verify_site.py` now fails on it because the site's own host is derived
   from `site_url` rather than listed among the external hosts.
 
-The next step this thread is taking is PROD-6, the brand. The domain moves
-in one edit; the name does not. `Tectori` still appears about 430 times
-under `site/`, almost all of it inside copy a new owner rewrites anyway, so
-a full tokenization would not be worth it. What is worth measuring is which
-of those occurrences are structural rather than prose: asset filenames, the
-nav and footer tables inside `build_site.py`, and the `contact_label`
-values. Those are the ones a rebrand would miss silently. The output is a
-count by kind, then a decision on which kinds to move into `site.json`.
+- **PROD-6 shipped, and its answer was mostly no.** The brand name appears
+  about 430 times under `site/`, but the breakdown is 96 in `pages.json`
+  titles and descriptions, 92 in body copy and 24 in JSON-LD names, all of
+  which a new owner rewrites anyway. Tokenizing those would be work with no
+  return. The structural remainder is small and already declared: the three
+  asset filenames live in `site.json`, and the three occurrences left in
+  `build_site.py` are a docstring, a default output path under the data root
+  and a temp-directory prefix, none of which reach the site.
+- **What the measurement did find was a defect in a checker.** The contact
+  details check carried its near-miss patterns written out beside the values
+  they check, so a rebrand would have left it looking for a previous owner's
+  phone number. Worse, its site URL arm was matching zero occurrences and
+  passing, because the full URL never appears as visible text. Both are
+  fixed and mutation tested; the arm now checks two occurrences instead of
+  none.
+
+The next step this thread is taking is PROD-7, the one thing a buyer needs
+that the repo still does not have: an ordered account of what to change to
+make the site theirs, and what to run to prove they got it right. Every
+piece of it is now true and checkable, which was not the case before
+tonight. It goes in `README.md` rather than a new file, because a new owner
+reads the README first and a document nobody opens is worth nothing.
 
 ## Owner-Only Tasks
 
