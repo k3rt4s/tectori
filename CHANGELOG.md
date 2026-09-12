@@ -4,6 +4,15 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `build_site.py --check` names any file in `docs/` the build did not write.
+  It walked the list of files the build produced and compared each against
+  `docs/`, which is a check for presence and cannot see a file that stopped
+  being generated. A build writes and never deletes, so dropping a page from
+  `pages.json` or renaming an image in `site.json` left the old file in place,
+  at its old URL, serving the previous owner's content, and every check passed.
+  Two places in `README.md` told the reader to delete such a file by hand and
+  nothing verified they had. Mutation tested by putting a stray page in
+  `docs/`, which the check names and exits 1 on.
 - The paths of the machine this site was built on are out of the product.
   `scripts/build_site.py` defaulted `--out` to a directory under this
   workstation's data root, so a new owner running the build with no flags
