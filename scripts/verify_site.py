@@ -560,6 +560,68 @@ def attributes(tag_body: str) -> dict:
     }
 
 
+META_CONTENT_RE = re.compile(
+    r'<meta[^>]*?\bcontent\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL
+)
+
+
+def stated_urls(value, prefix: str):
+    """Yield every string in a JSON-LD value that names something on this site."""
+    if isinstance(value, str):
+        if value.startswith(prefix) or value.startswith("/"):
+            yield value
+    elif isinstance(value, dict):
+        for item in value.values():
+            yield from stated_urls(item, prefix)
+    elif isinstance(value, list):
+        for item in value:
+            yield from stated_urls(item, prefix)
+
+
+def check_stated_urls_resolve(pages: list[Path], docs_root: Path) -> bool:
+    """Every URL a page states in a meta tag or its JSON-LD names a file that exists.
+
+    The link check reads href and src, which is what a visitor clicks. These
+    are the URLs nobody clicks: the social card image, og:url, and the image,
+    url and @id values inside the structured data. They are read by a crawler
+    and by whatever renders a link in a chat window, and they fail out of
+    sight. The social image is the plain case, because it is named in a meta
+    tag on all 24 pages and nowhere else: renaming that one file leaves every
+    check here passing and every share of this site blank.
+    """
+    prefix = SITE["site_url"].rstrip("/")
+    problems: list[str] = []
+    checked = 0
+    for page in pages:
+        text = page.read_text(encoding="utf-8")
+        values = {match.group(2) for match in META_CONTENT_RE.finditer(text)}
+        for match in LDJSON_RE.finditer(page.read_bytes()):
+            try:
+                data = json.loads(match.group(2).decode("utf-8"))
+            except ValueError:
+                # The JSON-LD mirror check owns unparseable structured data.
+                continue
+            values.update(stated_urls(data, prefix))
+        for value in sorted(values):
+            if not (value.startswith(prefix) or value.startswith("/")):
+                continue
+            checked += 1
+            kind, target = resolve_internal(value, page, docs_root)
+            if kind != "internal" or target is None or not target.is_file():
+                problems.append(
+                    f"{page.name}: states {value!r}, which is not a file this "
+                    "site publishes"
+                )
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] every URL stated outside a link "
+        f"resolves: {checked} checked, {len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_contact_form(pages: list[Path], docs_root: Path) -> bool:
     """The contact form posts to the declared endpoint and carries every field it needs.
 
@@ -1106,6 +1168,7 @@ def main() -> int:
         check_llms_txt(docs_root),
         check_noindex_and_navigation(pages, docs_root),
         check_contact_details(pages),
+        check_stated_urls_resolve(pages, docs_root),
         check_contact_form(pages, docs_root),
         check_cname(docs_root),
         check_phone_is_one_number(pages, docs_root),
