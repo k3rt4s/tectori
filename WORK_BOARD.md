@@ -46,149 +46,25 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
 `CHANGELOG.md`; the working notes are in `BOARD_ARCHIVE_2026.md` under the
 2026-09-12 heading. Nothing below there is a next action.
 
-- **The buyer read is done and its findings are fixed.** A worker with no
-  context read the repository as someone who had just bought it. Its report
-  is at
-  `C:\Code_data\tectori\reproducible\buyer_read_2026-09-12.md`. Five findings, all
-  real, all fixed: the README buried the one fact that stops a new owner
-  losing work, the runbook described the hero as one file when it is two,
-  step 4 sent the reader into the checker's source, the build's own output
-  said 28 pages when 24 are pages, and `THEORY.md` named Jon without ever
-  saying who he is. The read also surfaced a defect no document could:
-  the link check never looked at `srcset`, so the home page hero's webp was
-  unverified.
+- **`THEORY.md` stops above the 60 line standard on purpose.** It is 88
+  lines. Every bullet left states a constraint no check can see, so reaching
+  60 would mean deleting one, and an earlier attempt at that did exactly
+  that and had to put it back. Treat the gap as a decision, not a task.
+- **A push to `main` runs the checks on a clean Linux machine.**
+  `.github/workflows/verify.yml` runs `verify_site.py`, `check_site.py`, the
+  rebrand rehearsal and a byte comparison of `docs/` against what the build
+  produces. It does not gate the deploy: Pages publishes from `main` and
+  `docs/` either way, so a red run means a broken tree is already live.
+- **The buyer read of the repository is done and its findings are fixed.**
+  The report is at
+  `C:\Code_data\tectori\reproducible\buyer_read_2026-09-12.md`. It is a
+  record; a second read would be new work, not a repeat of this one.
 
-- **`check_site.py --full` shipped.** It adds the rebrand rehearsal as a
-  sixth check, off the default path because it clones the tree outside the
-  repo and takes about a minute. A failing rehearsal fails the run.
-
-- **The service page copy read is done and is waiting on Jon.** A worker read
-  all six service page fragments against what THEORY.md says the site may
-  claim. The report is at
-  `C:\Code_data\tectori\reproducible\service_copy_read_2026-09-12.md`.
-  Nothing crosses a line: no client, count, testimonial, rating, price or
-  result appears anywhere, and the QSA credential is never named. It found
-  five sentences that would describe any consultancy in the country, a
-  weakest sentence on each page with a replacement, and two disclaimers said
-  twice in different words. Three of its line citations were checked against
-  the fragments and all three were exact. It is listed under Owner-Only Tasks
-  below because every item in it is a copy judgment, which is Jon's.
-- **Line endings are pinned to the repository now.** The tree had no
-  `.gitattributes`, so they came from whoever cloned it, and this working
-  copy's local `core.autocrlf` was the only thing holding the invariant up.
-  A clone without it rebuilt to a 1700 line diff across 26 files having
-  changed nothing, with all five checks passing, and a clone on this machine
-  produced `docs/CNAME` with CRLF, which is the file GitHub Pages reads to
-  resolve the custom domain. The live site was never affected. After the fix
-  the same clone rebuilds to an empty diff. THEORY.md carried the invariant
-  as a repository property when it was a machine property; that is corrected.
-
-- **The checks run somewhere other than this laptop now.**
-  `.github/workflows/verify.yml` runs the five checks and the rebrand
-  rehearsal on a clean Linux machine for every push and pull request, and
-  adds one check that did not exist: `docs/` must be byte identical to what
-  the build produces, where `check_site.py` proves only that it renders
-  identically. Mutation tested by inserting one space before a `</body>`,
-  which the render check passes and the byte check fails. The whole sequence
-  was run in a clean clone before it was committed. Nothing in it gates the
-  deploy: Pages publishes from `main` and `docs/` either way.
-- **THEORY.md was cut from 95 lines to 87 and stopped there.** The framework
-  standard is 60. What came out was the incident narrative that belongs in
-  `CHANGELOG.md` and the restatements of mechanics the checks already print
-  in their own output. What is left is a constraint per bullet that a session
-  could break without noticing, so reaching 60 would have meant deleting one.
-  Treat the gap as a decision, not a task still open.
-
-- **The workflow ran and passed, twice.** Run 34678242856 went green on a
-  Linux runner in five seconds with all five checks, the byte comparison and
-  the rebrand rehearsal. It annotated itself with a Node 20 deprecation for
-  `actions/checkout@v4` and `actions/setup-python@v5`, so both moved to the
-  majors running on Node 24 and run 34678296950 went green with no
-  annotation. A workflow that has never run is a file, not a check; this one
-  has run.
-- **The Formspree endpoint was declared twice and is declared once now.** The
-  contact fragment hard-coded the URL alongside the declared value in
-  `site/content/site.json`, so a new owner following the runbook got a form
-  still posting to the previous owner's inbox. It failed loudly rather than
-  shipping wrong, which is why it survived: the identity check already
-  catches the mismatch. What was wrong was `THEORY.md`'s claim that the value
-  lived in one place. The fragment carries a token now, `docs/` is byte
-  identical, and `rehearse_rebrand.py` rebrands all three `third_party`
-  values so the claim is tested. Mutation tested both ways.
-- **The from-scratch deployment runbook already existed.** The note above
-  said nothing told a new owner how to stand up their own copy. That was
-  wrong: `PERMISSIONS.md` carries a ten step grant runbook covering Pages,
-  DNS, HTTPS, the form and the analytics accounts. Reading it is what found
-  the endpoint defect, because its step 7 named a generated file.
-
-- **Eight of the fifteen declared values never reached the pages, and all
-  fifteen do now.** The reading task above turned into a measurement: a
-  rebranded clone still showed the previous owner's phone number on eleven
-  pages, their address on three, and their LinkedIn and GitHub on every page,
-  with all six checks green. Only the footer and the utility bar used the
-  tokens; the page bodies wrote the literals out. 48 occurrences across 13
-  fragments now carry tokens, `docs/` is byte identical, and a rebranded clone
-  measures zero residue across all fifteen.
-- **The rehearsal was measuring the domain and nothing else.** Its residue
-  scan covered the old domain alone, so the seven values that are not derived
-  from the domain could not fail it, and its fixture never changed the two
-  social URLs at all. Both are fixed: the scan now covers every declared value
-  and reports the value, file and line of each survivor. Mutation tested by
-  restoring one literal phone number, which fails the rehearsal,
-  `check_site.py --full` and the workflow.
-- **THEORY.md is 98 lines, up from 87.** The declared-values bullet absorbed
-  a constraint that did not exist before: a value must reach the page through
-  a token, and no check can see a violation because the tree is correct for
-  this owner either way. The incident narrative went to `CHANGELOG.md`.
-
-- **The login page is generated and the rehearsal no longer special-cases**
-  **it.** It was source living inside the build output, rebranded by a hand
-  written list of substitutions in `rehearse_rebrand.py` that duplicated the
-  build's own token map and that nothing checked. It is now
-  `site/pages/login.page.frag`, rendered through the same substitution as
-  every other fragment but without the shared chrome it never had, which is
-  what `VERBATIM_PAGES` is for. Its CSP and its absence of analytics tags are
-  unchanged and still checked. `docs/login.html` is byte identical.
-
-- **Two gaps found by that reading, both now checked.** The phone number is
-  declared three times in `site.json` and nothing made the three agree, so a
-  new owner who changed the displayed number and missed the `tel:` URI would
-  have shipped a site showing their number with every Call button dialling
-  the previous owner, all ten checks green. And the two social profiles were
-  never read at all: their hosts were allowed for unrelated reasons, so a
-  page left pointing at the previous owner's account passed. `verify_site.py`
-  runs eleven checks now. Mutation tested on all four arms.
-
-- **The six remaining checks were read and none needed changing.** The two
-  suspected before reading both hold up: the forbidden-claims check is a
-  fixed list of strings and no rewrite of it would read prose, and fetching
-  the external URLs the link check skips would make the run depend on other
-  people's servers. The canonical worry was wrong: `sitemap.xml` is generated
-  from `public_pages.json` independently of the canonicals the check compares
-  it against, so a page canonicalised to the wrong path already fails.
-- **What the reading did find was a file no check read at all.** `docs/CNAME`
-  has no extension, and the identity check scans `.html`, `.xml` and `.txt`.
-  It is the file GitHub Pages reads itself to decide which domain serves the
-  tree, so a stale one serves nothing or serves someone else's domain, and it
-  passed everything. `verify_site.py` runs twelve checks now.
-
-- **`THEORY.md` is 88 lines, down from 107.** Five bullets went because a
-  check now enforces and prints what they said, and the rest of the cut was
-  narrative moved to the changelog and occurrence counts that nothing
-  recomputes. It stops above 60 deliberately: what is left states things no
-  check can see, and the earlier attempt that cut to a number had to put a
-  constraint back.
-
-The next step this thread is taking is this board, which is 259 lines against
-the 200 line threshold at which a board stops being read. Split it the way
-the framework rule says: move every completed or superseded section verbatim
-into `BOARD_ARCHIVE_2026.md`, which already exists and already opens with a
-line saying it is a record and not instructions. Two things matter more than
-the line count and are the reason for doing it. Carry everything still live
-across explicitly rather than assuming it survives the move, and read every
-section you archive for a question that was asked and never answered, because
-a long board hides open decisions by burying them. Anything you find that is
-Jon's to decide goes under Questions for Jon, not into the archive.
+Nothing on this board is dispatchable. Every repo item has shipped, and what
+remains under Owner-Only Tasks and Questions for Jon needs Jon's account, his
+judgment on copy, or a buyer who does not exist yet. If you are a fresh
+thread with no instruction from Jon, that is the answer: the board is done,
+say so and ask him what he wants rather than inventing work from the archive.
 
 ## Owner-Only Tasks
 
