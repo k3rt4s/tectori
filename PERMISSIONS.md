@@ -57,13 +57,11 @@ accounts below, never in this repository.
 ## Filesystem
 
 - **The repository tree**: read and write, required, used by every script.
-  `scripts/build_site.py` writes only to its output directory, never into
-  `docs/`, which a build reproduces rather than edits.
-- **`C:\Code_data\tectori\reproducible\build_out\`**: write and create,
-  best-effort, used by `scripts/build_site.py` as its default output
-  directory. It sits outside the repository so a build cannot dirty the
-  working tree. `--out <dir>` picks another location, so this exact path is
-  not load-bearing.
+  `scripts/build_site.py` writes only to the directory `--out` names. That
+  is normally `docs/`, which it rewrites in place with an identical tree.
+- **Any directory passed to `--out`**: write and create, required.
+  `--out` has no default, so nothing is written anywhere until a build names
+  a destination.
 - **The system temporary directory**: write and create, required, used by
   `scripts/build_site.py --check` and `scripts/check_site.py`, each of which
   builds into a temporary tree and deletes it afterwards.

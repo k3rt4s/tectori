@@ -16,7 +16,6 @@ REPO_ROOT = os.path.dirname(SCRIPT_DIR)
 SITE_DIR = os.path.join(REPO_ROOT, "site")
 DOCS_DIR = os.path.join(REPO_ROOT, "docs")
 STATIC_DIR = os.path.join(REPO_ROOT, "site", "static")
-DEFAULT_OUT = r"C:\Code_data\tectori\reproducible\build_out"
 
 # Desktop nav order, shared by every page. The trailing "Contact" link is
 # handled separately below because its label and href-class differ from the
@@ -640,9 +639,18 @@ def compare(out_dir, written):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--out", default=DEFAULT_OUT, help="output directory for generated pages")
+    parser.add_argument("--out", help="output directory for the built site")
     parser.add_argument("--check", action="store_true", help="build to a temporary directory and compare against docs/, writing nothing persistent")
     args = parser.parse_args()
+    # No default. It used to be a directory on the machine this site was
+    # built on, which is not a path anyone else has, so a new owner running
+    # the build with no flags wrote a site into a directory they had never
+    # heard of, or failed with an error about it.
+    if not args.check and not args.out:
+        parser.error(
+            "--out is required: pass --out docs to rebuild the published tree "
+            "in place, or a directory of your own to build a copy"
+        )
 
     if args.check:
         tmp_dir = tempfile.mkdtemp(prefix="tectori-build-check-")

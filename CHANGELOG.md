@@ -4,6 +4,23 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- The paths of the machine this site was built on are out of the product.
+  `scripts/build_site.py` defaulted `--out` to a directory under this
+  workstation's data root, so a new owner running the build with no flags
+  either wrote a site somewhere they had never heard of or failed with an
+  error naming a drive letter that meant nothing to them. `--out` is required
+  now, with an error naming the two real choices, and every caller already
+  passed it. `scripts/rehearse_rebrand.py` kept the same kind of default and
+  now uses the system temporary directory, which exists everywhere and is
+  still outside the repo, so its guard against cloning into the tree is
+  unchanged. `site/README.md` told the reader to run the scripts through a
+  virtual environment on this machine; they import only the standard library,
+  so it says `python` now. `PERMISSIONS.md` no longer declares the old default
+  output directory as a path the product writes to.
+- `site/README.md` also said a build writes the generated pages plus every
+  other file `docs/` carries, copied unchanged. Neither half is true since the
+  static files moved out of `docs/` and the stylesheet and script became
+  rendered output. It names the 43 files and how each kind is produced.
 - The last three images a new owner had to rename by hand are declared values
   now. The hero pair and the band image were written as filenames in
   `site/pages/index.body.frag` and `site/static/styles.css`, so runbook step 2
