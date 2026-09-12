@@ -65,12 +65,25 @@ the productization layer he named, not leftover board work.
   framework standard. `docs/hosting.md` is gone; it was an operations note
   living inside the published site and served at a live URL.
 
-No dispatchable item remains. The next step this thread is taking is PROD-3,
-the rebrand rehearsal: clone the tree to the data root, replace every value
-in `site/content/site.json` with a fictional business, rebuild, and measure
-what still names Tectori and in how many files. That converts the survey's
-estimate of what a rebrand costs into a measured number and shows whether
-the product is actually reproducible. Nothing in the repo is touched by it.
+- **PROD-3 shipped.** The rebrand rehearsal measured what a config change
+  actually reaches. Its one finding worth acting on was structural: `CNAME`,
+  `robots.txt`, `sitemap.xml` and `llms.txt` were copied from `docs/` byte for
+  byte, so they could not follow a `site.json` change at all.
+- **PROD-4 shipped.** Those four files are now generated from the content
+  model, with the public page list in the new
+  `site/content/public_pages.json` driving both the sitemap and llms.txt. The
+  build stayed byte-identical, 28 of 28. Mutation tested by swapping the site
+  URL for a fictional domain and changing one meta description: all four
+  files followed and none kept the old domain.
+
+The next step this thread is taking is PROD-5, making the domain a single
+value. The source tree still spells `www.tectori.com` out 143 times: 70 in
+`site/content/pages.json` as canonical, og:url and og:image, 68 in the
+JSON-LD fragments, and 3 in body fragments. Fragments already pass through
+the `{{SITE_URL}}` substitution, so tokenizing those 71 is byte-neutral. The
+70 in `pages.json` become site-relative paths that the build prefixes. Both
+gates stay in force; the change is not shipped unless `check_site.py` is
+still 5 of 5 and the build still reproduces `docs/` byte for byte.
 
 ## Owner-Only Tasks
 

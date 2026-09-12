@@ -42,7 +42,8 @@ directly.
   without each check's own output.
 - `site/` holds the content model and chrome templates, and
   `scripts/build_site.py` renders them into the 24 generated pages under
-  `docs/`. `docs/` is that build's output, so `--check` reproduces it byte for
+  `docs/`, along with `CNAME`, `robots.txt`, `sitemap.xml` and `llms.txt`.
+  `docs/` is that build's output, so `--check` reproduces it byte for
   byte. Run with `--out <dir>` to write a complete deployable tree, pages plus
   every other file `docs/` carries. `site/README.md` explains the content model
   and which gate applies to which kind of change.
@@ -53,8 +54,9 @@ directly.
   report a failure that is not one.
 - `scripts/check_llms_drift.py` compares every `docs/llms.txt` page
   description, and the file's summary paragraph, against the corresponding
-  page's meta description. `llms.txt` copies them with no generator behind
-  it and drifts silently. `--fix` rewrites the drifted lines from the pages.
+  page's meta description. It predates the generator and is kept as a
+  second opinion; now that `llms.txt` is built from those same
+  descriptions, byte equality already covers it.
 - `scripts/verify_site.py` checks that a built site tree is internally
   consistent: internal links resolve, head tags are singular, the sitemap
   and `llms.txt` cover the same pages with matching descriptions, only the

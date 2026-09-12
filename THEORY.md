@@ -9,7 +9,9 @@ What a session needs to believe before it changes anything in this repo.
   the content model or a fragment and rebuild; a hand edit to `docs/` is
   overwritten by the next build and is caught by `scripts/check_site.py`,
   which is the one command to run before any deploy.
-- Every file in the tree uses CRLF. A scripted edit that writes LF corrupts the
+- Every file in the tree uses CRLF except `docs/CNAME`, which is 16 bytes
+  ending in one bare LF because GitHub Pages reads it directly. A scripted
+  edit that writes LF anywhere else corrupts the
   diff for the whole file. After any splice, confirm the bare-LF count is zero.
 - Contact details appear character for character and are never reformatted:
   `(615) 829-6802`, `https://www.tectori.com`, and
@@ -34,10 +36,13 @@ What a session needs to believe before it changes anything in this repo.
   extensionless, and old `.html` inbound links still resolve. Search Console
   reporting "Alternate page with proper canonical tag" is that behavior, not a
   defect to chase.
-- `docs/llms.txt` duplicates every page's meta description in 24 places and no
-  generator produces it, so it goes stale silently. Run
-  `python scripts/check_llms_drift.py` after any meta description change, and
-  `--fix` to repair it.
+- `docs/CNAME`, `docs/robots.txt`, `docs/sitemap.xml` and `docs/llms.txt` are
+  generated too, from `site/content/site.json` and
+  `site/content/public_pages.json`. That is what makes the domain a one value
+  change and what ended the silent drift `scripts/check_llms_drift.py` was
+  written to catch; the drift check still runs but can no longer fail, since
+  byte equality already covers the file. Page canonicals in `pages.json` still
+  spell the domain out, so a rebrand is not yet one edit.
 - The contact form is a plain HTML POST to Formspree with no JavaScript, which
   is what the static hosting supports. Its `_next` field needs an absolute URL.
 - Each page's JSON-LD `name` and `description` repeat the visible title and
