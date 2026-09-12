@@ -631,6 +631,136 @@ PRIVACY_CLAIMS = (
 )
 
 
+ROBOTS_LINE_RE = re.compile(r"^([A-Za-z-]+)\s*:\s*(.*)$")
+
+# The sentence the file opens with, read from the file rather than repeated
+# here, so narrowing the policy on purpose fails this check instead of leaving
+# it enforcing a promise the file stopped making.
+ROBOTS_CLAIM = (
+    "robots policy permits every named crawler, covering search, "
+    "answer-engine, user-directed retrieval, and model training."
+)
+
+
+def robots_groups(text: str):
+    """Return robots.txt as (user agents, rules) groups, plus its other lines."""
+    groups: list[tuple[list[str], list[tuple[str, str]]]] = []
+    other: list[tuple[str, str]] = []
+    for raw in text.splitlines():
+        line = raw.split("#", 1)[0].strip()
+        if not line:
+            continue
+        match = ROBOTS_LINE_RE.match(line)
+        if not match:
+            continue
+        field, value = match.group(1).lower(), match.group(2).strip()
+        if field == "user-agent":
+            # Consecutive user-agent lines share the rules that follow them,
+            # so a new group starts only once a rule has been seen.
+            if groups and not groups[-1][1]:
+                groups[-1][0].append(value)
+            else:
+                groups.append(([value], []))
+        elif field in ("allow", "disallow"):
+            if groups:
+                groups[-1][1].append((field, value))
+        else:
+            other.append((field, value))
+    return groups, other
+
+
+def check_robots_policy(pages: list[Path], docs_root: Path) -> bool:
+    """robots.txt permits every page the site wants found, and points at the sitemap.
+
+    This is the one file that can take the whole business off the internet
+    without changing a page. Nothing here read it. Every check in this suite
+    treats the tree as a set of pages that link to each other, and all of them
+    keep passing against a tree whose robots.txt carries a single `Disallow: /`
+    line, which is what a copied template, a staging file promoted by mistake,
+    or a crawler group edited to exclude one path most often looks like. The
+    site is then perfectly consistent, perfectly deployed, and absent from
+    every search result and every answer engine, and the only signal is that
+    nobody calls.
+    """
+    problems: list[str] = []
+    robots = docs_root / "robots.txt"
+    if not robots.is_file():
+        print("[FAIL] robots.txt lets the site be found: robots.txt is missing")
+        return False
+    text = robots.read_text(encoding="utf-8")
+    if text.count(ROBOTS_CLAIM) != 1:
+        problems.append(
+            f"robots.txt no longer states {ROBOTS_CLAIM!r} exactly once, so "
+            "either the sentence was reworded, in which case update this "
+            "check, or the policy was narrowed on purpose, in which case say "
+            "so in the file and change what this check requires"
+        )
+
+    groups, other = robots_groups(text)
+    if not groups:
+        problems.append("robots.txt names no crawler at all")
+
+    # What a crawler is being asked to fetch: the path of every page that is
+    # not noindex, which is the set the sitemap check already treats as the
+    # site proper.
+    wanted = sorted(
+        "/" + page.relative_to(docs_root).as_posix()
+        for page in pages
+        if page.name not in NOINDEX_ALLOWED
+    )
+    for agents, rules in groups:
+        for field, value in rules:
+            if field != "disallow" or not value:
+                continue
+            blocked = [path for path in wanted if path.startswith(value)]
+            if value == "/" or blocked:
+                problems.append(
+                    f"robots.txt tells {', '.join(agents)} to stay out of "
+                    f"{value!r}, which covers "
+                    f"{len(blocked) or len(wanted)} of the site's "
+                    f"{len(wanted)} pages"
+                )
+        if not any(field == "allow" for field, _ in rules):
+            problems.append(
+                f"robots.txt names {', '.join(agents)} and then gives that "
+                "group no Allow rule, so the group says nothing"
+            )
+
+    catch_all = [agents for agents, _ in groups if "*" in agents]
+    if not catch_all:
+        problems.append(
+            "robots.txt has no `User-agent: *` group, so a crawler the file "
+            "does not name by hand is left to guess"
+        )
+
+    sitemaps = [value for field, value in other if field == "sitemap"]
+    expected = SITE["site_url"].rstrip("/") + "/sitemap.xml"
+    if len(sitemaps) != 1:
+        problems.append(
+            f"robots.txt carries {len(sitemaps)} Sitemap lines rather than one"
+        )
+    elif sitemaps[0] != expected:
+        problems.append(
+            f"robots.txt points a crawler at {sitemaps[0]!r}, and this site is "
+            f"published at {expected!r}"
+        )
+    elif not (docs_root / "sitemap.xml").is_file():
+        problems.append(
+            f"robots.txt points a crawler at {sitemaps[0]!r}, and this tree "
+            "publishes no sitemap.xml"
+        )
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] robots.txt lets the site be found: "
+        f"{len(groups)} crawler groups and {len(wanted)} pages checked, "
+        f"{len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_privacy_statement(pages: list[Path], docs_root: Path) -> bool:
     """The privacy policy's checkable claims are true of the tree it describes.
 
@@ -1394,6 +1524,7 @@ def main() -> int:
         check_llms_txt(docs_root),
         check_noindex_and_navigation(pages, docs_root),
         check_contact_details(pages),
+        check_robots_policy(pages, docs_root),
         check_privacy_statement(pages, docs_root),
         check_accessibility_statement(pages, docs_root),
         check_stated_urls_resolve(pages, docs_root),
