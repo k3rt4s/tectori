@@ -96,12 +96,15 @@ against it with the same result it gives against the live site.
   Until 2026-09-12 it was not, and nothing said so.
 - `scripts/rehearse_rebrand.py` proves the site is reproducible instead of
   claiming it. It clones the tree to a temporary directory, applies the three
-  mechanical steps of the runbook below against a fixture business, rebuilds,
-  runs every check, and then reports how much of the original identity
-  survived. It fails if the old domain appears even once, because the domain
-  is derived from one declared value everywhere. It counts rather than fails
-  on the old brand name, because most of those are body copy a new owner
-  rewrites. Nothing in the repository is modified by a run.
+  runbook steps below that a script can apply against a fixture business,
+  rebuilds, runs every check, and then reports how much of the original
+  identity survived. It fails if the old domain appears even once, or if the
+  previous owner's name, given name or structured-data anchor does, because
+  each of those is derived from one declared value everywhere. It counts
+  rather than fails on the old brand name, the old job title and the eleven
+  biography strings, and names the pages carrying them, because those are body
+  copy a new owner rewrites rather than rebrands. Nothing in the repository is
+  modified by a run.
 - `scripts/check_deploy_gate.py` reads `.github/workflows/verify.yml` and
   confirms the deploy job still waits for the checks, uploads `docs/`, and
   refuses pull requests. It is the only check that reads how the tree reaches
@@ -139,11 +142,12 @@ covers hosting, DNS, and the from-scratch deploy.
 
 ## Making this site yours
 
-In order. Steps 1 to 3 are mechanical and the checks catch a mistake in any
-of them. Step 4 is the real work and no tool can do it. These steps were
+In order. Steps 1 to 4 are mechanical and the checks catch a mistake in any
+of them. Step 5 is the real work and no tool can do it. These steps were
 rehearsed against a clone on 2026-09-12: a fictional business replacing every
-declared value reaches a tree that passes all thirteen checks and names the
-previous owner nowhere.
+declared value reaches a tree that passes all thirteen checks, carries the
+previous owner's name nowhere, and is told which files still hold his
+credentials and career for step 5 to rewrite.
 
 1. Rewrite every value in `site/content/site.json`: the brand name, tagline,
    site URL, the six image filenames, the three contact strings, the
@@ -151,21 +155,31 @@ previous owner nowhere.
    social URLs, and the external host allowlist. Delete an entry from
    `third_party` only by also removing what emits it, or a check will fail
    on the count.
-2. Replace the images in `site/static/assets/` and name them to match step 1.
+2. Rewrite `site/content/founder.json`: the name, the given name, the job
+   title and the anchor slug. These four reach the home page's structured
+   data, the about page's heading and prose, the FAQ page's answer and two
+   meta descriptions, and they name a real person, so one missed leaves your
+   site claiming someone else's practitioner. The `biography_strings` beside
+   them are not tokens and there is nothing to replace: they are the previous
+   owner's certifications, award, schools and employers, they belong to step
+   5, and they are listed there so the rehearsal can tell you how many are
+   still in the tree and which pages hold them.
+3. Replace the images in `site/static/assets/` and name them to match step 1.
    All six reach the pages from `site.json`, so no file needs editing to
    rename one. The hero is two files, a `.webp` offered through a `srcset`
    and a `.png` behind it, and a browser that prefers webp never loads the
    png. Renaming leaves the old name in `docs/assets/`, because a build writes
    files and never deletes them, so delete it there by hand. Both the rehearsal
    and `build_site.py --check` fail on an image left behind under its old name.
-3. Rewrite the brand name in `site/pages/login.page.frag`, which carries it
+4. Rewrite the brand name in `site/pages/login.page.frag`, which carries it
    five times as prose. Nothing else on that page needs touching: the
    filenames and both forms of the domain come from `site.json` like
    everywhere else. Until 2026-09-12 this page was hand authored inside
    `docs/` and this step was a list of substitutions to make by hand. The
    page still holds the only Content-Security-Policy in the tree.
-4. Rewrite the copy. It lives in `site/pages/<slug>.body.frag` for the visible
-   text, `site/pages/<slug>.jsonld.frag` for the structured data, and the
+5. Rewrite the copy, including the biography step 2 left for you. It lives
+   in `site/pages/<slug>.body.frag` for the visible text,
+   `site/pages/<slug>.jsonld.frag` for the structured data, and the
    title, description and og fields in `site/content/pages.json`. On nine
    pages the JSON-LD `name` and `description` repeat the title and meta
    description word for word and a check enforces it, so those change
@@ -177,15 +191,15 @@ previous owner nowhere.
    from `docs/` by hand, because a rebuild writes files and never deletes
    them. `build_site.py --check` names anything in `docs/` the build did not
    write, so a file you forget fails a check rather than staying on the site.
-5. Rebuild in place with `python scripts/build_site.py --out docs`, then run
+6. Rebuild in place with `python scripts/build_site.py --out docs`, then run
    `python scripts/check_site.py`. Every check must pass before the tree is
    worth deploying. One of them is `scripts/verify_site.py`, which is
    thirteen checks of its own that read the built tree as a site rather than
    as a set of files, and it is the one that catches a value you missed. To
-   see steps 1 to 3 and this one run end to end before you do them
+   see steps 1 to 4 and this one run end to end before you do them
    yourself, run `python scripts/check_site.py --full`, which adds the
    rehearsal as a seventh check.
-6. Follow the runbook in `PERMISSIONS.md` for the repository, the Pages
+7. Follow the runbook in `PERMISSIONS.md` for the repository, the Pages
    settings, the DNS records and the accounts behind the three third-party
    services.
 

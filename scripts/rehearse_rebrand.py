@@ -323,7 +323,7 @@ def main():
     rewrite_site_json(out_dir)
     rewrite_founder_json(out_dir)
     rename_assets(out_dir, original)
-    print("Applied the two mechanical runbook steps")
+    print("Applied the three mechanical runbook steps a script can apply")
 
     build = run(out_dir, [os.path.join("scripts", "build_site.py"), "--out", "docs"])
     if build.returncode != 0:
