@@ -120,7 +120,7 @@ from-scratch deploy.
 In order. Steps 1 to 3 are mechanical and the checks catch a mistake in any
 of them. Step 4 is the real work and no tool can do it. These steps were
 rehearsed against a clone on 2026-09-12: a fictional business replacing every
-declared value reaches a tree that passes all ten checks and names the
+declared value reaches a tree that passes all eleven checks and names the
 previous owner nowhere.
 
 1. Rewrite every value in `site/content/site.json`: the brand name, tagline,
@@ -157,7 +157,7 @@ previous owner nowhere.
 5. Rebuild in place with `python scripts/build_site.py --out docs`, then run
    `python scripts/check_site.py`. All five must pass before the tree is
    worth deploying. One of the five is `scripts/verify_site.py`, which is
-   ten checks of its own that read the built tree as a site rather than as
+   eleven checks of its own that read the built tree as a site rather than as
    a set of files, and it is the one that catches a value you missed. To
    see steps 1 to 3 and this one run end to end before you do them
    yourself, run `python scripts/check_site.py --full`, which adds the

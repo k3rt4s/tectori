@@ -4,6 +4,26 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- A new check: the phone number is one number everywhere. `site.json`
+  declares the phone three times, as it is displayed, as a `tel:` URI and in
+  the form schema.org wants, and nothing made the three agree. A new owner
+  who changed the displayed number and missed the other two would have
+  published a site showing their own number with every Call button dialling
+  the previous owner, and all ten checks would have passed. The visible text
+  check cannot see it, because a `tel:` href is an attribute rather than
+  text. The check compares the digits of the three declared forms and every
+  `tel:` link in the tree against the declared one. 60 Call links checked.
+- The identity check now reads the two social profiles. Their hosts were
+  allowed, which proved nothing about whose account they were: `tools.html`
+  links seven repositories under the declared GitHub account and
+  `resources.html` links GitHub's own documentation, so the host is allowed
+  for reasons unrelated to the profile. Every URL on a profile's host must
+  now sit under the declared profile, and each profile must be linked from
+  somewhere, so a page left pointing at the previous owner's account fails.
+- Mutation tested all four arms: a `tel:` URI that dials a different number
+  from the displayed one, a page whose Call link disagrees with the declared
+  URI, a repository link under another account, and a declared profile linked
+  from nowhere. Each fails with the file and the value named.
 - `login.html` is generated now. It was a hand-authored source file living
   inside `docs/`, the build output, which is the one place the project's own
   rules say source never goes. A rebrand reached it only through a list of

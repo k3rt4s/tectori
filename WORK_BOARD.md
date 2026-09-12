@@ -1,6 +1,6 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-12 07:00. An orchestrator session is live in this
+ACTIVE THREAD: 2026-09-12 07:45. An orchestrator session is live in this
 working copy and is running unattended. Do not work this tree until the
 marker is cleared.
 
@@ -150,13 +150,24 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   what `VERBATIM_PAGES` is for. Its CSP and its absence of analytics tags are
   unchanged and still checked. `docs/login.html` is byte identical.
 
-The next step this thread is taking is to read `verify_site.py` the way the
-build was just read. Its checks confirm that declared values are present, and
-the defect class this thread has found twice is a value that is present and
-also somewhere it should not be. The question for each of the ten checks is
-what a tree would have to look like to pass it while being wrong, and whether
-that tree is one a new owner could plausibly produce. Work the checks that
-fail that question, and leave the ones that do not.
+- **Two gaps found by that reading, both now checked.** The phone number is
+  declared three times in `site.json` and nothing made the three agree, so a
+  new owner who changed the displayed number and missed the `tel:` URI would
+  have shipped a site showing their number with every Call button dialling
+  the previous owner, all ten checks green. And the two social profiles were
+  never read at all: their hosts were allowed for unrelated reasons, so a
+  page left pointing at the previous owner's account passed. `verify_site.py`
+  runs eleven checks now. Mutation tested on all four arms.
+
+The next step this thread is taking is the remaining half of that reading.
+Six checks have not been put to the question yet: the link check, the head
+tag check, the noindex check, the sitemap check, the llms.txt check and the
+forbidden claims check. Ask of each what a tree would look like that passes
+it while being wrong, and whether a new owner could plausibly produce that
+tree. Two of the six are worth suspecting before reading: the forbidden
+claims check looks for a fixed list of strings, which is a check that passes
+on anything phrased differently, and the link check skips every external URL,
+which is where a stale identity would sit.
 
 ## Owner-Only Tasks
 
