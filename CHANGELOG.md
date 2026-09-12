@@ -4,6 +4,20 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- The reachability check now walks out from `index.html` instead of
+  collecting incoming links. The earlier form asserted each indexed page
+  appeared somewhere as a link target, which two new pages that link only to
+  each other satisfy while neither can be reached from anywhere a visitor
+  starts. Proved on a copy of `docs/` carrying that pair: the check fails and
+  names both. A missing `index.html` now fails too, where the old form read
+  it as an empty starting set and passed.
+- The deploy gate check now reads the deploy job's condition rather than
+  looking for the word `pull_request` inside it. `github.event_name ==
+  'pull_request'` holds the same word and means the opposite, and an
+  `always()` added to the condition leaves the `needs` line in place while
+  deploying after a failed check. All three mutations, the inverted
+  comparison, the added `always()`, and the deleted condition, were applied to
+  the workflow and caught by name, and the workflow restored byte identical.
 - Page weight measured across every page and left alone. The home page is
   about 646 KB across 11 files and `solutions` is 555 KB. A naive count reads
   the home page as 2.1 MB by adding the 1.5 MB hero PNG, which no browser

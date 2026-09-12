@@ -23,6 +23,13 @@ WORKFLOW = os.path.join(REPO_ROOT, ".github", "workflows", "verify.yml")
 # The job that runs the checks, and the job that publishes docs/.
 VERIFY_JOB = "verify"
 DEPLOY_JOB = "deploy"
+# What the deploy job's own condition has to say, character for character.
+# Matching the whole thing rather than looking for the word `pull_request`
+# in it is the point: the inverted form contains the same word.
+EXPECTED_CONDITION = "github.event_name != 'pull_request'"
+# Any of these in the deploy job makes it run whatever the verify job did,
+# which leaves the `needs` line in place and decorative.
+OVERRIDES = ("always()", "failure()", "cancelled()")
 
 
 def jobs(text):
@@ -80,11 +87,27 @@ def main():
                 f"the {DEPLOY_JOB} job does not upload docs/, so it publishes "
                 "something other than the tree every other check read"
             )
-        if "pull_request" not in body:
+        # Read for what the condition says, not for the words it contains.
+        # `github.event_name == 'pull_request'` holds the same word and means
+        # the opposite, and a four space indent is the job's own condition
+        # rather than a step's.
+        condition = re.search(r"^    if:\s*(.+?)\s*$", body, re.MULTILINE)
+        if condition is None:
             problems.append(
-                f"the {DEPLOY_JOB} job does not exclude pull requests, so an "
-                "unmerged branch can reach the site"
+                f"the {DEPLOY_JOB} job has no condition of its own, so a pull "
+                "request deploys and an unmerged branch reaches the site"
             )
+        elif condition.group(1) != EXPECTED_CONDITION:
+            problems.append(
+                f"the {DEPLOY_JOB} job's condition is {condition.group(1)!r} "
+                f"rather than {EXPECTED_CONDITION!r}"
+            )
+        for override in OVERRIDES:
+            if override in body:
+                problems.append(
+                    f"the {DEPLOY_JOB} job uses {override}, so it runs whatever "
+                    f"{VERIFY_JOB} did and the needs line above it decides nothing"
+                )
 
     ok = not problems
     print(
