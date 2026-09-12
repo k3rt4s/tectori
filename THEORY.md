@@ -46,7 +46,11 @@ What a session needs to believe before it changes anything in this repo.
 - GitHub Pages serves both `/page` and `/page.html` with 200. Canonicals are
   extensionless and old `.html` links still resolve, so Search Console
   reporting "Alternate page with proper canonical tag" is that behavior rather
-  than a defect to chase.
+  than a defect to chase. That behavior is the one thing the tree needs from a
+  host. Every internal link and every canonical is extensionless, so a host
+  that serves files literally, an S3 bucket or a default nginx, returns 404 on
+  every link on every page while the files are all present and every check
+  passes. Moving off Pages means giving the new host that rewrite first.
 - The domain is one value. Nothing under `site/` spells it out but `site_url`:
   canonicals and og:url are stored site-relative, the fragments carry
   `{{SITE_URL}}`, `{{SITE_HOST}}` and `{{SITE_APEX}}`, and changing it reaches

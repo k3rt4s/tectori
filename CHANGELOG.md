@@ -4,6 +4,10 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `THEORY.md` records what the tree needs from a host. Every internal link and
+  canonical is extensionless, which GitHub Pages resolves and a literal file
+  server does not, so moving the site to an S3 bucket or a default nginx would
+  404 on every link while every file was present and every check passed.
 - `build_site.py --check` names any file in `docs/` the build did not write.
   It walked the list of files the build produced and compared each against
   `docs/`, which is a check for presence and cannot see a file that stopped

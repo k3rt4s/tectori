@@ -55,6 +55,14 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   rebrand rehearsal and a byte comparison of `docs/` against what the build
   produces. It does not gate the deploy: Pages publishes from `main` and
   `docs/` either way, so a red run means a broken tree is already live.
+- **Nothing in the tree names this machine.** `build_site.py` requires
+  `--out` rather than defaulting to a directory under the data root, the
+  rehearsal clones into the system temporary directory, and the READMEs call
+  the interpreter `python`. A new owner can clone and build with no path of
+  Jon's anywhere in the instructions.
+- **`--check` fails on a file `docs/` carries that the build did not write.**
+  A build writes and never deletes, so a dropped page or a renamed image used
+  to leave a live file that every check passed over.
 - **`docs/` is output with no exceptions, and that is now literally true.**
   The stylesheet, the script and the images are source under `site/static/`.
   A tree with no `docs/` at all builds a complete deployable site; before
@@ -141,6 +149,14 @@ national versus local targeting call, was closed on 2026-09-11.
   included the video rule from a lower-confidence source and marked
   home-business specifics unresolved. Follow whatever verification method
   Google offers in the GBP interface.
+- **Question 5, what a buyer is licensed to do with the tree.** The
+  repository carries no LICENSE and no statement of what is being sold. The
+  generator, the checks and the runbooks are the part with resale value; the
+  copy, the case study, the images and the three third-party identifiers are
+  this business and are not. Which of those a buyer receives, and under what
+  terms, is a decision with legal weight and no default worth guessing, so
+  nothing was written. The rebrand rehearsal already proves the two halves
+  separate cleanly, which is the evidence a split license would rest on.
 - **Question 4, LinkedIn personal headline.** Lane 8 did not write a
   paste-ready personal profile headline because the source marked the
   current headline as `CONFIRM`. The default it would take if confirmed is
