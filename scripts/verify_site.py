@@ -1321,6 +1321,116 @@ def check_phone_is_one_number(pages: list[Path], docs_root: Path) -> bool:
     return ok
 
 
+CSP_META_RE = re.compile(
+    r'<meta[^>]*?http-equiv\s*=\s*(["\'])Content-Security-Policy\1[^>]*?'
+    r'content\s*=\s*(["\'])(.*?)\2',
+    re.IGNORECASE | re.DOTALL,
+)
+FORM_TAG_RE = re.compile(r"<form\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+LOGIN_PROMISE = "transmits or stores nothing entered into it"
+# The directives that make the promise true rather than merely intended. A
+# form with no action posts to its own URL, so 'none' is what stops it.
+REQUIRED_CSP = {
+    "default-src": "'self'",
+    "connect-src": "'none'",
+    "form-action": "'none'",
+    "object-src": "'none'",
+    "base-uri": "'none'",
+}
+# What the page's own script must not contain. The page has no other script,
+# and a CSP is a browser's rule rather than a reason not to read the code.
+FORBIDDEN_IN_SCRIPT = (
+    "fetch(", "XMLHttpRequest", "navigator.sendBeacon", "localStorage",
+    "sessionStorage", "document.cookie", "indexedDB", "WebSocket",
+)
+
+
+def csp_directives(content: str) -> dict[str, str]:
+    """Return the policy as a mapping of directive to its value."""
+    directives: dict[str, str] = {}
+    for part in content.split(";"):
+        name, _, value = part.strip().partition(" ")
+        if name:
+            directives[name.lower()] = value.strip()
+    return directives
+
+
+def check_login_promise(docs_root: Path) -> bool:
+    """The login page says it sends and keeps nothing, and the markup has to agree.
+
+    It is the one page that asks a visitor for a password, and the sentence at
+    the top of its source says what happens to it. Nothing read that sentence.
+    A form that gained an action attribute, a policy that lost form-action
+    'none', or a script that gained a fetch would each turn a page that keeps
+    credentials on the machine into one that sends them somewhere, and every
+    other check here would pass: the page would still be valid, reachable,
+    byte identical to the build, and free of the analytics tags the login
+    check already forbids.
+    """
+    problems: list[str] = []
+    page = docs_root / "login.html"
+    if not page.is_file():
+        print(
+            "[FAIL] the login page sends and keeps nothing: login.html is not "
+            "in the tree, so the promise cannot be read"
+        )
+        return False
+
+    text = page.read_text(encoding="utf-8")
+    if text.count(LOGIN_PROMISE) != 1:
+        problems.append(
+            f"login.html no longer states {LOGIN_PROMISE!r} exactly once, so "
+            "either the sentence was reworded, in which case update this "
+            "check, or the promise was withdrawn, in which case say what the "
+            "page now does with what a visitor types"
+        )
+
+    meta = CSP_META_RE.search(text)
+    if not meta:
+        problems.append(
+            "login.html carries no Content-Security-Policy, which is the only "
+            "one in the tree and the thing that stops the form posting"
+        )
+    else:
+        directives = csp_directives(html_lib.unescape(meta.group(3)))
+        for name, expected in REQUIRED_CSP.items():
+            actual = directives.get(name)
+            if actual != expected:
+                problems.append(
+                    f"login.html: the policy says {name} {actual!r} rather "
+                    f"than {expected!r}, so the page no longer enforces what "
+                    "its own first sentence promises"
+                )
+
+    for attributes in FORM_TAG_RE.findall(text):
+        if re.search(r"\baction\s*=", attributes, re.IGNORECASE):
+            problems.append(
+                "login.html: the form carries an action attribute, so what a "
+                "visitor types is sent somewhere"
+            )
+
+    for name in sorted(p.name for p in docs_root.glob("*.js")):
+        if f'src="{name}' not in text and f"src='{name}" not in text:
+            continue
+        script_text = (docs_root / name).read_text(encoding="utf-8")
+        for token in FORBIDDEN_IN_SCRIPT:
+            if token in script_text:
+                problems.append(
+                    f"{name} is loaded by login.html and contains {token!r}, "
+                    "which sends or keeps what a visitor types"
+                )
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] the login page sends and keeps "
+        f"nothing: {len(REQUIRED_CSP)} policy directives and every script it "
+        f"loads checked, {len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_login_tracking(pages: list[Path]) -> bool:
     """login.html carries no analytics beacon or tracking pixel; every other page carries both."""
     problems: list[str] = []
@@ -1647,6 +1757,7 @@ def main() -> int:
         check_cname(docs_root),
         check_phone_is_one_number(pages, docs_root),
         check_login_tracking(pages),
+        check_login_promise(docs_root),
         check_no_forbidden_claims(pages),
         check_jsonld_mirrors_title(pages),
         check_declared_identity(pages, docs_root),
