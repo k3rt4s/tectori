@@ -4,6 +4,28 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Declared the site's identity in `site/content/site.json`: brand name,
+  tagline, site URL, logo filename, the three contact strings, the Cloudflare
+  beacon token, the Scarf pixel id, the Formspree endpoint, the social URLs,
+  and an allowlist of every external host the tree may reference with the
+  reason each is there. `build_site.py` renders the chrome from those values
+  and refuses to finish a page that still holds an unresolved placeholder.
+- Added a tenth check to `scripts/verify_site.py`. The third-party
+  identifiers in a built tree must equal the declared ones at the expected
+  count, and no file may reference a host outside the allowlist. Its contact
+  strings and site prefix now come from the same file instead of being
+  hard-coded, so the checks cannot keep validating a previous owner's values
+  after a rebrand. Mutation tested against a wrong beacon token, a stale form
+  endpoint, an unlisted host and a changed phone number; each one fires.
+- Added `PERMISSIONS.md`, the rollup of everything the site needs to build,
+  deploy, and serve: runtime, filesystem paths, every outbound host and which
+  page causes it, the operator accounts that hold credentials, the DNS
+  records, a from-scratch runbook, and the verification to run afterwards.
+  It records that the repository holds no secrets and that the build scripts
+  import only the standard library.
+- Removed `docs/hosting.md`. It was an internal operations note living inside
+  the published site, so it was served at a live URL while appearing in no
+  sitemap and no navigation. Its content is in `PERMISSIONS.md` now.
 - Made `docs/` generated output. `site/` holds the content model and one
   canonical template per piece of chrome, and `scripts/build_site.py` renders
   the 24 generated pages from them. Changing the nav or the footer is now one
