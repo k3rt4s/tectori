@@ -34,8 +34,16 @@ TIMEOUT_SECONDS = 30
 # the tree literally returns all 43 files correctly and 404s on every link on
 # every page, so checking the files alone would report a healthy site nobody
 # can navigate. 404.html is excluded because a missing path is how it is
-# served, which makes its own extensionless path meaningless.
+# served, which makes its own extensionless path meaningless. The probe below
+# is what checks it instead, because exempting a file on the strength of an
+# assumption and never testing the assumption is how the rest of this file's
+# defects got in.
 EXTENSIONLESS_EXEMPT = {"404.html"}
+
+# A path no file answers. The host is expected to return 404.html with a 404
+# status: the page alone is not enough, because a 200 on a missing path tells
+# a crawler the page exists and gets every typo and dead inbound link indexed.
+MISSING_PATH = "/no-such-path-this-check-invented"
 
 
 def site_url():
@@ -50,13 +58,17 @@ def digest(data):
 
 
 def fetch(url):
-    """Return the response body and status, or None and the status for an error response."""
+    """Return the response body and status, including the body of an error response."""
+    # An error response has a body and it is the interesting part: the 404
+    # probe below cares which page the host serves for a missing path, not
+    # only that it refused. Callers decide what a status means, which is why
+    # this returns both rather than discarding one of them.
     request = urllib.request.Request(url, headers={"User-Agent": "tectori-deploy-check"})
     try:
         with urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS) as response:
             return response.read(), response.status
     except urllib.error.HTTPError as error:
-        return None, error.code
+        return error.read(), error.code
 
 
 def main():
@@ -85,7 +97,7 @@ def main():
         with open(os.path.join(DOCS_DIR, rel), "rb") as f:
             local = f.read()
         body, status = fetch(f"{base}/{rel}")
-        if body is None:
+        if status != 200:
             problems.append(f"{rel}: status {status}")
             continue
         if body != local:
@@ -100,7 +112,7 @@ def main():
             continue
         path = "" if rel == "index.html" else rel[: -len(".html")]
         link_body, link_status = fetch(f"{base}/{path}")
-        if link_body is None:
+        if link_status != 200:
             problems.append(
                 f"/{path}: status {link_status}, though {rel} is served. Every "
                 "internal link in the tree uses this form."
@@ -112,11 +124,32 @@ def main():
         else:
             links += 1
 
+    # 404.html is the one file whose delivery is not a request for it.
+    body, status = fetch(f"{base}{MISSING_PATH}")
+    with open(os.path.join(DOCS_DIR, "404.html"), "rb") as f:
+        not_found = f.read()
+    not_found_state = (
+        "a missing path returns 404.html"
+        if status == 404 and body == not_found
+        else "a missing path does not return 404.html"
+    )
+    if status != 404:
+        problems.append(
+            f"{MISSING_PATH}: status {status}, expected 404. A missing path "
+            "that answers 200 gets every typo and dead link indexed."
+        )
+    elif body != not_found:
+        problems.append(
+            f"{MISSING_PATH}: 404, and the body is not docs/404.html, so the "
+            "host is serving its own error page"
+        )
+
     ok = not problems
     print(
         f"[{'PASS' if ok else 'FAIL'}] {base} serves what docs/ holds: "
         f"{matched} of {len(published)} files identical, {links} extensionless "
-        f"paths resolve to the same bytes, {len(problems)} problems"
+        f"paths resolve to the same bytes, {not_found_state}, "
+        f"{len(problems)} problems"
     )
     for problem in problems[:20]:
         print(f"       {problem}")

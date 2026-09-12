@@ -4,6 +4,23 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `serve_docs.py` answers a missing path with `docs/404.html` and a 404
+  status, which the live host does and the preview did not. The one page a
+  new owner most wants to preview was the one page the preview could not
+  show them. Found by pointing the new 404 probe at the preview server, which
+  reported it; the preview now passes `check_live_deploy.py` with exactly the
+  result the live site gives, so the two are equivalent rather than similar.
+- `fetch` in `check_live_deploy.py` returned no body for an error response,
+  so the 404 probe compared `None` against the page and failed on a correct
+  site. An error response's body is the interesting part. It now returns both
+  and the two callers that read a missing body test the status instead.
+- `check_live_deploy.py` asks the live site for a path no file answers and
+  requires `docs/404.html` back with a 404 status. It already exempted
+  `404.html` from the extensionless probe on the grounds that a missing path
+  is how that page is served, and then never checked it, which is the same
+  shape as every other defect found in this tree. The status matters as much
+  as the body: a missing path answering 200 tells a crawler the page exists
+  and gets every typo and dead inbound link indexed.
 - `scripts/check_deploy_gate.py` reads the workflow and confirms the deploy
   job still waits for the verify job, still uploads `docs/`, and still
   refuses pull requests. Every other check reads the built tree; none of them
