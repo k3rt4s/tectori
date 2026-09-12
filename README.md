@@ -94,10 +94,17 @@ against it with the same result it gives against the live site.
   `docs/` byte for byte. Every other check reads a tree that already has
   `docs/` in it, so none of them can tell whether the source is sufficient.
   Until 2026-09-12 it was not, and nothing said so.
+- `scripts/check_doc_claims.py` reads the countable claims this README and
+  `PERMISSIONS.md` make about the tree, and compares each against the tree.
+  Every other check reads the site; this one reads what the repository says
+  about the site, which is what a new owner follows. It found two counts
+  already wrong on the day it was written. A claim it cannot find is a
+  failure rather than a pass, so rewording a sentence out of existence is
+  caught too.
 - `scripts/rehearse_rebrand.py` proves the site is reproducible instead of
-  claiming it. It clones the tree to a temporary directory, applies the three
-  runbook steps below that a script can apply against a fixture business,
-  rebuilds, runs every check, and then reports how much of the original
+  claiming it. It clones the tree to a temporary directory, applies the four
+  mechanical runbook steps below against a fixture business, rebuilds, runs
+  every check, and then reports how much of the original
   identity survived. It fails if the old domain appears even once, or if the
   previous owner's name, given name or structured-data anchor does, because
   each of those is derived from one declared value everywhere. It counts
@@ -117,7 +124,7 @@ against it with the same result it gives against the live site.
   serves whatever is on `main` whether they passed or not. It also fetches
   the extensionless path of every page, because a host that serves files
   literally returns all 43 files correctly and 404s on every link on every
-  page. It needs the network, so it is not one of the six.
+  page. It needs the network, so it is not one of the eight.
 - `PERMISSIONS.md` lists everything the site needs to build, deploy, and
   serve: runtime, filesystem paths, every outbound host, the operator
   accounts, the DNS records, and a from-scratch deploy runbook. It replaced
@@ -198,7 +205,7 @@ credentials and career for step 5 to rewrite.
    as a set of files, and it is the one that catches a value you missed. To
    see steps 1 to 4 and this one run end to end before you do them
    yourself, run `python scripts/check_site.py --full`, which adds the
-   rehearsal as a seventh check.
+   rehearsal as a ninth check.
 7. Follow the runbook in `PERMISSIONS.md` for the repository, the Pages
    settings, the DNS records and the accounts behind the three third-party
    services.

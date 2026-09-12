@@ -164,6 +164,26 @@ def rewrite_founder_json(out_dir):
         f.write((text.replace("\n", "\r\n") + "\r\n").encode("utf-8"))
 
 
+def rewrite_login_page(out_dir, original):
+    """Apply runbook step 4: the one page that carries the brand name as prose."""
+    # It is prose rather than a token because the login page is rendered
+    # without the shared chrome and reads as a sentence, so tokenising it
+    # would make the copy unreadable to whoever edits it. That makes it the
+    # one mechanical step a new owner does by hand, and doing it here is what
+    # lets the rehearsal claim all four mechanical steps rather than three.
+    path = os.path.join(out_dir, "site", "pages", "login.page.frag")
+    with open(path, "rb") as f:
+        text = f.read().decode("utf-8")
+    if original["brand_name"] not in text:
+        raise KeyError(
+            "login.page.frag no longer writes the brand name as prose, so "
+            "runbook step 4 and this rehearsal have diverged"
+        )
+    text = text.replace(original["brand_name"], FIXTURE["brand_name"])
+    with open(path, "wb") as f:
+        f.write(text.encode("utf-8"))
+
+
 def rename_assets(out_dir, original):
     """Apply runbook step 2: rename the three images site.json declares by name."""
     # The images are source under site/static and the build copies them into
@@ -322,8 +342,9 @@ def main():
     clone(out_dir)
     rewrite_site_json(out_dir)
     rewrite_founder_json(out_dir)
+    rewrite_login_page(out_dir, original)
     rename_assets(out_dir, original)
-    print("Applied the three mechanical runbook steps a script can apply")
+    print("Applied the four mechanical runbook steps")
 
     build = run(out_dir, [os.path.join("scripts", "build_site.py"), "--out", "docs"])
     if build.returncode != 0:
