@@ -36,6 +36,14 @@ Run `python scripts/serve_docs.py --port 8000` from the repository root, then op
   description, and the file's summary paragraph, against the corresponding
   page's meta description. `llms.txt` copies them with no generator behind
   it and drifts silently. `--fix` rewrites the drifted lines from the pages.
+- `scripts/verify_site.py` checks that a built site tree is internally
+  consistent: internal links resolve, head tags are singular, the sitemap
+  and `llms.txt` cover the same pages with matching descriptions, only the
+  two documented pages are noindex, the contact details are character for
+  character, the analytics tags are on every page except `login.html`, and
+  no ratings markup or Qualified Security Assessor claim appears. It takes
+  `--dir` so it can verify a generated build as well as `docs/`, and exits
+  non-zero on any failure so it can gate a deploy.
 - `SEARCH_SETUP.md` covers Google, Bing, and search-grounded assistant setup.
 - `THEORY.md` holds the working mental model: the invariants, the
   constraints the site is bent around, and the changes that look like fixes
