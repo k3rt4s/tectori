@@ -57,11 +57,13 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   publishes from the workflow, not from the branch, so a red run deploys
   nothing and the site that is already up keeps serving. It published either
   way until 2026-09-12, when a red run meant a broken tree was already live.
-- **Nothing in the tree names this machine.** `build_site.py` requires
-  `--out` rather than defaulting to a directory under the data root, the
-  rehearsal clones into the system temporary directory, and the READMEs call
-  the interpreter `python`. A new owner can clone and build with no path of
-  Jon's anywhere in the instructions.
+- **Nothing a new owner would read or run names this machine.**
+  `build_site.py` requires `--out` rather than defaulting to a directory under
+  the data root, the rehearsal clones into the system temporary directory, and
+  the READMEs call the interpreter `python`. `CLAUDE.md` and `.gitignore` both
+  still carried an absolute path until 2026-09-12; this bullet claimed
+  otherwise for a day. What remains is this board and the two history files,
+  which cite report paths under the data root on purpose, as records.
 - **`--check` fails on a file `docs/` carries that the build did not write.**
   A build writes and never deletes, so a dropped page or a renamed image used
   to leave a live file that every check passed over.

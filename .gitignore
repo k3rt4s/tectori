@@ -7,7 +7,9 @@ Thumbs.db
 node_modules/
 dist/
 
-# Generated data belongs under C:\Code_data\tectori\
+# Generated data belongs outside the repository, in whatever directory the
+# person running the build passes to --out. Nothing here writes into the tree
+# except a rebuild of docs/, which is tracked output.
 data/
 logs/
 
