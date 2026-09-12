@@ -1,6 +1,6 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-12 07:45. An orchestrator session is live in this
+ACTIVE THREAD: 2026-09-12 08:30. An orchestrator session is live in this
 working copy and is running unattended. Do not work this tree until the
 marker is cleared.
 
@@ -159,15 +159,27 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   page left pointing at the previous owner's account passed. `verify_site.py`
   runs eleven checks now. Mutation tested on all four arms.
 
-The next step this thread is taking is the remaining half of that reading.
-Six checks have not been put to the question yet: the link check, the head
-tag check, the noindex check, the sitemap check, the llms.txt check and the
-forbidden claims check. Ask of each what a tree would look like that passes
-it while being wrong, and whether a new owner could plausibly produce that
-tree. Two of the six are worth suspecting before reading: the forbidden
-claims check looks for a fixed list of strings, which is a check that passes
-on anything phrased differently, and the link check skips every external URL,
-which is where a stale identity would sit.
+- **The six remaining checks were read and none needed changing.** The two
+  suspected before reading both hold up: the forbidden-claims check is a
+  fixed list of strings and no rewrite of it would read prose, and fetching
+  the external URLs the link check skips would make the run depend on other
+  people's servers. The canonical worry was wrong: `sitemap.xml` is generated
+  from `public_pages.json` independently of the canonicals the check compares
+  it against, so a page canonicalised to the wrong path already fails.
+- **What the reading did find was a file no check read at all.** `docs/CNAME`
+  has no extension, and the identity check scans `.html`, `.xml` and `.txt`.
+  It is the file GitHub Pages reads itself to decide which domain serves the
+  tree, so a stale one serves nothing or serves someone else's domain, and it
+  passed everything. `verify_site.py` runs twelve checks now.
+
+The next step this thread is taking is `THEORY.md`, which is 107 lines
+against a 60 line standard and has grown every time this thread has learned
+something. The standard exists because a longer file stops being read, and
+this is the file a buyer reads to find out what they must not break. Read it
+whole and decide, per bullet, whether it states a constraint a session could
+break without noticing or restates something the checks now enforce and
+print. Cut the second kind. Do not cut a live constraint to reach a number;
+an earlier attempt at this deleted one and had to put it back.
 
 ## Owner-Only Tasks
 

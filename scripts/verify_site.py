@@ -437,6 +437,45 @@ def digits(value: str) -> str:
     return "".join(character for character in value if character.isdigit())
 
 
+def check_cname(docs_root: Path) -> bool:
+    """docs/CNAME names the declared host, and carries it as a single bare LF line.
+
+    Every other check reads pages. This one file is read by GitHub Pages
+    itself to decide which domain serves the tree, and no check read it at all:
+    the identity check scans .html, .xml and .txt, and CNAME has no extension.
+    A tree whose CNAME still names the previous owner's domain passes every
+    other check here and then either serves nothing or serves someone else's
+    domain. The line ending matters as much as the host, because Pages reads
+    the file literally and a CRLF makes the host a different string.
+    """
+    host = SITE["site_url"].split("://", 1)[1].rstrip("/")
+    path = docs_root / "CNAME"
+    problems: list[str] = []
+    if not path.is_file():
+        problems.append("docs/CNAME is missing, so the custom domain is unset")
+    else:
+        raw = path.read_bytes()
+        if b"\r" in raw:
+            problems.append(
+                "CNAME carries a carriage return; GitHub Pages reads the file "
+                "literally and would take the host to be a different string"
+            )
+        if raw != (host + "\n").encode("utf-8"):
+            problems.append(
+                f"CNAME reads {raw!r}, not the declared host {host!r} "
+                "followed by one newline"
+            )
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] CNAME names the declared host: "
+        f"{len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_phone_is_one_number(pages: list[Path], docs_root: Path) -> bool:
     """The three declared forms of the phone number are the same number, and every tel: link uses it.
 
@@ -801,6 +840,7 @@ def main() -> int:
         check_llms_txt(docs_root),
         check_noindex_and_navigation(pages),
         check_contact_details(pages),
+        check_cname(docs_root),
         check_phone_is_one_number(pages, docs_root),
         check_login_tracking(pages),
         check_no_forbidden_claims(pages),
