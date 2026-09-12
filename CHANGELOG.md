@@ -4,6 +4,18 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `verify_site.py` gained a twenty-second check, on the two accessibility
+  promises that are about how a page behaves rather than how it is marked up.
+  The statement says the navigation including the mobile menu works with a
+  keyboard, and that the login preview's fields have visible labels. Both are
+  true because of a choice that is invisible once made: the menu is a
+  `<details>` element a browser opens on its own, and the labels are ordinary
+  text beside the inputs. Turning the menu into a `<div>` with a `<span>`
+  toggle, and moving both labels into `placeholder` attributes, each passed
+  all fourteen committed checks on a mutated copy while the statement went on
+  promising what the page had stopped doing. The check also refuses an inline
+  event handler and any positive `tabindex`.
+
 - `rehearse_rebrand.py` now reads the content model in both directions before
   it clones anything. It already refused to run when a fixture named a value
   `site.json` or `founder.json` no longer declares. The other direction was
