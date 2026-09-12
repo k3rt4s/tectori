@@ -42,20 +42,38 @@ The objective he named is to finish the board so the site can become a
 reproducible product that can be sold or hosted. Every repo item on this
 board has shipped, so the night's work is the reproducibility layer.
 
-- **REPRO-1, measure the duplication.** A worker is surveying how much of
-  the 25 pages is repeated chrome and exactly which fields vary per page.
-  The report lands at
-  `C:\Code_data\tectori\reproducible\duplication_survey_2026-09-11.md`.
-  Read only, no repo change, so nothing to roll back.
-- **REPRO-2, build the generator, planned.** Templates plus a content model
-  under a new directory, and a build script that regenerates `docs/` from
-  them. The correctness test is that a build leaves `git status` clean,
-  meaning the generator reproduces all 25 live pages byte for byte. Until
-  that test passes the generator does not ship. Rollback is deleting the
-  new directory and script, because `docs/` is unchanged by definition.
-- **REPRO-3, one verification command, planned.** Internal link check, the
-  llms.txt drift check, and a sitemap and llms.txt coverage check, behind a
-  single script so a buyer or a host can verify a build. Additive only.
+- **REPRO lane, all five items done, on `feature/repro-generator`, not yet
+  merged.** The lane is complete as built. Its evidence, its rollback and the
+  one thing left to do are below. If you are the thread that picks this up,
+  your next action is the merge and push named at the end of this section.
+  - REPRO-1 measured the duplication. 84,011 of 289,004 bytes, 29.1 percent of
+    the tree, were repeated chrome. The report is at
+    `C:\Code_data\tectori\reproducible\duplication_survey_2026-09-11.md`.
+  - REPRO-2 built the generator. `site/` holds the content model, `scripts/
+    build_site.py` renders it. Committed at 00425f0.
+  - REPRO-3 built `scripts/verify_site.py`, one command, now nine checks.
+    Committed at 4ba4a9b.
+  - REPRO-4 tied the JSON-LD mirror to the page as that ninth check, with the
+    exempt pages named so an uncovered page is reported rather than skipped.
+    Committed at f386b54.
+  - REPRO-5 collapsed the 28 stored chrome formatting variants to one template
+    per piece and made `docs/` the generator's own output, so a nav or footer
+    change is one edit rather than 14. Committed at 2e4f6dc. Hardened at
+    03f13ab after a pre-push review: the content model is validated with the
+    offending page and field named, interpolated values are escaped, and a
+    build copies every file `docs/` carries that it does not generate, so the
+    output is a complete deployable tree rather than pages alone.
+  - Verified four ways, none of them the scripts' own passing run.
+    `build_site.py --check` reports 24 of 24 pages byte-identical to `docs/`,
+    `verify_site.py` passes 9 of 9, `check_llms_drift.py` reports no drift, and
+    `compare_render.py` finds the built tree render-identical. The full built
+    tree compares byte-identical to `docs/` across all 44 files. Every new
+    check was tested by mutation against a scratch copy.
+  - The pre-push review log for 2e4f6dc is at
+    `C:\Code_data\tectori\reviews\pre_push_2026-09-12_normalization.md`.
+  - Rollback: `docs/` differs from what was deployed only in whitespace, and
+    reverting 2e4f6dc restores the hand-authored bytes. Everything else on the
+    branch is additive.
 
 ## Owner-Only Tasks
 
