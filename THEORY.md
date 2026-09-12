@@ -70,8 +70,12 @@ What a session needs to believe before it changes anything in this repo.
   every file.
 - The contact form is a plain HTML POST to Formspree with no JavaScript, which
   is what static hosting supports. Its `_next` field needs an absolute URL.
-- `scripts/compare_render.py` proves render equality, not byte equality, and is
-  sound only because every chrome container is a flex or grid box in
+- `scripts/compare_render.py` proves render equality, not byte equality, and it
+  compares the top level of each directory only, so a page in a subdirectory is
+  not compared and is not reported as missing either. Every page in this tree
+  is at the top level and the build cannot write anywhere else, because it
+  creates the output directory and no directory under it. It is also sound only
+  because every chrome container is a flex or grid box in
   `site/static/styles.css`, where whitespace-only text generates no boxes, and
   no page contains a `pre`. Break either assumption and reformatting needs a
   different proof.
