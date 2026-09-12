@@ -4,6 +4,22 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `verify_site.py` reads the contact form, which nothing did. The identity
+  check confirms the Formspree endpoint appears in the tree, which it would
+  even if the form were not posting to it, and every other check treats the
+  page as text. A form fails silently by construction: the visitor fills it
+  in, the browser posts it, the thank-you page loads, and the field whose
+  name attribute was lost in an edit is simply not in the mail. The new
+  check requires the form to post to the declared endpoint by POST, every
+  control to have a name and a label, the name, email and message fields to
+  exist, the `_gotcha` spam trap to exist and to be hidden by a rule in
+  styles.css, and `_next` to name a page of this site. Proved against a copy
+  with the email field's name removed, the honeypot's wrapper class changed
+  to a visible one and `_next` pointed off site: the committed checks passed
+  it 13 of 13, and this one names all four faults. A visible honeypot is the
+  worst of them, because Formspree discards every submission that fills it
+  in and the site looks like nobody is writing.
+
 - `scripts/check_stdlib_only.py` reads every script's imports and requires
   each to name a standard library module, and `check_site.py` runs it.
   `PERMISSIONS.md` promises a clone runs on a machine with nothing

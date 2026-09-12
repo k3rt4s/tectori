@@ -537,6 +537,163 @@ def digits(value: str) -> str:
     return "".join(character for character in value if character.isdigit())
 
 
+FORM_RE = re.compile(r"<form\b.*?</form>", re.IGNORECASE | re.DOTALL)
+CONTROL_RE = re.compile(r"<(input|textarea|select)\b([^>]*)>", re.IGNORECASE)
+FORM_ATTR_RE = re.compile(r'([A-Za-z_:][-\w:.]*)\s*=\s*(["\'])(.*?)\2', re.DOTALL)
+LABEL_FOR_RE = re.compile(r'<label[^>]*?\bfor\s*=\s*(["\'])(.*?)\1', re.IGNORECASE)
+WRAPPER_CLASS_RE = re.compile(r'<div[^>]*?\bclass\s*=\s*(["\'])(.*?)\1', re.IGNORECASE)
+
+# The fields the business reads. A form that posts without one of them sends
+# an inquiry with no way to answer it, or no question in it.
+REQUIRED_FIELDS = ("name", "email", "message")
+# Formspree discards a submission whose spam trap was filled in. The trap only
+# works while it is invisible, and a visitor who can see it fills it in.
+HONEYPOT_FIELD = "_gotcha"
+HIDING_DECLARATIONS = ("position: absolute", "display: none")
+
+
+def attributes(tag_body: str) -> dict:
+    """Return a tag's attributes, lowercased by name, as written."""
+    return {
+        match.group(1).lower(): match.group(3)
+        for match in FORM_ATTR_RE.finditer(tag_body)
+    }
+
+
+def check_contact_form(pages: list[Path], docs_root: Path) -> bool:
+    """The contact form posts to the declared endpoint and carries every field it needs.
+
+    Nothing else here reads the form. The identity check confirms the endpoint
+    string is somewhere in the tree, which it would be even if the form were
+    not posting to it, and every other check treats the page as text. A form
+    fails silently by construction: the visitor fills it in, the browser posts
+    it, the thank-you page loads, and the field whose name attribute was lost
+    in an edit simply is not in the mail. An inquiry that arrives with no
+    email address and a spam trap that has become visible both look exactly
+    like nobody writing in, which is the one failure a business cannot notice
+    from the outside.
+    """
+    problems: list[str] = []
+    # Forms that post somewhere. The login page carries a second form on
+    # purpose: it has no action and none of its inputs has a name, so a submit
+    # sends nothing anywhere, which is the point of a demonstration sign-in.
+    forms = []
+    for page in pages:
+        text = page.read_text(encoding="utf-8")
+        for match in FORM_RE.finditer(text):
+            opening = match.group(0)[: match.group(0).index(">") + 1]
+            if attributes(opening).get("action"):
+                forms.append((page, match.group(0)))
+
+    if len(forms) != 1:
+        print(
+            f"[FAIL] the contact form can deliver a message: {len(forms)} forms "
+            "post somewhere rather than one"
+        )
+        for page, _ in forms:
+            print(f"       {page.name}")
+        return False
+
+    page, form = forms[0]
+    opening = form[: form.index(">") + 1]
+    attrs = attributes(opening)
+
+    endpoint = SITE["third_party"]["formspree_endpoint"]
+    if attrs.get("action") != endpoint:
+        problems.append(
+            f"{page.name}: the form posts to {attrs.get('action')!r}, not to "
+            f"the declared endpoint {endpoint!r}"
+        )
+    if attrs.get("method", "").upper() != "POST":
+        problems.append(
+            f"{page.name}: the form's method is {attrs.get('method')!r}; a GET "
+            "puts the message in the URL and delivers nothing"
+        )
+
+    labelled = {match.group(2) for match in LABEL_FOR_RE.finditer(form)}
+    names = []
+    for match in CONTROL_RE.finditer(form):
+        control = attributes(match.group(2))
+        if control.get("type", "").lower() == "submit":
+            continue
+        field = control.get("name")
+        if not field:
+            problems.append(
+                f"{page.name}: a <{match.group(1).lower()}> in the form has no "
+                "name attribute, so whatever a visitor types in it is never sent"
+            )
+            continue
+        names.append(field)
+        if control.get("type", "").lower() == "hidden":
+            continue
+        identifier = control.get("id")
+        if not identifier or identifier not in labelled:
+            problems.append(
+                f"{page.name}: the field named {field!r} has no label pointing "
+                "at it, so a screen reader cannot say what it is for"
+            )
+
+    for field in REQUIRED_FIELDS:
+        if field not in names:
+            problems.append(
+                f"{page.name}: the form has no field named {field!r}, so an "
+                "inquiry arrives without it"
+            )
+    if HONEYPOT_FIELD not in names:
+        problems.append(
+            f"{page.name}: the form has no {HONEYPOT_FIELD!r} field, so the "
+            "spam trap is gone"
+        )
+    else:
+        offset = form.index(HONEYPOT_FIELD)
+        wrappers = WRAPPER_CLASS_RE.findall(form[:offset])
+        stylesheet = (docs_root / "styles.css").read_text(encoding="utf-8")
+        hidden = False
+        for _quote, classes in wrappers[-1:]:
+            for name in classes.split():
+                rule = re.search(
+                    r"\." + re.escape(name) + r"\s*\{([^}]*)\}", stylesheet
+                )
+                if rule and any(
+                    declaration in rule.group(1)
+                    for declaration in HIDING_DECLARATIONS
+                ):
+                    hidden = True
+        if not hidden:
+            problems.append(
+                f"{page.name}: nothing in styles.css hides the element holding "
+                f"the {HONEYPOT_FIELD!r} field, so a visitor can see it and "
+                "fill it in, and every submission that does is discarded"
+            )
+
+    redirect = None
+    for match in CONTROL_RE.finditer(form):
+        control = attributes(match.group(2))
+        if control.get("name") == "_next":
+            redirect = control.get("value")
+    if redirect is None:
+        problems.append(
+            f"{page.name}: the form has no _next field, so a visitor who sends "
+            "a message lands on the form service's own page"
+        )
+    else:
+        kind, target = resolve_internal(redirect, page, docs_root)
+        if kind != "internal" or target is None or not target.is_file():
+            problems.append(
+                f"{page.name}: _next points at {redirect!r}, which is not a "
+                "page of this site"
+            )
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] the contact form can deliver a message: "
+        f"{len(names)} fields checked, {len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_cname(docs_root: Path) -> bool:
     """docs/CNAME names the declared host, and carries it as a single bare LF line.
 
@@ -949,6 +1106,7 @@ def main() -> int:
         check_llms_txt(docs_root),
         check_noindex_and_navigation(pages, docs_root),
         check_contact_details(pages),
+        check_contact_form(pages, docs_root),
         check_cname(docs_root),
         check_phone_is_one_number(pages, docs_root),
         check_login_tracking(pages),
