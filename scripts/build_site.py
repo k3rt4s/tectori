@@ -138,6 +138,9 @@ SITE_TOKENS = {
     "{{SITE_HOST}}": SITE["site_url"].split("://", 1)[1].rstrip("/"),
     "{{SITE_APEX}}": SITE["site_url"].split("://", 1)[1].rstrip("/").split("www.", 1)[-1],
     "{{FAVICON_FILENAME}}": SITE["favicon_filename"],
+    "{{HERO_WEBP_FILENAME}}": SITE["hero_webp_filename"],
+    "{{HERO_PNG_FILENAME}}": SITE["hero_png_filename"],
+    "{{BAND_IMAGE_FILENAME}}": SITE["band_image_filename"],
     "{{PHONE_DISPLAY}}": SITE["phone_display"],
     "{{PHONE_TEL_URI}}": SITE["phone_tel_uri"],
     "{{POSTAL_ADDRESS}}": SITE["postal_address"],
@@ -575,24 +578,42 @@ def build(out_dir):
     return written
 
 
+# Substituted rather than copied, so a filename the stylesheet carries reaches
+# it from site.json like every other declared value. Anything else is copied
+# byte for byte: the images are binary, and the one .svg is stored as it ships.
+RENDERED_STATIC_SUFFIXES = (".css", ".js")
+
+
 def copy_static_files(out_dir):
-    """Copy every file under site/static into the output, so the result is a deployable tree."""
-    # These are source. They used to live in docs/ and be copied from there
-    # to there, which made docs/ an input to its own build: a clone that
-    # deleted the output directory could not rebuild, and a hand edit to the
-    # stylesheet survived every rebuild while README said it would not. The
-    # whole directory is copied rather than a named list, so a font or an
-    # image added later ships without anyone remembering to name it here.
-    copied = []
+    """Render or copy every file under site/static, so the output is a deployable tree."""
+    # These are source. They used to live in docs/ and be copied from there to
+    # there, which made the output directory an input to its own build: a clone
+    # without docs/ shipped no styling and said nothing was wrong.
+    rendered, copied = [], []
     for dir_path, _dir_names, file_names in os.walk(STATIC_DIR):
         rel_dir = os.path.relpath(dir_path, STATIC_DIR)
-        for file_name in file_names:
+        for file_name in sorted(file_names):
             rel = file_name if rel_dir == os.curdir else os.path.join(rel_dir, file_name)
+            source = os.path.join(dir_path, file_name)
             destination = os.path.join(out_dir, rel)
             os.makedirs(os.path.dirname(destination), exist_ok=True)
-            shutil.copyfile(os.path.join(dir_path, file_name), destination)
-            copied.append(rel)
-    return sorted(copied)
+            if file_name.endswith(RENDERED_STATIC_SUFFIXES):
+                data = load_fragment(os.path.relpath(source, SITE_DIR))
+                if b"{{" in data:
+                    offset = data.index(b"{{")
+                    context = data[max(0, offset - 40):offset + 40].decode(
+                        "utf-8", "replace"
+                    )
+                    raise SystemExit(
+                        f"{rel}: unresolved placeholder near: {context.strip()}"
+                    )
+                with open(destination, "wb") as f:
+                    f.write(data)
+                rendered.append(rel.replace(os.sep, "/"))
+            else:
+                shutil.copyfile(source, destination)
+                copied.append(rel)
+    return sorted(rendered), sorted(copied)
 
 
 def compare(out_dir, written):
@@ -627,10 +648,15 @@ def main():
         tmp_dir = tempfile.mkdtemp(prefix="tectori-build-check-")
         try:
             written = build(tmp_dir)
+            # The stylesheet and the script are rendered too, and the images
+            # are copied, so comparing only the pages would leave a third of
+            # the published tree unverified.
+            rendered, copied = copy_static_files(tmp_dir)
+            written += rendered + [name.replace(os.sep, "/") for name in copied]
             identical, differing = compare(tmp_dir, written)
         finally:
             shutil.rmtree(tmp_dir, ignore_errors=True)
-        print(f"Files generated: {len(written)}, the 24 modelled pages, login.html, and CNAME, robots.txt, sitemap.xml and llms.txt")
+        print(f"Files compared: {len(written)}, the 24 modelled pages, login.html, CNAME, robots.txt, sitemap.xml, llms.txt, and the static files")
         print(f"Identical to docs/: {identical}")
         print(f"Differing from docs/: {len(differing)}")
         for name, reason in differing:
@@ -639,10 +665,10 @@ def main():
     else:
         written = build(args.out)
         print(f"Wrote {len(written)} files to {args.out}, the 24 modelled pages, login.html, and CNAME, robots.txt, sitemap.xml and llms.txt")
-        copied = copy_static_files(args.out)
+        rendered, copied = copy_static_files(args.out)
         print(
-            f"Copied {len(copied)} static files from site/static, the stylesheet, "
-            "the script and the images"
+            f"Rendered {len(rendered)} static files from site/static and copied "
+            f"{len(copied)} more"
         )
 
 

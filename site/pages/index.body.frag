@@ -1,7 +1,7 @@
       <section class="hero" aria-labelledby="hero-title">
         <picture class="hero-image">
-          <source srcset="assets/tectori-hero.webp" type="image/webp">
-          <img src="assets/tectori-hero.png" alt="Abstract secure cloud architecture on a modern operations desk">
+          <source srcset="assets/{{HERO_WEBP_FILENAME}}" type="image/webp">
+          <img src="assets/{{HERO_PNG_FILENAME}}" alt="Abstract secure cloud architecture on a modern operations desk">
         </picture>
         <div class="hero-scrim" aria-hidden="true"></div>
         <div class="hero-content">

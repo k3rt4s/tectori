@@ -109,7 +109,7 @@ directly.
 
 No local secrets or runtime settings are required. The values that belong to
 the business rather than to the site's structure, the brand name, the tagline,
-the contact strings, the domain, the logo, social card and favicon filenames,
+the contact strings, the domain, the six image filenames, the social profiles
 and the three third-party identifiers, are declared once in
 `site/content/site.json`. The domain in particular is a single value:
 changing `site_url` reaches every file in a rebuilt tree. `PERMISSIONS.md`
@@ -130,14 +130,12 @@ previous owner nowhere.
    `third_party` only by also removing what emits it, or a check will fail
    on the count.
 2. Replace the images in `site/static/assets/` and name them to match step 1.
-   The logo, social card and favicon are the three the build reads from
-   `site.json`. The band image and both hero files are referenced by name
-   from `site/pages/index.body.frag` and `site/static/styles.css` instead, so
-   those two files need editing if you rename them. The hero is two files, a
-   `.webp` offered through a `srcset` and a `.png` behind it, and a browser
-   that prefers webp never loads the png. Renaming a file leaves the old name
-   in `docs/assets/`, because a build writes files and never deletes them, so
-   delete it there by hand. The rehearsal fails on one that is left behind.
+   All six reach the pages from `site.json`, so no file needs editing to
+   rename one. The hero is two files, a `.webp` offered through a `srcset`
+   and a `.png` behind it, and a browser that prefers webp never loads the
+   png. Renaming leaves the old name in `docs/assets/`, because a build writes
+   files and never deletes them, so delete it there by hand. The rehearsal
+   fails on an image left behind under its old name.
 3. Rewrite the brand name in `site/pages/login.page.frag`, which carries it
    five times as prose. Nothing else on that page needs touching: the
    filenames and both forms of the domain come from `site.json` like
