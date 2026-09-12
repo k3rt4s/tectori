@@ -14,25 +14,25 @@
       <section class="content-section split-section" aria-labelledby="founder-title">
         <div class="section-heading">
           <p class="eyebrow">Founder and principal consultant</p>
-          <h2 id="founder-title">Jonathan Bowker</h2>
+          <h2 id="founder-title">{{FOUNDER_NAME}}</h2>
         </div>
         <div class="prose">
           <p>
-            Jonathan brings 20 years of experience across enterprise IT,
+            {{FOUNDER_GIVEN_NAME}} brings 20 years of experience across enterprise IT,
             cybersecurity, compliance, risk, infrastructure, and technology
             operations. His career progressed from hands-on network and systems
             work into enterprise architecture, director, CISO, and CIO
             responsibilities in healthcare, fintech, and compliance technology.
           </p>
           <p>
-            At Ncontracts, Jonathan helped grow the compliance technology
+            At Ncontracts, {{FOUNDER_GIVEN_NAME}} helped grow the compliance technology
             company from $10 million to $100 million in revenue while leading
             security, governance, risk, IT operations, cloud infrastructure,
             and acquisition integration. Ncontracts is part of his work
             history and is not represented as a Tectori client.
           </p>
           <p>
-            Most recently, at HCA Healthcare, Jonathan worked as a security
+            Most recently, at HCA Healthcare, {{FOUNDER_GIVEN_NAME}} worked as a security
             architect and AI automation engineer. He applied Zero Trust
             principles across Azure and data center design reviews. He also
             built a human governed AI workflow that returned a stalled policy
@@ -81,7 +81,7 @@
         </div>
         <div class="prose">
           <p>
-            Jonathan earned an MBA in Management of Technology from the Georgia
+            {{FOUNDER_GIVEN_NAME}} earned an MBA in Management of Technology from the Georgia
             Institute of Technology and a Bachelor of Business Administration
             in Business Management from Kennesaw State University. He also
             taught information systems at Nashville Software School, with

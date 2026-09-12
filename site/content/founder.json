@@ -1,0 +1,20 @@
+{
+  "comment": "The person this practice is. Declared here rather than written into the pages because a name, a job title and an anchor recur across structured data, headings and meta descriptions, and one that a rebrand misses ships a site claiming a real person it has nothing to do with. The biography below is the other half and is deliberately not tokenised: a new owner writes their own rather than filling in these blanks. scripts/rehearse_rebrand.py counts every one of these strings that survives a rebrand and reports the number, the same treatment brand_name gets and for the same reason.",
+  "name": "Jonathan Bowker",
+  "given_name": "Jonathan",
+  "job_title": "Founder and Principal Consultant",
+  "anchor_slug": "jonathan-bowker",
+  "biography_strings": [
+    "Certified Information Systems Security Professional (CISSP)",
+    "SABSA Chartered Security Architect, Foundation Certificate (SCF)",
+    "Payment Card Industry Professional (PCIP)",
+    "Payment Card Industry Internal Security Assessor (ISA)",
+    "SANS SEC545, GenAI and LLM Application Security, 2026",
+    "Finalist, Top 3, Nashville Security Leader of the Year, 2022",
+    "Georgia Institute of Technology",
+    "Kennesaw State University",
+    "Nashville Software School",
+    "Ncontracts",
+    "HCA Healthcare"
+  ]
+}
