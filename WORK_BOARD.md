@@ -8,8 +8,20 @@ marker is cleared.
 
 Records, not work. Nothing here is dispatchable.
 
-- GitHub Pages deploys this site from `main` and `docs/`. A push to `main`
-  is the go-live. Allow about three minutes before checking a live URL.
+- GitHub Pages publishes the artifact the workflow uploads, not the branch.
+  A push to `main` runs every check and deploys `docs/` only if they pass,
+  so a push is still the go-live but a red run now ships nothing. Allow
+  about three minutes before checking a live URL. This said Pages deployed
+  from `main` and `docs/` until 2026-09-12, which was true and was the
+  defect: the checks reported on a tree visitors were already being served.
+- `check_live_deploy.py` asks only about the files `docs/` holds, so a file
+  the live site serves and `docs/` no longer contains is invisible to it.
+  That is the declared-only shape every other defect here has had, and it
+  was looked at on 2026-09-12 and deliberately left. The deploy replaces the
+  whole Pages artifact on every successful run, so an ordinary content edit
+  cannot leave a stale file behind; only a partial rollout or CDN lag could,
+  and neither is something this repository can cause or fix. Closing it
+  would mean listing the live tree, which Pages offers no way to do.
 - Every scored item from the 2026-09-06 scoring run and the 2026-09-08
   eight-lane run has shipped and has been verified on the live site. The
   remediation brief at
