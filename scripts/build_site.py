@@ -401,6 +401,22 @@ REQUIRED_ENTRY_KEYS = (
 def validate(entries):
     """Fail with the offending page and field named, rather than a KeyError mid render."""
     problems = []
+    # Two entries writing one file is the failure a copied entry produces: the
+    # second render overwrites the first and the page that lost simply is not
+    # there. Every count still matches, because nothing counts the entries
+    # against the files, and the tree is caught downstream only because two
+    # pages then declare one canonical. Refusing here names the two entries
+    # instead of the symptom.
+    seen = {}
+    for index, entry in enumerate(entries):
+        output = entry.get("output")
+        if output is not None:
+            if output in seen:
+                problems.append(
+                    f"{output}: entries {seen[output]} and {index} both write "
+                    "it, so one of the two pages would not exist"
+                )
+            seen[output] = index
     for index, entry in enumerate(entries):
         where = entry.get("output") or f"entry {index}"
         for key in REQUIRED_ENTRY_KEYS:

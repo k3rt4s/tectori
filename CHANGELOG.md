@@ -4,6 +4,14 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `build_site.py` refuses a content model where two entries write the same
+  file. Copying an entry to start a new page and leaving `output` unchanged
+  deletes the first page by overwriting it, and every count still matched:
+  43 files written, 43 published, no orphans, because nothing counted the
+  entries against the files. The tree was caught downstream, by two pages
+  then declaring one canonical, which is the symptom rather than the cause.
+  The build now names the two entries and writes nothing.
+
 - `scripts/check_source_only_build.py` builds from the source files git
   carries rather than from the working directory, and says which of the two
   it used. What a new owner receives is a clone, so a source file that was
