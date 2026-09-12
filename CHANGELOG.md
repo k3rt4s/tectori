@@ -4,6 +4,15 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `scripts/check_documented_commands.py` requires every `python scripts/...`
+  command in `README.md`, `PERMISSIONS.md` and `SEARCH_SETUP.md` to name a
+  script that exists and to pass only options that script's parser accepts.
+  The counts in those documents were already checked and the commands were
+  not, and the runbook is what a new owner types first, so a renamed script or
+  a retired flag would fail at the moment they are deciding whether any of
+  this works. `check_site.py` now runs fifteen checks by default and sixteen
+  with `--full`.
+
 - `verify_site.py` gained a twentieth check. Every attribute that names
   another element by id, `aria-labelledby`, `aria-describedby`,
   `aria-controls`, `aria-owns`, `for` and `list`, has to find that element on

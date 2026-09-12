@@ -27,7 +27,7 @@ ORDINALS = {
     "first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5,
     "sixth": 6, "seventh": 7, "eighth": 8, "ninth": 9, "tenth": 10,
     "eleventh": 11, "twelfth": 12, "thirteenth": 13, "fourteenth": 14,
-    "fifteenth": 15,
+    "fifteenth": 15, "sixteenth": 16,
 }
 SPELLINGS = {**WORDS, **ORDINALS}
 NUMBER = r"(?P<n>\d+|[a-z]+(?:-[a-z]+)?)"
