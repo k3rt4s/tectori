@@ -36,6 +36,14 @@ def main():
         action="store_true",
         help="print only the summary, not each check's own output",
     )
+    parser.add_argument(
+        "--full",
+        action="store_true",
+        help=(
+            "also rehearse a rebrand, which clones the tree outside the repo "
+            "and takes about a minute"
+        ),
+    )
     args = parser.parse_args()
 
     results = []
@@ -67,6 +75,18 @@ def main():
         ))
     finally:
         shutil.rmtree(tmp_dir, ignore_errors=True)
+
+    # Off the default path on purpose. The five checks above read the tree
+    # that is about to deploy and are what a deploy should wait for. The
+    # rehearsal answers a different question, whether someone else could make
+    # this site theirs, and it writes a whole clone outside the repo to do it.
+    # That is worth running when the build or the content model changes, and
+    # not worth making every deploy wait for.
+    if args.full:
+        results.append(run(
+            "a new owner could rebrand the site and it would still pass",
+            [script("rehearse_rebrand.py")],
+        ))
 
     if not args.quiet:
         for title, code, output in results:

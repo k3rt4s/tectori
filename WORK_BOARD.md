@@ -58,12 +58,20 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   the link check never looked at `srcset`, so the home page hero's webp was
   unverified.
 
-The next step this thread is taking is to give `scripts/check_site.py` a
-`--full` mode that also runs the rebrand rehearsal. Today the repository
-proves two different things with two different commands, and only one of
-them is the one a reader is told to run before deploying. The rehearsal is
-slower and writes outside the repo, so it should stay off the default path
-and be one flag away rather than a thing you have to know about.
+- **`check_site.py --full` shipped.** It adds the rebrand rehearsal as a
+  sixth check, off the default path because it clones the tree outside the
+  repo and takes about a minute. A failing rehearsal fails the run.
+
+The next step this thread is taking is to work through the copy on the six
+service pages the way the buyer read worked through the documents. Every
+check in this repo tests whether the site is consistent with itself, and
+the one thing none of them can test is whether a page is worth reading.
+Those six pages carry the offer, they were written early, and they have not
+been read end to end since. Anything that reads as a claim about results,
+clients or credentials is checked against what the site is allowed to say,
+and anything vague enough to describe any consultancy is a finding. This is
+a reading task producing a written list, not an edit: changing the copy is
+Jon's call, and the list is what he decides from.
 
 ## Owner-Only Tasks
 
