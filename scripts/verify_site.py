@@ -992,6 +992,238 @@ HIDDEN_LABEL_CLASSES = ("sr-only", "visually-hidden", "screen-reader-only", "hid
 NO_MENU = "login.html"
 
 
+CONTRAST_CLAIM = "Text and background colors are chosen for contrast and readability."
+# The statement names a standard, and the standard carries a number. Reading
+# the level out of the page rather than writing 4.5 here is what makes the
+# threshold the one the site actually promises: raising the target to AAA
+# raises this check with it, and lowering it is a change to a published
+# sentence rather than to a constant nobody would notice.
+WCAG_LEVEL_RE = re.compile(
+    r"Web Content Accessibility Guidelines \(WCAG\) (\d+\.\d+) level (A+)"
+)
+WCAG_MINIMUM = {"A": 3.0, "AA": 4.5, "AAA": 7.0}
+CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
+CSS_RULE_RE = re.compile(r"([^{}]+)\{([^{}]*)\}", re.DOTALL)
+CSS_VAR_RE = re.compile(r"--([a-z0-9-]+)\s*:\s*([^;}]+)")
+CSS_VAR_USE_RE = re.compile(r"var\(\s*--([a-z0-9-]+)\s*\)$")
+CSS_HEX_RE = re.compile(r"#([0-9a-fA-F]{6})$")
+CSS_RGBA_RE = re.compile(r"rgba?\(([^)]*)\)$")
+
+# The surfaces the site paints text on. Four, because the palette is four
+# opaque colours wide, and each is confirmed below to still be used as a
+# background somewhere.
+CONTRAST_SURFACES = {
+    "the page": "var(--white)",
+    "a dark band": "var(--charcoal)",
+    "the resilience band": "var(--gold)",
+    "a primary button": "var(--orange)",
+}
+
+# Which surface each text colour is read on. Stated rather than derived,
+# because working it out from the tree means resolving the cascade against
+# the markup and nothing here does that. The table is kept honest in both
+# directions: a colour the stylesheet uses and this table does not name fails,
+# and so does a colour named here that the stylesheet no longer uses, so the
+# list cannot drift into describing a stylesheet that no longer exists.
+CONTRAST_READ_ON = {
+    "var(--ink)": ("the page",),
+    "var(--muted)": ("the page",),
+    "var(--orange-text)": ("the page",),
+    "var(--charcoal)": ("the page", "the resilience band", "a primary button"),
+    "var(--white)": ("a dark band",),
+    "var(--gold)": ("a dark band",),
+    "rgba(254, 255, 254, 0.7)": ("a dark band",),
+    "rgba(254, 255, 254, 0.76)": ("a dark band",),
+    "rgba(254, 255, 254, 0.78)": ("a dark band",),
+    "rgba(254, 255, 254, 0.82)": ("a dark band",),
+    "rgba(254, 255, 254, 0.84)": ("a dark band",),
+    "rgba(254, 255, 254, 0.86)": ("a dark band",),
+    "rgba(39, 49, 56, 0.82)": ("the resilience band",),
+}
+# A colour that says to use whatever the element inherits, which is one of the
+# values above by the time it is painted.
+CONTRAST_IGNORED = ("inherit", "currentColor", "transparent")
+
+
+def css_palette(css: str) -> dict[str, str]:
+    """Return the custom properties declared on :root."""
+    root = re.search(r":root\s*\{(.*?)\}", css, re.DOTALL)
+    if not root:
+        return {}
+    return {name: value.strip() for name, value in CSS_VAR_RE.findall(root.group(1))}
+
+
+def css_colour(value: str, palette: dict[str, str], depth: int = 0):
+    """Return a colour as red, green, blue and alpha, or None if it is not one."""
+    value = value.strip()
+    if depth > 4:
+        return None
+    used = CSS_VAR_USE_RE.match(value)
+    if used:
+        return css_colour(palette.get(used.group(1), ""), palette, depth + 1)
+    written = CSS_HEX_RE.match(value)
+    if written:
+        digits = written.group(1)
+        return (
+            int(digits[0:2], 16),
+            int(digits[2:4], 16),
+            int(digits[4:6], 16),
+            1.0,
+        )
+    channels = CSS_RGBA_RE.match(value)
+    if channels:
+        parts = [part.strip() for part in channels.group(1).split(",")]
+        if len(parts) not in (3, 4):
+            return None
+        try:
+            red, green, blue = (float(part) for part in parts[:3])
+            alpha = float(parts[3]) if len(parts) == 4 else 1.0
+        except ValueError:
+            return None
+        return (red, green, blue, alpha)
+    return None
+
+
+def composite(colour, background):
+    """Return what a partly transparent colour looks like painted on a surface."""
+    return tuple(
+        colour[3] * colour[index] + (1 - colour[3]) * background[index]
+        for index in range(3)
+    ) + (1.0,)
+
+
+def relative_luminance(colour) -> float:
+    """Return the WCAG relative luminance of an opaque colour."""
+
+    def channel(value: float) -> float:
+        value = value / 255
+        return value / 12.92 if value <= 0.03928 else ((value + 0.055) / 1.055) ** 2.4
+
+    return (
+        0.2126 * channel(colour[0])
+        + 0.7152 * channel(colour[1])
+        + 0.0722 * channel(colour[2])
+    )
+
+
+def contrast_ratio(text, background) -> float:
+    """Return the WCAG contrast ratio between two opaque colours."""
+    first, second = relative_luminance(text), relative_luminance(background)
+    return (max(first, second) + 0.05) / (min(first, second) + 0.05)
+
+
+def check_colour_contrast(docs_root: Path) -> bool:
+    """Every colour the stylesheet paints text in reaches the ratio the site targets.
+
+    The accessibility statement says the colours are chosen for contrast and
+    names WCAG 2.1 level AA as the target, which is a number: 4.5 to 1 for
+    ordinary text. Nothing computed it, and a palette is one line to edit. On
+    2026-09-12 the body text on the gold band sat at 4.40, so the statement had
+    been promising a standard the tree missed, and every other check passed
+    because a colour that is too light is still a valid page that builds,
+    renders, links and reads the same as any other.
+    """
+    problems: list[str] = []
+    statement = docs_root / "accessibility.html"
+    stylesheet = docs_root / "styles.css"
+    for path in (statement, stylesheet):
+        if not path.is_file():
+            print(
+                f"[FAIL] every text colour meets the contrast the statement "
+                f"targets: {path.name} is not in the tree"
+            )
+            return False
+
+    statement_text = " ".join(statement.read_text(encoding="utf-8").split())
+    if statement_text.count(CONTRAST_CLAIM) != 1:
+        problems.append(
+            f"accessibility.html no longer states {CONTRAST_CLAIM!r} exactly "
+            "once, so either the promise was reworded, in which case update "
+            "this check, or it was withdrawn, in which case say what a visitor "
+            "who needs contrast gets instead"
+        )
+    target = WCAG_LEVEL_RE.search(statement_text)
+    if not target or target.group(2) not in WCAG_MINIMUM:
+        print(
+            "[FAIL] every text colour meets the contrast the statement "
+            "targets: accessibility.html names no WCAG level, so there is no "
+            "number to measure against"
+        )
+        return False
+    version, level = target.group(1), target.group(2)
+    minimum = WCAG_MINIMUM[level]
+
+    css = CSS_COMMENT_RE.sub(" ", stylesheet.read_text(encoding="utf-8"))
+    palette = css_palette(css)
+    used_as_text: set[str] = set()
+    used_as_background: set[str] = set()
+    for _selector, body in CSS_RULE_RE.findall(css):
+        for declaration in body.split(";"):
+            if ":" not in declaration:
+                continue
+            name, value = declaration.split(":", 1)
+            name, value = name.strip().lower(), value.strip()
+            if name == "color":
+                used_as_text.add(value)
+            elif name in ("background", "background-color"):
+                used_as_background.add(value.split()[0] if value else "")
+
+    for value in sorted(used_as_text):
+        if value in CONTRAST_IGNORED or value in CONTRAST_READ_ON:
+            continue
+        problems.append(
+            f"styles.css paints text in {value!r} and nothing here says which "
+            "surface that is read on, so its contrast went unmeasured"
+        )
+    for value in sorted(CONTRAST_READ_ON):
+        if value not in used_as_text:
+            problems.append(
+                f"{value!r} is listed here as a text colour and styles.css no "
+                "longer paints anything in it, so this list has drifted from "
+                "the stylesheet"
+            )
+    for name, value in sorted(CONTRAST_SURFACES.items()):
+        if value not in used_as_background:
+            problems.append(
+                f"{name} is listed here as a surface and styles.css no longer "
+                f"paints anything {value!r}, so this list has drifted from the "
+                "stylesheet"
+            )
+
+    measured = 0
+    for value, surfaces in sorted(CONTRAST_READ_ON.items()):
+        text_colour = css_colour(value, palette)
+        if not text_colour:
+            problems.append(f"{value!r} is not a colour this check can read")
+            continue
+        for name in surfaces:
+            surface = css_colour(CONTRAST_SURFACES[name], palette)
+            if not surface:
+                problems.append(
+                    f"{CONTRAST_SURFACES[name]!r} is not a colour this check can read"
+                )
+                continue
+            measured += 1
+            ratio = contrast_ratio(composite(text_colour, surface), surface)
+            if ratio < minimum:
+                problems.append(
+                    f"{value} on {name} is {ratio:.2f} to 1, and WCAG {version} "
+                    f"level {level} asks for {minimum} to 1 for ordinary text, "
+                    "which the accessibility statement says this site targets"
+                )
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] every text colour meets the contrast "
+        f"the statement targets: {len(CONTRAST_READ_ON)} colours on "
+        f"{measured} surfaces at {minimum} to 1 for WCAG {version} level "
+        f"{level}, {len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_keyboard_operable(pages: list[Path], docs_root: Path) -> bool:
     """The menu opens and the login form is labelled without a mouse in the room.
 
@@ -1915,6 +2147,7 @@ def main() -> int:
         check_privacy_statement(pages, docs_root),
         check_accessibility_statement(pages, docs_root),
         check_keyboard_operable(pages, docs_root),
+        check_colour_contrast(docs_root),
         check_stated_urls_resolve(pages, docs_root),
         check_contact_form(pages, docs_root),
         check_cname(docs_root),

@@ -4,6 +4,25 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- The body text on the resilience band sat at 4.40 to 1 against the gold
+  behind it, and the accessibility statement names WCAG 2.1 level AA, which
+  asks for 4.5 to 1 for ordinary text. The colour is now
+  `rgba(39, 49, 56, 0.82)`, which is 4.69 to 1. Nothing had ever computed a
+  ratio, so the statement had been promising a standard the tree missed, and
+  every check passed because a colour that is too light is still a valid page
+  that builds, renders and links like any other.
+- `verify_site.py` gained a twenty-third check, which computes the contrast of
+  every colour the stylesheet paints text in. It reads the WCAG level out of
+  the accessibility statement rather than carrying the number itself, so
+  raising the target to AAA raises the check with it and lowering it is a
+  change to a published sentence. Which surface each colour is read on is
+  stated, because resolving the cascade against the markup is not something
+  anything here does, and the list is held to the stylesheet in both
+  directions: a text colour it does not name fails, and so does a colour named
+  there that the stylesheet no longer uses. Lightening `--muted` from 0.74 to
+  0.52 passed all fourteen committed checks on a mutated copy and put the body
+  copy on every page at 3.07 to 1.
+
 - `verify_site.py` gained a twenty-second check, on the two accessibility
   promises that are about how a page behaves rather than how it is marked up.
   The statement says the navigation including the mobile menu works with a
