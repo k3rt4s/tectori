@@ -4,6 +4,18 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `build_site.py` refuses a content model field that is present and blank.
+  The required-key rule asks whether a field is there, which is a different
+  question from whether it says anything, and an entry carrying
+  `"og_title": ""` has every required key. Proved: a tree built from that
+  entry ships `<meta property="og:title" content="">`, which is what a chat
+  window shows when the page is shared, and it passed all nineteen checks. An
+  empty description was the one case already caught, and only by accident,
+  where the `llms.txt` renderer read the blank as a missing entry and blamed
+  the page for not being in the content model. The four fields that may be
+  absent by design must now say so with null rather than with a blank, and
+  `root_absolute` must be true or false.
+
 - `verify_site.py` resolves the part of a link that says which section of a
   page it means. The link check drops the fragment before resolving, by
   design, so it asks only whether the file exists, and nothing read the rest.
