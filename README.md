@@ -94,6 +94,15 @@ against it with the same result it gives against the live site.
   `docs/` byte for byte. Every other check reads a tree that already has
   `docs/` in it, so none of them can tell whether the source is sufficient.
   Until 2026-09-12 it was not, and nothing said so.
+- `scripts/check_lastmod.py` compares every date in `docs/sitemap.xml`
+  against the commit history of the page's own body fragment, and fails a
+  page whose words were rewritten after the date the sitemap gives for it.
+  Dates are the one thing here nothing can derive, because a build reads no
+  history and has to produce the same bytes from source alone, so they are
+  hand written and decay in silence. On the day this was written, 22 of the
+  23 were wrong. It is the only check that reads git, so it refuses to run
+  against a clone with one commit of history rather than passing against a
+  question it cannot answer.
 - `scripts/check_stdlib_only.py` reads every script's imports and requires
   each one to name a standard library module. `PERMISSIONS.md` promises that
   a clone runs on a machine with nothing installed, which is why there is no
@@ -132,7 +141,7 @@ against it with the same result it gives against the live site.
   serves whatever is on `main` whether they passed or not. It also fetches
   the extensionless path of every page, because a host that serves files
   literally returns all 43 files correctly and 404s on every link on every
-  page. It needs the network, so it is not one of the nine.
+  page. It needs the network, so it is not one of the ten.
 - `PERMISSIONS.md` lists everything the site needs to build, deploy, and
   serve: runtime, filesystem paths, every outbound host, the operator
   accounts, the DNS records, and a from-scratch deploy runbook. It replaced
@@ -210,11 +219,11 @@ credentials and career for step 5 to rewrite.
    `python scripts/check_site.py`. Every check must pass before the tree is
    worth deploying. One of them is `scripts/verify_site.py`, which is
    nineteen checks of its own that read the built tree as a site rather
-   than
-   as a set of files, and it is the one that catches a value you missed. To
+   than as a set of files, and it is the one that catches a value you
+   missed. To
    see steps 1 to 4 and this one run end to end before you do them
    yourself, run `python scripts/check_site.py --full`, which adds the
-   rehearsal as a tenth check.
+   rehearsal as an eleventh check.
 7. Follow the runbook in `PERMISSIONS.md` for the repository, the Pages
    settings, the DNS records and the accounts behind the three third-party
    services.

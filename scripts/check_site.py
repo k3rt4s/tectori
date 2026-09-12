@@ -44,6 +44,14 @@ def main():
             "and takes about a minute"
         ),
     )
+    parser.add_argument(
+        "--no-history",
+        action="store_true",
+        help=(
+            "skip the sitemap date check, for a copy of the tree that carries "
+            "no commit history to read"
+        ),
+    )
     args = parser.parse_args()
 
     results = []
@@ -66,6 +74,19 @@ def main():
         "the source alone reproduces docs/",
         [script("check_source_only_build.py")],
     ))
+    # Dates are the one thing in this tree that nothing can derive: the build
+    # has no history to read, and a rebuild from source alone must produce the
+    # same bytes, so the sitemap's dates are hand written and decay in silence.
+    # This check is the only one here that reads git rather than the tree.
+    # Skipped only where there is provably nothing to read: a copy of
+    # the tree made outside a repository. It is never skipped because the
+    # answer is inconvenient, and the check itself refuses to pass on a clone
+    # whose history is too shallow to answer the question.
+    if not args.no_history:
+        results.append(run(
+            "the sitemap's dates match the pages",
+            [script("check_lastmod.py")],
+        ))
     # The check above proves the source is sufficient on this machine, which
     # has a Python that has had things installed into it. A dependency added
     # to a script is invisible to it, and to every other check here, until a
