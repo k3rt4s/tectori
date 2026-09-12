@@ -669,6 +669,73 @@ def robots_groups(text: str):
     return groups, other
 
 
+NAME_ANCHOR_RE = re.compile(
+    r'<a[^>]*?\bname\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL
+)
+
+
+def anchor_targets(text: str) -> set[str]:
+    """Return every name a fragment on this page can legitimately point at."""
+    names = {match.group(2) for match in ID_ATTR_RE.finditer(text)}
+    names.update(match.group(2) for match in NAME_ANCHOR_RE.finditer(text))
+    return names
+
+
+def check_fragments_resolve(pages: list[Path], docs_root: Path) -> bool:
+    """Every link to a place on a page lands on something that is there.
+
+    The link check drops the fragment before resolving, by design: it asks
+    whether the file exists. So a link to a section of another page is only
+    ever checked as far as the page, and the part of it that says which
+    section is read by nothing. A heading renamed in a copy edit takes its id
+    with it, every check still passes, and the visitor who followed a link to
+    one service on the hub page arrives at the top of a long page with no sign
+    that anything went wrong, which is worse than an error because they blame
+    themselves for not finding it.
+    """
+    problems: list[str] = []
+    targets: dict[Path, set[str]] = {}
+    checked = 0
+    for page in pages:
+        text = page.read_text(encoding="utf-8")
+        for match in ANCHOR_RE.finditer(text):
+            value = html_lib.unescape(match.group(2)).strip()
+            if "#" not in value:
+                continue
+            fragment = value.split("#", 1)[1]
+            if not fragment:
+                # A bare `#` is a link to the top of the page, which is a
+                # place that always exists.
+                continue
+            kind, target = resolve_internal(value, page, docs_root)
+            if kind == "external" or target is None:
+                continue
+            if not target.is_file():
+                # A target file that does not exist is the link check's.
+                continue
+            checked += 1
+            if target not in targets:
+                targets[target] = anchor_targets(
+                    target.read_text(encoding="utf-8")
+                )
+            if fragment not in targets[target]:
+                where = "this page" if target == page else target.name
+                problems.append(
+                    f"{page.name}: links to {value!r}, and nothing on "
+                    f"{where} carries that id, so the visitor lands at the "
+                    "top of the page instead"
+                )
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] a link to a place on a page lands "
+        f"there: {checked} checked, {len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_robots_policy(pages: list[Path], docs_root: Path) -> bool:
     """robots.txt permits every page the site wants found, and points at the sitemap.
 
@@ -1524,6 +1591,7 @@ def main() -> int:
         check_llms_txt(docs_root),
         check_noindex_and_navigation(pages, docs_root),
         check_contact_details(pages),
+        check_fragments_resolve(pages, docs_root),
         check_robots_policy(pages, docs_root),
         check_privacy_statement(pages, docs_root),
         check_accessibility_statement(pages, docs_root),
