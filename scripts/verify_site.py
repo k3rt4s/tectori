@@ -13,12 +13,19 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR))
 import check_llms_drift  # noqa: E402  (reused for the llms.txt drift comparison, see report)
 
-SITE_PREFIX = "https://www.tectori.com"
+# One declaration of who the site is for, read rather than repeated here. A
+# phone number or domain hard-coded in this file would let the check keep
+# passing against the previous owner's values after a rebrand, which is the
+# one failure a consistency check exists to prevent.
+SITE_CONFIG_PATH = SCRIPT_DIR.parent / "site" / "content" / "site.json"
+SITE = json.loads(SITE_CONFIG_PATH.read_text(encoding="utf-8"))
+
+SITE_PREFIX = SITE["site_url"]
 NOINDEX_ALLOWED = {"404.html", "thank-you.html"}
 CONTACT_STRINGS = {
-    "phone number": "(615) 829-6802",
-    "site URL": "https://www.tectori.com",
-    "mailing address": "201 Summit View Dr, Suite 305, Brentwood, TN 37027",
+    "phone number": SITE["phone_display"],
+    "site URL": SITE["site_url"],
+    "mailing address": SITE["postal_address"],
 }
 FORBIDDEN_MARKUP = ("AggregateRating", '"@type": "Review"', '"offers"')
 FORBIDDEN_TEXT = ("Qualified Security Assessor",)
@@ -36,6 +43,7 @@ SCRIPT_BLOCK_RE = re.compile(rb"<script\b.*?</script>", re.IGNORECASE | re.DOTAL
 TAG_RE = re.compile(rb"<[^>]+>")
 BEACON_MARKER = b"cloudflareinsights.com/beacon.min.js"
 PIXEL_MARKER = b"static.scarf.sh"
+URL_HOST_RE = re.compile(r"https?://([A-Za-z0-9.-]+)")
 LDJSON_RE = re.compile(
     rb'<script[^>]*?type=(["\'])application/ld\+json\1[^>]*?>(.*?)</script>',
     re.IGNORECASE | re.DOTALL,
@@ -508,6 +516,75 @@ def check_jsonld_mirrors_title(pages: list[Path]) -> bool:
     return ok
 
 
+def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
+    """Third-party ids in the tree are the declared ones, and every external host is allowed.
+
+    The other checks confirm the analytics tags and the contact form are
+    present, never that they point at this business. A beacon token or a form
+    endpoint left over from another site would ship silently, send this site's
+    traffic and its inbound mail somewhere else, and pass every other check
+    here. The comparison is against site.json, which is also what the build
+    renders from, so the two cannot disagree without one of them being wrong.
+    """
+    third_party = SITE["third_party"]
+    expected_ids = {
+        "Cloudflare beacon token": third_party["cloudflare_beacon_token"],
+        "Scarf pixel id": third_party["scarf_pixel_id"],
+        "Formspree endpoint": third_party["formspree_endpoint"],
+    }
+    allowed_hosts = set(SITE["allowed_external_hosts"])
+
+    problems: list[str] = []
+    found_ids = {label: 0 for label in expected_ids}
+
+    # Every file a visitor or a crawler can fetch, not only the pages: the
+    # sitemap, llms.txt and robots.txt all carry absolute URLs too.
+    scanned = sorted(
+        path
+        for path in docs_root.rglob("*")
+        if path.is_file() and path.suffix.lower() in {".html", ".xml", ".txt"}
+    )
+    for path in scanned:
+        try:
+            text = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            problems.append(f"{path.name}: not valid UTF-8")
+            continue
+        for label, value in expected_ids.items():
+            found_ids[label] += text.count(value)
+        for host in URL_HOST_RE.findall(text):
+            if host not in allowed_hosts:
+                problems.append(
+                    f"{path.name}: links to {host!r}, which site.json does not allow"
+                )
+
+    # The beacon token and the pixel id ride on every page but login.html; the
+    # form endpoint appears once, on contact.html. Requiring a count rather
+    # than mere presence is what catches a page that kept a stale id beside
+    # the current one.
+    page_count = len([page for page in pages if page.name != "login.html"])
+    expected_counts = {
+        "Cloudflare beacon token": page_count,
+        "Scarf pixel id": page_count,
+        "Formspree endpoint": 1,
+    }
+    for label, expected in expected_counts.items():
+        if found_ids[label] != expected:
+            problems.append(
+                f"the declared {label} appears {found_ids[label]} times, expected {expected}"
+            )
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] third-party ids and external hosts match site.json: "
+        f"{len(scanned)} files scanned, {len(allowed_hosts)} hosts allowed, "
+        f"{len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -537,6 +614,7 @@ def main() -> int:
         check_login_tracking(pages),
         check_no_forbidden_claims(pages),
         check_jsonld_mirrors_title(pages),
+        check_declared_identity(pages, docs_root),
     ]
 
     passed = sum(results)
