@@ -398,6 +398,18 @@ REQUIRED_ENTRY_KEYS = (
 )
 
 
+def output_paths(entry):
+    """Return the site relative paths that name an entry's own page, or None."""
+    output = entry.get("output")
+    if not isinstance(output, str) or not output.endswith(".html"):
+        return None
+    if output == "index.html":
+        return ("/",)
+    # Both spellings, because the site serves extensionless URLs and one page
+    # is linked with its extension.
+    return ("/" + output[: -len(".html")], "/" + output)
+
+
 def validate(entries):
     """Fail with the offending page and field named, rather than a KeyError mid render."""
     problems = []
@@ -437,6 +449,21 @@ def validate(entries):
                 problems.append(
                     f"{where}: {key} {value!r} must be a site relative path "
                     f"beginning with /, not an absolute URL"
+                )
+                continue
+            # And it has to name the file this entry writes. A canonical
+            # copied from the entry beside it tells a search engine this page
+            # is that page, which drops it from the index and credits its
+            # content elsewhere, and the tree that ships looks correct: the
+            # link resolves, because it points at a page that exists. The
+            # build already refuses this one, but only by accident and one
+            # stage later, where llms.txt cannot find a description for the
+            # output path and blames the page for not being in the content
+            # model. Saying it here names the field that is actually wrong.
+            if value and output_paths(entry) and value not in output_paths(entry):
+                problems.append(
+                    f"{where}: {key} {value!r} does not name this page, which "
+                    f"is written to {entry['output']!r}"
                 )
     if problems:
         print("The content model is not valid, so nothing was built:")
