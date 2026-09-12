@@ -1,0 +1,103 @@
+      <section class="page-hero" aria-labelledby="page-title">
+        <div class="page-hero-inner">
+          <p class="eyebrow">Service line 01</p>
+          <h1 id="page-title">Senior direction without a full time hire.</h1>
+          <p class="page-lead">
+            Tectori's founder serves as a part time CIO, CISO, or both. The work covers technology strategy, security program direction, spending discipline, and clear communication with leadership.
+          </p>
+        </div>
+      </section>
+
+      <section class="content-section split-section" aria-labelledby="who-title">
+        <div class="section-heading">
+          <p class="eyebrow">Who this is for</p>
+          <h2 id="who-title">For organizations that need the role, not the headcount.</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Some organizations need senior IT and security direction but do not have the volume of work, or the budget, to justify a full time CIO or CISO. The decisions still have to be made, and someone still has to answer for them.
+          </p>
+          <p>
+            Common situations include a bank or credit union whose examiner expects a named accountable owner, a healthcare organization with a security program and no leader, and a growing business where technology decisions are made by whoever is closest to the problem.
+          </p>
+        </div>
+      </section>
+
+      <section class="soft-band cyan" aria-labelledby="includes-title">
+        <div class="split-section section">
+          <div class="section-heading">
+            <p class="eyebrow">What the work includes</p>
+            <h2 id="includes-title">The work of the role, carried out part time.</h2>
+          </div>
+          <ul class="plain-list">
+            <li>Technology strategy and roadmap</li>
+            <li>Security program direction and ownership</li>
+            <li>Budget planning and vendor oversight</li>
+            <li>Board, examiner, and leadership communication</li>
+            <li>A named accountable owner for technology and security decisions</li>
+            <li>An escalation path when something goes wrong</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section" aria-labelledby="deliverables-title">
+        <div class="section-heading">
+          <p class="eyebrow">Deliverables</p>
+          <h2 id="deliverables-title">What you receive.</h2>
+        </div>
+        <div class="practice-grid">
+          <article class="practice-item">
+            <h3>Technology roadmap</h3>
+            <p>A prioritized plan naming what is being done, when, why, and what it costs.</p>
+          </article>
+          <article class="practice-item">
+            <h3>Budget and vendor oversight</h3>
+            <p>A current view of technology spend, contracts, renewal dates, and what each vendor actually delivers.</p>
+          </article>
+          <article class="practice-item">
+            <h3>Security program ownership</h3>
+            <p>A named owner for policies, controls, exceptions, and risk decisions, with the decisions written down.</p>
+          </article>
+          <article class="practice-item">
+            <h3>Board and examiner communication</h3>
+            <p>Written updates in the language the audience uses, prepared on a schedule rather than on request.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-section split-section" aria-labelledby="readiness-title">
+        <div class="section-heading">
+          <p class="eyebrow">How it supports audit readiness</p>
+          <h2 id="readiness-title">Leadership decisions become part of the record.</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Leadership decisions are recorded with owners and rationale, so governance questions have answers before an exam begins. An examiner asking who approved a risk, and on what basis, is answered from a record instead of memory.
+          </p>
+          <p>
+            This service line pairs with <a class="text-link" href="/audit-ready-it">audit-ready IT</a>, which describes how a decision becomes a control and then evidence.
+          </p>
+        </div>
+      </section>
+
+      <section class="dark-band" aria-labelledby="scope-title">
+        <div class="split-section section">
+          <div class="section-heading">
+            <p class="eyebrow">What this is not</p>
+            <h2 id="scope-title">What this service line does not cover.</h2>
+          </div>
+          <ul class="plain-list">
+            <li>Staffing placement. Every engagement is delivered directly by Tectori's founder.</li>
+            <li>Help desk and day to day administration, which sits in the <a class="text-link" href="/service-it-operations">IT operations</a> service line.</li>
+            <li>An audit opinion or a certification. Tectori is not an audit firm and does not issue one.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="cta-band">
+        <div class="cta-inner">
+          <h2>Put a named owner on the decisions that need one.</h2>
+          <a class="button primary" href="/contact">Discuss fractional leadership</a>
+        </div>
+      </section>
+

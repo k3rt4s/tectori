@@ -2,8 +2,52 @@
 
 Tectori website changes are recorded here.
 
+## 2026-09-12
+
+- Made `docs/` generated output. `site/` holds the content model and one
+  canonical template per piece of chrome, and `scripts/build_site.py` renders
+  the 24 generated pages from them. Changing the nav or the footer is now one
+  edit rather than 14. The 28 stored chrome formatting variants are gone, and
+  `docs/login.html` is unchanged because it shares no chrome with any page and
+  carries the tree's only CSP.
+- Added `scripts/compare_render.py`, which compares two directories of pages as
+  rendered documents rather than as bytes: tag order, attributes as an
+  order-insensitive mapping, comments, and whitespace-collapsed text. It was
+  the acceptance test for the reformatting, since reindenting chrome changes
+  bytes on purpose. It reports a page present in one directory and not the
+  other as a difference, which it did not do until that case was tested by
+  deleting a page from a copy and watching it exit 0.
+- Hardened the generator. It validates every content-model entry before
+  rendering, naming the page and the offending field instead of failing with a
+  bare KeyError; it escapes values interpolated into titles and attributes,
+  using a narrower escape than the standard library's quoted mode, which
+  rewrites the apostrophe six page titles carry; and a build now copies every
+  file `docs/` carries that it does not generate, so the output is a complete
+  deployable tree rather than pages alone.
+- Verified four ways. `build_site.py --check` reports 24 of 24 pages identical
+  to `docs/`, `verify_site.py` passes 9 of 9 checks, `check_llms_drift.py`
+  reports no drift, and the full built tree compares byte-identical to `docs/`
+  across all 44 files. Every new check was tested by mutation against a scratch
+  copy rather than by its own passing run.
+
 ## 2026-09-11
 
+- Added `scripts/verify_site.py`, one command that verifies a built site
+  tree without knowing its history. Eight checks: internal links resolve,
+  each page has one title, one description and at most one canonical, the
+  sitemap matches each page's own canonical, `llms.txt` covers the same
+  page set with descriptions that have not drifted, only `404.html` and
+  `thank-you.html` are noindex and neither is linked, the phone number,
+  address and site URL appear character for character, `login.html` carries
+  no analytics while every other page carries both tags, and no ratings
+  markup or Qualified Security Assessor claim exists anywhere. It takes
+  `--dir` so it can verify a generated build as well as `docs/`, and exits
+  non-zero on any failure. All eight pass against the current tree, which
+  proves little on its own, so they were tested by mutation against a
+  scratch copy in the data root: a broken internal link, a reformatted
+  phone number, a drifted `llms.txt` description and an injected Review
+  type were each caught. Not yet merged to `main`; it sits on
+  `feature/repro-generator` with the generator work.
 - Verified the Nashville change on the live site after the GitHub Pages
   deploy. `/contact`, `/about` and `/service-fractional-leadership` each
   serve the new title and meta description and the matching JSON-LD copy,
