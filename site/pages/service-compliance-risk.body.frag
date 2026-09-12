@@ -23,7 +23,7 @@
         </div>
       </section>
 
-      <section class="soft-band cyan" aria-labelledby="includes-title">
+      <section class="soft-band" aria-labelledby="includes-title">
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">What the work includes</p>
@@ -69,7 +69,7 @@
         </div>
       </section>
 
-      <section class="soft-band cyan" id="evidence-readiness-baseline" aria-labelledby="baseline-title">
+      <section class="soft-band" id="evidence-readiness-baseline" aria-labelledby="baseline-title">
         <div class="section">
           <div class="section-heading">
             <p class="eyebrow">Fixed-scope starting point</p>

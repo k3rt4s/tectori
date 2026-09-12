@@ -4,6 +4,17 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `scripts/check_class_names.py` requires every class name a published page
+  uses to have a rule in `site/static/styles.css`, and three did not. `cyan`
+  sat beside `soft-band` on ten pages and has never existed in the stylesheet,
+  and `buyer-paths` and `explore-section` were on the home page. A class
+  nothing defines renders as nothing, so the page stays valid, reachable and
+  byte identical to what the build produces while not looking the way the
+  markup asks. The three are removed rather than defined, because inventing a
+  colour band is a visual change nobody can review without a browser and
+  removing a class that does nothing changes no pixel. `check_site.py` now
+  runs fourteen checks by default and fifteen with `--full`.
+
 - `scripts/check_checks_wired.py` requires every check in this repository to
   be run by something: every `check_*.py` script by `check_site.py`, and every
   `check_` function in `verify_site.py` by the list its `main` evaluates. A

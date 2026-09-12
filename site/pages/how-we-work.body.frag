@@ -31,7 +31,7 @@
         </div>
       </section>
 
-      <section class="soft-band cyan" aria-labelledby="rhythm-title">
+      <section class="soft-band" aria-labelledby="rhythm-title">
         <div>
           <div class="section-heading">
             <p class="eyebrow">Working rhythm</p>

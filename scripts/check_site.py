@@ -125,6 +125,14 @@ def main():
         "every check here is run by something",
         [script("check_checks_wired.py")],
     ))
+    # Every check so far reads the markup as structure. A class name is the
+    # half of the markup that only the stylesheet gives meaning to, and a
+    # class nothing defines renders as nothing while the page stays valid,
+    # reachable, byte identical and wrong.
+    results.append(run(
+        "every class a page uses is defined",
+        [script("check_class_names.py")],
+    ))
     # And every check reads the tree, not how the tree reaches the site. The
     # deploy job is the only route there, and deleting the one line that makes
     # it wait would leave every check passing while a red run shipped again.

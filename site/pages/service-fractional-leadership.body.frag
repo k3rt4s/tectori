@@ -23,7 +23,7 @@
         </div>
       </section>
 
-      <section class="soft-band cyan" aria-labelledby="includes-title">
+      <section class="soft-band" aria-labelledby="includes-title">
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">What the work includes</p>
