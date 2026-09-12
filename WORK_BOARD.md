@@ -50,11 +50,13 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   lines. Every bullet left states a constraint no check can see, so reaching
   60 would mean deleting one, and an earlier attempt at that did exactly
   that and had to put it back. Treat the gap as a decision, not a task.
-- **A push to `main` runs the checks on a clean Linux machine.**
+- **A push to `main` runs the checks, and only then deploys.**
   `.github/workflows/verify.yml` runs `verify_site.py`, `check_site.py`, the
   rebrand rehearsal and a byte comparison of `docs/` against what the build
-  produces. It does not gate the deploy: Pages publishes from `main` and
-  `docs/` either way, so a red run means a broken tree is already live.
+  produces, then a second job uploads `docs/` to Pages. The repository
+  publishes from the workflow, not from the branch, so a red run deploys
+  nothing and the site that is already up keeps serving. It published either
+  way until 2026-09-12, when a red run meant a broken tree was already live.
 - **Nothing in the tree names this machine.** `build_site.py` requires
   `--out` rather than defaulting to a directory under the data root, the
   rehearsal clones into the system temporary directory, and the READMEs call

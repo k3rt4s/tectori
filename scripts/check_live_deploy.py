@@ -2,12 +2,13 @@
 """Fetch every file in docs/ from the live site and report any that differs from what was published."""
 
 # Nothing else answers whether a deploy landed. The six checks read the tree
-# about to be deployed and say nothing about the host; the workflow reports on
-# the commit and does not gate Pages, which serves whatever is on main whether
-# the checks passed or not. A build can be perfect, the push can succeed, and
-# the site can still be serving last week because the deploy failed or a cache
-# is stale. This is the only check that reads what a visitor actually gets, so
-# it needs the network and is not part of check_site.py.
+# about to be deployed and say nothing about the host, and the workflow that
+# publishes it reports that the artifact was accepted, not that the domain and
+# the certificate answer with it. A build can be perfect, the push can
+# succeed, the deploy can go green, and the site can still be serving last
+# week because a cache is stale or the domain moved. This is the only check
+# that reads what a visitor actually gets, so it needs the network and is not
+# part of check_site.py.
 
 import argparse
 import hashlib
@@ -20,11 +21,12 @@ import urllib.request
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOCS_DIR = os.path.join(REPO_ROOT, "docs")
 
-# GitHub Pages reads CNAME to learn the custom domain and does not serve it.
-# A 404 for it is correct; a 200 would mean the host is serving the tree
-# literally, which is its own defect.
-NOT_SERVED = {"CNAME"}
-
+# Every file in docs/ is expected to come back byte for byte, CNAME included.
+# It was exempt until 2026-09-12, when the deploy moved from branch publishing
+# to the workflow: branch publishing consumed CNAME and 404d it, and the
+# workflow uploads the tree as an artifact and serves all of it. The exemption
+# read a 200 there as proof the host was serving files literally, which the
+# extensionless probe below now proves directly and better.
 TIMEOUT_SECONDS = 30
 
 # Every internal link and every canonical in the tree is extensionless, and
@@ -83,10 +85,6 @@ def main():
         with open(os.path.join(DOCS_DIR, rel), "rb") as f:
             local = f.read()
         body, status = fetch(f"{base}/{rel}")
-        if rel in NOT_SERVED:
-            if status != 404:
-                problems.append(f"{rel}: served with status {status}, expected 404")
-            continue
         if body is None:
             problems.append(f"{rel}: status {status}")
             continue

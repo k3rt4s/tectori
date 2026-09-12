@@ -4,6 +4,22 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- The checks now gate the deploy. GitHub Pages published `main` and `docs/`
+  on its own, so `verify.yml` ran alongside the go-live rather than in front
+  of it and a red run meant a broken tree was already being served. The
+  workflow gained a deploy job that uploads `docs/` and needs the verify job,
+  and the repository was switched from branch publishing to Actions
+  publishing so that job is the only route to the site. A pull request runs
+  the checks and deploys nothing. Deploys are serialized and never cancelled
+  in flight, because a cancelled one leaves whichever tree was mid-upload.
+- `check_live_deploy.py` no longer exempts `CNAME`. It caught the switch on
+  the first run against the live site: branch publishing consumed the file and
+  returned 404, and the workflow serves the artifact whole, so the exemption
+  turned a correct deploy into a failure. It read a 200 there as evidence the
+  host was serving files literally, which the extensionless probe added the
+  same day proves directly. `CNAME` is now compared byte for byte like every
+  other file. The file itself is kept and kept correct so publishing from the
+  branch still works if anyone switches back.
 - `verify_site.py` has a thirteenth check: every indexed page is linked to
   from some page that is not itself. The existing link check asks whether
   links point at pages that exist, which is the opposite direction. A page
