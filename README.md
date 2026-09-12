@@ -32,6 +32,22 @@ Run `python scripts/serve_docs.py --port 8000` from the repository root, then op
 - `docs/thank-you.html` is the page the contact form redirects to after a
   successful submission. It is noindex and stays out of `docs/sitemap.xml`,
   `docs/llms.txt`, and the navigation, and is reached only through the form.
+- `scripts/check_site.py` runs every check below in one command and prints a
+  pass or fail line for each, exiting non-zero if any failed. It is the entry
+  point to use before a deploy; the individual scripts are there for when one
+  of them fails and you want its output alone. `--quiet` prints the summary
+  without each check's own output.
+- `site/` holds the content model and chrome templates, and
+  `scripts/build_site.py` renders them into the 24 generated pages under
+  `docs/`. `docs/` is that build's output, so `--check` reproduces it byte for
+  byte. Run with `--out <dir>` to write a complete deployable tree, pages plus
+  every other file `docs/` carries. `site/README.md` explains the content model
+  and which gate applies to which kind of change.
+- `scripts/compare_render.py` compares two directories of pages as rendered
+  documents rather than as bytes: tag order, attributes as an
+  order-insensitive mapping, comments, and whitespace-collapsed text. Use it
+  when a change reformats the templates on purpose and byte equality would
+  report a failure that is not one.
 - `scripts/check_llms_drift.py` compares every `docs/llms.txt` page
   description, and the file's summary paragraph, against the corresponding
   page's meta description. `llms.txt` copies them with no generator behind
