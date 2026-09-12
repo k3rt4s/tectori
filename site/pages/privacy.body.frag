@@ -1,0 +1,104 @@
+      <section class="page-hero" aria-labelledby="page-title">
+        <div class="page-hero-inner">
+          <p class="eyebrow">Privacy policy</p>
+          <h1 id="page-title">Here is everything this site collects, and everything it does not.</h1>
+          <p class="page-lead">Effective date: August 23, 2026</p>
+        </div>
+      </section>
+      <section class="content-section narrow" aria-labelledby="collect-title">
+        <div class="prose">
+          <h2 id="collect-title">What this website collects</h2>
+          <p>
+            The Tectori website is a static informational site. Every page
+            except the client login page loads two things from other
+            companies. The first is a page view counter from Cloudflare. The
+            second is a small image from Scarf. The contact page also posts
+            form submissions to Formspree. These services are described below.
+          </p>
+          <h2>The Cloudflare page view counter</h2>
+          <p>
+            Every page except the client login page loads a script from
+            Cloudflare Web Analytics. It counts page views and records the
+            site that referred you, your country, and your browser type.
+            Cloudflare states that it stores no cookies and no other data on
+            your device, and that it does not identify individuals from an IP
+            address, a user agent string, or any other data. Tectori sees
+            counts. Tectori cannot see who you are from this script.
+            Cloudflare's handling of that data is described in the
+            <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare Privacy Policy</a>.
+          </p>
+          <h2>The Scarf pixel</h2>
+          <p>
+            Every page except the client login page also loads a small image
+            from Scarf. Requesting that image sends Scarf your IP address and
+            your browser's user agent string. That is the same information any
+            image request sends to the server it comes from. This site is set
+            up so that Scarf is told only that the request came from
+            www.tectori.com, and not which page you are reading. Scarf uses the
+            IP address to look up the organization that address belongs to, and
+            reports those organizations and visit counts to Tectori. Scarf
+            states that it does not store the IP address itself. Scarf's
+            handling of that data is described in the
+            <a href="https://about.scarf.sh/privacy-policy">Scarf privacy policy</a>.
+          </p>
+          <p>
+            Be clear on what that means. If you read this site from a
+            workplace network, Tectori may see the name of your employer. It
+            does not see your name, your email address, or anything else about
+            you personally.
+          </p>
+          <h2>Your choices</h2>
+          <p>
+            If your browser sends a Do Not Track header, Scarf does not record
+            your visit. Any browser setting, extension, or network filter that
+            blocks third party requests will stop both the Cloudflare script
+            and the Scarf image, and the site works exactly the same without
+            them. You can ask Scarf for access to, correction of, or deletion
+            of information it holds through the data request process in its
+            privacy policy. You can also use the contact page and Tectori
+            will pass the request on.
+          </p>
+          <h2>What this website still does not do</h2>
+          <p>
+            It sets no cookies. It stores nothing on your device. It uses no
+            advertising technology. It does not track you across other
+            websites, across your devices, or over time. It loads no fonts and
+            no other resources from third party services.
+          </p>
+          <p>
+            The contact page is the only form on the public site that
+            transmits data, and it posts to Formspree. Nothing typed into the
+            client login page is ever sent to or stored by Tectori. That page
+            loads neither the Cloudflare script nor the Scarf image. Your own
+            browser, password manager, or browser extensions may still save
+            what you type, the same as on any website, and that is outside
+            Tectori's control.
+          </p>
+          <h2>Hosting logs</h2>
+          <p>
+            The site is served by GitHub Pages. GitHub may log technical
+            request data, such as IP addresses, for security and operational
+            purposes. Tectori does not receive or review per visitor logs.
+            GitHub's handling of that data is described in the
+            <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement">GitHub Privacy Statement</a>.
+          </p>
+          <h2>Contact form submissions</h2>
+          <p>
+            If you use the contact form, Formspree receives the fields you
+            submit and forwards them to Tectori. Tectori uses that information
+            to respond to you and to keep normal business records. It is not
+            sold. It is not shared for marketing.
+          </p>
+          <h2>Links to other sites</h2>
+          <p>
+            Pages on this site may link to other websites, such as LinkedIn.
+            Those sites operate under their own privacy policies.
+          </p>
+          <h2>Changes and contact</h2>
+          <p>
+            If this policy changes, the new version will appear on this page
+            with a new effective date. Questions about this policy can go
+            through the contact page.
+          </p>
+        </div>
+      </section>
