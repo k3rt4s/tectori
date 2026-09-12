@@ -398,6 +398,22 @@ REQUIRED_ENTRY_KEYS = (
 )
 
 
+# Fields whose whole purpose is to carry words onto the page. A required key
+# check asks whether the key is there, which is a different question from
+# whether it says anything, and an entry that carries `"description": ""` has
+# every required key.
+MUST_CARRY_TEXT = (
+    "output", "comment", "title", "description", "robots", "og_title",
+    "og_description", "og_type", "og_url", "stylesheet_href",
+    "body_fragment", "contact_label", "footer_order", "slug",
+)
+# The four that may be absent by design: a page with no canonical, no place in
+# the navigation, no structured data, or no footer link to leave out. Null is
+# how the model says so. An empty string is not, because it renders as an
+# empty attribute rather than as nothing at all.
+MAY_BE_NULL = ("canonical", "current_nav", "jsonld_fragment", "footer_omit")
+
+
 def output_paths(entry):
     """Return the site relative paths that name an entry's own page, or None."""
     output = entry.get("output")
@@ -434,6 +450,39 @@ def validate(entries):
         for key in REQUIRED_ENTRY_KEYS:
             if key not in entry:
                 problems.append(f"{where}: missing required field {key!r}")
+        # A field that is present and blank. The build has no default to fall
+        # back on, so it renders the blank: an empty title, an empty
+        # description, an empty og:title. Every check downstream counts the
+        # tag and finds one, because there is one. The one place this is
+        # caught today is an empty description, and only by accident: the
+        # llms.txt renderer treats the empty string as a missing entry and
+        # blames the page for not being in the content model, one stage away
+        # from the field that is actually wrong.
+        for key in MUST_CARRY_TEXT:
+            if key not in entry:
+                continue
+            value = entry[key]
+            if not isinstance(value, str) or not value.strip():
+                problems.append(
+                    f"{where}: {key} is {value!r}, and this field is written "
+                    "onto the page, so it has to say something"
+                )
+        for key in MAY_BE_NULL:
+            value = entry.get(key)
+            if value is None:
+                continue
+            if not isinstance(value, str) or not value.strip():
+                problems.append(
+                    f"{where}: {key} is {value!r}; leave it null to mean this "
+                    "page has none, rather than blank"
+                )
+        if "root_absolute" in entry and not isinstance(
+            entry["root_absolute"], bool
+        ):
+            problems.append(
+                f"{where}: root_absolute is {entry['root_absolute']!r} rather "
+                "than true or false"
+            )
         order = entry.get("footer_order")
         if order is not None and order not in FOOTER_ORDERS:
             problems.append(f"{where}: footer_order {order!r} is not one of {sorted(FOOTER_ORDERS)}")
