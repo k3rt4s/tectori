@@ -172,14 +172,23 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   tree, so a stale one serves nothing or serves someone else's domain, and it
   passed everything. `verify_site.py` runs twelve checks now.
 
-The next step this thread is taking is `THEORY.md`, which is 107 lines
-against a 60 line standard and has grown every time this thread has learned
-something. The standard exists because a longer file stops being read, and
-this is the file a buyer reads to find out what they must not break. Read it
-whole and decide, per bullet, whether it states a constraint a session could
-break without noticing or restates something the checks now enforce and
-print. Cut the second kind. Do not cut a live constraint to reach a number;
-an earlier attempt at this deleted one and had to put it back.
+- **`THEORY.md` is 88 lines, down from 107.** Five bullets went because a
+  check now enforces and prints what they said, and the rest of the cut was
+  narrative moved to the changelog and occurrence counts that nothing
+  recomputes. It stops above 60 deliberately: what is left states things no
+  check can see, and the earlier attempt that cut to a number had to put a
+  constraint back.
+
+The next step this thread is taking is this board, which is 259 lines against
+the 200 line threshold at which a board stops being read. Split it the way
+the framework rule says: move every completed or superseded section verbatim
+into `BOARD_ARCHIVE_2026.md`, which already exists and already opens with a
+line saying it is a record and not instructions. Two things matter more than
+the line count and are the reason for doing it. Carry everything still live
+across explicitly rather than assuming it survives the move, and read every
+section you archive for a question that was asked and never answered, because
+a long board hides open decisions by burying them. Anything you find that is
+Jon's to decide goes under Questions for Jon, not into the archive.
 
 ## Owner-Only Tasks
 
