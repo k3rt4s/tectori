@@ -4,6 +4,14 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Gave `scripts/check_site.py` a `--full` flag that adds the rebrand
+  rehearsal as a sixth check. The repository proved two different things
+  with two different commands, and only one of them was the command a
+  reader is told to run. The rehearsal stays off the default path because
+  it clones the tree outside the repo and takes about a minute, which is
+  worth waiting for when the build or the content model changes and not
+  worth making every deploy wait for. Verified that a failing rehearsal
+  fails the run.
 - Fixed a gap in the link check. It matched `href` and `src` only, so the
   home page hero, which is offered as a webp through a `srcset` with a png
   behind it, was never checked. A renamed or deleted webp would have shipped

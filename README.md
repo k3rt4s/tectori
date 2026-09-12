@@ -44,7 +44,10 @@ directly.
 - `scripts/check_site.py` runs every check below in one command and prints a
   pass or fail line for each, exiting non-zero if any failed. It is the entry
   point to use before a deploy; the individual scripts are there for when one
-  of them fails and you want its output alone. `--quiet` prints the summary
+  of them fails and you want its output alone. `--full` adds the rebrand
+  rehearsal described below, which is off the default path because it clones
+  the tree outside the repository and takes about a minute. `--quiet` prints
+  the summary
   without each check's own output.
 - `site/` holds the content model and chrome templates, and
   `scripts/build_site.py` renders them into the 24 generated pages under
@@ -152,7 +155,8 @@ previous owner nowhere.
    ten checks of its own that read the built tree as a site rather than as
    a set of files, and it is the one that catches a value you missed. To
    see steps 1 to 3 and this one run end to end before you do them
-   yourself, run `python scripts/rehearse_rebrand.py`.
+   yourself, run `python scripts/check_site.py --full`, which adds the
+   rehearsal as a sixth check.
 6. Follow the runbook in `PERMISSIONS.md` for the repository, the Pages
    settings, the DNS records and the accounts behind the three third-party
    services.
