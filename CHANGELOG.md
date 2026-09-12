@@ -4,6 +4,22 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `THEORY.md` cut from 107 lines to 88. The standard is 60, and the file had
+  grown every time a session learned something. The test applied per bullet
+  was whether it states a constraint a session could break without noticing,
+  or restates something a check now enforces and prints on failure. Four
+  things went for the second reason: the list of what `site.json` declares,
+  which is the file itself; that the contact strings are never reformatted;
+  that `404.html` and `thank-you.html` are the only `noindex` pages; and that
+  `login.html` carries no tracking tags. The JSON-LD mirroring rule went too,
+  because the check fails any page carrying JSON-LD that no table covers, so a
+  new page cannot be authored past it silently.
+- The rest of the cut was narrative and counts: how each defect was found now
+  lives here rather than there, and the occurrence counts, 166 for the domain
+  and 50 for the tagline, were dropped because a number in a file nothing
+  recomputes goes stale without anyone noticing. It stops at 88 rather than
+  60. Everything left states something no check can see, and cutting further
+  would mean removing a live constraint to reach a number.
 - A new check reads `docs/CNAME`, which no check read before. The identity
   check scans `.html`, `.xml` and `.txt`, and CNAME has no extension, so the
   one file GitHub Pages reads itself to decide which domain serves the tree
