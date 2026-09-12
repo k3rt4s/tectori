@@ -133,6 +133,13 @@ def main():
         "every class a page uses is defined",
         [script("check_class_names.py")],
     ))
+    # The documentation's counts are checked, and the commands in it are not.
+    # A renamed script or a retired option leaves a runbook step that fails at
+    # the moment a new owner is deciding whether any of this works.
+    results.append(run(
+        "the documented commands would run",
+        [script("check_documented_commands.py")],
+    ))
     # And every check reads the tree, not how the tree reaches the site. The
     # deploy job is the only route there, and deleting the one line that makes
     # it wait would leave every check passing while a red run shipped again.
