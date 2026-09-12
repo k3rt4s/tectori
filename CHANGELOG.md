@@ -4,6 +4,16 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `verify_site.py` has a thirteenth check: every indexed page is linked to
+  from some page that is not itself. The existing link check asks whether
+  links point at pages that exist, which is the opposite direction. A page
+  added to `pages.json` and never put in the nav or a footer builds cleanly,
+  resolves, and appears in the sitemap and `llms.txt`, so it would be indexed
+  and unreachable at once with every check passing. Self links do not count,
+  because each page's nav links to that page. The two noindex pages are
+  exempt, and a separate check already requires that nothing links to them.
+  Mutation tested on a copy of `docs/` with every link to one page rewritten,
+  which fails naming that page.
 - Three sentences in the guides were false and are fixed. `SEARCH_SETUP.md`
   said no AI text file is used, which stopped being true when `llms.txt`
   shipped and was never revisited. `README.md` step 1 told a new owner to

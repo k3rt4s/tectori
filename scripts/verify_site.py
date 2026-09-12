@@ -43,6 +43,12 @@ ROBOTS_RE = re.compile(
     re.IGNORECASE | re.DOTALL,
 )
 ATTR_RE = re.compile(r'(?:href|src)\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
+# Anchors only, for the reachability check. Every page carries a canonical
+# link element pointing at itself and a stylesheet link pointing at a file,
+# so counting every href would make each page reach itself and prove nothing.
+ANCHOR_RE = re.compile(
+    r'<a\b[^>]*?href\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL
+)
 SRCSET_RE = re.compile(r'srcset\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
 SCRIPT_BLOCK_RE = re.compile(rb"<script\b.*?</script>", re.IGNORECASE | re.DOTALL)
 TAG_RE = re.compile(rb"<[^>]+>")
@@ -194,6 +200,43 @@ def check_links(pages: list[Path], docs_root: Path) -> bool:
     )
     for example in broken_examples[:20]:
         print(f"       broken: {example}")
+    return ok
+
+
+def check_pages_are_reachable(pages: list[Path], docs_root: Path) -> bool:
+    """Every indexed page is linked to from some other page, so a visitor can get there."""
+    # check_links asks whether the links point at pages that exist. This asks
+    # the other direction, whether the pages have links pointing at them. A
+    # page added to pages.json and never put in the nav or a footer builds
+    # cleanly, resolves, and appears in the sitemap and llms.txt, so it is
+    # indexed and unreachable at the same time and every other check passes.
+    # Self links do not count: the nav on each page links to that page.
+    linked: set[str] = set()
+    for page in pages:
+        text = page.read_text(encoding="utf-8")
+        for match in ANCHOR_RE.finditer(text):
+            value = html_lib.unescape(match.group(2)).strip()
+            try:
+                kind, target = resolve_internal(value, page, docs_root)
+            except Exception:
+                continue
+            if kind != "internal" or target is None:
+                continue
+            if target.resolve() == page.resolve():
+                continue
+            linked.add(target.name)
+
+    # The two noindex pages are reached by a redirect and by a 404, not by a
+    # link, which is why they are the two the sitemap check also exempts.
+    expected = {page.name for page in pages} - NOINDEX_ALLOWED
+    unreachable = sorted(expected - linked)
+    ok = not unreachable
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] every indexed page is linked to: "
+        f"{len(expected)} pages, {len(unreachable)} reachable from nothing"
+    )
+    for name in unreachable[:20]:
+        print(f"       {name}: no other page links to it")
     return ok
 
 
@@ -835,6 +878,7 @@ def main() -> int:
 
     results = [
         check_links(pages, docs_root),
+        check_pages_are_reachable(pages, docs_root),
         check_head_tags(pages),
         check_sitemap(pages, docs_root),
         check_llms_txt(docs_root),

@@ -77,8 +77,9 @@ directly.
 - `scripts/verify_site.py` checks that a built site tree is internally
   consistent: internal links resolve, head tags are singular, the sitemap
   and `llms.txt` cover the same pages with matching descriptions, only the
-  two documented pages are noindex, the contact details are character for
-  character, the analytics tags are on every page except `login.html`, and
+  two documented pages are noindex, every other page is linked to from some
+  page that is not itself, the contact details are character for character,
+  the analytics tags are on every page except `login.html`, and
   no ratings markup or Qualified Security Assessor claim appears. Its last
   check compares the third-party identifiers and every external host in the
   tree against `site/content/site.json`, so a stale analytics token or form
@@ -132,7 +133,7 @@ covers hosting, DNS, and the from-scratch deploy.
 In order. Steps 1 to 3 are mechanical and the checks catch a mistake in any
 of them. Step 4 is the real work and no tool can do it. These steps were
 rehearsed against a clone on 2026-09-12: a fictional business replacing every
-declared value reaches a tree that passes all twelve checks and names the
+declared value reaches a tree that passes all thirteen checks and names the
 previous owner nowhere.
 
 1. Rewrite every value in `site/content/site.json`: the brand name, tagline,
@@ -170,8 +171,8 @@ previous owner nowhere.
 5. Rebuild in place with `python scripts/build_site.py --out docs`, then run
    `python scripts/check_site.py`. All six must pass before the tree is
    worth deploying. One of the six is `scripts/verify_site.py`, which is
-   twelve checks of its own that read the built tree as a site rather than as
-   a set of files, and it is the one that catches a value you missed. To
+   thirteen checks of its own that read the built tree as a site rather than
+   as a set of files, and it is the one that catches a value you missed. To
    see steps 1 to 3 and this one run end to end before you do them
    yourself, run `python scripts/check_site.py --full`, which adds the
    rehearsal as a seventh check.
