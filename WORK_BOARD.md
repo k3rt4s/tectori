@@ -42,17 +42,40 @@ The objective he named is to finish the board so the site can become a
 reproducible product that can be sold or hosted. Every repo item on this
 board has shipped, so the night's work is the reproducibility layer.
 
-- **REPRO-1, measure the duplication.** A worker is surveying how much of
-  the 25 pages is repeated chrome and exactly which fields vary per page.
-  The report lands at
+- **REPRO-1, measure the duplication, done.** 84,011 of 289,004 bytes, 29.1
+  percent of the tree, are repeated chrome. Seven head fields vary per page,
+  eight on the 11 pages carrying JSON-LD. The report is at
   `C:\Code_data\tectori\reproducible\duplication_survey_2026-09-11.md`.
   Read only, no repo change, so nothing to roll back.
-- **REPRO-2, build the generator, planned.** Templates plus a content model
-  under a new directory, and a build script that regenerates `docs/` from
-  them. The correctness test is that a build leaves `git status` clean,
-  meaning the generator reproduces all 25 live pages byte for byte. Until
-  that test passes the generator does not ship. Rollback is deleting the
-  new directory and script, because `docs/` is unchanged by definition.
+- **REPRO-2, the generator, built and committed.** `site/` holds the content
+  model and chrome fragments, `scripts/build_site.py` renders them.
+  Committed at 00425f0 on `feature/repro-generator`. 24 of the 25 pages
+  rebuild byte for byte; `login.html` is deliberately excluded because it
+  shares no chrome with any page and carries the only CSP. Verified by
+  mutating a title in the content model and confirming the build named the
+  page, reported the byte offset and exited 1, then restored. The build
+  never writes into `docs/`, so rollback is dropping the commit.
+- **REPRO-4, tie the JSON-LD mirror to the page, in progress.** A worker is
+  adding a ninth check to `scripts/verify_site.py`: each page's JSON-LD
+  `name` and `description` must equal its title and meta description, with
+  the service pages excepted because theirs name the service. Found while
+  reviewing the generator: the title lives in the content model and the
+  JSON-LD lives in a separate fragment, so a title edit silently leaves the
+  JSON-LD behind, which is the defect SEO-17 was merged to fix. Additive,
+  rollback is dropping the commit.
+- **REPRO-5, make the chrome editable in one place, in progress.** The
+  generator is faithful but stores 28 chrome fragments, because the hand
+  written HTML indents the same markup differently page to page. A worker is
+  collapsing them to one header, one footer and one utility bar driven by
+  data, and removing the per field formatting shape values. That output
+  cannot be byte identical to `docs/`, so the acceptance test becomes render
+  equality, proved by a new `scripts/compare_render.py` that compares tag
+  order, attributes and collapsed text across all 25 pages. This is safe
+  only because every chrome container is flex or grid in `styles.css`, where
+  whitespace between children generates no boxes. The worker writes to
+  `C:\Code_data\tectori\reproducible\normalized_out\` and never into
+  `docs/`. Applying it to `docs/` is a separate step this thread takes after
+  reviewing the evidence, and rollback is reverting that one commit.
 - **REPRO-3, one verification command, built and committed.**
   `scripts/verify_site.py` runs eight checks over a built tree and exits
   non-zero on any failure. Committed on `feature/repro-generator` at
