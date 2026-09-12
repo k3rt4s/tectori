@@ -79,7 +79,7 @@ directly.
   and `llms.txt` cover the same pages with matching descriptions, only the
   two documented pages are noindex, the contact details are character for
   character, the analytics tags are on every page except `login.html`, and
-  no ratings markup or Qualified Security Assessor claim appears. Its tenth
+  no ratings markup or Qualified Security Assessor claim appears. Its last
   check compares the third-party identifiers and every external host in the
   tree against `site/content/site.json`, so a stale analytics token or form
   endpoint fails here rather than shipping. It takes
@@ -98,6 +98,13 @@ directly.
   is derived from one declared value everywhere. It counts rather than fails
   on the old brand name, because most of those are body copy a new owner
   rewrites. Nothing in the repository is modified by a run.
+- `scripts/check_live_deploy.py` fetches every file in `docs/` from the live
+  site and reports any that differs. It is the only check that reads what a
+  visitor gets: the others read the tree about to be deployed, and Pages
+  serves whatever is on `main` whether they passed or not. It also fetches
+  the extensionless path of every page, because a host that serves files
+  literally returns all 43 files correctly and 404s on every link on every
+  page. It needs the network, so it is not one of the six.
 - `PERMISSIONS.md` lists everything the site needs to build, deploy, and
   serve: runtime, filesystem paths, every outbound host, the operator
   accounts, the DNS records, and a from-scratch deploy runbook. It replaced
@@ -129,7 +136,7 @@ declared value reaches a tree that passes all twelve checks and names the
 previous owner nowhere.
 
 1. Rewrite every value in `site/content/site.json`: the brand name, tagline,
-   site URL, the three asset filenames, the three contact strings, the
+   site URL, the six image filenames, the three contact strings, the
    Cloudflare beacon token, the Scarf pixel id, the Formspree endpoint, the
    social URLs, and the external host allowlist. Delete an entry from
    `third_party` only by also removing what emits it, or a check will fail

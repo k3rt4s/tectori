@@ -4,6 +4,16 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Three sentences in the guides were false and are fixed. `SEARCH_SETUP.md`
+  said no AI text file is used, which stopped being true when `llms.txt`
+  shipped and was never revisited. `README.md` step 1 told a new owner to
+  rewrite the three asset filenames in `site.json`, contradicting a sentence
+  seven lines later saying all six reach the pages from there. `README.md`
+  and `PERMISSIONS.md` both attributed the third-party identifier check to
+  `verify_site.py`'s tenth check when it is the twelfth and last, which sends
+  a reader chasing the wrong failure. Found by auditing every factual claim
+  in the five guide files against the tree; `THEORY.md` and `site/README.md`
+  came back clean.
 - `scripts/check_live_deploy.py` reads what a visitor actually gets. Nothing
   did before: the checks read the tree about to be deployed, and the workflow
   reports on a commit without gating Pages, which serves whatever is on `main`

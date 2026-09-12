@@ -48,9 +48,14 @@ Google Search, Bing, and search-grounded assistants.
   visibility.
 - Bingbot is allowed for Bing Search and Bing Copilot discovery.
 
-No special AI text file is used. Search providers currently emphasize normal
-indexing, accessible semantic HTML, internal links, accurate structured data,
-and useful textual content.
+The site publishes `llms.txt`, a plain text summary of every indexed page
+built from the same meta descriptions the pages carry, so an assistant
+reading it and a person reading the site are told the same thing. Nothing
+requires it and no provider is known to weight it; it costs one generated
+file. Everything that is known to matter is ordinary: normal indexing,
+accessible semantic HTML, internal links, accurate structured data, and
+useful textual content. This paragraph said no such file was used until
+2026-09-12, which stopped being true when `llms.txt` shipped.
 
 ## Ongoing Maintenance
 
