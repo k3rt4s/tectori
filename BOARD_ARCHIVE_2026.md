@@ -401,3 +401,134 @@ Records, not work. Nothing here is dispatchable.
   homepage eyebrow became "Built to be reviewed" in the same change, because
   the H1 below it now opens with "Audit-ready." Recorded so a later thread
   does not read the new line as drift from the old one.
+
+## Archived 2026-09-12: the productization lane and two closed records
+
+Archived from `WORK_BOARD.md` at the end of the unattended 2026-09-12
+session, when the board reached 215 lines and its In Progress section had
+become a log. Everything below shipped and is recorded in `CHANGELOG.md`.
+Nothing here is a next action.
+
+Every repo item that was on this board has shipped. The reproducibility lane
+shipped on 2026-09-12 and is recorded in CHANGELOG.md, so the work below is
+the productization layer he named, not leftover board work.
+
+- **The reproducibility lane shipped and is live.** Merged at 5c5d0ca and
+  pushed to `main`, which is the go-live. All 24 generated pages plus
+  `login.html` were fetched from `https://www.tectori.com` afterwards and
+  `scripts/compare_render.py` found all 25 render-identical to the repo tree.
+  `docs/` is now the output of `scripts/build_site.py`, so a nav or footer
+  change is one edit rather than 14. `scripts/check_site.py` runs all five
+  checks in one command; run it before any deploy. Nothing here is
+  dispatchable, it is the record of what changed under you.
+- **PROD-1 shipped.** The survey at
+  `C:\Code_data\tectori\reproducible\identity_constants_2026-09-12.md` is a record
+  now, not a specification. Its own conclusion was that a full templating
+  layer is not worth building, because the files carrying configuration are
+  mostly the same files carrying the content a new owner must rewrite anyway.
+  What was worth building is the narrow part: the third-party identifiers now
+  live in `site/content/site.json` and `verify_site.py` checks a built tree
+  against them, so a stale analytics token or form endpoint fails a check
+  instead of shipping. Merged at 96bdee7 and pushed.
+- **PROD-2 shipped.** `PERMISSIONS.md` is at the repo root, written to the
+  framework standard. `docs/hosting.md` is gone; it was an operations note
+  living inside the published site and served at a live URL.
+
+- **PROD-3 shipped.** The rebrand rehearsal measured what a config change
+  actually reaches. Its one finding worth acting on was structural: `CNAME`,
+  `robots.txt`, `sitemap.xml` and `llms.txt` were copied from `docs/` byte for
+  byte, so they could not follow a `site.json` change at all.
+- **PROD-4 shipped.** Those four files are now generated from the content
+  model, with the public page list in the new
+  `site/content/public_pages.json` driving both the sitemap and llms.txt. The
+  build stayed byte-identical, 28 of 28. Mutation tested by swapping the site
+  URL for a fictional domain and changing one meta description: all four
+  files followed and none kept the old domain.
+
+- **PROD-5 shipped.** The domain is one value. Nothing under `site/` spells
+  `www.tectori.com` out except `site_url` in `site.json`, down from 143
+  occurrences. Canonicals and og:url are site relative paths the build
+  prefixes; fragments carry `{{SITE_URL}}` and `{{SITE_HOST}}`; og:image, its
+  alt text and the favicon href are derived rather than stored 24 times each.
+  Measured against a fictional domain: 166 occurrences follow the one value.
+  The only file left behind is the hand-authored `docs/login.html`, and
+  `verify_site.py` now fails on it because the site's own host is derived
+  from `site_url` rather than listed among the external hosts.
+
+- **PROD-6 shipped, and its answer was mostly no.** The brand name appears
+  about 430 times under `site/`, but the breakdown is 96 in `pages.json`
+  titles and descriptions, 92 in body copy and 24 in JSON-LD names, all of
+  which a new owner rewrites anyway. Tokenizing those would be work with no
+  return. The structural remainder is small and already declared: the three
+  asset filenames live in `site.json`, and the three occurrences left in
+  `build_site.py` are a docstring, a default output path under the data root
+  and a temp-directory prefix, none of which reach the site.
+- **What the measurement did find was a defect in a checker.** The contact
+  details check carried its near-miss patterns written out beside the values
+  they check, so a rebrand would have left it looking for a previous owner's
+  phone number. Worse, its site URL arm was matching zero occurrences and
+  passing, because the full URL never appears as visible text. Both are
+  fixed and mutation tested; the arm now checks two occurrences instead of
+  none.
+
+- **PROD-7 shipped, and it was proved rather than written.** `README.md`
+  now carries a make-this-site-yours runbook: six ordered steps ending in
+  the rebuild and the checks. Rather than describe the steps and trust
+  them, this thread executed them on a clone at
+  `C:\Code_data\tectori\reproducible\northvale\`, rebranding the site to a
+  fictional business. The clone passes all ten checks and holds no trace of
+  the previous owner. Two defects surfaced that no amount of reading would
+  have: `--out docs` crashed on copying a file onto itself, so there was no
+  supported way to rebuild the published tree in place, and the identity
+  check ignored hostnames written as prose, which is how `login.html` names
+  the domain in its link home. Both are fixed and the second is mutation
+  tested on the clone.
+
+The board holds no dispatchable item and no unshipped repo work. What is
+left is the part a session cannot decide alone: whether this becomes a
+product someone buys, a template repository, or a hosted service, which
+changes what gets built next. Until Jon says which, the useful work is
+hardening what exists.
+
+- **The `THEORY.md` audit is done.** Every claim in it was checked against
+  the tree. One was wrong, the line-ending invariant, which named
+  `docs/CNAME` as the only non-CRLF file when three at the repo root are
+  pure LF too. Two were stale. It is 88 lines now rather than 98, still
+  over the framework's 60-line guidance, and the rest is load-bearing.
+
+- **PROD-8 shipped.** `scripts/rehearse_rebrand.py` runs the rebrand
+  rehearsal end to end: clone to the data root, apply the runbook's three
+  mechanical steps against a fixture business, rebuild, run all fifteen
+  checks, and measure what survived. It fails on a single surviving
+  occurrence of the old domain and counts the old brand name rather than
+  failing on it, because the second is body copy a new owner rewrites and
+  the first is not. Mutation tested by un-tokenizing one fragment: it fails
+  and names the file and line.
+
+The next step this thread is taking is to read the site as a buyer would
+rather than as its builder. Every check in this repo answers whether the
+tree is internally consistent; none answers whether a stranger handed the
+repository could get it running. The specific question is what the first
+hour looks like for someone who clones it with no context: whether the
+README's opening actually says what this is, whether the runbook's step 4
+gives enough to rewrite the copy safely, and whether anything assumes a
+reader who was here tonight. That is a reading task with a written result,
+not a build, and it is the last thing between the current state and a
+product that can change hands.
+
+### Moved out of Questions for Jon on 2026-09-12
+
+Neither was a question. Both were records of a decision already taken, and
+a Questions section that holds records stops being read as a list of things
+waiting on Jon.
+
+5. The five resumes outside this repo say Internal PCI Qualified Security
+  Assessor. PCI SSC issues Internal Security Assessor (ISA) to employees and
+  reserves Qualified Security Assessor for external assessor companies. The
+  site says ISA. The resumes should be corrected to match, which is work in
+  another folder, not in this repo.
+6. The executive resume claims a client outcome delivered through an MSP
+  partner, a 140,000 email index cut 80 percent and 37 percent in license
+  savings. The site claims no client results anywhere and case-study.html
+  says so explicitly. Jon chose on 2026-08-23 to leave it off the site.
+  Recorded so a later thread does not rediscover it as a gap.
