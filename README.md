@@ -17,7 +17,10 @@ make it.
 Run `python scripts/serve_docs.py --port 8000` from the repository root,
 then open `http://127.0.0.1:8000/` to review the site locally. Internal
 links use extensionless paths, so do not review by opening the HTML file
-directly.
+directly. That server answers a request the way the live host does, both
+the extensionless paths and `404.html` for a path no file matches, and
+`python scripts/check_live_deploy.py --base http://127.0.0.1:8000` passes
+against it with the same result it gives against the live site.
 
 ## Layout
 
