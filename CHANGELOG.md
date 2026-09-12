@@ -4,6 +4,23 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `scripts/check_source_only_build.py` builds from the source files git
+  carries rather than from the working directory, and says which of the two
+  it used. What a new owner receives is a clone, so a source file that was
+  written but never added is absent from what they get; copying the working
+  directory proved this machine can build the site, which nobody doubted.
+  A local run before a push was the case that mattered, because the workflow
+  checks out a clean tree and would have failed after the push instead.
+  Proved by untracking one content file and watching the previous version
+  pass and this one fail. Inside the rebrand rehearsal's clone, which has no
+  git history on purpose, it falls back to the working copy and says so, and
+  it refuses to answer with a parent repository's file list.
+- `THEORY.md` records that `compare_render.py` compares the top level of each
+  directory only. Every page here is at the top level and the build creates
+  no directory under its output, so nothing is uncompared today; the
+  assumption was undocumented, which is how it would survive the change that
+  made it wrong.
+
 - `scripts/check_doc_claims.py` reads the twelve countable claims `README.md`
   and `PERMISSIONS.md` make about this tree and compares each against the
   tree, and `check_site.py` runs it. Every other check reads the site; this
