@@ -66,6 +66,13 @@ def main():
         "the source alone reproduces docs/",
         [script("check_source_only_build.py")],
     ))
+    # And every check reads the tree, not how the tree reaches the site. The
+    # deploy job is the only route there, and deleting the one line that makes
+    # it wait would leave every check passing while a red run shipped again.
+    results.append(run(
+        "the deploy waits for the checks",
+        [script("check_deploy_gate.py")],
+    ))
 
     # The render comparison needs a real built tree, so build one into a
     # temporary directory rather than the default output location, which a
@@ -83,8 +90,8 @@ def main():
     finally:
         shutil.rmtree(tmp_dir, ignore_errors=True)
 
-    # Off the default path on purpose. The six checks above read the tree
-    # that is about to deploy and are what a deploy should wait for. The
+    # Off the default path on purpose. The checks above read the tree that
+    # is about to deploy and are what a deploy should wait for. The
     # rehearsal answers a different question, whether someone else could make
     # this site theirs, and it writes a whole clone outside the repo to do it.
     # That is worth running when the build or the content model changes, and

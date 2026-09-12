@@ -194,7 +194,7 @@ On a fresh environment, in order.
 
 1. Install Python and git. Clone the repository. Nothing else installs.
 2. Run `python scripts/check_site.py` from the repository root and confirm
-   six of six checks pass before changing anything.
+   every check passes before changing anything. It prints the count it ran.
 3. Create the GitHub repository and push `main`. Pages needs the repository to
    exist before it can serve from it.
 4. In the repository settings, enable Pages with source GitHub Actions, then
@@ -233,7 +233,7 @@ After the runbook, two checks.
 python scripts/check_site.py
 ```
 
-Six of six must pass. The third of those runs `scripts/verify_site.py`,
+Every one of them must pass. The third runs `scripts/verify_site.py`,
 whose last check confirms the beacon token, the pixel id, and the form
 endpoint in the built tree are the declared ones at the expected count, and
 that no page references a host outside the allowlist.

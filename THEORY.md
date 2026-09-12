@@ -51,6 +51,14 @@ What a session needs to believe before it changes anything in this repo.
   that serves files literally, an S3 bucket or a default nginx, returns 404 on
   every link on every page while the files are all present and every check
   passes. Moving off Pages means giving the new host that rewrite first.
+- The deploy job in `.github/workflows/verify.yml` is the only route to the
+  site, and the repository publishes from the workflow rather than from the
+  branch. A push to `main` is still the go-live, but it goes live only if the
+  checks pass. The failure mode reversed with it: deleting that job, or
+  breaking the upload, now ships nothing and leaves the site as it was, where
+  before 2026-09-12 a red run shipped anyway. `docs/CNAME` no longer sets the
+  domain either, the Pages setting does; the file is kept correct only so
+  publishing from the branch still works if anyone switches back.
 - The domain is one value. Nothing under `site/` spells it out but `site_url`:
   canonicals and og:url are stored site-relative, the fragments carry
   `{{SITE_URL}}`, `{{SITE_HOST}}` and `{{SITE_APEX}}`, and changing it reaches

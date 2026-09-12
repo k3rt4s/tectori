@@ -45,7 +45,7 @@ jobs:
       - name: Confirm nothing needs installing
         run: python -c "import sys; print(sys.version)"
 
-      - name: Run the six checks
+      - name: Run every check
         run: python scripts/check_site.py
 
       # check_site.py proves the built tree renders identically to docs/.
