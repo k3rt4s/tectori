@@ -75,7 +75,7 @@
         </div>
         <div class="prose">
           <p>
-            Use the contact page for a response within 48 hours. For something urgent, call <a class="text-link" href="tel:+16158296802"><span class="nowrap">(615) 829-6802</span></a> for an immediate response.
+            Use the contact page for a response within 48 hours. For something urgent, call <a class="text-link" href="{{PHONE_TEL_URI}}"><span class="nowrap">{{PHONE_DISPLAY}}</span></a> for an immediate response.
           </p>
           <p>
             Good faith reports of a security problem in this site, in Tectori's published tools, or in work delivered to you are welcomed. Reporting one will not be treated as a hostile act.

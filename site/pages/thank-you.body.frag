@@ -5,7 +5,7 @@
           <p class="page-lead">
             It goes to Tectori through Formspree and is used to respond to your
             inquiry. If the matter is active or urgent, call
-            <a href="tel:+16158296802"><span class="nowrap">(615) 829-6802</span></a>
+            <a href="{{PHONE_TEL_URI}}"><span class="nowrap">{{PHONE_DISPLAY}}</span></a>
             rather than waiting on the form.
           </p>
         </div>
@@ -25,7 +25,7 @@
         <div class="cta-inner">
           <div><p class="eyebrow">Need an answer sooner</p><h2>A call is the fastest path.</h2></div>
           <div class="action-row">
-            <a class="button primary" href="tel:+16158296802">Call <span class="nowrap">(615) 829-6802</span></a>
+            <a class="button primary" href="{{PHONE_TEL_URI}}">Call <span class="nowrap">{{PHONE_DISPLAY}}</span></a>
             <a class="button secondary" href="/faq">Read the FAQ</a>
           </div>
         </div>

@@ -41,6 +41,15 @@ THIRD_PARTY_FIXTURE = {
     "formspree_endpoint": "https://formspree.io/f/xnorthvale",
 }
 
+# The profiles the footer links from every page. Nested under "social" for the
+# same reason the block above is nested, and missed for longer: until the
+# residue scan below covered every declared value, a rebrand left the previous
+# owner's LinkedIn and GitHub on all 24 pages and every check still passed.
+SOCIAL_FIXTURE = {
+    "linkedin": "https://www.linkedin.com/company/northvale-grove",
+    "github": "https://github.com/northvale-grove",
+}
+
 TEXT_SUFFIXES = {".html", ".xml", ".txt", ".css", ".js", ""}
 
 
@@ -88,6 +97,14 @@ def rewrite_site_json(out_dir):
                 "prove less than it claims"
             )
         config["third_party"][key] = value
+    for key, value in SOCIAL_FIXTURE.items():
+        if key not in config["social"]:
+            raise KeyError(
+                f"site.json declares no social.{key!r}, so the fixture and "
+                "the content model have diverged and this rehearsal would "
+                "prove less than it claims"
+            )
+        config["social"][key] = value
     text = json.dumps(config, indent=2, ensure_ascii=False)
     with open(path, "wb") as f:
         f.write((text.replace("\n", "\r\n") + "\r\n").encode("utf-8"))
@@ -146,16 +163,34 @@ def text_files(docs_root):
                 yield os.path.join(dir_path, name)
 
 
-def domain_residue(out_dir, original):
-    """Return every line of the rebranded tree that still names the old domain.
+def declared_values(original):
+    """Return every value a new owner replaces, labelled by where it is declared."""
+    # The brand name is the one declared value left out, by design: most of its
+    # occurrences are body copy a new owner rewrites rather than rebrands, so it
+    # is counted below rather than failed on. Everything else reaches the pages
+    # through the build's token map, which means one occurrence of the old value
+    # in a built page is a page the token never reached.
+    values = {"site_url apex": apex_of(original["site_url"])}
+    for key, value in original.items():
+        if isinstance(value, str) and key not in ("comment", "brand_name"):
+            values[key] = value
+    for group in ("third_party", "social"):
+        for key, value in original[group].items():
+            values[group + "." + key] = value
+    return values
 
-    The domain is the honest measure of whether this site is reproducible,
-    because it is derived from one declared value everywhere including the
-    prose. One occurrence left behind is a defect. The brand name is not that,
-    by design: most of its occurrences are body copy a new owner rewrites, so
-    it is counted rather than failed on.
-    """
-    pattern = re.compile(re.escape(apex_of(original["site_url"])), re.IGNORECASE)
+
+def value_residue(out_dir, original):
+    """Return every line of the rebranded tree that still carries an old value."""
+    hits = []
+    for label, value in sorted(declared_values(original).items()):
+        hits.extend(residue_for(out_dir, label, value))
+    return hits
+
+
+def residue_for(out_dir, label, value):
+    """Return every line of the rebranded tree that still carries one old value."""
+    pattern = re.compile(re.escape(value), re.IGNORECASE)
     docs = os.path.join(out_dir, "docs")
     hits = []
     for path in text_files(docs):
@@ -167,7 +202,7 @@ def domain_residue(out_dir, original):
         for number, line in enumerate(text.splitlines(), 1):
             if pattern.search(line):
                 rel = os.path.relpath(path, docs)
-                hits.append(f"{rel}:{number}: {line.strip()[:90]}")
+                hits.append(f"{label}: {rel}:{number}: {line.strip()[:70]}")
     return hits
 
 
@@ -216,11 +251,13 @@ def main():
         if line.startswith("[") or "passed" in line:
             print(f"  {line.rstrip()}")
 
-    residue = domain_residue(out_dir, original)
+    residue = value_residue(out_dir, original)
     brand_hits = brand_residue(out_dir, original)
+    checked = len(declared_values(original))
     print(
-        f"The old domain appears {len(residue)} times in the rebranded tree, "
-        f"and the old brand name {brand_hits} times in copy a new owner rewrites."
+        f"Of the {checked} declared values a new owner replaces, the old value "
+        f"survives on {len(residue)} lines of the rebranded tree, and the old "
+        f"brand name appears {brand_hits} times in copy a new owner rewrites."
     )
     for hit in residue[:20]:
         print(f"  {hit}")

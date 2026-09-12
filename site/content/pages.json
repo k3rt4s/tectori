@@ -196,7 +196,7 @@
     "description": "Tectori connects cloud, security, compliance, evidence, and governed AI for regulated and growing organizations that need technology to hold up under review.",
     "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Tectori | Audit-ready IT, security, and AI governance",
-    "og_description": "Audit-ready IT that scales with your ambition.",
+    "og_description": "{{TAGLINE}}.",
     "og_type": "website",
     "og_url": "/",
     "canonical": "/",

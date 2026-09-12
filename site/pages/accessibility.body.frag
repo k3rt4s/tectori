@@ -31,7 +31,7 @@
           <h2>Report an issue</h2>
           <p>
             If any part of this site is hard to use with assistive
-            technology, use the contact page or call <span class="nowrap">(615) 829-6802</span>
+            technology, use the contact page or call <span class="nowrap">{{PHONE_DISPLAY}}</span>
             to tell Tectori directly. Reports go straight to the founder and
             are treated as defects, not feedback for a backlog.
           </p>

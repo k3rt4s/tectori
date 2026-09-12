@@ -97,6 +97,35 @@ def load_site_config():
 
 SITE = load_site_config()
 
+
+def address_parts(postal_address):
+    """Return the street, locality, region and postal code of a US mailing address."""
+    # The JSON-LD asks for the address in four fields and site.json declares it
+    # as one string. Splitting here rather than declaring both is what stops the
+    # two disagreeing: a new owner changes one value and every form of the
+    # address follows. The shape assumed is a comma separated US address ending
+    # in a two word state and ZIP, with any unit line folded into the street, so
+    # both three part and four part addresses parse.
+    parts = [part.strip() for part in postal_address.split(",")]
+    if len(parts) < 3:
+        raise ValueError(
+            "postal_address " + repr(postal_address) + " has fewer than three "
+            "comma separated parts, so the street, city and state cannot be told "
+            "apart and the JSON-LD address would be wrong."
+        )
+    tail = parts[-1].split()
+    if len(tail) != 2:
+        raise ValueError(
+            "the last part of postal_address is " + repr(parts[-1]) + ", which is "
+            "not a state and ZIP such as 'TN 37027'."
+        )
+    return ", ".join(parts[:-2]), parts[-2], tail[0], tail[1]
+
+
+ADDRESS_STREET, ADDRESS_LOCALITY, ADDRESS_REGION, ADDRESS_POSTAL_CODE = (
+    address_parts(SITE["postal_address"])
+)
+
 # Every value below appears on all 24 generated pages, so declaring it once is
 # what stops the same phone number or analytics id existing in 24 places that
 # can disagree. verify_site.py checks a built tree against the same file, so a
@@ -109,6 +138,12 @@ SITE_TOKENS = {
     "{{PHONE_DISPLAY}}": SITE["phone_display"],
     "{{PHONE_TEL_URI}}": SITE["phone_tel_uri"],
     "{{POSTAL_ADDRESS}}": SITE["postal_address"],
+    "{{ADDRESS_STREET}}": ADDRESS_STREET,
+    "{{ADDRESS_LOCALITY}}": ADDRESS_LOCALITY,
+    "{{ADDRESS_REGION}}": ADDRESS_REGION,
+    "{{ADDRESS_POSTAL_CODE}}": ADDRESS_POSTAL_CODE,
+    "{{LOGO_FILENAME}}": SITE["logo_filename"],
+    "{{PHONE_SCHEMA}}": SITE["phone_schema"],
     "{{LINKEDIN_URL}}": SITE["social"]["linkedin"],
     "{{GITHUB_URL}}": SITE["social"]["github"],
     "{{CLOUDFLARE_BEACON_TOKEN}}": SITE["third_party"]["cloudflare_beacon_token"],
@@ -126,11 +161,26 @@ def load_fragment(rel_path):
     return text.encode("utf-8")
 
 
+def resolve_tokens(value):
+    """Return the value with every site token in its strings replaced, at any depth."""
+    if isinstance(value, str):
+        for token, replacement in SITE_TOKENS.items():
+            value = value.replace(token, replacement)
+        return value
+    if isinstance(value, dict):
+        return {key: resolve_tokens(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [resolve_tokens(item) for item in value]
+    return value
+
+
 def load_pages():
     path = os.path.join(SITE_DIR, "content", "pages.json")
     with open(path, "rb") as f:
         raw = f.read()
-    return json.loads(raw.decode("utf-8"))
+    # Substituted after parsing rather than before, so a declared value holding
+    # a quote or a backslash cannot turn valid page metadata into invalid JSON.
+    return resolve_tokens(json.loads(raw.decode("utf-8")))
 
 
 def attr(value):

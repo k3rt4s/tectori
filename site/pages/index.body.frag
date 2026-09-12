@@ -6,7 +6,7 @@
         <div class="hero-scrim" aria-hidden="true"></div>
         <div class="hero-content">
           <p class="eyebrow">Built to be reviewed</p>
-          <h1 id="hero-title">Audit-ready IT that scales with your ambition.</h1>
+          <h1 id="hero-title">{{TAGLINE}}.</h1>
           <p class="hero-copy">
             Tectori connects cloud architecture, cybersecurity, compliance,
             operations, and governed AI so regulated and growing
@@ -15,7 +15,7 @@
           </p>
           <div class="hero-actions">
             <a class="button primary" href="/contact">Start a conversation</a>
-            <a class="button secondary" href="tel:+16158296802">Call <span class="nowrap">(615) 829-6802</span></a>
+            <a class="button secondary" href="{{PHONE_TEL_URI}}">Call <span class="nowrap">{{PHONE_DISPLAY}}</span></a>
             <a class="button secondary" href="/solutions">Explore solutions</a>
           </div>
         </div>
@@ -190,7 +190,7 @@
           <div><p class="eyebrow">Start with the real constraint</p><h2>Bring the audit question and the business goal.</h2></div>
           <div class="action-row">
             <a class="button primary" href="/contact">Start a conversation</a>
-            <a class="button secondary" href="tel:+16158296802">Call <span class="nowrap">(615) 829-6802</span></a>
+            <a class="button secondary" href="{{PHONE_TEL_URI}}">Call <span class="nowrap">{{PHONE_DISPLAY}}</span></a>
           </div>
         </div>
       </section>

@@ -135,7 +135,7 @@
           <h2>Build cloud operations that can explain themselves.</h2>
           <div class="action-row">
             <a class="button primary" href="/contact">Discuss a cloud project</a>
-            <a class="button secondary" href="tel:+16158296802">Call <span class="nowrap">(615) 829-6802</span></a>
+            <a class="button secondary" href="{{PHONE_TEL_URI}}">Call <span class="nowrap">{{PHONE_DISPLAY}}</span></a>
           </div>
         </div>
       </section>
