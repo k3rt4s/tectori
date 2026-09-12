@@ -18,6 +18,12 @@ Tectori website changes are recorded here.
   copies: copying the cybersecurity identifiers onto the IT operations page and
   hand writing the founder reference on the about page each passed all committed
   checks, and the new one names the page and the identifier in both cases.
+  The one node whose url points at another page on purpose is the founder on
+  the home page, and the row excusing it is keyed on the anchor declared in
+  `site/content/founder.json` rather than on the slug that anchor currently
+  holds. Writing the slug was the first attempt and the rebrand rehearsal
+  caught it: on a rebranded tree the row described the previous owner's node
+  and the new owner's node was excused by nothing.
 
 - The body text on the resilience band sat at 4.40 to 1 against the gold
   behind it, and the accessibility statement names WCAG 2.1 level AA, which

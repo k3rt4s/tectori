@@ -19,6 +19,8 @@ import check_llms_drift  # noqa: E402  (reused for the llms.txt drift comparison
 # one failure a consistency check exists to prevent.
 SITE_CONFIG_PATH = SCRIPT_DIR.parent / "site" / "content" / "site.json"
 SITE = json.loads(SITE_CONFIG_PATH.read_text(encoding="utf-8"))
+FOUNDER_CONFIG_PATH = SCRIPT_DIR.parent / "site" / "content" / "founder.json"
+FOUNDER = json.loads(FOUNDER_CONFIG_PATH.read_text(encoding="utf-8"))
 
 SITE_PREFIX = SITE["site_url"]
 NOINDEX_ALLOWED = {"404.html", "thank-you.html"}
@@ -2003,7 +2005,11 @@ ABSOLUTE_URL_RE = re.compile(r'https?://[^\s"<>)]+')
 # here that no longer describes a node in the tree fails too, so an excuse
 # cannot outlive the thing it excused.
 JSONLD_URL_ELSEWHERE = {
-    ("index.html", "#jonathan-bowker"): (
+    # Keyed on the declared anchor rather than on the slug it currently holds,
+    # because the slug is a value a rebrand replaces: writing it here would
+    # leave this row describing the previous owner's node and the new owner's
+    # node excused by nothing.
+    ("index.html", "#" + FOUNDER["anchor_slug"]): (
         "the founder is defined once, beside the organization that declares "
         "him, and the page about him is the about page rather than the home "
         "page the node sits on"
