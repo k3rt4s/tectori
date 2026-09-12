@@ -42,50 +42,38 @@ The objective he named is to finish the board so the site can become a
 reproducible product that can be sold or hosted. Every repo item on this
 board has shipped, so the night's work is the reproducibility layer.
 
-- **REPRO-1, measure the duplication, done.** 84,011 of 289,004 bytes, 29.1
-  percent of the tree, are repeated chrome. Seven head fields vary per page,
-  eight on the 11 pages carrying JSON-LD. The report is at
-  `C:\Code_data\tectori\reproducible\duplication_survey_2026-09-11.md`.
-  Read only, no repo change, so nothing to roll back.
-- **REPRO-2, the generator, built and committed.** `site/` holds the content
-  model and chrome fragments, `scripts/build_site.py` renders them.
-  Committed at 00425f0 on `feature/repro-generator`. 24 of the 25 pages
-  rebuild byte for byte; `login.html` is deliberately excluded because it
-  shares no chrome with any page and carries the only CSP. Verified by
-  mutating a title in the content model and confirming the build named the
-  page, reported the byte offset and exited 1, then restored. The build
-  never writes into `docs/`, so rollback is dropping the commit.
-- **REPRO-4, tie the JSON-LD mirror to the page, done.** `verify_site.py`
-  now runs nine checks. The ninth enforces that a page's JSON-LD `name` and
-  `description` equal its title and meta description on the nine pages where
-  the tree already mirrors them. The six service pages have only their
-  description enforced, because their JSON-LD `name` and `serviceType` name
-  the service by design. `index.html` and `faq.html` are exempt and named as
-  exempt, so a page carrying JSON-LD that matches no rule is reported as a
-  gap in the check rather than skipped. Committed at f386b54. Verified by
-  mutation in a scratch tree, not by its own passing run. Rollback is
-  dropping the commit.
-- **REPRO-5, make the chrome editable in one place, in progress.** The
-  generator is faithful but stores 28 chrome fragments, because the hand
-  written HTML indents the same markup differently page to page. A worker is
-  collapsing them to one header, one footer and one utility bar driven by
-  data, and removing the per field formatting shape values. That output
-  cannot be byte identical to `docs/`, so the acceptance test becomes render
-  equality, proved by a new `scripts/compare_render.py` that compares tag
-  order, attributes and collapsed text across all 25 pages. This is safe
-  only because every chrome container is flex or grid in `styles.css`, where
-  whitespace between children generates no boxes. The worker writes to
-  `C:\Code_data\tectori\reproducible\normalized_out\` and never into
-  `docs/`. Applying it to `docs/` is a separate step this thread takes after
-  reviewing the evidence, and rollback is reverting that one commit.
-- **REPRO-3, one verification command, built and committed.**
-  `scripts/verify_site.py` runs eight checks over a built tree and exits
-  non-zero on any failure. Committed on `feature/repro-generator` at
-  4ba4a9b, not yet merged to `main`, because the branch also carries the
-  unfinished generator. Reviewed by mutation, not by its own self-report:
-  four injected defects in a scratch copy were each caught. Rollback is
-  dropping the commit, since the script is additive and `docs/` is
-  untouched.
+- **REPRO lane, all five items done, on `feature/repro-generator`, not yet
+  merged.** The lane is complete as built. Its evidence, its rollback and the
+  one thing left to do are below. If you are the thread that picks this up,
+  your next action is the merge and push named at the end of this section.
+  - REPRO-1 measured the duplication. 84,011 of 289,004 bytes, 29.1 percent of
+    the tree, were repeated chrome. The report is at
+    `C:\Code_data\tectori\reproducible\duplication_survey_2026-09-11.md`.
+  - REPRO-2 built the generator. `site/` holds the content model, `scripts/
+    build_site.py` renders it. Committed at 00425f0.
+  - REPRO-3 built `scripts/verify_site.py`, one command, now nine checks.
+    Committed at 4ba4a9b.
+  - REPRO-4 tied the JSON-LD mirror to the page as that ninth check, with the
+    exempt pages named so an uncovered page is reported rather than skipped.
+    Committed at f386b54.
+  - REPRO-5 collapsed the 28 stored chrome formatting variants to one template
+    per piece and made `docs/` the generator's own output, so a nav or footer
+    change is one edit rather than 14. Committed at 2e4f6dc. Hardened at
+    03f13ab after a pre-push review: the content model is validated with the
+    offending page and field named, interpolated values are escaped, and a
+    build copies every file `docs/` carries that it does not generate, so the
+    output is a complete deployable tree rather than pages alone.
+  - Verified four ways, none of them the scripts' own passing run.
+    `build_site.py --check` reports 24 of 24 pages byte-identical to `docs/`,
+    `verify_site.py` passes 9 of 9, `check_llms_drift.py` reports no drift, and
+    `compare_render.py` finds the built tree render-identical. The full built
+    tree compares byte-identical to `docs/` across all 44 files. Every new
+    check was tested by mutation against a scratch copy.
+  - The pre-push review log for 2e4f6dc is at
+    `C:\Code_data\tectori\reviews\pre_push_2026-09-12_normalization.md`.
+  - Rollback: `docs/` differs from what was deployed only in whitespace, and
+    reverting 2e4f6dc restores the hand-authored bytes. Everything else on the
+    branch is additive.
 
 ## Owner-Only Tasks
 
