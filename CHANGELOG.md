@@ -4,6 +4,18 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `rehearse_rebrand.py` now reads the content model in both directions before
+  it clones anything. It already refused to run when a fixture named a value
+  `site.json` or `founder.json` no longer declares. The other direction was
+  open: a value declared in either file that no fixture replaced was skipped
+  twice, never rewritten and never scanned for afterwards. Adding one string to
+  `founder.json`, wiring it through a token and updating the count sentence the
+  documentation check reads left the previous owner's credentials in the
+  fixture business's structured data on the home page, and the rehearsal still
+  printed REHEARSAL PASSED and counted twenty-one declared values as though it
+  had checked it. A declared value now has to be in a fixture or in a table
+  saying why it stays.
+
 - `verify_site.py` gained a twenty-first check, on the one page that asks a
   visitor for a password. The first sentence of `login.html` says the page
   transmits or stores nothing entered into it, and the only
