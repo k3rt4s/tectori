@@ -98,6 +98,16 @@ def load_site_config():
 SITE = load_site_config()
 
 
+def load_founder():
+    """Return the founder's declared identity and the biography strings beside it."""
+    path = os.path.join(SITE_DIR, "content", "founder.json")
+    with open(path, "rb") as f:
+        return json.loads(f.read().decode("utf-8"))
+
+
+FOUNDER = load_founder()
+
+
 def address_parts(postal_address):
     """Return the street, locality, region and postal code of a US mailing address."""
     # The JSON-LD asks for the address in four fields and site.json declares it
@@ -154,6 +164,13 @@ SITE_TOKENS = {
     "{{CLOUDFLARE_BEACON_TOKEN}}": SITE["third_party"]["cloudflare_beacon_token"],
     "{{SCARF_PIXEL_ID}}": SITE["third_party"]["scarf_pixel_id"],
     "{{FORMSPREE_ENDPOINT}}": SITE["third_party"]["formspree_endpoint"],
+    # The founder's identity recurs in structured data, in a heading, in prose
+    # and in a meta description. Declaring it once is what stops a rebrand
+    # replacing four of those five and shipping the fifth.
+    "{{FOUNDER_NAME}}": FOUNDER["name"],
+    "{{FOUNDER_GIVEN_NAME}}": FOUNDER["given_name"],
+    "{{FOUNDER_JOB_TITLE}}": FOUNDER["job_title"],
+    "{{FOUNDER_ANCHOR}}": FOUNDER["anchor_slug"],
 }
 
 

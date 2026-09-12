@@ -16,16 +16,21 @@ What a session needs to believe before it changes anything in this repo.
   scripted edit that writes LF elsewhere corrupts the diff for the whole file,
   so count bare LFs after any splice.
 - The values that belong to the business rather than to the site are declared
-  once in `site/content/site.json`, and each reaches a page through a token,
+  once in `site/content/site.json`, and the person it belongs to in
+  `site/content/founder.json` beside it. Each reaches a page through a token,
   never as a literal. A fragment that writes one out instead is invisible to
   every check, because the built tree is correct for this owner either way;
-  only `rehearse_rebrand.py` catches it, by changing all eighteen and failing
-  any built line still carrying an old one. Tokens resolve in `pages.json`
-  after it is parsed rather than on its raw text, and the JSON-LD address is
-  derived from the one declared string by `address_parts`.
-- The brand name is the exception. It is body copy a new owner rewrites, so the
-  rehearsal counts it rather than failing on it, and tokenizing it in prose
-  would make the copy unreadable to whoever edits it.
+  only `rehearse_rebrand.py` catches it, by changing every one of them and
+  failing any built line still carrying an old value. Tokens resolve in
+  `pages.json` after it is parsed rather than on its raw text, and the JSON-LD
+  address is derived from the one declared string by `address_parts`.
+- The brand name is the exception, and the founder's job title and biography
+  are the other half of it. They are body copy a new owner rewrites, so the
+  rehearsal counts them and names the pages rather than failing on them, and
+  tokenizing them in prose would make the copy unreadable to whoever edits it.
+  The founder's name, given name and anchor are not copy: they carry a real
+  person into structured data, so a rebrand that leaves one behind ships a site
+  claiming someone who has nothing to do with it, and that one fails.
 - A check that confirms a declared value is present cannot see the same value
   in a second place it should not be, and that is where every defect found in
   this tree has been. When adding a check, ask what a tree would look like that

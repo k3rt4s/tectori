@@ -40,7 +40,7 @@
             "name": "Is Tectori a large consulting firm?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. Tectori is a founder-led practice. Clients work directly with Jonathan Bowker, the practitioner responsible for recommendations, design, and delivery."
+              "text": "No. Tectori is a founder-led practice. Clients work directly with {{FOUNDER_NAME}}, the practitioner responsible for recommendations, design, and delivery."
             }
           },
           {

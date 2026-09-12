@@ -67,6 +67,26 @@ SOCIAL_FIXTURE = {
     "github": "https://github.com/northvale-grove",
 }
 
+# The person the fixture practice is. The founder's name, given name, job
+# title and anchor reach the pages through the token map like every other
+# declared value, so a rebrand that misses one leaves a real person's name in
+# the structured data of a site they have never heard of. That is what this
+# fixture exists to prove cannot happen quietly: until 2026-09-12 none of it
+# was in the content model at all, and the rehearsal could not see it.
+FOUNDER_FIXTURE = {
+    "name": "Avery Lindholm",
+    "given_name": "Avery",
+    "job_title": "Principal and Managing Partner",
+    "anchor_slug": "avery-lindholm",
+}
+
+# The one founder value that is copy as well as data. It reaches the structured
+# data through a token like the rest, and it also appears in the about page's
+# eyebrow and in two meta descriptions, in sentence case, inside sentences a new
+# owner rewrites rather than rebrands. So it is counted rather than failed on,
+# exactly as brand_name is and for the same reason.
+FOUNDER_COPY = ("job_title",)
+
 TEXT_SUFFIXES = {".html", ".xml", ".txt", ".css", ".js", ""}
 
 
@@ -123,6 +143,23 @@ def rewrite_site_json(out_dir):
             )
         config["social"][key] = value
     text = json.dumps(config, indent=2, ensure_ascii=False)
+    with open(path, "wb") as f:
+        f.write((text.replace("\n", "\r\n") + "\r\n").encode("utf-8"))
+
+
+def rewrite_founder_json(out_dir):
+    """Apply runbook step 1 to the founder's identity as well as to site.json."""
+    path = os.path.join(out_dir, "site", "content", "founder.json")
+    founder = read_json(path)
+    for key, value in FOUNDER_FIXTURE.items():
+        if key not in founder:
+            raise KeyError(
+                f"founder.json has no {key!r}, so the fixture and the content "
+                "model have diverged and this rehearsal would prove less "
+                "than it claims"
+            )
+        founder[key] = value
+    text = json.dumps(founder, indent=2, ensure_ascii=False)
     with open(path, "wb") as f:
         f.write((text.replace("\n", "\r\n") + "\r\n").encode("utf-8"))
 
@@ -202,10 +239,26 @@ def declared_values(original):
     return values
 
 
-def value_residue(out_dir, original):
+def founder_values(founder):
+    """Return the founder's declared identity, labelled by where it is declared."""
+    # Only the identity. The biography beside it in founder.json is counted
+    # rather than failed on, for the reason brand_name is: a new owner writes
+    # their own credentials and history rather than filling in these blanks,
+    # and a rehearsal that failed on them would be failing on the one thing
+    # nobody can automate.
+    return {
+        "founder." + key: founder[key]
+        for key in FOUNDER_FIXTURE
+        if key not in FOUNDER_COPY and isinstance(founder.get(key), str)
+    }
+
+
+def value_residue(out_dir, original, founder):
     """Return every line of the rebranded tree that still carries an old value."""
     hits = []
-    for label, value in sorted(declared_values(original).items()):
+    declared = declared_values(original)
+    declared.update(founder_values(founder))
+    for label, value in sorted(declared.items()):
         hits.extend(residue_for(out_dir, label, value))
     return hits
 
@@ -230,12 +283,22 @@ def residue_for(out_dir, label, value):
 
 def brand_residue(out_dir, original):
     """Count what still names the old brand, which its copy is expected to."""
-    pattern = re.compile(re.escape(original["brand_name"]), re.IGNORECASE)
+    return string_residue(out_dir, [original["brand_name"]])[0]
+
+
+def string_residue(out_dir, values):
+    """Return how many times a set of strings survives, and which pages carry them."""
+    patterns = [re.compile(re.escape(value), re.IGNORECASE) for value in values]
     total = 0
+    pages = set()
     for path in text_files(os.path.join(out_dir, "docs")):
         with open(path, "rb") as f:
-            total += len(pattern.findall(f.read().decode("utf-8", "ignore")))
-    return total
+            text = f.read().decode("utf-8", "ignore")
+        found = sum(len(pattern.findall(text)) for pattern in patterns)
+        if found:
+            total += found
+            pages.add(os.path.basename(path))
+    return total, sorted(pages)
 
 
 def main():
@@ -254,9 +317,11 @@ def main():
         raise SystemExit(f"refusing to write the clone inside the repo: {out_dir}")
 
     original = read_json(os.path.join(REPO_ROOT, "site", "content", "site.json"))
+    founder = read_json(os.path.join(REPO_ROOT, "site", "content", "founder.json"))
     print(f"Cloning to {out_dir}")
     clone(out_dir)
     rewrite_site_json(out_dir)
+    rewrite_founder_json(out_dir)
     rename_assets(out_dir, original)
     print("Applied the two mechanical runbook steps")
 
@@ -272,9 +337,12 @@ def main():
         if line.startswith("[") or "passed" in line:
             print(f"  {line.rstrip()}")
 
-    residue = value_residue(out_dir, original) + filename_residue(out_dir, original)
+    residue = (
+        value_residue(out_dir, original, founder)
+        + filename_residue(out_dir, original)
+    )
     brand_hits = brand_residue(out_dir, original)
-    checked = len(declared_values(original))
+    checked = len(declared_values(original)) + len(founder_values(founder))
     print(
         f"Of the {checked} declared values a new owner replaces, the old value "
         f"survives on {len(residue)} lines of the rebranded tree, and the old "
@@ -282,6 +350,19 @@ def main():
     )
     for hit in residue[:20]:
         print(f"  {hit}")
+
+    # Reported rather than failed on, and reported by page so a new owner knows
+    # which files to open. These are the previous owner's credentials, award,
+    # schools and employers: a rebrand cannot invent replacements for them, and
+    # a rehearsal that said nothing about them would be claiming the tree is
+    # ready to hand over when a buyer still has a biography to write.
+    copy = [founder[key] for key in FOUNDER_COPY] + founder["biography_strings"]
+    bio_hits, bio_pages = string_residue(out_dir, copy)
+    print(
+        f"The previous owner's job title and biography survive {bio_hits} times "
+        f"across {len(bio_pages)} pages, which a new owner rewrites by hand: "
+        + (", ".join(bio_pages) if bio_pages else "none")
+    )
 
     ok = checks.returncode == 0 and not residue
     print("REHEARSAL PASSED" if ok else "REHEARSAL FAILED")

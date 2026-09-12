@@ -4,6 +4,26 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- The founder's identity is declared content. `site/content/founder.json` holds
+  the name, the given name, the job title and the structured-data anchor, and
+  the build exposes all four as tokens the way `site.json`'s values already
+  are, so the home page's JSON-LD, the about page's heading and prose, the FAQ
+  page's answer and two meta descriptions all read from one place. Before this
+  a real person's name was written into six source files, outside the content
+  model entirely, which meant `rehearse_rebrand.py` could not see it: the
+  rehearsal printed REHEARSAL PASSED while the rebranded fixture site still
+  named him, with his certifications and employers, in its structured data.
+  `python scripts/build_site.py --check` reports 43 identical and 0 differing,
+  so the live site is unchanged.
+- The rebrand rehearsal now rewrites `founder.json` with a fixture identity
+  alongside `site.json`, fails on any name, given name or anchor that survives,
+  and counts the job title and the eleven biography strings the way it already
+  counts the brand name, reporting which pages carry them. The job title is
+  counted rather than failed on because it appears in sentence case inside
+  prose a new owner rewrites. Proved by putting the founder's name back into
+  one fragment as a literal and confirming the rehearsal fails and names the
+  page and the line.
+
 - Three checks stopped passing a tree that is wrong, found by asking each
   check in `verify_site.py` what such a tree would look like. The noindex
   check compared links against a hand written list of spellings that held

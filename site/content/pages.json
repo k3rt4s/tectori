@@ -25,7 +25,7 @@
     "output": "about.html",
     "comment": "Tectori's About page presents the founder's verified experience, education, credentials, and teaching history.",
     "title": "About Tectori | Enterprise IT and security, Nashville",
-    "description": "Meet Jonathan Bowker, Tectori's Nashville based founder and principal consultant, with 20 years across enterprise IT, security, risk, and regulated technology.",
+    "description": "Meet {{FOUNDER_NAME}}, Tectori's Nashville based founder and principal consultant, with 20 years across enterprise IT, security, risk, and regulated technology.",
     "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "About Tectori",
     "og_description": "Founder-led IT, security, risk, and AI governance experience built for regulated organizations.",

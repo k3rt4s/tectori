@@ -21,10 +21,10 @@
         "description": "Founder-led cloud, cybersecurity, compliance, IT operations, fractional leadership, and AI governance consulting for regulated and growing organizations.",
         "founder": {
           "@type": "Person",
-          "name": "Jonathan Bowker",
-          "jobTitle": "Founder and Principal Consultant",
+          "name": "{{FOUNDER_NAME}}",
+          "jobTitle": "{{FOUNDER_JOB_TITLE}}",
           "url": "{{SITE_URL}}/about",
-          "@id": "{{SITE_URL}}/#jonathan-bowker",
+          "@id": "{{SITE_URL}}/#{{FOUNDER_ANCHOR}}",
           "sameAs": "{{GITHUB_URL}}",
           "hasCredential": [
             {
