@@ -429,6 +429,71 @@ def check_contact_details(pages: list[Path]) -> bool:
     return ok
 
 
+TEL_HREF_RE = re.compile(r'href\s*=\s*(["\'])(tel:[^"\']*)\1', re.IGNORECASE)
+
+
+def digits(value: str) -> str:
+    """Return only the digits of a string, which is the phone number inside it."""
+    return "".join(character for character in value if character.isdigit())
+
+
+def check_phone_is_one_number(pages: list[Path], docs_root: Path) -> bool:
+    """The three declared forms of the phone number are the same number, and every tel: link uses it.
+
+    site.json declares the phone three times: as it is displayed, as a tel:
+    URI, and in the form schema.org wants. Nothing made them agree. A new
+    owner who changed the displayed number and missed the other two published
+    a site whose visible number was theirs and whose every Call button dialled
+    the previous owner, with all ten checks green. The visible text check
+    cannot see it, because a tel: href is an attribute rather than text.
+    """
+    problems: list[str] = []
+    display, tel_uri = SITE["phone_display"], SITE["phone_tel_uri"]
+    schema = SITE["phone_schema"]
+    if digits(tel_uri) != digits(schema):
+        problems.append(
+            f"phone_tel_uri {tel_uri!r} and phone_schema {schema!r} are "
+            "different numbers"
+        )
+    if not digits(tel_uri).endswith(digits(display)):
+        problems.append(
+            f"phone_display {display!r} is not the number phone_tel_uri "
+            f"{tel_uri!r} dials"
+        )
+
+    # Every file a visitor can fetch, not only the pages: a tel: link in the
+    # sitemap or llms.txt would be as wrong and as invisible.
+    found = 0
+    for path in sorted(docs_root.rglob("*")):
+        if not path.is_file() or path.suffix.lower() not in {".html", ".xml", ".txt"}:
+            continue
+        try:
+            text = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            continue
+        for _quote, href in TEL_HREF_RE.findall(text):
+            found += 1
+            if href != tel_uri:
+                problems.append(
+                    f"{path.name}: a Call link dials {href!r}, not the declared "
+                    f"{tel_uri!r}"
+                )
+    if not found:
+        problems.append(
+            "no page carries a tel: link, so nothing was compared against the "
+            "declared number"
+        )
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] the phone number is one number everywhere: "
+        f"{found} Call links checked, {len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_login_tracking(pages: list[Path]) -> bool:
     """login.html carries no analytics beacon or tracking pixel; every other page carries both."""
     problems: list[str] = []
@@ -618,6 +683,22 @@ def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
     # second identity, so the apex form is allowed wherever the full host is.
     allowed_bare = allowed_hosts | {own_host.split("www.", 1)[-1]}
 
+    # A social profile lives on a host the site links to for other reasons:
+    # tools.html links seven repositories under the declared GitHub account,
+    # and resources.html links GitHub's own documentation. So the host being
+    # allowed proves nothing about whose account it is. Requiring every URL on
+    # a profile's host to sit under the declared profile is what catches a page
+    # still pointing at the previous owner's account after a rebrand, which
+    # every other check here would pass.
+    social = {
+        "LinkedIn profile": SITE["social"]["linkedin"],
+        "GitHub profile": SITE["social"]["github"],
+    }
+    social_hosts = {
+        label: url.split("://", 1)[1].split("/", 1)[0] for label, url in social.items()
+    }
+    found_social = {label: 0 for label in social}
+
     problems: list[str] = []
     found_ids = {label: 0 for label in expected_ids}
 
@@ -641,6 +722,18 @@ def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
                 problems.append(
                     f"{path.name}: links to {host!r}, which site.json does not allow"
                 )
+        for url in ABSOLUTE_URL_RE.findall(text):
+            url = url.rstrip('".,)')
+            for label, profile in social.items():
+                if not url.startswith("https://" + social_hosts[label] + "/"):
+                    continue
+                if url == profile:
+                    found_social[label] += 1
+                elif not url.startswith(profile + "/"):
+                    problems.append(
+                        f"{path.name}: links to {url!r}, which is not under the "
+                        f"declared {label} {profile!r}"
+                    )
         for host in set(BARE_HOST_RE.findall(ABSOLUTE_URL_RE.sub(" ", text))):
             if host not in allowed_bare:
                 problems.append(
@@ -661,6 +754,14 @@ def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
         if found_ids[label] != expected:
             problems.append(
                 f"the declared {label} appears {found_ids[label]} times, expected {expected}"
+            )
+    # Counted rather than merely allowed, because a profile that vanished from
+    # the footer would otherwise leave this check passing on an empty set.
+    for label, count in found_social.items():
+        if not count:
+            problems.append(
+                f"the declared {label} {social[label]!r} is linked from nowhere "
+                "in the tree"
             )
 
     ok = not problems
@@ -700,6 +801,7 @@ def main() -> int:
         check_llms_txt(docs_root),
         check_noindex_and_navigation(pages),
         check_contact_details(pages),
+        check_phone_is_one_number(pages, docs_root),
         check_login_tracking(pages),
         check_no_forbidden_claims(pages),
         check_jsonld_mirrors_title(pages),

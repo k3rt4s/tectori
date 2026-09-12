@@ -33,6 +33,13 @@ What a session needs to believe before it changes anything in this repo.
   clear. It is body copy a new owner rewrites, so the rehearsal counts it
   rather than failing on it, and tokenizing it in prose would make the copy
   unreadable to whoever edits it.
+- A check that confirms a declared value is present cannot see the same value
+  in a second place it should not be, and that is where this tree's defects
+  have been: a form endpoint hard-coded beside its declaration, a phone number
+  declared three times with nothing making the three agree, a social profile
+  whose host was allowed for unrelated reasons. When adding a check, ask what
+  a tree would look like that passes it while being wrong, and whether a new
+  owner could plausibly produce that tree.
 - The site claims no clients, client counts, testimonials, ratings, prices or
   results. Copy never implies employees beyond the founder, and never frames
   the practice as one person either. The credential is Internal Security
