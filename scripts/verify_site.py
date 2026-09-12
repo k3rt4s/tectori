@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import html as html_lib
+import json
 import re
 import sys
 from pathlib import Path
@@ -35,6 +36,41 @@ SCRIPT_BLOCK_RE = re.compile(rb"<script\b.*?</script>", re.IGNORECASE | re.DOTAL
 TAG_RE = re.compile(rb"<[^>]+>")
 BEACON_MARKER = b"cloudflareinsights.com/beacon.min.js"
 PIXEL_MARKER = b"static.scarf.sh"
+LDJSON_RE = re.compile(
+    rb'<script[^>]*?type=(["\'])application/ld\+json\1[^>]*?>(.*?)</script>',
+    re.IGNORECASE | re.DOTALL,
+)
+
+# Pages whose JSON-LD is a single top-level object; its "name" mirrors the
+# page's <title> and its "description" mirrors the page's meta description.
+JSONLD_TOP_LEVEL_MIRROR_PAGES = {"about.html", "contact.html"}
+# Pages whose JSON-LD is an "@graph" array holding a node whose "name" and
+# "description" mirror the page's <title> and meta description.
+JSONLD_GRAPH_MIRROR_NODE_TYPE = {"services.html": "CollectionPage"}
+# The six service-*.html pages: an "@graph" array holding a "Service" node.
+# Its "name" and "serviceType" deliberately name the service, not the page
+# title, so they are a documented exception and are never compared to the
+# title here. Its "description" is still required to mirror the page's meta
+# description.
+JSONLD_GRAPH_SERVICE_DESCRIPTION_PAGES = {
+    "service-agentic-ai.html",
+    "service-cloud-architecture.html",
+    "service-compliance-risk.html",
+    "service-cybersecurity.html",
+    "service-fractional-leadership.html",
+    "service-it-operations.html",
+}
+# index.html and faq.html carry JSON-LD too, but neither keeps a verbatim
+# mirror of the title/description today: index.html's Organization node has
+# "name": "Tectori", not the full <title>, and its "description" reads
+# differently from the page's meta description by design; faq.html's
+# FAQPage node has no top-level "name" or "description" at all (only nested
+# Question/Answer text). Inventing a comparison for either would be enforcing
+# a rule the tree does not actually follow, so both are intentionally left
+# unchecked here. They are named rather than skipped silently, because a page
+# carrying JSON-LD that appears in none of these tables is a gap in the check
+# rather than a page with nothing to verify, and is reported as a problem.
+JSONLD_NO_MIRROR_PAGES = {"index.html", "faq.html"}
 
 
 def html_pages(root: Path) -> list[Path]:
@@ -380,6 +416,98 @@ def check_no_forbidden_claims(pages: list[Path]) -> bool:
     return ok
 
 
+def page_title(raw: bytes) -> str | None:
+    """Return a page's <title> text as a single collapsed, entity-decoded line, or None."""
+    match = TITLE_RE.search(raw)
+    if match is None:
+        return None
+    return " ".join(html_lib.unescape(match.group(1).decode("utf-8")).split())
+
+
+def find_graph_node(data, node_type: str):
+    """Return the first node in data["@graph"] whose "@type" equals node_type, or None."""
+    if not isinstance(data, dict):
+        return None
+    graph = data.get("@graph")
+    if not isinstance(graph, list):
+        return None
+    for node in graph:
+        if isinstance(node, dict) and node.get("@type") == node_type:
+            return node
+    return None
+
+
+def check_jsonld_mirrors_title(pages: list[Path]) -> bool:
+    """Where the tree already mirrors it, JSON-LD name/description match the title/meta description.
+
+    See the JSONLD_* tables above check_links for exactly which pages and
+    nodes this covers, and why index.html and faq.html are intentionally
+    excluded rather than checked against an invented rule.
+    """
+    problems: list[str] = []
+    checked = 0
+    for page in pages:
+        name = page.name
+        in_top = name in JSONLD_TOP_LEVEL_MIRROR_PAGES
+        graph_node_type = JSONLD_GRAPH_MIRROR_NODE_TYPE.get(name)
+        in_service = name in JSONLD_GRAPH_SERVICE_DESCRIPTION_PAGES
+        if not (in_top or graph_node_type or in_service):
+            if name in JSONLD_NO_MIRROR_PAGES:
+                continue
+            if LDJSON_RE.search(page.read_bytes()) is not None:
+                problems.append(
+                    f"{name}: carries JSON-LD but no rule covers it. Add it to one of the"
+                    " JSONLD_ tables, or to JSONLD_NO_MIRROR_PAGES with the reason."
+                )
+            continue
+
+        raw = page.read_bytes()
+        match = LDJSON_RE.search(raw)
+        if match is None:
+            problems.append(f"{name}: no application/ld+json script block found")
+            continue
+        try:
+            data = json.loads(match.group(2).decode("utf-8"))
+        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+            problems.append(f"{name}: JSON-LD did not parse ({exc})")
+            continue
+
+        title = page_title(raw)
+        description = check_llms_drift.meta_description(page)
+
+        if in_top:
+            node = data
+        elif graph_node_type:
+            node = find_graph_node(data, graph_node_type)
+            if node is None:
+                problems.append(f"{name}: no {graph_node_type!r} node found in @graph")
+                continue
+        else:
+            node = find_graph_node(data, "Service")
+            if node is None:
+                problems.append(f"{name}: no 'Service' node found in @graph")
+                continue
+
+        checked += 1
+        if in_top or graph_node_type:
+            if title is not None and node.get("name") != title:
+                problems.append(
+                    f"{name}: JSON-LD name {node.get('name')!r} does not match <title> {title!r}"
+                )
+        if description is not None and node.get("description") != description:
+            problems.append(
+                f"{name}: JSON-LD description {node.get('description')!r} does not match "
+                f"meta description {description!r}"
+            )
+
+    ok = not problems
+    print(f"[{'PASS' if ok else 'FAIL'}] JSON-LD name/description mirror the title/meta description "
+          f"where the tree keeps them in sync: {checked} pages checked, {len(problems)} problems")
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -408,6 +536,7 @@ def main() -> int:
         check_contact_details(pages),
         check_login_tracking(pages),
         check_no_forbidden_claims(pages),
+        check_jsonld_mirrors_title(pages),
     ]
 
     passed = sum(results)
