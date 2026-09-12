@@ -4,6 +4,15 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `CLAUDE.md` and `.gitignore` still named absolute paths on this machine, a
+  day after the board recorded that nothing did. `CLAUDE.md` was one line
+  pointing at a rule file no one else has, so it is now instructions a session
+  in this repository can actually follow: read the README, never hand edit
+  `docs/`, run the checks either side of a change, nothing installs. The
+  `.gitignore` comment names no directory, because the build writes wherever
+  `--out` points. The board bullet was too broad and now says what is true:
+  nothing a new owner would read or run names this machine, while the board
+  and the two history files still cite report paths as records.
 - `serve_docs.py` answers a missing path with `docs/404.html` and a 404
   status, which the live host does and the preview did not. The one page a
   new owner most wants to preview was the one page the preview could not
