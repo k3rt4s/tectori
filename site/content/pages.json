@@ -4,37 +4,22 @@
     "output": "404.html",
     "comment": "Tectori's 404 page tells a visitor the address is wrong and routes them to services, free tools, or contact.",
     "title": "Page not found | Tectori",
-    "description": {
-      "value": "That Tectori address does not exist. Start again from services, the free tools, or a direct conversation.",
-      "shape": "wrap_attached"
-    },
-    "robots": {
-      "value": "noindex, follow",
-      "shape": "inline"
-    },
+    "description": "That Tectori address does not exist. Start again from services, the free tools, or a direct conversation.",
+    "robots": "noindex, follow",
     "og_title": "Page not found | Tectori",
-    "og_description": {
-      "value": "That address does not exist on the Tectori site.",
-      "shape": "inline"
-    },
+    "og_description": "That address does not exist on the Tectori site.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/404.html",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "wrap_attached"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": null,
     "favicon_href": "/assets/tectori-favicon.png",
     "stylesheet_href": "/styles.css?v=20260906",
-    "blank_line_before_main": false,
-    "blank_line_before_footer": false,
-    "header_variant": "h-404-thankyou",
-    "footer_variant": "f-404-thankyou",
-    "utility_bar_variant": "u-multiline-root-absolute",
+    "root_absolute": true,
+    "current_nav": null,
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": null,
     "body_fragment": "pages/404.body.frag"
   },
@@ -43,37 +28,22 @@
     "output": "about.html",
     "comment": "Tectori's About page presents the founder's verified experience, education, credentials, and teaching history.",
     "title": "About Tectori | Enterprise IT and security, Nashville",
-    "description": {
-      "value": "Meet Jonathan Bowker, Tectori's Nashville based founder and principal consultant, with 20 years across enterprise IT, security, risk, and regulated technology.",
-      "shape": "wrap_ownline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Meet Jonathan Bowker, Tectori's Nashville based founder and principal consultant, with 20 years across enterprise IT, security, risk, and regulated technology.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "About Tectori",
-    "og_description": {
-      "value": "Founder-led IT, security, risk, and AI governance experience built for regulated organizations.",
-      "shape": "inline"
-    },
+    "og_description": "Founder-led IT, security, risk, and AI governance experience built for regulated organizations.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/about",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/about",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-about",
-    "footer_variant": "f-about",
-    "utility_bar_variant": "u-compact",
+    "root_absolute": false,
+    "current_nav": "about",
+    "contact_label": "Contact",
+    "footer_order": "about_early",
+    "footer_omit": "about",
     "jsonld_fragment": "pages/about.jsonld.frag",
     "body_fragment": "pages/about.body.frag"
   },
@@ -82,37 +52,22 @@
     "output": "accessibility.html",
     "comment": "Tectori's accessibility statement sets a WCAG 2.1 AA target and a direct reporting path.",
     "title": "Accessibility | Tectori",
-    "description": {
-      "value": "Tectori's accessibility target is WCAG 2.1 AA, with semantic HTML, keyboard navigation, and a direct contact path to report issues.",
-      "shape": "wrap_attached"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Tectori's accessibility target is WCAG 2.1 AA, with semantic HTML, keyboard navigation, and a direct contact path to report issues.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Tectori accessibility statement",
-    "og_description": {
-      "value": "The accessibility target and current state of the Tectori website.",
-      "shape": "wrap_attached"
-    },
+    "og_description": "The accessibility target and current state of the Tectori website.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/accessibility",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "wrap_attached"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/accessibility",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": false,
-    "blank_line_before_footer": false,
-    "header_variant": "h-accessibility-privacy-terms",
-    "footer_variant": "f-shared-full-nav",
-    "utility_bar_variant": "u-multiline-relative",
+    "root_absolute": false,
+    "current_nav": null,
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": null,
     "body_fragment": "pages/accessibility.body.frag"
   },
@@ -121,37 +76,22 @@
     "output": "ai-governance.html",
     "comment": "Tectori's AI governance page explains accountable automation for regulated organizations.",
     "title": "AI governance for regulated organizations | Tectori",
-    "description": {
-      "value": "Plan AI governance with use-case approval, data boundaries, monitoring, documentation, rollback paths, and clear human accountability.",
-      "shape": "wrap_ownline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Plan AI governance with use-case approval, data boundaries, monitoring, documentation, rollback paths, and clear human accountability.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "AI governance for regulated organizations | Tectori",
-    "og_description": {
-      "value": "A practical operating model for governed AI and agentic AI orchestration.",
-      "shape": "inline"
-    },
+    "og_description": "A practical operating model for governed AI and agentic AI orchestration.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/ai-governance",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/ai-governance",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-ai-governance",
-    "footer_variant": "f-ai-governance",
-    "utility_bar_variant": "u-compact",
+    "root_absolute": false,
+    "current_nav": "ai_governance",
+    "contact_label": "Contact",
+    "footer_order": "about_early",
+    "footer_omit": "ai_governance",
     "jsonld_fragment": null,
     "body_fragment": "pages/ai-governance.body.frag"
   },
@@ -160,37 +100,22 @@
     "output": "audit-ready-it.html",
     "comment": "Tectori's Audit-ready IT page connects governance, controls, documentation, and evidence.",
     "title": "Audit-ready IT | Tectori",
-    "description": {
-      "value": "Build audit readiness into cloud governance, security controls, compliance mapping, documentation, and operating evidence.",
-      "shape": "wrap_ownline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Build audit readiness into cloud governance, security controls, compliance mapping, documentation, and operating evidence.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Audit-ready IT | Tectori",
-    "og_description": {
-      "value": "Audit readiness is an architecture property, not a scramble before the exam.",
-      "shape": "inline"
-    },
+    "og_description": "Audit readiness is an architecture property, not a scramble before the exam.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/audit-ready-it",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/audit-ready-it",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-audit-ready-it",
-    "footer_variant": "f-audit-ready-it",
-    "utility_bar_variant": "u-compact",
+    "root_absolute": false,
+    "current_nav": "audit_ready_it",
+    "contact_label": "Contact",
+    "footer_order": "about_early",
+    "footer_omit": "audit_ready_it",
     "jsonld_fragment": null,
     "body_fragment": "pages/audit-ready-it.body.frag"
   },
@@ -199,37 +124,22 @@
     "output": "case-study.html",
     "comment": "Tectori's case study presents a real Azure reference implementation without client claims.",
     "title": "Azure operations reference implementation | Tectori",
-    "description": {
-      "value": "A real Azure Container Apps reference implementation showing versioned delivery, operating safeguards, documentation, and recovery-minded engineering.",
-      "shape": "wrap_ownline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "A real Azure Container Apps reference implementation showing versioned delivery, operating safeguards, documentation, and recovery-minded engineering.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Azure operations reference implementation | Tectori",
-    "og_description": {
-      "value": "A technical case study based on the real deployment pattern behind MailSweep.",
-      "shape": "inline"
-    },
+    "og_description": "A technical case study based on the real deployment pattern behind MailSweep.",
     "og_type": "article",
     "og_url": "https://www.tectori.com/case-study",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/case-study",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-case-study",
-    "footer_variant": "f-case-study",
-    "utility_bar_variant": "u-compact",
+    "root_absolute": false,
+    "current_nav": "case_study",
+    "contact_label": "Contact",
+    "footer_order": "about_early",
+    "footer_omit": "case_study",
     "jsonld_fragment": null,
     "body_fragment": "pages/case-study.body.frag"
   },
@@ -238,37 +148,22 @@
     "output": "contact.html",
     "comment": "Tectori's contact page gives regulated organizations a direct form and phone path to the practice.",
     "title": "Contact Tectori | IT Compliance and Security, Nashville",
-    "description": {
-      "value": "Contact Tectori, Nashville based and serving organizations nationwide, about cloud governance, cybersecurity, compliance, IT operations, or AI governance.",
-      "shape": "wrap_attached"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "wrap_attached"
-    },
+    "description": "Contact Tectori, Nashville based and serving organizations nationwide, about cloud governance, cybersecurity, compliance, IT operations, or AI governance.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Contact Tectori",
-    "og_description": {
-      "value": "Discuss an audit-ready IT, security, compliance, or governed AI requirement with Tectori.",
-      "shape": "wrap_attached"
-    },
+    "og_description": "Discuss an audit-ready IT, security, compliance, or governed AI requirement with Tectori.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/contact",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "wrap_attached"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "wrap_attached"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/contact",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": false,
-    "blank_line_before_footer": false,
-    "header_variant": "h-contact",
-    "footer_variant": "f-shared-full-nav",
-    "utility_bar_variant": "u-multiline-relative",
+    "root_absolute": false,
+    "current_nav": "contact",
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": "pages/contact.jsonld.frag",
     "body_fragment": "pages/contact.body.frag"
   },
@@ -277,37 +172,22 @@
     "output": "faq.html",
     "comment": "Tectori's FAQ answers common questions about the practice, services, and product brands.",
     "title": "IT Compliance and AI Governance FAQ | Tectori",
-    "description": {
-      "value": "Answers about Tectori's audit-ready IT, cybersecurity, compliance, fractional leadership, AI governance, and technology solutions.",
-      "shape": "wrap_attached"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "wrap_attached"
-    },
+    "description": "Answers about Tectori's audit-ready IT, cybersecurity, compliance, fractional leadership, AI governance, and technology solutions.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Tectori FAQ",
-    "og_description": {
-      "value": "Clear answers about Tectori's founder-led IT, security, compliance, and AI governance work.",
-      "shape": "wrap_attached"
-    },
+    "og_description": "Clear answers about Tectori's founder-led IT, security, compliance, and AI governance work.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/faq",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "wrap_attached"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "wrap_attached"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/faq",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": false,
-    "blank_line_before_footer": false,
-    "header_variant": "h-faq",
-    "footer_variant": "f-shared-full-nav",
-    "utility_bar_variant": "u-multiline-relative",
+    "root_absolute": false,
+    "current_nav": "faq",
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": "pages/faq.jsonld.frag",
     "body_fragment": "pages/faq.body.frag"
   },
@@ -316,37 +196,22 @@
     "output": "how-we-work.html",
     "comment": "Tectori's How We Work page states the founder-led practice's real engagement and operating model.",
     "title": "How we work | Tectori",
-    "description": {
-      "value": "Tectori's founder-led engagement model, documentation habits, remote delivery approach, communication expectations, and current hiring status.",
-      "shape": "wrap_ownline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Tectori's founder-led engagement model, documentation habits, remote delivery approach, communication expectations, and current hiring status.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "How we work | Tectori",
-    "og_description": {
-      "value": "Direct, documented, founder-led work for regulated and growing organizations.",
-      "shape": "inline"
-    },
+    "og_description": "Direct, documented, founder-led work for regulated and growing organizations.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/how-we-work",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/how-we-work",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-how-we-work",
-    "footer_variant": "f-how-we-work",
-    "utility_bar_variant": "u-compact",
+    "root_absolute": false,
+    "current_nav": "how_we_work",
+    "contact_label": "Contact",
+    "footer_order": "about_early",
+    "footer_omit": "how_we_work",
     "jsonld_fragment": null,
     "body_fragment": "pages/how-we-work.body.frag"
   },
@@ -355,37 +220,22 @@
     "output": "index.html",
     "comment": "Tectori's homepage presents its audit-ready consulting practice and founder-built product brands.",
     "title": "Tectori | Audit-ready IT, security, and AI governance",
-    "description": {
-      "value": "Tectori connects cloud, security, compliance, evidence, and governed AI for regulated and growing organizations that need technology to hold up under review.",
-      "shape": "inline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Tectori connects cloud, security, compliance, evidence, and governed AI for regulated and growing organizations that need technology to hold up under review.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Tectori | Audit-ready IT, security, and AI governance",
-    "og_description": {
-      "value": "Audit-ready IT that scales with your ambition.",
-      "shape": "inline"
-    },
+    "og_description": "Audit-ready IT that scales with your ambition.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-index",
-    "footer_variant": "f-index",
-    "utility_bar_variant": "u-index",
+    "root_absolute": false,
+    "current_nav": "home",
+    "contact_label": "Talk with Tectori",
+    "footer_order": "standard",
+    "footer_omit": "home",
     "jsonld_fragment": "pages/index.jsonld.frag",
     "body_fragment": "pages/index.body.frag"
   },
@@ -394,37 +244,22 @@
     "output": "privacy.html",
     "comment": "Tectori's privacy policy states exactly what the website collects and what it does not.",
     "title": "Privacy policy | Tectori",
-    "description": {
-      "value": "How the Tectori website handles visitor data, page view counting, organization-identification pixels, contact submissions, privacy requests, and cookie-free pages.",
-      "shape": "wrap_attached"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "How the Tectori website handles visitor data, page view counting, organization-identification pixels, contact submissions, privacy requests, and cookie-free pages.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Tectori privacy policy",
-    "og_description": {
-      "value": "What the Tectori website collects and what it does not.",
-      "shape": "wrap_attached"
-    },
+    "og_description": "What the Tectori website collects and what it does not.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/privacy",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "wrap_attached"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/privacy",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": false,
-    "blank_line_before_footer": false,
-    "header_variant": "h-accessibility-privacy-terms",
-    "footer_variant": "f-shared-full-nav",
-    "utility_bar_variant": "u-multiline-relative",
+    "root_absolute": false,
+    "current_nav": null,
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": null,
     "body_fragment": "pages/privacy.body.frag"
   },
@@ -433,37 +268,22 @@
     "output": "resources.html",
     "comment": "Tectori's Resources page indexes the site's reference material by situation and defines the terms used across it.",
     "title": "Resources | Tectori",
-    "description": {
-      "value": "Reading paths for an exam, an AI rollout, or a fractional leadership decision, plus the free tools and a plain-language glossary of the terms used across the site.",
-      "shape": "wrap_ownline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Reading paths for an exam, an AI rollout, or a fractional leadership decision, plus the free tools and a plain-language glossary of the terms used across the site.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Resources | Tectori",
-    "og_description": {
-      "value": "Where to start, depending on the problem in front of you.",
-      "shape": "inline"
-    },
+    "og_description": "Where to start, depending on the problem in front of you.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/resources",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/resources",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-shared-no-active",
-    "footer_variant": "f-shared-no-self",
-    "utility_bar_variant": "u-compact",
+    "root_absolute": false,
+    "current_nav": null,
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": null,
     "body_fragment": "pages/resources.body.frag"
   },
@@ -472,37 +292,22 @@
     "output": "service-agentic-ai.html",
     "comment": "Tectori's agentic AI orchestration service page, the detail behind the services.html summary.",
     "title": "Agentic AI orchestration | Tectori",
-    "description": {
-      "value": "Governed AI automation with approval gates, monitoring, decision records, and human accountability, aligned with ISO/IEC 42001 and the NIST AI Risk Management Framework.",
-      "shape": "wrap_ownline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Governed AI automation with approval gates, monitoring, decision records, and human accountability, aligned with ISO/IEC 42001 and the NIST AI Risk Management Framework.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Agentic AI orchestration | Tectori",
-    "og_description": {
-      "value": "AI automation held to the same accountability as any material system.",
-      "shape": "inline"
-    },
+    "og_description": "AI automation held to the same accountability as any material system.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/service-agentic-ai",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/service-agentic-ai",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-shared-no-active",
-    "footer_variant": "f-shared-no-self",
-    "utility_bar_variant": "u-compact",
+    "root_absolute": false,
+    "current_nav": null,
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": "pages/service-agentic-ai.jsonld.frag",
     "body_fragment": "pages/service-agentic-ai.body.frag"
   },
@@ -511,37 +316,22 @@
     "output": "service-cloud-architecture.html",
     "comment": "Tectori's cloud architecture and operations service page, the detail behind the services.html summary.",
     "title": "Cloud architecture and operations | Tectori",
-    "description": {
-      "value": "Azure architecture reviews, governance baselines, deployment patterns, and operational runbooks for cloud environments that must stand up to review.",
-      "shape": "wrap_ownline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Azure architecture reviews, governance baselines, deployment patterns, and operational runbooks for cloud environments that must stand up to review.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Cloud architecture and operations | Tectori",
-    "og_description": {
-      "value": "Cloud environments designed with governance and evidence built in from day one.",
-      "shape": "inline"
-    },
+    "og_description": "Cloud environments designed with governance and evidence built in from day one.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/service-cloud-architecture",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/service-cloud-architecture",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-shared-no-active",
-    "footer_variant": "f-shared-no-self",
-    "utility_bar_variant": "u-compact",
+    "root_absolute": false,
+    "current_nav": null,
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": "pages/service-cloud-architecture.jsonld.frag",
     "body_fragment": "pages/service-cloud-architecture.body.frag"
   },
@@ -550,37 +340,22 @@
     "output": "service-compliance-risk.html",
     "comment": "Tectori's compliance and risk management service page, the detail behind the services.html summary.",
     "title": "Compliance and risk management | Tectori",
-    "description": {
-      "value": "Requirement to policy to control mapping, gap analysis, risk registers, third party risk, and business continuity planning for FFIEC and HIPAA regulated organizations.",
-      "shape": "wrap_ownline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Requirement to policy to control mapping, gap analysis, risk registers, third party risk, and business continuity planning for FFIEC and HIPAA regulated organizations.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Compliance and risk management | Tectori",
-    "og_description": {
-      "value": "The next exam should be a review of records that already exist.",
-      "shape": "inline"
-    },
+    "og_description": "The next exam should be a review of records that already exist.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/service-compliance-risk",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/service-compliance-risk",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-shared-no-active",
-    "footer_variant": "f-shared-no-self",
-    "utility_bar_variant": "u-compact",
+    "root_absolute": false,
+    "current_nav": null,
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": "pages/service-compliance-risk.jsonld.frag",
     "body_fragment": "pages/service-compliance-risk.body.frag"
   },
@@ -589,37 +364,22 @@
     "output": "service-cybersecurity.html",
     "comment": "Tectori's cybersecurity service page, the detail behind the services.html summary.",
     "title": "Cybersecurity | Tectori",
-    "description": {
-      "value": "Security control design and ownership, hardening baselines, and identity and access management across Active Directory, Azure, and Microsoft 365.",
-      "shape": "wrap_ownline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Security control design and ownership, hardening baselines, and identity and access management across Active Directory, Azure, and Microsoft 365.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Cybersecurity | Tectori",
-    "og_description": {
-      "value": "Security controls designed, owned, and operating across the Microsoft environment.",
-      "shape": "inline"
-    },
+    "og_description": "Security controls designed, owned, and operating across the Microsoft environment.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/service-cybersecurity",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/service-cybersecurity",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-shared-no-active",
-    "footer_variant": "f-shared-no-self",
-    "utility_bar_variant": "u-compact",
+    "root_absolute": false,
+    "current_nav": null,
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": "pages/service-cybersecurity.jsonld.frag",
     "body_fragment": "pages/service-cybersecurity.body.frag"
   },
@@ -628,37 +388,22 @@
     "output": "service-fractional-leadership.html",
     "comment": "Tectori's fractional CIO and CISO leadership service page, the detail behind the services.html summary.",
     "title": "Fractional CIO and CISO leadership, Nashville | Tectori",
-    "description": {
-      "value": "Part time CIO and CISO leadership from Nashville covering technology strategy, security program ownership, vendor oversight, and board and examiner communication.",
-      "shape": "wrap_ownline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Part time CIO and CISO leadership from Nashville covering technology strategy, security program ownership, vendor oversight, and board and examiner communication.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Fractional CIO and CISO leadership | Tectori",
-    "og_description": {
-      "value": "Senior IT and security direction without a full time hire.",
-      "shape": "inline"
-    },
+    "og_description": "Senior IT and security direction without a full time hire.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/service-fractional-leadership",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/service-fractional-leadership",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-shared-no-active",
-    "footer_variant": "f-shared-no-self",
-    "utility_bar_variant": "u-compact",
+    "root_absolute": false,
+    "current_nav": null,
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": "pages/service-fractional-leadership.jsonld.frag",
     "body_fragment": "pages/service-fractional-leadership.body.frag"
   },
@@ -667,37 +412,22 @@
     "output": "service-it-operations.html",
     "comment": "Tectori's IT operations service page, the detail behind the services.html summary.",
     "title": "IT operations | Tectori",
-    "description": {
-      "value": "Repeatable and documented administration for Windows, Active Directory, Azure, IIS, and Microsoft 365, with dry runs, plan records, and rollback reporting.",
-      "shape": "wrap_ownline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Repeatable and documented administration for Windows, Active Directory, Azure, IIS, and Microsoft 365, with dry runs, plan records, and rollback reporting.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "IT operations | Tectori",
-    "og_description": {
-      "value": "Administration that is repeatable, documented, and reversible.",
-      "shape": "inline"
-    },
+    "og_description": "Administration that is repeatable, documented, and reversible.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/service-it-operations",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/service-it-operations",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-shared-no-active",
-    "footer_variant": "f-shared-no-self",
-    "utility_bar_variant": "u-compact",
+    "root_absolute": false,
+    "current_nav": null,
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": "pages/service-it-operations.jsonld.frag",
     "body_fragment": "pages/service-it-operations.body.frag"
   },
@@ -706,37 +436,22 @@
     "output": "services.html",
     "comment": "Tectori's services page details the six consulting service lines, their scope, and their deliverables.",
     "title": "Services | Tectori",
-    "description": {
-      "value": "Tectori's six consulting service lines, from fractional CIO and CISO leadership to cloud, cybersecurity, compliance, IT operations, and agentic AI.",
-      "shape": "wrap_attached"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Tectori's six consulting service lines, from fractional CIO and CISO leadership to cloud, cybersecurity, compliance, IT operations, and agentic AI.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Tectori services",
-    "og_description": {
-      "value": "Consulting service lines built for organizations whose technology must satisfy examiners.",
-      "shape": "wrap_attached"
-    },
+    "og_description": "Consulting service lines built for organizations whose technology must satisfy examiners.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/services",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "wrap_attached"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/services",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": false,
-    "blank_line_before_footer": false,
-    "header_variant": "h-services",
-    "footer_variant": "f-shared-full-nav",
-    "utility_bar_variant": "u-multiline-relative",
+    "root_absolute": false,
+    "current_nav": "services",
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": "pages/services.jsonld.frag",
     "body_fragment": "pages/services.body.frag"
   },
@@ -745,37 +460,22 @@
     "output": "solutions.html",
     "comment": "Tectori's solutions page documents the firm's founder-built product brands.",
     "title": "Solutions | Tectori",
-    "description": {
-      "value": "Explore Tectori's founder-built product brands for compliance, operations, file intelligence, security, and architecture.",
-      "shape": "wrap_attached"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Explore Tectori's founder-built product brands for compliance, operations, file intelligence, security, and architecture.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Tectori solutions",
-    "og_description": {
-      "value": "Purpose-built tools for accountable technology operations.",
-      "shape": "wrap_attached"
-    },
+    "og_description": "Purpose-built tools for accountable technology operations.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/solutions",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "wrap_attached"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/solutions",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": false,
-    "blank_line_before_footer": false,
-    "header_variant": "h-solutions",
-    "footer_variant": "f-solutions",
-    "utility_bar_variant": "u-multiline-relative",
+    "root_absolute": false,
+    "current_nav": "solutions",
+    "contact_label": "Talk with Tectori",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": null,
     "body_fragment": "pages/solutions.body.frag"
   },
@@ -784,37 +484,22 @@
     "output": "terms.html",
     "comment": "Tectori's terms of use govern the informational website under Tennessee law.",
     "title": "Terms of use | Tectori",
-    "description": {
-      "value": "The terms that govern use of the Tectori website, including informational content without warranty and Tennessee governing law.",
-      "shape": "wrap_attached"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "The terms that govern use of the Tectori website, including informational content without warranty and Tennessee governing law.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Tectori terms of use",
-    "og_description": {
-      "value": "The terms that govern use of the Tectori website.",
-      "shape": "wrap_attached"
-    },
+    "og_description": "The terms that govern use of the Tectori website.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/terms",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "wrap_attached"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/terms",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": false,
-    "blank_line_before_footer": false,
-    "header_variant": "h-accessibility-privacy-terms",
-    "footer_variant": "f-shared-full-nav",
-    "utility_bar_variant": "u-multiline-relative",
+    "root_absolute": false,
+    "current_nav": null,
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": null,
     "body_fragment": "pages/terms.body.frag"
   },
@@ -823,37 +508,22 @@
     "output": "thank-you.html",
     "comment": "Tectori's form confirmation page tells a visitor the message arrived and offers the faster paths.",
     "title": "Message sent | Tectori",
-    "description": {
-      "value": "Your message reached Tectori. Call for anything active or urgent, or keep reading about how Tectori works.",
-      "shape": "wrap_attached"
-    },
-    "robots": {
-      "value": "noindex, follow",
-      "shape": "inline"
-    },
+    "description": "Your message reached Tectori. Call for anything active or urgent, or keep reading about how Tectori works.",
+    "robots": "noindex, follow",
     "og_title": "Message sent | Tectori",
-    "og_description": {
-      "value": "Your message reached Tectori.",
-      "shape": "inline"
-    },
+    "og_description": "Your message reached Tectori.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/thank-you",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "wrap_attached"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": null,
     "favicon_href": "/assets/tectori-favicon.png",
     "stylesheet_href": "/styles.css?v=20260906",
-    "blank_line_before_main": false,
-    "blank_line_before_footer": false,
-    "header_variant": "h-404-thankyou",
-    "footer_variant": "f-404-thankyou",
-    "utility_bar_variant": "u-multiline-root-absolute",
+    "root_absolute": true,
+    "current_nav": null,
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": null,
     "body_fragment": "pages/thank-you.body.frag"
   },
@@ -862,37 +532,22 @@
     "output": "tools.html",
     "comment": "Tectori's free tools page lists the open source tools the practice publishes and links each one to its GitHub repository.",
     "title": "Free tools | Tectori",
-    "description": {
-      "value": "Free, open source tools from Tectori for IT operations, security programs, incident response, and evidence review. Licensed for reuse and hosted on GitHub.",
-      "shape": "wrap_attached"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Free, open source tools from Tectori for IT operations, security programs, incident response, and evidence review. Licensed for reuse and hosted on GitHub.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Free tools from Tectori",
-    "og_description": {
-      "value": "Open source tools for IT operations, security programs, and incident response.",
-      "shape": "wrap_attached"
-    },
+    "og_description": "Open source tools for IT operations, security programs, and incident response.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/tools",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "wrap_attached"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/tools",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": false,
-    "blank_line_before_footer": false,
-    "header_variant": "h-tools",
-    "footer_variant": "f-shared-full-nav",
-    "utility_bar_variant": "u-multiline-relative",
+    "root_absolute": false,
+    "current_nav": "tools",
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": null,
     "body_fragment": "pages/tools.body.frag"
   },
@@ -901,37 +556,22 @@
     "output": "trust.html",
     "comment": "Tectori's Trust page states who you are engaging, how client data is handled, how the practice itself is secured, and how to report a problem.",
     "title": "Trust | Tectori",
-    "description": {
-      "value": "Who you are engaging, how client data is handled and returned, how the practice itself is secured, the third parties this site uses, and how to report a security problem.",
-      "shape": "wrap_ownline"
-    },
-    "robots": {
-      "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "shape": "inline"
-    },
+    "description": "Who you are engaging, how client data is handled and returned, how the practice itself is secured, the third parties this site uses, and how to report a security problem.",
+    "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Trust | Tectori",
-    "og_description": {
-      "value": "How Tectori operates, stated plainly enough to be checked.",
-      "shape": "inline"
-    },
+    "og_description": "How Tectori operates, stated plainly enough to be checked.",
     "og_type": "website",
     "og_url": "https://www.tectori.com/trust",
-    "og_image": {
-      "value": "https://www.tectori.com/assets/tectori-social.png",
-      "shape": "inline"
-    },
-    "og_image_alt": {
-      "value": "Tectori, Audit-ready IT that scales with your ambition",
-      "shape": "inline"
-    },
+    "og_image": "https://www.tectori.com/assets/tectori-social.png",
+    "og_image_alt": "Tectori, Audit-ready IT that scales with your ambition",
     "canonical": "https://www.tectori.com/trust",
     "favicon_href": "assets/tectori-favicon.png",
     "stylesheet_href": "styles.css?v=20260906",
-    "blank_line_before_main": true,
-    "blank_line_before_footer": true,
-    "header_variant": "h-shared-no-active",
-    "footer_variant": "f-shared-no-self",
-    "utility_bar_variant": "u-compact",
+    "root_absolute": false,
+    "current_nav": null,
+    "contact_label": "Contact",
+    "footer_order": "standard",
+    "footer_omit": null,
     "jsonld_fragment": null,
     "body_fragment": "pages/trust.body.frag"
   }
