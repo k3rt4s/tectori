@@ -16,34 +16,76 @@ SITE_DIR = os.path.join(REPO_ROOT, "site")
 DOCS_DIR = os.path.join(REPO_ROOT, "docs")
 DEFAULT_OUT = r"C:\Code_data\tectori\reproducible\build_out"
 
-SHAPE_TEMPLATES = {
-    "meta_description": {
-        "inline": '    <meta name="description" content="{v}">' + CRLF,
-        "wrap_attached": '    <meta' + CRLF + '      name="description"' + CRLF + '      content="{v}">' + CRLF,
-        "wrap_ownline": '    <meta' + CRLF + '      name="description"' + CRLF + '      content="{v}"' + CRLF + '    >' + CRLF,
-    },
-    "robots": {
-        "inline": '    <meta name="robots" content="{v}">' + CRLF,
-        "wrap_attached": '    <meta' + CRLF + '      name="robots"' + CRLF + '      content="{v}">' + CRLF,
-    },
-    "og_description": {
-        "inline": '    <meta property="og:description" content="{v}">' + CRLF,
-        "wrap_attached": '    <meta' + CRLF + '      property="og:description"' + CRLF + '      content="{v}">' + CRLF,
-    },
-    "og_image": {
-        "inline": '    <meta property="og:image" content="{v}">' + CRLF,
-        "wrap_attached": '    <meta' + CRLF + '      property="og:image"' + CRLF + '      content="{v}">' + CRLF,
-    },
-    "og_image_alt": {
-        "inline": '    <meta property="og:image:alt" content="{v}">' + CRLF,
-        "wrap_attached": '    <meta' + CRLF + '      property="og:image:alt"' + CRLF + '      content="{v}">' + CRLF,
-    },
+# Desktop nav order, shared by every page. The trailing "Contact" link is
+# handled separately below because its label and href-class differ from the
+# other items.
+DESKTOP_NAV_ITEMS = [
+    ("services", "/services", "Services"),
+    ("solutions", "/solutions", "Solutions"),
+    ("tools", "/tools", "Free tools"),
+    ("audit_ready_it", "/audit-ready-it", "Audit-ready IT"),
+    ("ai_governance", "/ai-governance", "AI governance"),
+    ("case_study", "/case-study", "Case study"),
+    ("about", "/about", "About"),
+    ("how_we_work", "/how-we-work", "How we work"),
+]
+
+# Mobile nav order, shared by every page. "faq" is only reachable from the
+# mobile menu. "login" and the trailing "contact" are handled separately
+# because the login href depends on root_absolute.
+MOBILE_NAV_ITEMS = [
+    ("home", "/", "Home"),
+    ("services", "/services", "Services"),
+    ("solutions", "/solutions", "Solutions"),
+    ("tools", "/tools", "Free tools"),
+    ("audit_ready_it", "/audit-ready-it", "Audit-ready IT"),
+    ("ai_governance", "/ai-governance", "AI governance"),
+    ("case_study", "/case-study", "Case study"),
+    ("about", "/about", "About"),
+    ("how_we_work", "/how-we-work", "How we work"),
+    ("faq", "/faq", "FAQ"),
+]
+
+# Footer link label/href table, keyed the same way as current_nav/footer_omit.
+FOOTER_LINKS = {
+    "home": ("/", "Home"),
+    "services": ("/services", "Services"),
+    "solutions": ("/solutions", "Solutions"),
+    "tools": ("/tools", "Free tools"),
+    "resources": ("/resources", "Resources"),
+    "audit_ready_it": ("/audit-ready-it", "Audit-ready IT"),
+    "ai_governance": ("/ai-governance", "AI governance"),
+    "case_study": ("/case-study", "Case study"),
+    "about": ("/about", "About"),
+    "how_we_work": ("/how-we-work", "How we work"),
+    "faq": ("/faq", "FAQ"),
+    "contact": ("/contact", "Contact"),
+    "login": (None, "Client login"),  # href depends on root_absolute
+    "trust": ("/trust", "Trust"),
+    "privacy": ("/privacy", "Privacy"),
+    "terms": ("/terms", "Terms"),
+    "accessibility": ("/accessibility", "Accessibility"),
 }
 
-
-def render_field(field, spec):
-    tmpl = SHAPE_TEMPLATES[field][spec["shape"]]
-    return tmpl.format(v=spec["value"]).encode("utf-8")
+# The two real footer link orderings used across the site. "standard" is the
+# order used by most pages. "about_early" is used by the about/ai-governance/
+# audit-ready-it/case-study/how-we-work cluster, where "about" sits right
+# after "resources" and "login" sits right after the topic links instead of
+# after "contact". Per page, footer_omit drops that page's own self-link.
+FOOTER_ORDER_STANDARD = [
+    "home", "services", "solutions", "tools", "resources",
+    "audit_ready_it", "ai_governance", "case_study", "about", "how_we_work",
+    "faq", "contact", "login", "trust", "privacy", "terms", "accessibility",
+]
+FOOTER_ORDER_ABOUT_EARLY = [
+    "home", "services", "solutions", "tools", "resources",
+    "about", "audit_ready_it", "ai_governance", "case_study", "how_we_work",
+    "login", "faq", "contact", "trust", "privacy", "terms", "accessibility",
+]
+FOOTER_ORDERS = {
+    "standard": FOOTER_ORDER_STANDARD,
+    "about_early": FOOTER_ORDER_ABOUT_EARLY,
+}
 
 
 def load_fragment(rel_path):
@@ -58,12 +100,90 @@ def load_pages():
     return json.loads(raw.decode("utf-8"))
 
 
+def render_head_field_inline(name_or_property, key, value):
+    return ("    <meta " + key + '="' + name_or_property + '" content="' + value + '">' + CRLF).encode("utf-8")
+
+
+def render_meta_description(value):
+    return (
+        "    <meta" + CRLF
+        + '      name="description"' + CRLF
+        + '      content="' + value + '"' + CRLF
+        + "    >" + CRLF
+    ).encode("utf-8")
+
+
+def nav_link(href, label, current_nav, key, extra_class=None):
+    attrs = ""
+    if extra_class:
+        attrs += ' class="' + extra_class + '"'
+    attrs += ' href="' + href + '"'
+    if current_nav == key:
+        attrs += ' aria-current="page"'
+    return "<a" + attrs + ">" + label + "</a>"
+
+
+def render_desktop_nav(entry, indent):
+    lines = []
+    for key, href, label in DESKTOP_NAV_ITEMS:
+        lines.append(indent + nav_link(href, label, entry["current_nav"], key))
+    contact_label = entry["contact_label"]
+    lines.append(indent + nav_link("/contact", contact_label, entry["current_nav"], "contact", extra_class="nav-contact"))
+    return CRLF.join(lines)
+
+
+def render_mobile_nav(entry, indent):
+    login_href = "/login.html" if entry["root_absolute"] else "login.html"
+    lines = []
+    for key, href, label in MOBILE_NAV_ITEMS:
+        lines.append(indent + nav_link(href, label, entry["current_nav"], key))
+    lines.append(indent + nav_link(login_href, "Client login", entry["current_nav"], "login"))
+    lines.append(indent + nav_link("/contact", "Contact", entry["current_nav"], "contact"))
+    return CRLF.join(lines)
+
+
+def render_header(entry):
+    tmpl = load_fragment("fragments/header.frag").decode("utf-8")
+    brand_current = ' aria-current="page"' if entry["current_nav"] == "home" else ""
+    logo_src = "/assets/tectori-logo.png" if entry["root_absolute"] else "assets/tectori-logo.png"
+    tmpl = tmpl.replace("{{BRAND_CURRENT}}", brand_current)
+    tmpl = tmpl.replace("{{LOGO_SRC}}", logo_src)
+    tmpl = tmpl.replace("{{DESKTOP_NAV_ITEMS}}", render_desktop_nav(entry, "        "))
+    tmpl = tmpl.replace("{{MOBILE_NAV_ITEMS}}", render_mobile_nav(entry, "          "))
+    return tmpl.encode("utf-8")
+
+
+def render_footer(entry):
+    tmpl = load_fragment("fragments/footer.frag").decode("utf-8")
+    logo_src = "/assets/tectori-logo.png" if entry["root_absolute"] else "assets/tectori-logo.png"
+    login_href = "/login.html" if entry["root_absolute"] else "login.html"
+    order = FOOTER_ORDERS[entry["footer_order"]]
+    omit = entry["footer_omit"]
+    lines = []
+    for key in order:
+        if key == omit:
+            continue
+        href, label = FOOTER_LINKS[key]
+        if key == "login":
+            href = login_href
+        lines.append("        " + "<a href=\"" + href + "\">" + label + "</a>")
+    tmpl = tmpl.replace("{{LOGO_SRC}}", logo_src)
+    tmpl = tmpl.replace("{{FOOTER_LINK_ITEMS}}", CRLF.join(lines))
+    return tmpl.encode("utf-8")
+
+
+def render_utility_bar(entry):
+    tmpl = load_fragment("fragments/utility-bar.frag").decode("utf-8")
+    login_href = "/login.html" if entry["root_absolute"] else "login.html"
+    tmpl = tmpl.replace("{{LOGIN_HREF}}", login_href)
+    return tmpl.encode("utf-8")
+
+
 def render_page(entry, cache):
-    def cached_fragment(kind, name):
-        key = (kind, name)
-        if key not in cache:
-            cache[key] = load_fragment(os.path.join("fragments", kind, name + ".frag"))
-        return cache[key]
+    def cached_fragment(name):
+        if name not in cache:
+            cache[name] = load_fragment(os.path.join("fragments", name + ".frag"))
+        return cache[name]
 
     out = []
     out.append(b"<!DOCTYPE html>" + CRLF.encode())
@@ -73,16 +193,16 @@ def render_page(entry, cache):
     out.append(('    <meta charset="utf-8">' + CRLF).encode("utf-8"))
     out.append(('    <meta name="viewport" content="width=device-width, initial-scale=1">' + CRLF).encode("utf-8"))
     out.append(("    <title>" + entry["title"] + "</title>" + CRLF).encode("utf-8"))
-    out.append(render_field("meta_description", entry["description"]))
-    out.append(render_field("robots", entry["robots"]))
-    out.append(('    <meta property="og:title" content="' + entry["og_title"] + '">' + CRLF).encode("utf-8"))
-    out.append(render_field("og_description", entry["og_description"]))
-    out.append(('    <meta property="og:type" content="' + entry["og_type"] + '">' + CRLF).encode("utf-8"))
-    out.append(('    <meta property="og:url" content="' + entry["og_url"] + '">' + CRLF).encode("utf-8"))
-    out.append(render_field("og_image", entry["og_image"]))
+    out.append(render_meta_description(entry["description"]))
+    out.append(render_head_field_inline("robots", "name", entry["robots"]))
+    out.append(render_head_field_inline("og:title", "property", entry["og_title"]))
+    out.append(render_head_field_inline("og:description", "property", entry["og_description"]))
+    out.append(render_head_field_inline("og:type", "property", entry["og_type"]))
+    out.append(render_head_field_inline("og:url", "property", entry["og_url"]))
+    out.append(render_head_field_inline("og:image", "property", entry["og_image"]))
     out.append(('    <meta property="og:image:width" content="1200">' + CRLF).encode("utf-8"))
     out.append(('    <meta property="og:image:height" content="630">' + CRLF).encode("utf-8"))
-    out.append(render_field("og_image_alt", entry["og_image_alt"]))
+    out.append(render_head_field_inline("og:image:alt", "property", entry["og_image_alt"]))
     out.append(('    <meta property="og:site_name" content="Tectori">' + CRLF).encode("utf-8"))
     out.append(('    <meta name="twitter:card" content="summary_large_image">' + CRLF).encode("utf-8"))
     if entry["canonical"]:
@@ -93,31 +213,22 @@ def render_page(entry, cache):
         out.append(load_fragment(entry["jsonld_fragment"]))
     out.append(("  </head>" + CRLF).encode("utf-8"))
     out.append(("  <body>" + CRLF).encode("utf-8"))
-    out.append(cached_fragment("chrome-single", "skip-link"))
-    out.append(cached_fragment("utility-bar", entry["utility_bar_variant"]))
-    out.append(cached_fragment("header", entry["header_variant"]))
-    if entry["blank_line_before_main"]:
-        out.append(CRLF.encode())
+    out.append(cached_fragment("skip-link"))
+    out.append(render_utility_bar(entry))
+    out.append(render_header(entry))
+    out.append(CRLF.encode())
     out.append(('    <main id="main-content">' + CRLF).encode("utf-8"))
     out.append(load_fragment(entry["body_fragment"]))
     out.append(("    </main>" + CRLF).encode("utf-8"))
-    if entry["blank_line_before_footer"]:
-        out.append(CRLF.encode())
-    out.append(cached_fragment("footer", entry["footer_variant"]))
-    out.append(cached_fragment("chrome-single", "tail"))
+    out.append(CRLF.encode())
+    out.append(render_footer(entry))
+    out.append(cached_fragment("tail"))
     return b"".join(out)
-
-
-def load_fragment_single(name):
-    return load_fragment(os.path.join("fragments", name + ".frag"))
 
 
 def build(out_dir):
     entries = load_pages()
     cache = {}
-    # chrome-single fragments (skip-link, tail) live directly under fragments/, not a subdirectory
-    cache[("chrome-single", "skip-link")] = load_fragment_single("skip-link")
-    cache[("chrome-single", "tail")] = load_fragment_single("tail")
     os.makedirs(out_dir, exist_ok=True)
     written = []
     for entry in entries:
