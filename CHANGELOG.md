@@ -4,6 +4,25 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Three checks stopped passing a tree that is wrong, found by asking each
+  check in `verify_site.py` what such a tree would look like. The noindex
+  check compared links against a hand written list of spellings that held
+  `/404.html` but not `/thank-you.html`, so a link to the thank-you page in
+  the spelling a footer is most likely to use was invisible; it now resolves
+  each link the way the link checker does. The forbidden markup check held
+  `"@type": "Review"` as a literal string, so the same JSON written compact
+  passed; it is a pattern now. The JSON-LD mirror check read the first node of
+  its type in a graph, so a stale duplicate left behind by an edit was never
+  compared; it reads every one and says so when there is more than one. Each
+  was proved by mutating a copy of `docs/`, running the previous version of
+  the file against it to confirm it passed, and the new version to confirm it
+  fails.
+- The sitemap check now names two pages that declare the same canonical. It
+  already failed on that tree through the arm that reports a sitemap entry
+  with no indexed page behind it, which is the symptom rather than the cause,
+  and the message sent a reader looking at the sitemap instead of at the two
+  pages. Not a hole, a diagnosis.
+
 - The reachability check now walks out from `index.html` instead of
   collecting incoming links. The earlier form asserted each indexed page
   appeared somewhere as a link target, which two new pages that link only to

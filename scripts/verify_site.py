@@ -31,7 +31,15 @@ CONTACT_STRINGS = {
     "site host": SITE["site_url"].split("://", 1)[1].rstrip("/"),
     "mailing address": SITE["postal_address"],
 }
-FORBIDDEN_MARKUP = ("AggregateRating", '"@type": "Review"', '"offers"')
+# Matched as patterns rather than as one spelling. `"@type":"Review"` with no
+# space after the colon is valid JSON, is what a compact formatter emits, and as
+# a literal string it is simply a different string from the one this tuple held
+# until 2026-09-12. The label beside each pattern is what a failure names.
+FORBIDDEN_MARKUP = (
+    ("AggregateRating", re.compile(rb"AggregateRating")),
+    ('"@type": "Review"', re.compile(rb'"@type"\s*:\s*"Review"')),
+    ('"offers"', re.compile(rb'"offers"')),
+)
 FORBIDDEN_TEXT = ("Qualified Security Assessor",)
 
 TITLE_RE = re.compile(rb"<title>(.*?)</title>", re.IGNORECASE | re.DOTALL)
@@ -287,7 +295,7 @@ def check_head_tags(pages: list[Path]) -> bool:
     return ok
 
 
-def check_noindex_and_navigation(pages: list[Path]) -> bool:
+def check_noindex_and_navigation(pages: list[Path], docs_root: Path) -> bool:
     """404.html and thank-you.html are the only noindex pages, and no page links to them."""
     problems: list[str] = []
     noindex_found = set()
@@ -304,13 +312,24 @@ def check_noindex_and_navigation(pages: list[Path]) -> bool:
         if missing:
             problems.append(f"missing noindex on: {sorted(missing)}")
 
-    link_targets = {"404.html", "thank-you.html", "/404", "/404.html", "/thank-you"}
+    # Resolved rather than compared against a list of spellings. The list held
+    # here until 2026-09-12 carried `/404.html` but not `/thank-you.html`, so the
+    # one spelling a footer link is most likely to use was the one it could not
+    # see, and a link straight to the thank-you page would have shipped.
+    forbidden = {(docs_root / name).resolve() for name in NOINDEX_ALLOWED}
     for page in pages:
         text = page.read_text(encoding="utf-8")
         for raw in link_values(text):
-            value = html_lib.unescape(raw).strip().split("#", 1)[0].split("?", 1)[0]
-            if value in link_targets:
-                problems.append(f"{page.name}: links to {value!r}")
+            value = html_lib.unescape(raw).strip()
+            try:
+                kind, target = resolve_internal(value, page, docs_root)
+            except Exception:
+                continue
+            if kind != "internal" or target is None:
+                continue
+            resolved = target.resolve()
+            if resolved in forbidden and resolved != page.resolve():
+                problems.append(f"{page.name}: links to {target.name}")
 
     ok = not problems
     print(f"[{'PASS' if ok else 'FAIL'}] only 404.html and thank-you.html are noindex, "
@@ -336,6 +355,7 @@ def check_sitemap(pages: list[Path], docs_root: Path) -> bool:
         sitemap_paths.add(loc[len(SITE_PREFIX) :] or "/")
 
     expected_paths = set()
+    declaring: dict[str, list[str]] = {}
     for page in pages:
         if page.name in NOINDEX_ALLOWED:
             continue
@@ -343,7 +363,19 @@ def check_sitemap(pages: list[Path], docs_root: Path) -> bool:
         if path is None:
             problems.append(f"{page.name}: no canonical href to derive its sitemap path from")
             continue
+        declaring.setdefault(path, []).append(page.name)
         expected_paths.add(path)
+
+    # Two pages declaring one canonical collapse into a single element of the set
+    # above, and the sitemap then matches a set that is one page short while both
+    # pages ship. A page begun by copying another and never having its canonical
+    # changed is the ordinary way that happens, and nothing else here reads what
+    # a canonical says, only that a page has one of them.
+    for path, names in sorted(declaring.items()):
+        if len(names) > 1:
+            problems.append(
+                f"{len(names)} pages declare the canonical {path!r}: {sorted(names)}"
+            )
 
     missing = expected_paths - sitemap_paths
     extra = sitemap_paths - expected_paths
@@ -642,9 +674,9 @@ def check_no_forbidden_claims(pages: list[Path]) -> bool:
     problems: list[str] = []
     for page in pages:
         raw = page.read_bytes()
-        for marker in FORBIDDEN_MARKUP:
-            if marker.encode("utf-8") in raw:
-                problems.append(f"{page.name}: contains {marker!r}")
+        for label, pattern in FORBIDDEN_MARKUP:
+            if pattern.search(raw):
+                problems.append(f"{page.name}: contains {label!r}")
         for marker in FORBIDDEN_TEXT:
             if marker.encode("utf-8") in raw:
                 problems.append(f"{page.name}: contains {marker!r}")
@@ -665,17 +697,22 @@ def page_title(raw: bytes) -> str | None:
     return " ".join(html_lib.unescape(match.group(1).decode("utf-8")).split())
 
 
-def find_graph_node(data, node_type: str):
-    """Return the first node in data["@graph"] whose "@type" equals node_type, or None."""
+def find_graph_nodes(data, node_type: str) -> list:
+    """Return every node in data["@graph"] whose "@type" equals node_type."""
+    # Every one of them, because returning the first was the hole. A node
+    # duplicated while restructuring the JSON-LD leaves a stale copy behind it,
+    # and comparing only the first compares the correct node and never sees the
+    # wrong one, which is the defect class this file exists to close.
     if not isinstance(data, dict):
-        return None
+        return []
     graph = data.get("@graph")
     if not isinstance(graph, list):
-        return None
-    for node in graph:
-        if isinstance(node, dict) and node.get("@type") == node_type:
-            return node
-    return None
+        return []
+    return [
+        node
+        for node in graph
+        if isinstance(node, dict) and node.get("@type") == node_type
+    ]
 
 
 def check_jsonld_mirrors_title(pages: list[Path]) -> bool:
@@ -717,29 +754,32 @@ def check_jsonld_mirrors_title(pages: list[Path]) -> bool:
         description = check_llms_drift.meta_description(page)
 
         if in_top:
-            node = data
-        elif graph_node_type:
-            node = find_graph_node(data, graph_node_type)
-            if node is None:
-                problems.append(f"{name}: no {graph_node_type!r} node found in @graph")
-                continue
+            nodes = [data]
         else:
-            node = find_graph_node(data, "Service")
-            if node is None:
-                problems.append(f"{name}: no 'Service' node found in @graph")
+            wanted = graph_node_type or "Service"
+            nodes = find_graph_nodes(data, wanted)
+            if not nodes:
+                problems.append(f"{name}: no {wanted!r} node found in @graph")
                 continue
+            if len(nodes) > 1:
+                problems.append(
+                    f"{name}: {len(nodes)} {wanted!r} nodes in @graph. One of them is "
+                    "stale, and reading only the first is how it stays"
+                )
 
         checked += 1
-        if in_top or graph_node_type:
-            if title is not None and node.get("name") != title:
+        for node in nodes:
+            if in_top or graph_node_type:
+                if title is not None and node.get("name") != title:
+                    problems.append(
+                        f"{name}: JSON-LD name {node.get('name')!r} does not match "
+                        f"<title> {title!r}"
+                    )
+            if description is not None and node.get("description") != description:
                 problems.append(
-                    f"{name}: JSON-LD name {node.get('name')!r} does not match <title> {title!r}"
+                    f"{name}: JSON-LD description {node.get('description')!r} does not "
+                    f"match meta description {description!r}"
                 )
-        if description is not None and node.get("description") != description:
-            problems.append(
-                f"{name}: JSON-LD description {node.get('description')!r} does not match "
-                f"meta description {description!r}"
-            )
 
     ok = not problems
     print(f"[{'PASS' if ok else 'FAIL'}] JSON-LD name/description mirror the title/meta description "
@@ -907,7 +947,7 @@ def main() -> int:
         check_head_tags(pages),
         check_sitemap(pages, docs_root),
         check_llms_txt(docs_root),
-        check_noindex_and_navigation(pages),
+        check_noindex_and_navigation(pages, docs_root),
         check_contact_details(pages),
         check_cname(docs_root),
         check_phone_is_one_number(pages, docs_root),
