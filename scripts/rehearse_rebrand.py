@@ -1,0 +1,215 @@
+"""Rebrand a throwaway clone of this site to a fixture business and check the result."""
+
+import argparse
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DEFAULT_OUT = os.path.join(
+    "C:" + chr(92) + "Code_data", "tectori", "reproducible", "rehearsal"
+)
+
+# A business that does not exist, on a domain that cannot resolve. The values
+# are deliberately shaped unlike this site's: a different area code format, a
+# longer street line, a two word brand. A fixture that resembles the original
+# can pass by accident.
+FIXTURE = {
+    "brand_name": "Northvale Grove",
+    "tagline": "Evidence-first IT for teams under review",
+    "site_url": "https://www.northvale-grove.example",
+    "logo_filename": "northvale-logo.png",
+    "social_image_filename": "northvale-social.png",
+    "favicon_filename": "northvale-favicon.png",
+    "phone_display": "(312) 555-0148",
+    "phone_tel_uri": "tel:+13125550148",
+    "phone_schema": "+1-312-555-0148",
+    "postal_address": "8800 North Wacker Drive, Suite 1200, Chicago, IL 60606",
+}
+
+TEXT_SUFFIXES = {".html", ".xml", ".txt", ".css", ".js", ""}
+
+
+def clone(out_dir):
+    """Copy the repo tree to a scratch directory, without its git history."""
+    shutil.rmtree(out_dir, ignore_errors=True)
+    shutil.copytree(
+        REPO_ROOT, out_dir, ignore=shutil.ignore_patterns(".git", "__pycache__")
+    )
+
+
+def read_json(path):
+    """Return the parsed contents of a UTF-8 JSON file."""
+    with open(path, "rb") as f:
+        return json.loads(f.read().decode("utf-8"))
+
+
+def host_of(site_url):
+    """Return the hostname a site URL carries."""
+    return site_url.split("://", 1)[1].rstrip("/")
+
+
+def apex_of(site_url):
+    """Return the hostname without its leading www, which prose uses."""
+    return host_of(site_url).split("www.", 1)[-1]
+
+
+def rewrite_site_json(out_dir):
+    """Apply runbook step 1: replace every declared value with the fixture's."""
+    path = os.path.join(out_dir, "site", "content", "site.json")
+    config = read_json(path)
+    for key, value in FIXTURE.items():
+        if key not in config:
+            raise KeyError(
+                f"site.json has no {key!r}, so the fixture and the content "
+                "model have diverged and this rehearsal would prove less "
+                "than it claims"
+            )
+        config[key] = value
+    text = json.dumps(config, indent=2, ensure_ascii=False)
+    with open(path, "wb") as f:
+        f.write((text.replace("\n", "\r\n") + "\r\n").encode("utf-8"))
+
+
+def rename_assets(out_dir, original):
+    """Apply runbook step 2: rename the three images site.json declares by name."""
+    assets = os.path.join(out_dir, "docs", "assets")
+    for key in ("logo_filename", "social_image_filename", "favicon_filename"):
+        os.rename(
+            os.path.join(assets, original[key]),
+            os.path.join(assets, FIXTURE[key]),
+        )
+
+
+def rewrite_login(out_dir, original):
+    """Apply runbook step 3: the one page the generator does not model.
+
+    Every substitution here is one the README names in that step. Doing them by
+    an explicit list rather than a blanket sweep of the whole clone is the
+    point: a value hard coded somewhere else in the tree stays visible to the
+    residue scan instead of being tidied away before it is measured.
+    """
+    path = os.path.join(out_dir, "docs", "login.html")
+    with open(path, "rb") as f:
+        raw = f.read()
+    pairs = [
+        (original["logo_filename"], FIXTURE["logo_filename"]),
+        (original["favicon_filename"], FIXTURE["favicon_filename"]),
+        (original["site_url"], FIXTURE["site_url"]),
+        (host_of(original["site_url"]), host_of(FIXTURE["site_url"])),
+        (apex_of(original["site_url"]), apex_of(FIXTURE["site_url"])),
+        (original["brand_name"], FIXTURE["brand_name"]),
+    ]
+    for old, new in pairs:
+        raw = raw.replace(old.encode("utf-8"), new.encode("utf-8"))
+    with open(path, "wb") as f:
+        f.write(raw)
+
+
+def run(out_dir, args):
+    """Run one of the repo's own scripts inside the clone and return the result."""
+    return subprocess.run(
+        [sys.executable] + args,
+        cwd=out_dir,
+        capture_output=True,
+        text=True,
+    )
+
+
+def text_files(docs_root):
+    """Yield every file under a built tree that a reader or a crawler can read."""
+    for dir_path, _, file_names in os.walk(docs_root):
+        for name in sorted(file_names):
+            if os.path.splitext(name)[1].lower() in TEXT_SUFFIXES:
+                yield os.path.join(dir_path, name)
+
+
+def domain_residue(out_dir, original):
+    """Return every line of the rebranded tree that still names the old domain.
+
+    The domain is the honest measure of whether this site is reproducible,
+    because it is derived from one declared value everywhere including the
+    prose. One occurrence left behind is a defect. The brand name is not that,
+    by design: most of its occurrences are body copy a new owner rewrites, so
+    it is counted rather than failed on.
+    """
+    pattern = re.compile(re.escape(apex_of(original["site_url"])), re.IGNORECASE)
+    docs = os.path.join(out_dir, "docs")
+    hits = []
+    for path in text_files(docs):
+        try:
+            with open(path, "rb") as f:
+                text = f.read().decode("utf-8")
+        except (UnicodeDecodeError, OSError):
+            continue
+        for number, line in enumerate(text.splitlines(), 1):
+            if pattern.search(line):
+                rel = os.path.relpath(path, docs)
+                hits.append(f"{rel}:{number}: {line.strip()[:90]}")
+    return hits
+
+
+def brand_residue(out_dir, original):
+    """Count what still names the old brand, which its copy is expected to."""
+    pattern = re.compile(re.escape(original["brand_name"]), re.IGNORECASE)
+    total = 0
+    for path in text_files(os.path.join(out_dir, "docs")):
+        with open(path, "rb") as f:
+            total += len(pattern.findall(f.read().decode("utf-8", "ignore")))
+    return total
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--out",
+        default=DEFAULT_OUT,
+        help="where to build the throwaway clone, which must be outside the repo",
+    )
+    args = parser.parse_args()
+    out_dir = os.path.abspath(args.out)
+    if os.path.commonpath([out_dir, REPO_ROOT]) == REPO_ROOT:
+        # The clone is generated data and a rewritten copy of every page. Letting
+        # it land inside the repo would put a second, wrong copy of the site
+        # under version control.
+        raise SystemExit(f"refusing to write the clone inside the repo: {out_dir}")
+
+    original = read_json(os.path.join(REPO_ROOT, "site", "content", "site.json"))
+    print(f"Cloning to {out_dir}")
+    clone(out_dir)
+    rewrite_site_json(out_dir)
+    rename_assets(out_dir, original)
+    rewrite_login(out_dir, original)
+    print("Applied the three mechanical runbook steps")
+
+    build = run(out_dir, [os.path.join("scripts", "build_site.py"), "--out", "docs"])
+    if build.returncode != 0:
+        print(build.stdout)
+        print(build.stderr)
+        raise SystemExit("the rebranded tree does not build")
+    print(build.stdout.strip())
+
+    checks = run(out_dir, [os.path.join("scripts", "check_site.py")])
+    for line in checks.stdout.splitlines():
+        if line.startswith("[") or "passed" in line:
+            print(f"  {line.rstrip()}")
+
+    residue = domain_residue(out_dir, original)
+    brand_hits = brand_residue(out_dir, original)
+    print(
+        f"The old domain appears {len(residue)} times in the rebranded tree, "
+        f"and the old brand name {brand_hits} times in copy a new owner rewrites."
+    )
+    for hit in residue[:20]:
+        print(f"  {hit}")
+
+    ok = checks.returncode == 0 and not residue
+    print("REHEARSAL PASSED" if ok else "REHEARSAL FAILED")
+    return 0 if ok else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

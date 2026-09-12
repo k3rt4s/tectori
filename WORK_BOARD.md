@@ -127,14 +127,25 @@ hardening what exists.
   pure LF too. Two were stale. It is 88 lines now rather than 98, still
   over the framework's 60-line guidance, and the rest is load-bearing.
 
-The next step this thread is taking is PROD-8, turning tonight's rebrand
-rehearsal into a script anything can run. The rehearsal proved the product
-is reproducible once, by hand, on 2026-09-12, and that proof decays with
-the next change to the build. A `scripts/rehearse_rebrand.py` that clones
-to the data root, rewrites every declared value to a fixture business,
-rebuilds and runs the checks turns a claim a buyer has to take on trust
-into one the repo re-proves on demand. It found two real defects the first
-time it was run by hand, which is the argument for running it again.
+- **PROD-8 shipped.** `scripts/rehearse_rebrand.py` runs the rebrand
+  rehearsal end to end: clone to the data root, apply the runbook's three
+  mechanical steps against a fixture business, rebuild, run all fifteen
+  checks, and measure what survived. It fails on a single surviving
+  occurrence of the old domain and counts the old brand name rather than
+  failing on it, because the second is body copy a new owner rewrites and
+  the first is not. Mutation tested by un-tokenizing one fragment: it fails
+  and names the file and line.
+
+The next step this thread is taking is to read the site as a buyer would
+rather than as its builder. Every check in this repo answers whether the
+tree is internally consistent; none answers whether a stranger handed the
+repository could get it running. The specific question is what the first
+hour looks like for someone who clones it with no context: whether the
+README's opening actually says what this is, whether the runbook's step 4
+gives enough to rewrite the copy safely, and whether anything assumes a
+reader who was here tonight. That is a reading task with a written result,
+not a build, and it is the last thing between the current state and a
+product that can change hands.
 
 ## Owner-Only Tasks
 

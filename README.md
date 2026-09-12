@@ -68,6 +68,14 @@ directly.
   endpoint fails here rather than shipping. It takes
   `--dir` so it can verify a generated build as well as `docs/`, and exits
   non-zero on any failure so it can gate a deploy.
+- `scripts/rehearse_rebrand.py` proves the site is reproducible instead of
+  claiming it. It clones the tree to the data root, applies the three
+  mechanical steps of the runbook below against a fixture business, rebuilds,
+  runs every check, and then reports how much of the original identity
+  survived. It fails if the old domain appears even once, because the domain
+  is derived from one declared value everywhere. It counts rather than fails
+  on the old brand name, because most of those are body copy a new owner
+  rewrites. Nothing in the repository is modified by a run.
 - `PERMISSIONS.md` lists everything the site needs to build, deploy, and
   serve: runtime, filesystem paths, every outbound host, the operator
   accounts, the DNS records, and a from-scratch deploy runbook. It replaced
@@ -131,7 +139,9 @@ previous owner nowhere.
    `python scripts/check_site.py`. All five must pass before the tree is
    worth deploying. One of the five is `scripts/verify_site.py`, which is
    ten checks of its own that read the built tree as a site rather than as
-   a set of files, and it is the one that catches a value you missed.
+   a set of files, and it is the one that catches a value you missed. To
+   see steps 1 to 3 and this one run end to end before you do them
+   yourself, run `python scripts/rehearse_rebrand.py`.
 6. Follow the runbook in `PERMISSIONS.md` for the repository, the Pages
    settings, the DNS records and the accounts behind the three third-party
    services.

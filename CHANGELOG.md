@@ -4,6 +4,13 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Added `scripts/rehearse_rebrand.py`, which turns the reproducibility
+  claim into something the repository re-proves on demand. It clones the
+  tree to the data root, rebrands it to a fixture business by the runbook's
+  three mechanical steps, rebuilds, runs all fifteen checks, and fails if a
+  single occurrence of the old domain survives. Mutation tested by removing
+  one `{{SITE_URL}}` token from a fragment: the run fails and names the
+  file and line that kept the old domain.
 - Audited every claim in `THEORY.md` against the tree and rewrote it. One
   was wrong: the line-ending invariant named `docs/CNAME` as the only file
   that is not CRLF, and three more at the repo root are pure LF. Two were
