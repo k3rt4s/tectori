@@ -179,9 +179,12 @@ redirect to it.
 | AAAA  | @    | 2606:50c0:8002::153 |
 | AAAA  | @    | 2606:50c0:8003::153 |
 
-`docs/CNAME` holds `www.tectori.com` and is what tells Pages the canonical
-hostname. Changing the domain means changing that file, `site_url` in
-`site/content/site.json`, and these records together.
+`docs/CNAME` holds `www.tectori.com`. The custom domain now lives in the
+repository's Pages settings, because the deploy runs from the workflow rather
+than from the branch, and only branch publishing reads the file. It is kept
+and kept correct so that publishing from the branch still works if anyone
+switches back. Changing the domain means changing that file, the Pages
+setting, `site_url` in `site/content/site.json`, and these records together.
 
 ---
 
@@ -194,15 +197,17 @@ On a fresh environment, in order.
    six of six checks pass before changing anything.
 3. Create the GitHub repository and push `main`. Pages needs the repository to
    exist before it can serve from it.
-4. In the repository settings, enable Pages with source `main` and folder
-   `/docs`, then set the custom domain to the hostname in `docs/CNAME`.
+4. In the repository settings, enable Pages with source GitHub Actions, then
+   set the custom domain to the hostname in `docs/CNAME`. The source matters:
+   with `main` and `/docs` instead, Pages publishes every push whether the
+   checks passed or not, and this workflow's deploy job fails.
 5. Add the DNS records above at the registrar. Allow for propagation before
    expecting the custom domain to answer.
 6. Enable HTTPS enforcement in the Pages settings once the certificate is
    issued. Then run `python scripts/check_live_deploy.py`, which fetches
    every file from the live site and compares it against `docs/`. Until it
-   passes, nothing has confirmed the deploy landed: Pages serves whatever is
-   on `main` and reports nothing back to the repository.
+   passes, nothing has confirmed the deploy landed: a green workflow says the
+   artifact was accepted, not that the domain and the certificate answer.
 7. If the contact form is wanted, create the Formspree form and put its
    endpoint in `third_party.formspree_endpoint` in `site/content/site.json`.
    That is the only place it is written. This step told you to also edit the

@@ -136,6 +136,7 @@ All other 24 pages, including `docs/404.html` and `docs/thank-you.html`,
 are generated and byte-identical to `docs/`. So are the four non-page
 files that carry the domain or repeat the page descriptions: `CNAME`,
 `robots.txt`, `sitemap.xml` and `llms.txt`. `CNAME` is the one file the
-build writes with a bare LF, because GitHub Pages reads it directly.
+build writes with a bare LF, because Pages reads it as a single line when a
+site is published from a branch rather than from a workflow.
 Everything else in `docs/`, the stylesheet, the script, the images and
 `login.html`, is copied across unchanged.
