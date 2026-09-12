@@ -8,37 +8,29 @@ What a session needs to believe before it changes anything in this repo.
   is rendered by `scripts/build_site.py` from `site/`, and so are `CNAME`,
   `robots.txt`, `sitemap.xml` and `llms.txt`. Edit the content model or a
   fragment and rebuild with `--out docs`; a hand edit is overwritten by the
-  next build. `scripts/check_site.py` is the one command to run before a
-  deploy, and byte equality against `docs/` is one of its five checks.
-- Line endings belong to the repository, not to whoever cloned it. Since
-  2026-09-12 `.gitattributes` pins them: every stored blob is LF, and every
-  working copy is CRLF except five files, `.gitignore`, `.env.example`,
-  `CLAUDE.md`, `docs/CNAME`, which GitHub Pages reads itself and which the
-  generator emits with one bare LF for that reason, and the one `.svg`, which
-  the build copies byte for byte rather than rendering. Before that file
-  existed the invariant held only where `core.autocrlf` happened to be set. A
-  clone without it checked out LF, rebuilt to CRLF, and produced a 1700 line
-  diff across 26 files from changing nothing, with all five checks passing. A
-  scripted edit that writes LF anywhere else corrupts the diff for the whole
+  next build. Run `scripts/check_site.py` before any deploy.
+- Line endings belong to the repository, not to whoever clones it.
+  `.gitattributes` pins them: blobs are LF, working copies are CRLF except
+  `.gitignore`, `.env.example`, `CLAUDE.md`, `docs/CNAME`, which GitHub Pages
+  reads itself, and the one `.svg`, which the build copies rather than renders.
+  A scripted edit that writes LF elsewhere corrupts the diff for the whole
   file, so confirm the bare-LF count after any splice.
 - The values that belong to the business rather than to the site are declared
   once in `site/content/site.json`: brand name, tagline, domain, asset
   filenames, the three contact strings, the social URLs and the three
-  third-party identifiers. The build renders from it and
-  `scripts/verify_site.py` checks a built tree against it, so the site and its
-  checks cannot be changed one without the other.
-- Contact details appear character for character and are never reformatted:
-  `(615) 829-6802`, `www.tectori.com` as displayed text, and
-  `201 Summit View Dr, Suite 305, Brentwood, TN 37027`.
+  third-party identifiers. The build renders from it and `verify_site.py`
+  checks a built tree against it, so the site and its checks cannot be changed
+  one without the other. The contact strings appear character for character
+  and are never reformatted.
 - The site claims no clients, client counts, testimonials, ratings, prices or
-  results, and carries no `Review`, `AggregateRating` or `offers` markup.
-- Copy never implies employees beyond the founder, and never frames the
-  practice as one person either.
-- The credential is Internal Security Assessor (ISA). Qualified Security
-  Assessor is a different thing and is not Tectori's.
+  results. Copy never implies employees beyond the founder, and never frames
+  the practice as one person either. The credential is Internal Security
+  Assessor (ISA); Qualified Security Assessor is a different thing and is not
+  Tectori's. `verify_site.py` catches the markup and the wrong credential. It
+  cannot read prose, so the rest of this holds only if a writer keeps it.
 - `docs/login.html` carries no tracking tags and holds the tree's only CSP.
-- The only `noindex` pages are `docs/404.html` and `docs/thank-you.html`, and
-  both stay out of `sitemap.xml`, `llms.txt` and the navigation.
+  `docs/404.html` and `docs/thank-you.html` are the only `noindex` pages and
+  stay out of `sitemap.xml`, `llms.txt` and the navigation.
 
 ## Load-bearing constraints
 
@@ -79,11 +71,11 @@ What a session needs to believe before it changes anything in this repo.
   prevents the line break they were added to fix.
 - Tectori is nationally targeted and Nashville is location proof, decided on
   2026-09-11 by Jon Bowker, who owns the practice and the site. No location
-  pages, no LocalBusiness schema, no
-  Nashville-modified keyword targets, and the nationwide wording stands.
-  `contact`, `about` and `service-fractional-leadership` name Nashville in
-  their title and meta description, which is proof rather than drift toward
-  local targeting. Reopen only if Search Console shows local query volume.
+  pages, no LocalBusiness schema, no Nashville-modified keyword targets, and
+  the nationwide wording stands. `contact`, `about` and
+  `service-fractional-leadership` name Nashville in their title and meta
+  description, which is proof rather than drift. Reopen only if Search Console
+  shows local query volume.
 - `docs/404.html` deliberately has no canonical, and its links and assets are
   root-absolute so it renders when Pages serves it for a deep path, which is
   why reviewing it needs a local server rather than a `file://` open.

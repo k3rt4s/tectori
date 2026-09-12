@@ -41,6 +41,13 @@ directly.
 - `docs/thank-you.html` is the page the contact form redirects to after a
   successful submission. It is noindex and stays out of `docs/sitemap.xml`,
   `docs/llms.txt`, and the navigation, and is reached only through the form.
+- `.github/workflows/verify.yml` runs those checks on a clean Linux machine
+  for every push and pull request, and adds one they cannot make on their
+  own: that `docs/` is byte identical to what the build produces, not merely
+  render identical to it. A hand edit to whitespace, an entity or a line
+  ending renders the same and fails there. Nothing in it gates the deploy.
+  GitHub Pages publishes from `main` and `docs/` whether or not it passes,
+  so it reports rather than blocks.
 - `scripts/check_site.py` runs every check below in one command and prints a
   pass or fail line for each, exiting non-zero if any failed. It is the entry
   point to use before a deploy; the individual scripts are there for when one

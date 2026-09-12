@@ -45,6 +45,12 @@ accounts below, never in this repository.
 - **markdownlint-cli2 via npx**: best-effort, lints Markdown only. Skipping it
   degrades nothing at runtime; the site builds and deploys without Node
   installed.
+- **GitHub Actions**: best-effort, runs the checks on every push and pull
+  request from `.github/workflows/verify.yml`. It needs `contents: read` and
+  no secrets, and it pulls `actions/checkout` and `actions/setup-python` from
+  the Actions marketplace at run time. Disabling Actions costs the checks on
+  a clean machine and nothing else: Pages deploys from `main` and `docs/`
+  whether the workflow passed, failed, or never ran.
 
 ---
 
