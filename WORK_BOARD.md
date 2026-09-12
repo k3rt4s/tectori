@@ -53,9 +53,14 @@ board has shipped, so the night's work is the reproducibility layer.
   meaning the generator reproduces all 25 live pages byte for byte. Until
   that test passes the generator does not ship. Rollback is deleting the
   new directory and script, because `docs/` is unchanged by definition.
-- **REPRO-3, one verification command, planned.** Internal link check, the
-  llms.txt drift check, and a sitemap and llms.txt coverage check, behind a
-  single script so a buyer or a host can verify a build. Additive only.
+- **REPRO-3, one verification command, built and committed.**
+  `scripts/verify_site.py` runs eight checks over a built tree and exits
+  non-zero on any failure. Committed on `feature/repro-generator` at
+  4ba4a9b, not yet merged to `main`, because the branch also carries the
+  unfinished generator. Reviewed by mutation, not by its own self-report:
+  four injected defects in a scratch copy were each caught. Rollback is
+  dropping the commit, since the script is additive and `docs/` is
+  untouched.
 
 ## Owner-Only Tasks
 
