@@ -4,6 +4,18 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `scripts/check_stdlib_only.py` reads every script's imports and requires
+  each to name a standard library module, and `check_site.py` runs it.
+  `PERMISSIONS.md` promises a clone runs on a machine with nothing
+  installed, and says the missing `requirements.txt` is deliberate rather
+  than an oversight. Nothing verified either half. Every check here runs on
+  a machine that has had packages installed into it, so one convenient
+  import would have passed the whole suite and failed for the first buyer to
+  clone the repository. The check reads the promise as well as the imports,
+  so withdrawing one without the other fails. Proved against a copy with an
+  `import requests` added and a `requirements.txt` beside it: both were
+  named.
+
 - `build_site.py` requires each content entry's canonical and og:url to name
   the page that entry writes. A canonical copied from the entry beside it
   tells a search engine the page is a different page, which drops it from the
