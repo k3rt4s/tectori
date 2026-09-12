@@ -599,6 +599,128 @@ ACCESSIBILITY_CLAIMS = (
 )
 
 
+# Elements whose URL the browser fetches on its own, which is what the privacy
+# policy is about. A form action is not one of them: nothing is sent until a
+# visitor fills the form in and presses the button, and the policy says so
+# separately.
+RESOURCE_RE = re.compile(
+    r"<(script|link|img|iframe|source|video|audio|embed|object)\b([^>]*)>",
+    re.IGNORECASE | re.DOTALL,
+)
+RESOURCE_URL_RE = re.compile(
+    r'\b(?:src|href|data|srcset)\s*=\s*(["\'])(.*?)\1',
+    re.IGNORECASE | re.DOTALL,
+)
+ABSOLUTE_HOST_RE = re.compile(r"^https?://([^/]+)", re.IGNORECASE)
+
+# Ways a page keeps something on a visitor's machine. The policy says it does
+# none of them, which is a sentence no check read.
+STORAGE_MARKERS = (
+    "document.cookie",
+    "localStorage",
+    "sessionStorage",
+    "indexedDB",
+)
+
+# Read from the page, so withdrawing a promise and dropping the check that
+# enforces it stay one action.
+PRIVACY_CLAIMS = (
+    "It sets no cookies.",
+    "It stores nothing on your device.",
+    "It loads no fonts and no other resources from third party services.",
+)
+
+
+def check_privacy_statement(pages: list[Path], docs_root: Path) -> bool:
+    """The privacy policy's checkable claims are true of the tree it describes.
+
+    The identity check reads every host the tree names and requires it to be
+    allowed by site.json, which is a question about whose accounts these are.
+    This is a different question with a different answer: the policy tells a
+    visitor that two named companies see a request and nobody else does, and
+    a host added to the allowlist for a good reason satisfies that check while
+    falsifying this page. A web font, an embedded map, a hosted icon set or a
+    line of script that remembers something in localStorage each turn a
+    published privacy policy into a false statement, quietly, in an edit that
+    looks like an improvement.
+    """
+    problems: list[str] = []
+    policy = docs_root / "privacy.html"
+    if not policy.is_file():
+        print("[FAIL] the privacy policy is true: privacy.html is missing")
+        return False
+    text = " ".join(policy.read_text(encoding="utf-8").split())
+    for claim in PRIVACY_CLAIMS:
+        if text.count(claim) != 1:
+            problems.append(
+                f"privacy.html no longer states {claim!r} exactly once, so "
+                "either the promise was reworded, in which case update this "
+                "check, or it was withdrawn, in which case delete the part of "
+                "this check that enforces it"
+            )
+
+    own_host = SITE["site_url"].split("://", 1)[1].rstrip("/")
+    # The two the policy names, taken from the markers the tracking check
+    # already uses, so a tracker that moves host cannot be allowed here by
+    # spelling it a second time.
+    disclosed = {
+        BEACON_MARKER.decode("utf-8").split("/", 1)[0],
+        PIXEL_MARKER.decode("utf-8"),
+    }
+
+    def is_disclosed(host: str) -> bool:
+        """Say whether a host is the site's own or one the policy names."""
+        if host == own_host:
+            return True
+        # A subdomain of a named service, because the beacon marker names the
+        # company's domain and the script is served from a host under it.
+        return any(
+            host == domain or host.endswith("." + domain) for domain in disclosed
+        )
+
+    fetched = 0
+    for page in pages:
+        page_text = page.read_text(encoding="utf-8")
+        for element in RESOURCE_RE.finditer(page_text):
+            for attribute in RESOURCE_URL_RE.finditer(element.group(2)):
+                for candidate in attribute.group(2).split(","):
+                    url = candidate.strip().split(" ")[0]
+                    host = ABSOLUTE_HOST_RE.match(url)
+                    if not host:
+                        continue
+                    fetched += 1
+                    if not is_disclosed(host.group(1)):
+                        problems.append(
+                            f"{page.name}: a <{element.group(1).lower()}> "
+                            f"loads from {host.group(1)!r}, which the privacy "
+                            "policy does not tell a visitor about"
+                        )
+
+    stored = sorted(
+        path
+        for path in docs_root.rglob("*")
+        if path.is_file() and path.suffix.lower() in {".html", ".js"}
+    )
+    for path in stored:
+        content = path.read_text(encoding="utf-8", errors="ignore")
+        for marker in STORAGE_MARKERS:
+            if marker in content:
+                problems.append(
+                    f"{path.name}: uses {marker}, and the policy says this "
+                    "site stores nothing on a visitor's device"
+                )
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] the privacy policy is true where it is "
+        f"checkable: {fetched} fetched URLs and {len(stored)} files checked, "
+        f"{len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_accessibility_statement(pages: list[Path], docs_root: Path) -> bool:
     """The accessibility page's checkable claims are true of every page.
 
@@ -1272,6 +1394,7 @@ def main() -> int:
         check_llms_txt(docs_root),
         check_noindex_and_navigation(pages, docs_root),
         check_contact_details(pages),
+        check_privacy_statement(pages, docs_root),
         check_accessibility_statement(pages, docs_root),
         check_stated_urls_resolve(pages, docs_root),
         check_contact_form(pages, docs_root),
