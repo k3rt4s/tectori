@@ -103,6 +103,21 @@ gate, the 404 probe, and the two machine paths nobody had noticed.
   would mean an image library, which the build refuses on purpose, and a
   change to `docs/` that cannot be reviewed without a browser, so none of it
   was done. Treat this as measured rather than as a task.
+- **The founder is declared content, not prose in six files.**
+  `site/content/founder.json` holds the name, the given name, the job title
+  and the anchor, and the rebrand rehearsal fails on any of the first, second
+  or fourth that survives a rebrand. His credentials, schools and employers
+  are counted and reported by page instead, because nobody can generate a
+  replacement biography. Until 2026-09-12 none of it was in the content model
+  and the rehearsal printed REHEARSAL PASSED on a fixture site still naming
+  him in its structured data.
+- **The documentation's numbers are checked against the tree.**
+  `scripts/check_doc_claims.py` reads twelve countable claims in `README.md`
+  and `PERMISSIONS.md` and compares each against what the tree holds, and
+  `check_site.py` runs it. A claim whose sentence it cannot find fails rather
+  than passes. Three documents were corrected by hand on 2026-09-12 before it
+  existed, which is what asked for it; it found two more wrong the moment it
+  ran. Rewording one of those sentences means updating the check with it.
 - **The buyer read of the repository is done and its findings are fixed.**
   The report is at
   `C:\Code_data\tectori\reproducible\buyer_read_2026-09-12.md`. It is a
