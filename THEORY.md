@@ -14,7 +14,7 @@ What a session needs to believe before it changes anything in this repo.
   anywhere else corrupts the diff for the whole file. After any splice,
   confirm the bare-LF count is zero.
 - Contact details appear character for character and are never reformatted:
-  `(615) 829-6802`, `https://www.tectori.com`, and
+  `(615) 829-6802`, `www.tectori.com` as displayed text, and
   `201 Summit View Dr, Suite 305, Brentwood, TN 37027`. Those three strings,
   the brand name, the tagline, the social URLs and the three third-party
   identifiers are declared once in `site/content/site.json`. The build renders

@@ -22,9 +22,13 @@ SITE = json.loads(SITE_CONFIG_PATH.read_text(encoding="utf-8"))
 
 SITE_PREFIX = SITE["site_url"]
 NOINDEX_ALLOWED = {"404.html", "thank-you.html"}
+# The displayed form of the site URL is the bare host. The scheme appears in
+# canonicals and JSON-LD, which are markup rather than visible text, so the
+# full site_url would match nothing here and this arm would pass on an empty
+# set, which is what it did until 2026-09-12.
 CONTACT_STRINGS = {
     "phone number": SITE["phone_display"],
-    "site URL": SITE["site_url"],
+    "site host": SITE["site_url"].split("://", 1)[1].rstrip("/"),
     "mailing address": SITE["postal_address"],
 }
 FORBIDDEN_MARKUP = ("AggregateRating", '"@type": "Review"', '"offers"')
@@ -341,24 +345,62 @@ def visible_text(raw: bytes) -> str:
     return html_lib.unescape(raw.decode("utf-8"))
 
 
+SEPARATOR_CLASS = r"[^A-Za-z0-9]{0,4}"
+
+
+def near_miss_pattern(exact: str) -> re.Pattern:
+    """Return a pattern matching a declared contact string and its likely reformattings.
+
+    Built from the declared value rather than written out beside it, so a
+    rebrand cannot leave this looking for a previous owner's phone number,
+    finding nothing, and reporting a pass on an empty set.
+
+    The relaxations are the two ways a contact string gets reformatted in
+    practice. Punctuation and spacing between the parts is free, which is how
+    "(615) 829-6802" becomes "615-829-6802". A word may grow a suffix, which
+    is how "Dr" becomes "Drive". Digits stay exact, because a changed digit is
+    a different phone number rather than a reformatting.
+    """
+    tokens = re.findall(r"[A-Za-z0-9]+|[^A-Za-z0-9]+", exact)
+    parts = []
+    for token in tokens:
+        if not token[0].isalnum():
+            parts.append(SEPARATOR_CLASS)
+        elif token[0].isdigit():
+            parts.append(re.escape(token))
+        else:
+            parts.append(re.escape(token) + r"[A-Za-z]*")
+    return re.compile("".join(parts), re.IGNORECASE)
+
+
 def check_contact_details(pages: list[Path]) -> bool:
     """Contact details appear character for character wherever they show up as visible text."""
     near_miss = {
-        "phone number": re.compile(r"\(?\s*615\s*\)?[\s.\-]*829[\s.\-]*6802"),
-        "site URL": re.compile(r"https?://(?:www\.)?tectori\.com"),
-        "mailing address": re.compile(r"201\s+Summit\s+View\s+Dr[^.\n]{0,60}?37027"),
+        label: near_miss_pattern(exact)
+        for label, exact in CONTACT_STRINGS.items()
     }
     checked = 0
+    found_labels = {label: 0 for label in near_miss}
     problems: list[str] = []
     for page in pages:
         text = " ".join(visible_text(page.read_bytes()).split())
         for label, pattern in near_miss.items():
             for match in pattern.finditer(text):
                 checked += 1
+                found_labels[label] += 1
                 found = match.group(0).strip()
                 exact = CONTACT_STRINGS[label]
                 if found != exact:
                     problems.append(f"{page.name}: {label} reads {found!r}, not {exact!r}")
+
+    # A pattern that matches nothing is the failure this check exists to avoid,
+    # so it is reported rather than passing quietly on an empty set.
+    for label, count in found_labels.items():
+        if not count:
+            problems.append(
+                f"the declared {label} appears nowhere in the visible text, "
+                f"so nothing was compared against it"
+            )
 
     ok = not problems
     print(f"[{'PASS' if ok else 'FAIL'}] contact details match character for character: "

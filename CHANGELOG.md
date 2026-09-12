@@ -4,6 +4,17 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Fixed the contact-details check, which had one arm comparing nothing. Its
+  near-miss patterns were written out beside the values they check, so they
+  would have gone on looking for a previous owner's phone number after a
+  rebrand and passed on an empty set. They are now built from the declared
+  strings, a pattern that matches nothing anywhere in the tree is reported as
+  a failure, and the site URL arm compares the displayed host rather than the
+  full URL, which never appears as visible text. That arm had been checking
+  zero occurrences; it now checks two. Mutation tested on a reformatted phone
+  number, a recased host and 'Dr' expanded to 'Drive'; each one fires, and so
+  does removing the phone number from every page.
+
 - Made the domain a single value. Canonicals and og:url are stored in
   `site/content/pages.json` as site relative paths that the build prefixes;
   the JSON-LD and body fragments carry `{{SITE_URL}}` and `{{SITE_HOST}}`;
