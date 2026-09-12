@@ -2,10 +2,10 @@
       {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "@id": "https://www.tectori.com/#organization",
+        "@id": "{{SITE_URL}}/#organization",
         "name": "Tectori",
-        "url": "https://www.tectori.com/",
-        "logo": "https://www.tectori.com/assets/tectori-logo.png",
+        "url": "{{SITE_URL}}/",
+        "logo": "{{SITE_URL}}/assets/tectori-logo.png",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "201 Summit View Dr, Suite 305",
@@ -23,8 +23,8 @@
           "@type": "Person",
           "name": "Jonathan Bowker",
           "jobTitle": "Founder and Principal Consultant",
-          "url": "https://www.tectori.com/about",
-          "@id": "https://www.tectori.com/#jonathan-bowker",
+          "url": "{{SITE_URL}}/about",
+          "@id": "{{SITE_URL}}/#jonathan-bowker",
           "sameAs": "https://github.com/k3rt4s",
           "hasCredential": [
             {
@@ -68,7 +68,7 @@
           "@type": "ContactPoint",
           "contactType": "business inquiries",
           "telephone": "+1-615-829-6802",
-          "url": "https://www.tectori.com/contact"
+          "url": "{{SITE_URL}}/contact"
         },
         "knowsAbout": [
           "Cloud architecture and operations",

@@ -4,13 +4,13 @@
         "@graph": [
           {
             "@type": "Service",
-            "@id": "https://www.tectori.com/service-cloud-architecture#service",
+            "@id": "{{SITE_URL}}/service-cloud-architecture#service",
             "name": "Cloud architecture and operations",
-            "url": "https://www.tectori.com/service-cloud-architecture",
+            "url": "{{SITE_URL}}/service-cloud-architecture",
             "description": "Azure architecture reviews, governance baselines, deployment patterns, and operational runbooks for cloud environments that must stand up to review.",
             "serviceType": "Cloud architecture and operations",
             "provider": {
-              "@id": "https://www.tectori.com/#organization"
+              "@id": "{{SITE_URL}}/#organization"
             },
             "areaServed": {
               "@type": "Country",
@@ -19,25 +19,25 @@
           },
           {
             "@type": "BreadcrumbList",
-            "@id": "https://www.tectori.com/service-cloud-architecture#breadcrumb",
+            "@id": "{{SITE_URL}}/service-cloud-architecture#breadcrumb",
             "itemListElement": [
               {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "https://www.tectori.com/"
+                "item": "{{SITE_URL}}/"
               },
               {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Services",
-                "item": "https://www.tectori.com/services"
+                "item": "{{SITE_URL}}/services"
               },
               {
                 "@type": "ListItem",
                 "position": 3,
                 "name": "Cloud architecture and operations",
-                "item": "https://www.tectori.com/service-cloud-architecture"
+                "item": "{{SITE_URL}}/service-cloud-architecture"
               }
             ]
           }

@@ -9,10 +9,10 @@ What a session needs to believe before it changes anything in this repo.
   the content model or a fragment and rebuild; a hand edit to `docs/` is
   overwritten by the next build and is caught by `scripts/check_site.py`,
   which is the one command to run before any deploy.
-- Every file in the tree uses CRLF except `docs/CNAME`, which is 16 bytes
-  ending in one bare LF because GitHub Pages reads it directly. A scripted
-  edit that writes LF anywhere else corrupts the
-  diff for the whole file. After any splice, confirm the bare-LF count is zero.
+- Every file uses CRLF except `docs/CNAME`, which ends in one bare LF
+  because GitHub Pages reads it directly. A scripted edit that writes LF
+  anywhere else corrupts the diff for the whole file. After any splice,
+  confirm the bare-LF count is zero.
 - Contact details appear character for character and are never reformatted:
   `(615) 829-6802`, `https://www.tectori.com`, and
   `201 Summit View Dr, Suite 305, Brentwood, TN 37027`. Those three strings,
@@ -38,11 +38,17 @@ What a session needs to believe before it changes anything in this repo.
   defect to chase.
 - `docs/CNAME`, `docs/robots.txt`, `docs/sitemap.xml` and `docs/llms.txt` are
   generated too, from `site/content/site.json` and
-  `site/content/public_pages.json`. That is what makes the domain a one value
-  change and what ended the silent drift `scripts/check_llms_drift.py` was
-  written to catch; the drift check still runs but can no longer fail, since
-  byte equality already covers the file. Page canonicals in `pages.json` still
-  spell the domain out, so a rebrand is not yet one edit.
+  `site/content/public_pages.json`. That ended the silent drift
+  `scripts/check_llms_drift.py` was written to catch; the drift check still
+  runs but can no longer fail, since byte equality already covers the file.
+- The domain is one value. Nothing under `site/` spells it out except
+  `site_url` in `site.json`: canonicals and og:url are stored as site
+  relative paths, and the fragments carry `{{SITE_URL}}` and `{{SITE_HOST}}`.
+  Changing that one value moves 166 occurrences across the built tree. The
+  one file it cannot reach is `docs/login.html`, which is hand authored, and
+  `verify_site.py` now fails on it rather than letting the stale domain ship:
+  the site's own host is allowed because it is derived from `site_url`, not
+  because it is listed among the external hosts.
 - The contact form is a plain HTML POST to Formspree with no JavaScript, which
   is what the static hosting supports. Its `_next` field needs an absolute URL.
 - Each page's JSON-LD `name` and `description` repeat the visible title and
@@ -63,10 +69,10 @@ What a session needs to believe before it changes anything in this repo.
 ## Decisions that look wrong
 
 - "Audit-ready IT that scales with your ambition." is the brand tagline, not
-  homepage copy. It is the footer line and the social image alt text on each
-  of the 24 content pages, 48 occurrences, and the homepage adds two more in
-  its H1 and `og:description`. `login.html` is the only page without it.
-  Changing it in one place means changing it in every place, a brand call.
+  homepage copy. It is the footer line and the social image alt text on all
+  24 content pages, 48 occurrences in the built tree but one value in
+  `site.json`, and the homepage adds two more in its H1 and `og:description`.
+  Changing it is a brand call, not a copy edit.
 - The homepage eyebrow reads "Built to be reviewed" rather than naming
   audit-readiness, because the H1 directly below it already opens with
   "Audit-ready".

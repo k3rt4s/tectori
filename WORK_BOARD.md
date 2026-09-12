@@ -76,14 +76,24 @@ the productization layer he named, not leftover board work.
   URL for a fictional domain and changing one meta description: all four
   files followed and none kept the old domain.
 
-The next step this thread is taking is PROD-5, making the domain a single
-value. The source tree still spells `www.tectori.com` out 143 times: 70 in
-`site/content/pages.json` as canonical, og:url and og:image, 68 in the
-JSON-LD fragments, and 3 in body fragments. Fragments already pass through
-the `{{SITE_URL}}` substitution, so tokenizing those 71 is byte-neutral. The
-70 in `pages.json` become site-relative paths that the build prefixes. Both
-gates stay in force; the change is not shipped unless `check_site.py` is
-still 5 of 5 and the build still reproduces `docs/` byte for byte.
+- **PROD-5 shipped.** The domain is one value. Nothing under `site/` spells
+  `www.tectori.com` out except `site_url` in `site.json`, down from 143
+  occurrences. Canonicals and og:url are site relative paths the build
+  prefixes; fragments carry `{{SITE_URL}}` and `{{SITE_HOST}}`; og:image, its
+  alt text and the favicon href are derived rather than stored 24 times each.
+  Measured against a fictional domain: 166 occurrences follow the one value.
+  The only file left behind is the hand-authored `docs/login.html`, and
+  `verify_site.py` now fails on it because the site's own host is derived
+  from `site_url` rather than listed among the external hosts.
+
+The next step this thread is taking is PROD-6, the brand. The domain moves
+in one edit; the name does not. `Tectori` still appears about 430 times
+under `site/`, almost all of it inside copy a new owner rewrites anyway, so
+a full tokenization would not be worth it. What is worth measuring is which
+of those occurrences are structural rather than prose: asset filenames, the
+nav and footer tables inside `build_site.py`, and the `contact_label`
+values. Those are the ones a rebrand would miss silently. The output is a
+count by kind, then a decision on which kinds to move into `site.json`.
 
 ## Owner-Only Tasks
 

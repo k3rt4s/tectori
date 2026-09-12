@@ -105,6 +105,7 @@ SITE_TOKENS = {
     "{{BRAND_NAME}}": SITE["brand_name"],
     "{{TAGLINE}}": SITE["tagline"],
     "{{SITE_URL}}": SITE["site_url"],
+    "{{SITE_HOST}}": SITE["site_url"].split("://", 1)[1].rstrip("/"),
     "{{PHONE_DISPLAY}}": SITE["phone_display"],
     "{{PHONE_TEL_URI}}": SITE["phone_tel_uri"],
     "{{POSTAL_ADDRESS}}": SITE["postal_address"],
@@ -233,6 +234,29 @@ def render_utility_bar(entry):
     return tmpl.encode("utf-8")
 
 
+def site_absolute(path):
+    """Return a site relative path as the absolute URL the head tags need."""
+    return SITE["site_url"] + path
+
+
+def favicon_href(entry):
+    """Return the favicon href, which differs only in whether it is root absolute."""
+    prefix = "/assets/" if entry["root_absolute"] else "assets/"
+    return prefix + SITE["favicon_filename"]
+
+
+def social_image_url():
+    """Return the og:image URL, which is the same card on all 24 pages."""
+    return SITE["site_url"] + "/assets/" + SITE["social_image_filename"]
+
+
+def social_image_alt():
+    """Return the og:image alt text, which reads as the brand and its tagline."""
+    # Stored as a derivation rather than 24 copies of one string, for the same
+    # reason the URL above is: a rebrand should not have to find it.
+    return SITE["brand_name"] + ", " + SITE["tagline"]
+
+
 def render_page(entry, cache):
     def cached_fragment(name):
         if name not in cache:
@@ -252,16 +276,17 @@ def render_page(entry, cache):
     out.append(render_head_field_inline("og:title", "property", entry["og_title"]))
     out.append(render_head_field_inline("og:description", "property", entry["og_description"]))
     out.append(render_head_field_inline("og:type", "property", entry["og_type"]))
-    out.append(render_head_field_inline("og:url", "property", entry["og_url"]))
-    out.append(render_head_field_inline("og:image", "property", entry["og_image"]))
+    out.append(render_head_field_inline("og:url", "property", site_absolute(entry["og_url"])))
+    out.append(render_head_field_inline("og:image", "property", social_image_url()))
     out.append(('    <meta property="og:image:width" content="1200">' + CRLF).encode("utf-8"))
     out.append(('    <meta property="og:image:height" content="630">' + CRLF).encode("utf-8"))
-    out.append(render_head_field_inline("og:image:alt", "property", entry["og_image_alt"]))
+    out.append(render_head_field_inline("og:image:alt", "property", social_image_alt()))
     out.append(('    <meta property="og:site_name" content="' + attr(SITE["brand_name"]) + '">' + CRLF).encode("utf-8"))
     out.append(('    <meta name="twitter:card" content="summary_large_image">' + CRLF).encode("utf-8"))
     if entry["canonical"]:
-        out.append(('    <link rel="canonical" href="' + attr(entry["canonical"]) + '">' + CRLF).encode("utf-8"))
-    out.append(('    <link rel="icon" href="' + attr(entry["favicon_href"]) + '">' + CRLF).encode("utf-8"))
+        canonical = site_absolute(entry["canonical"])
+        out.append(('    <link rel="canonical" href="' + attr(canonical) + '">' + CRLF).encode("utf-8"))
+    out.append(('    <link rel="icon" href="' + attr(favicon_href(entry)) + '">' + CRLF).encode("utf-8"))
     out.append(('    <link rel="stylesheet" href="' + attr(entry["stylesheet_href"]) + '">' + CRLF).encode("utf-8"))
     if entry["jsonld_fragment"]:
         out.append(load_fragment(entry["jsonld_fragment"]))
@@ -293,8 +318,8 @@ def render_page(entry, cache):
 
 REQUIRED_ENTRY_KEYS = (
     "output", "comment", "title", "description", "robots", "og_title",
-    "og_description", "og_type", "og_url", "og_image", "og_image_alt",
-    "canonical", "favicon_href", "stylesheet_href", "jsonld_fragment",
+    "og_description", "og_type", "og_url",
+    "canonical", "stylesheet_href", "jsonld_fragment",
     "body_fragment", "current_nav", "contact_label", "footer_order",
     "footer_omit", "root_absolute",
 )
@@ -314,6 +339,16 @@ def validate(entries):
         omit = entry.get("footer_omit")
         if omit and omit not in dict(FOOTER_LINKS):
             problems.append(f"{where}: footer_omit {omit!r} is not a footer link key")
+        # canonical and og:url are stored site relative so the domain lives in
+        # site.json alone. A value that still carries a scheme would render as
+        # a doubled URL, which is the one way this storage form goes wrong.
+        for key in ("canonical", "og_url"):
+            value = entry.get(key)
+            if value and not value.startswith("/"):
+                problems.append(
+                    f"{where}: {key} {value!r} must be a site relative path "
+                    f"beginning with /, not an absolute URL"
+                )
     if problems:
         print("The content model is not valid, so nothing was built:")
         for problem in problems:

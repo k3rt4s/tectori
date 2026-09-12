@@ -4,13 +4,13 @@
         "@graph": [
           {
             "@type": "Service",
-            "@id": "https://www.tectori.com/service-it-operations#service",
+            "@id": "{{SITE_URL}}/service-it-operations#service",
             "name": "IT operations",
-            "url": "https://www.tectori.com/service-it-operations",
+            "url": "{{SITE_URL}}/service-it-operations",
             "description": "Repeatable and documented administration for Windows, Active Directory, Azure, IIS, and Microsoft 365, with dry runs, plan records, and rollback reporting.",
             "serviceType": "IT operations",
             "provider": {
-              "@id": "https://www.tectori.com/#organization"
+              "@id": "{{SITE_URL}}/#organization"
             },
             "areaServed": {
               "@type": "Country",
@@ -19,25 +19,25 @@
           },
           {
             "@type": "BreadcrumbList",
-            "@id": "https://www.tectori.com/service-it-operations#breadcrumb",
+            "@id": "{{SITE_URL}}/service-it-operations#breadcrumb",
             "itemListElement": [
               {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "https://www.tectori.com/"
+                "item": "{{SITE_URL}}/"
               },
               {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Services",
-                "item": "https://www.tectori.com/services"
+                "item": "{{SITE_URL}}/services"
               },
               {
                 "@type": "ListItem",
                 "position": 3,
                 "name": "IT operations",
-                "item": "https://www.tectori.com/service-it-operations"
+                "item": "{{SITE_URL}}/service-it-operations"
               }
             ]
           }

@@ -4,12 +4,12 @@
         "@graph": [
           {
             "@type": "CollectionPage",
-            "@id": "https://www.tectori.com/services#webpage",
+            "@id": "{{SITE_URL}}/services#webpage",
             "name": "Services | Tectori",
-            "url": "https://www.tectori.com/services",
+            "url": "{{SITE_URL}}/services",
             "description": "Tectori's six consulting service lines, from fractional CIO and CISO leadership to cloud, cybersecurity, compliance, IT operations, and agentic AI.",
             "publisher": {
-              "@id": "https://www.tectori.com/#organization"
+              "@id": "{{SITE_URL}}/#organization"
             },
             "mainEntity": {
               "@type": "ItemList",
@@ -18,56 +18,56 @@
                   "@type": "ListItem",
                   "position": 1,
                   "name": "Fractional CIO and CISO leadership",
-                  "url": "https://www.tectori.com/service-fractional-leadership"
+                  "url": "{{SITE_URL}}/service-fractional-leadership"
                 },
                 {
                   "@type": "ListItem",
                   "position": 2,
                   "name": "Cloud architecture and operations",
-                  "url": "https://www.tectori.com/service-cloud-architecture"
+                  "url": "{{SITE_URL}}/service-cloud-architecture"
                 },
                 {
                   "@type": "ListItem",
                   "position": 3,
                   "name": "Cybersecurity",
-                  "url": "https://www.tectori.com/service-cybersecurity"
+                  "url": "{{SITE_URL}}/service-cybersecurity"
                 },
                 {
                   "@type": "ListItem",
                   "position": 4,
                   "name": "Compliance and risk management",
-                  "url": "https://www.tectori.com/service-compliance-risk"
+                  "url": "{{SITE_URL}}/service-compliance-risk"
                 },
                 {
                   "@type": "ListItem",
                   "position": 5,
                   "name": "IT operations",
-                  "url": "https://www.tectori.com/service-it-operations"
+                  "url": "{{SITE_URL}}/service-it-operations"
                 },
                 {
                   "@type": "ListItem",
                   "position": 6,
                   "name": "Agentic AI orchestration",
-                  "url": "https://www.tectori.com/service-agentic-ai"
+                  "url": "{{SITE_URL}}/service-agentic-ai"
                 }
               ]
             }
           },
           {
             "@type": "BreadcrumbList",
-            "@id": "https://www.tectori.com/services#breadcrumb",
+            "@id": "{{SITE_URL}}/services#breadcrumb",
             "itemListElement": [
               {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "https://www.tectori.com/"
+                "item": "{{SITE_URL}}/"
               },
               {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Services",
-                "item": "https://www.tectori.com/services"
+                "item": "{{SITE_URL}}/services"
               }
             ]
           }

@@ -22,7 +22,7 @@
             >
           </div>
           <form class="contact-form" action="https://formspree.io/f/mljeabad" method="POST">
-            <input type="hidden" name="_next" value="https://www.tectori.com/thank-you">
+            <input type="hidden" name="_next" value="{{SITE_URL}}/thank-you">
             <div class="form-field">
               <label for="contact-name">Name</label>
               <input id="contact-name" name="name" autocomplete="name" required>

@@ -4,6 +4,19 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Made the domain a single value. Canonicals and og:url are stored in
+  `site/content/pages.json` as site relative paths that the build prefixes;
+  the JSON-LD and body fragments carry `{{SITE_URL}}` and `{{SITE_HOST}}`;
+  and og:image, its alt text and the favicon href, which were identical on
+  all 24 pages, are derived from `site.json` rather than stored 24 times.
+  Nothing under `site/` spells the domain out except `site_url`. The build
+  stayed byte-identical throughout.
+- Stopped listing the site's own host among the allowed external hosts in
+  `site.json` and derived it from `site_url` instead. Measured by rebuilding
+  against a fictional domain: 166 occurrences follow the one value, the
+  hand-authored `docs/login.html` is the only file left behind, and
+  `verify_site.py` now fails on it instead of letting the stale domain ship.
+
 - Generated `docs/CNAME`, `docs/robots.txt`, `docs/sitemap.xml` and
   `docs/llms.txt` from the content model instead of copying them across.
   The domain now comes from `site/content/site.json` and the public page

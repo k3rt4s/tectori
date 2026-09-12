@@ -4,6 +4,8 @@
   "tagline": "Audit-ready IT that scales with your ambition",
   "site_url": "https://www.tectori.com",
   "logo_filename": "tectori-logo.png",
+  "social_image_filename": "tectori-social.png",
+  "favicon_filename": "tectori-favicon.png",
   "phone_display": "(615) 829-6802",
   "phone_tel_uri": "tel:+16158296802",
   "phone_schema": "+1-615-829-6802",
@@ -28,7 +30,6 @@
     "docs.github.com": "GitHub's own documentation, linked from resources.html",
     "genai.owasp.org": "the OWASP GenAI project, linked from resources.html",
     "schema.org": "the JSON-LD vocabulary, which is a namespace rather than a fetch",
-    "www.sitemaps.org": "the sitemap XML namespace, which is a namespace rather than a fetch",
-    "www.tectori.com": "the site's own absolute URLs in canonicals, og:url and JSON-LD"
+    "www.sitemaps.org": "the sitemap XML namespace, which is a namespace rather than a fetch"
   }
 }

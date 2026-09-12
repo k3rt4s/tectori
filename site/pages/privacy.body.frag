@@ -34,7 +34,7 @@
             your browser's user agent string. That is the same information any
             image request sends to the server it comes from. This site is set
             up so that Scarf is told only that the request came from
-            www.tectori.com, and not which page you are reading. Scarf uses the
+            {{SITE_HOST}}, and not which page you are reading. Scarf uses the
             IP address to look up the organization that address belongs to, and
             reports those organizations and visit counts to Tectori. Scarf
             states that it does not store the IP address itself. Scarf's

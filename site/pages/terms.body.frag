@@ -9,7 +9,7 @@
         <div class="prose">
           <h2 id="terms-title">Acceptance of these terms</h2>
           <p>
-            By using www.tectori.com you accept these terms. If you do not
+            By using {{SITE_HOST}} you accept these terms. If you do not
             accept them, do not use the site.
           </p>
           <h2>Informational content only</h2>

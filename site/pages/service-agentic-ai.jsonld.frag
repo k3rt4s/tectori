@@ -4,13 +4,13 @@
         "@graph": [
           {
             "@type": "Service",
-            "@id": "https://www.tectori.com/service-agentic-ai#service",
+            "@id": "{{SITE_URL}}/service-agentic-ai#service",
             "name": "Agentic AI orchestration",
-            "url": "https://www.tectori.com/service-agentic-ai",
+            "url": "{{SITE_URL}}/service-agentic-ai",
             "description": "Governed AI automation with approval gates, monitoring, decision records, and human accountability, aligned with ISO/IEC 42001 and the NIST AI Risk Management Framework.",
             "serviceType": "Agentic AI orchestration",
             "provider": {
-              "@id": "https://www.tectori.com/#organization"
+              "@id": "{{SITE_URL}}/#organization"
             },
             "areaServed": {
               "@type": "Country",
@@ -19,25 +19,25 @@
           },
           {
             "@type": "BreadcrumbList",
-            "@id": "https://www.tectori.com/service-agentic-ai#breadcrumb",
+            "@id": "{{SITE_URL}}/service-agentic-ai#breadcrumb",
             "itemListElement": [
               {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "https://www.tectori.com/"
+                "item": "{{SITE_URL}}/"
               },
               {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Services",
-                "item": "https://www.tectori.com/services"
+                "item": "{{SITE_URL}}/services"
               },
               {
                 "@type": "ListItem",
                 "position": 3,
                 "name": "Agentic AI orchestration",
-                "item": "https://www.tectori.com/service-agentic-ai"
+                "item": "{{SITE_URL}}/service-agentic-ai"
               }
             ]
           }
