@@ -22,7 +22,8 @@ directly.
 ## Layout
 
 - `docs/` contains the public website files served by GitHub Pages.
-- `docs/assets/` contains website-owned image assets.
+- `site/static/` holds the stylesheet, the script and the images. They are
+  copied into `docs/` by the build, so edit them there and never in `docs/`.
 - `docs/solutions.html` presents the incubated Tectori solution portfolio.
 - `docs/service-*.html` are the six individual service line pages, one per
   anchored section on `docs/services.html`, which remains the hub.
@@ -111,9 +112,8 @@ the business rather than to the site's structure, the brand name, the tagline,
 the contact strings, the domain, the logo, social card and favicon filenames,
 and the three third-party identifiers, are declared once in
 `site/content/site.json`. The domain in particular is a single value:
-changing `site_url` moves 166 occurrences across a rebuilt tree, and there is
-no file it cannot reach. `PERMISSIONS.md` covers hosting, DNS, and the
-from-scratch deploy.
+changing `site_url` reaches every file in a rebuilt tree. `PERMISSIONS.md`
+covers hosting, DNS, and the from-scratch deploy.
 
 ## Making this site yours
 
@@ -129,13 +129,15 @@ previous owner nowhere.
    social URLs, and the external host allowlist. Delete an entry from
    `third_party` only by also removing what emits it, or a check will fail
    on the count.
-2. Replace the images in `docs/assets/` and name them to match step 1. The
-   logo, social card and favicon are the three the build reads from
+2. Replace the images in `site/static/assets/` and name them to match step 1.
+   The logo, social card and favicon are the three the build reads from
    `site.json`. The band image and both hero files are referenced by name
-   from `site/pages/index.body.frag` and `docs/styles.css` instead, so those
-   two files need editing if you rename them. The hero is two files, a
+   from `site/pages/index.body.frag` and `site/static/styles.css` instead, so
+   those two files need editing if you rename them. The hero is two files, a
    `.webp` offered through a `srcset` and a `.png` behind it, and a browser
-   that prefers webp never loads the png.
+   that prefers webp never loads the png. Renaming a file leaves the old name
+   in `docs/assets/`, because a build writes files and never deletes them, so
+   delete it there by hand. The rehearsal fails on one that is left behind.
 3. Rewrite the brand name in `site/pages/login.page.frag`, which carries it
    five times as prose. Nothing else on that page needs touching: the
    filenames and both forms of the domain come from `site.json` like

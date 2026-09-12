@@ -4,6 +4,29 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- The stylesheet, the script and the twelve images moved from `docs/` to
+  `site/static/`, which was the last source living inside the build output.
+  The build had been walking `docs/`, skipping what it had just generated and
+  copying the rest, which made the output directory an input to its own build.
+  Two things followed from that and both are gone. A clone without `docs/`
+  built 29 files and no stylesheet, script or images, and said nothing was
+  wrong: it printed that there was nothing to copy because it wrote into the
+  directory it reads them from, which was false in that tree. And a hand edit
+  to `docs/styles.css` survived every rebuild while `README.md` said, in its
+  first paragraph, that `docs/` has no exceptions and a hand edit there is
+  overwritten. That sentence is true now. The same clone builds 43 files.
+- `docs/` is byte identical, so the live site is untouched, and a build into a
+  scratch directory reproduces all 43 files exactly.
+- Moving the images exposed a gap in the rebrand rehearsal. Its runbook step 2
+  renamed the three declared images inside `docs/assets/`, which is the copy
+  rather than the source, so after the move the next build would have put the
+  previous owner's filenames straight back. It renames the source now and
+  deletes the stale copy, and a new scan fails on any file in the rebranded
+  tree still named for one of the old images. A declared value can survive as
+  a filename as well as as a line of text, and the residue scan reads content
+  only, so nothing would have caught the previous owner's logo sitting in the
+  tree under its own name. Mutation tested: leaving the stale copy fails the
+  rehearsal and names all three files.
 - `WORK_BOARD.md` split at 268 lines, against the 200 line threshold at which
   a board stops being read. The 132 lines of completed work in In Progress
   moved verbatim into `BOARD_ARCHIVE_2026.md`, which leaves the board at 144.

@@ -6,7 +6,9 @@ What a session needs to believe before it changes anything in this repo.
 
 - `docs/` is generated output, not source. `scripts/build_site.py` renders every
   page from `site/`, and `CNAME`, `robots.txt`, `sitemap.xml` and `llms.txt`
-  with them. A hand edit is overwritten by the next build. Rebuild with
+  with them, and copies the stylesheet, the script and the images out of
+  `site/static/`. There are no exceptions and nothing under `docs/` is an
+  input: a hand edit there is overwritten by the next build. Rebuild with
   `--out docs` and run `scripts/check_site.py` before any deploy.
 - Line endings belong to the repository, not to whoever clones it.
   `.gitattributes` pins them: blobs LF, working copies CRLF except
@@ -53,7 +55,7 @@ What a session needs to believe before it changes anything in this repo.
   is what static hosting supports. Its `_next` field needs an absolute URL.
 - `scripts/compare_render.py` proves render equality, not byte equality, and is
   sound only because every chrome container is a flex or grid box in
-  `docs/styles.css`, where whitespace-only text generates no boxes, and because
+  `site/static/styles.css`, where whitespace-only text generates no boxes, and
   no page contains a `pre`. Break either assumption and reformatting needs a
   different proof.
 - The hero uses `min-height`, so copy that wraps grows it rather than clipping.
