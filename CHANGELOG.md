@@ -4,6 +4,23 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- The runbook in `README.md` gained the founder's identity as step 2, between
+  the business values and the images, and the steps after it are renumbered.
+  A new owner following the old list in order rebranded the business and
+  shipped a site whose home page still carried the previous owner's name in
+  its Person node. The biography strings are named there as explicitly not
+  part of that step: there is nothing to substitute, they belong to the copy
+  step, and the rehearsal reports how many survive and which files hold them.
+- `PERMISSIONS.md` called GitHub Actions best-effort and said Pages deployed
+  from the branch whether the workflow ran or not. That was true until the
+  deploy moved into the workflow on 2026-09-12 and is now the opposite of
+  true: Actions is the only route to the site, and disabling it stops every
+  deploy rather than costing the checks alone. The Pages entry also now says
+  what the site needs from any host, which is one behaviour rather than a
+  product: links and canonicals are extensionless, so a host that serves
+  files literally returns all 43 correctly and 404s on every link on every
+  page while every check in the repository still passes.
+
 - The founder's identity is declared content. `site/content/founder.json` holds
   the name, the given name, the job title and the structured-data anchor, and
   the build exposes all four as tokens the way `site.json`'s values already

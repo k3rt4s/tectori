@@ -39,18 +39,30 @@ accounts below, never in this repository.
   `requirements.txt` for that reason, not by oversight.
 - **git and a GitHub account**: required, used to deploy. A push to `main` is
   the go-live.
-- **GitHub Pages**: required, serves the site. Free tier is sufficient.
+- **GitHub Pages**: required, serves the site. Free tier is sufficient. What
+  the site needs from a host is one behaviour rather than a product: every
+  internal link and every canonical is extensionless, so the host must serve
+  `/about` for the file `about.html`. Pages does. A bucket or a default nginx
+  returns all 43 files correctly and 404s on every link on every page, and
+  every check in this repository still passes, because the checks read the
+  tree rather than the live site. Only `scripts/check_live_deploy.py` would
+  catch it, and only after the move.
 - **A registrar that can set A, AAAA, and CNAME records**: required, points
   the custom domain at Pages. The current registrar is Dynadot.
 - **markdownlint-cli2 via npx**: best-effort, lints Markdown only. Skipping it
   degrades nothing at runtime; the site builds and deploys without Node
   installed.
-- **GitHub Actions**: best-effort, runs the checks on every push and pull
-  request from `.github/workflows/verify.yml`. It needs `contents: read` and
-  no secrets, and it pulls `actions/checkout` and `actions/setup-python` from
-  the Actions marketplace at run time. Disabling Actions costs the checks on
-  a clean machine and nothing else: Pages deploys from `main` and `docs/`
-  whether the workflow passed, failed, or never ran.
+- **GitHub Actions**: required, and it is the deploy.
+  `.github/workflows/verify.yml` runs the checks on every push and pull
+  request, and on a push to `main` that passes them a second job uploads
+  `docs/` to Pages. It needs `contents: read`, `pages: write` and
+  `id-token: write`, no secrets, and it pulls `actions/checkout`,
+  `actions/setup-python` and the Pages actions from the marketplace at run
+  time. Disabling Actions no longer costs the checks
+  alone, it stops every deploy: the site that is already up keeps serving and
+  nothing new reaches it. This entry said Actions was best-effort and that
+  Pages deployed from the branch regardless, which was true until 2026-09-12
+  and is the opposite of true now.
 
 ---
 
