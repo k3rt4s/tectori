@@ -4,6 +4,19 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Added `.gitattributes`, so line endings are a property of this repository
+  rather than of whoever clones it. The tree had none, and this working copy
+  set `core.autocrlf` locally, which is why the CRLF invariant held here and
+  nowhere else. Measured on a clone with `core.autocrlf` unset, which is what
+  Linux, macOS and most CI runners give you: checkout produced LF, the build
+  wrote CRLF, and a rebuild that changed nothing produced a 1700 line diff
+  across 26 files with all five checks passing. A clone on this machine
+  produced `docs/CNAME` with CRLF, and GitHub Pages reads that file itself to
+  resolve the custom domain. The live site was never affected, because Pages
+  reads the stored blob rather than a working copy. Verified after the fix:
+  the same clone rebuilds to an empty diff, `CNAME` stays one bare LF, and
+  all 12 binary assets hash identically to this tree. Stored blobs are
+  unchanged, `git add --renormalize` stages nothing.
 - Gave `scripts/check_site.py` a `--full` flag that adds the rebrand
   rehearsal as a sixth check. The repository proved two different things
   with two different commands, and only one of them was the command a

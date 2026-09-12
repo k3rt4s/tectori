@@ -1,6 +1,6 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-12 02:40. An orchestrator session is live in this
+ACTIVE THREAD: 2026-09-12 04:05. An orchestrator session is live in this
 working copy and is running unattended. Do not work this tree until the
 marker is cleared.
 
@@ -62,18 +62,50 @@ lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
   sixth check, off the default path because it clones the tree outside the
   repo and takes about a minute. A failing rehearsal fails the run.
 
-The next step this thread is taking is to work through the copy on the six
-service pages the way the buyer read worked through the documents. Every
-check in this repo tests whether the site is consistent with itself, and
-the one thing none of them can test is whether a page is worth reading.
-Those six pages carry the offer, they were written early, and they have not
-been read end to end since. Anything that reads as a claim about results,
-clients or credentials is checked against what the site is allowed to say,
-and anything vague enough to describe any consultancy is a finding. This is
-a reading task producing a written list, not an edit: changing the copy is
-Jon's call, and the list is what he decides from.
+- **The service page copy read is done and is waiting on Jon.** A worker read
+  all six service page fragments against what THEORY.md says the site may
+  claim. The report is at
+  `C:\Code_data\tectori\reproducible\service_copy_read_2026-09-12.md`.
+  Nothing crosses a line: no client, count, testimonial, rating, price or
+  result appears anywhere, and the QSA credential is never named. It found
+  five sentences that would describe any consultancy in the country, a
+  weakest sentence on each page with a replacement, and two disclaimers said
+  twice in different words. Three of its line citations were checked against
+  the fragments and all three were exact. It is listed under Owner-Only Tasks
+  below because every item in it is a copy judgment, which is Jon's.
+- **Line endings are pinned to the repository now.** The tree had no
+  `.gitattributes`, so they came from whoever cloned it, and this working
+  copy's local `core.autocrlf` was the only thing holding the invariant up.
+  A clone without it rebuilt to a 1700 line diff across 26 files having
+  changed nothing, with all five checks passing, and a clone on this machine
+  produced `docs/CNAME` with CRLF, which is the file GitHub Pages reads to
+  resolve the custom domain. The live site was never affected. After the fix
+  the same clone rebuilds to an empty diff. THEORY.md carried the invariant
+  as a repository property when it was a machine property; that is corrected.
+
+The next step this thread is taking is to cut THEORY.md back under the 60
+line standard. It is 95 lines and the framework's own reason for the limit is
+that a longer one stops being read, which matters more here than usual: it is
+the file a buyer reads to find out what they must not break. The cut is by
+merging what repeats and dropping what the code now enforces on its own,
+never by dropping a constraint that is still load bearing.
 
 ## Owner-Only Tasks
+
+- **COPY-SERVICE, decide what to change on the six service pages.** The read
+  is done and the findings are at
+  `C:\Code_data\tectori\reproducible\service_copy_read_2026-09-12.md`.
+  Every item is a copy judgment, so none of it was applied. Two are worth
+  Jon's attention before the rest. The first is
+  `service-fractional-leadership`, which the read names as the page most
+  worth rewriting: its heading, its opening premise and its accountability
+  line are all stock fractional-CIO wording. The second is one sentence on
+  that page, "Every engagement is delivered directly by Tectori's founder",
+  which states solo delivery outright where THEORY.md says the copy must not
+  frame the practice as one person. The read judged it acceptable because it
+  separates the offer from a staffing placement. That call is Jon's, and it
+  is the only place in the six pages where a stated commitment and the
+  shipped words point different ways.
 
 - **EXPORT-GSC, get the Search Console export.** Verify the property at
   search.google.com/search-console for `www.tectori.com`, export Performance

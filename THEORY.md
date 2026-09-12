@@ -10,11 +10,17 @@ What a session needs to believe before it changes anything in this repo.
   fragment and rebuild with `--out docs`; a hand edit is overwritten by the
   next build. `scripts/check_site.py` is the one command to run before a
   deploy, and byte equality against `docs/` is one of its five checks.
-- Everything the build reads or writes is CRLF. The exceptions are four files
-  it does not touch, `.gitignore`, `.env.example`, `CLAUDE.md`, and `CNAME`,
-  which GitHub Pages reads itself and which the generator emits with one bare
-  LF for that reason. A scripted edit that writes LF anywhere else corrupts
-  the diff for the whole file, so confirm the bare-LF count after any splice.
+- Line endings belong to the repository, not to whoever cloned it. Since
+  2026-09-12 `.gitattributes` pins them: every stored blob is LF, and every
+  working copy is CRLF except five files, `.gitignore`, `.env.example`,
+  `CLAUDE.md`, `docs/CNAME`, which GitHub Pages reads itself and which the
+  generator emits with one bare LF for that reason, and the one `.svg`, which
+  the build copies byte for byte rather than rendering. Before that file
+  existed the invariant held only where `core.autocrlf` happened to be set. A
+  clone without it checked out LF, rebuilt to CRLF, and produced a 1700 line
+  diff across 26 files from changing nothing, with all five checks passing. A
+  scripted edit that writes LF anywhere else corrupts the diff for the whole
+  file, so confirm the bare-LF count after any splice.
 - The values that belong to the business rather than to the site are declared
   once in `site/content/site.json`: brand name, tagline, domain, asset
   filenames, the three contact strings, the social URLs and the three
