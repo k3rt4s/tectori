@@ -7,10 +7,10 @@ The site presents Tectori's IT and security consulting services and is built as
 a static website for low-cost hosting.
 
 Read this before editing anything. `docs/` is the last build's output, not
-the source. You edit `site/`, then rebuild. The one exception is
-`docs/login.html`, which is hand authored and which the generator leaves
-alone. A hand edit to any other file under `docs/` is overwritten by the next
-build with no warning at the time you make it.
+the source, and it has no exceptions: every file in it is either generated
+or copied from elsewhere. You edit `site/`, then rebuild. A hand edit under
+`docs/` is overwritten by the next build with no warning at the time you
+make it.
 
 ## Quick Start
 
@@ -110,11 +110,10 @@ No local secrets or runtime settings are required. The values that belong to
 the business rather than to the site's structure, the brand name, the tagline,
 the contact strings, the domain, the logo, social card and favicon filenames,
 and the three third-party identifiers, are declared once in
-`site/content/site.json`. The domain in particular is a single value: changing
-`site_url` moves 166 occurrences across a rebuilt tree, and the only file it
-cannot reach, the hand-authored `docs/login.html`, fails a check rather than
-shipping stale. `PERMISSIONS.md` covers hosting, DNS, and the from-scratch
-deploy.
+`site/content/site.json`. The domain in particular is a single value:
+changing `site_url` moves 166 occurrences across a rebuilt tree, and there is
+no file it cannot reach. `PERMISSIONS.md` covers hosting, DNS, and the
+from-scratch deploy.
 
 ## Making this site yours
 
@@ -137,13 +136,12 @@ previous owner nowhere.
    two files need editing if you rename them. The hero is two files, a
    `.webp` offered through a `srcset` and a `.png` behind it, and a browser
    that prefers webp never loads the png.
-3. Edit `docs/login.html` by hand. It is the one page the generator does not
-   model. It carries five uses of the brand name, both asset filenames, the
-   domain as a full URL in its canonical, and the domain again as plain text
-   in the link back to the home page. That last one is easy to miss because
-   it is lowercase and has no `www`; the identity check fails on it rather
-   than letting it ship. The page also holds the only Content-Security-Policy
-   in the tree.
+3. Rewrite the brand name in `site/pages/login.page.frag`, which carries it
+   five times as prose. Nothing else on that page needs touching: the
+   filenames and both forms of the domain come from `site.json` like
+   everywhere else. Until 2026-09-12 this page was hand authored inside
+   `docs/` and this step was a list of substitutions to make by hand. The
+   page still holds the only Content-Security-Policy in the tree.
 4. Rewrite the copy. It lives in `site/pages/<slug>.body.frag` for the visible
    text, `site/pages/<slug>.jsonld.frag` for the structured data, and the
    title, description and og fields in `site/content/pages.json`. On nine

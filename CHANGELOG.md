@@ -4,6 +4,23 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `login.html` is generated now. It was a hand-authored source file living
+  inside `docs/`, the build output, which is the one place the project's own
+  rules say source never goes. A rebrand reached it only through a list of
+  substitutions written out by hand in `rehearse_rebrand.py` and repeated as
+  step 3 of the README runbook, and nothing failed when either fell behind.
+  It now lives at `site/pages/login.page.frag` and is rendered through the
+  same token substitution as every other fragment, without the shared chrome
+  it has never had. `docs/login.html` is byte identical.
+- Added `{{SITE_APEX}}` and `{{FAVICON_FILENAME}}`, the two values that page
+  needed and no other fragment had asked for. The apex is the domain without
+  its `www`, which reads as prose in the link home and was the substitution
+  easiest to forget.
+- Dropped `rewrite_login` from the rehearsal and step 3 from the runbook.
+  Mutation tested by restoring the literal domain in the link home: the
+  rehearsal names the value, the file and the line, and exits 1. What the
+  rehearsal proves is larger for the removal, because it no longer rebrands
+  that page itself before measuring whether the build did.
 - Tokenized 48 hard-coded identity values across 13 fragments. The phone
   number, the mailing address, the LinkedIn and GitHub profiles and the logo
   filename were written as literals in the page bodies while only the footer
