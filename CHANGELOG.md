@@ -4,6 +4,15 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- `verify_site.py` resolves the part of a link that says which section of a
+  page it means. The link check drops the fragment before resolving, by
+  design, so it asks only whether the file exists, and nothing read the rest.
+  A heading renamed in a copy edit takes its id with it, every check still
+  passes, and a visitor following a link to one service on the hub page lands
+  at the top of a long page with nothing to tell them why. Proved against a
+  copy with one section id on `services.html` renamed: the committed suite
+  passed it 18 of 18, this one names the page, the link and the missing id.
+
 - `verify_site.py` reads `robots.txt`, which nothing did. It is the one file
   that can take the business off the internet without changing a page: a
   tree whose robots.txt tells Googlebot to stay out passed all seventeen
