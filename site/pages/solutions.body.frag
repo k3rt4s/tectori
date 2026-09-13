@@ -93,8 +93,8 @@
           <img loading="lazy"
             src="assets/solution-compliance-compass.png"
             alt="Compliance Compass mark"
-            width="640"
-            height="640">
+            width="300"
+            height="300">
           <div>
             <h2>Compliance Compass</h2>
             <p>
@@ -115,8 +115,8 @@
           <img loading="lazy"
             src="assets/solution-mailsweep.png"
             alt="MailSweep mark"
-            width="640"
-            height="640">
+            width="300"
+            height="300">
           <div>
             <h2>MailSweep</h2>
             <p>
@@ -137,8 +137,8 @@
           <img loading="lazy"
             src="assets/solution-fileiq.png"
             alt="FileIQ mark"
-            width="640"
-            height="640">
+            width="300"
+            height="300">
           <div>
             <h2>FileIQ</h2>
             <p>
@@ -160,8 +160,8 @@
           <img loading="lazy"
             src="assets/solution-architect-copilot.png"
             alt="Architect Copilot mark"
-            width="640"
-            height="640">
+            width="300"
+            height="300">
           <div>
             <h2>Architect Copilot</h2>
             <p>
@@ -182,8 +182,8 @@
           <img loading="lazy"
             src="assets/solution-lumenwatch.png"
             alt="Lumenwatch mark"
-            width="640"
-            height="640">
+            width="300"
+            height="300">
           <div>
             <h2>Lumenwatch</h2>
             <p>
