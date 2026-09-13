@@ -4,6 +4,21 @@ Tectori website changes are recorded here.
 
 ## 2026-09-12
 
+- Five of the six solution marks declared themselves 640 by 640 on both pages
+  that show them, and the files are 300 by 300. The sixth is an SVG whose
+  viewBox really is 640, and the other five were copied from it. The
+  declarations now say 300, which is what the browser reserves space for before
+  the file arrives.
+- `verify_site.py` gained a twenty-fifth check, which reads the pixel size out
+  of every image file a page declares a size for and requires the two to agree.
+  It reads PNG, WebP, JPEG and an SVG viewBox from the bytes, because this tree
+  refuses an image library, and a format it cannot read fails rather than being
+  skipped. It also holds the two halves of a `picture` element to one shape, so
+  a WebP and the PNG behind it cannot come to differ and change the page for
+  whoever's browser takes the fallback, and it requires the card image to be at
+  least the 1200 by 630 a link preview is rendered at, which is visible
+  everywhere the site is shared and nowhere on the site.
+
 - `verify_site.py` gained a twenty-fourth check, which requires the structured
   data a page defines to name that page. Six service pages carry near identical
   JSON-LD, and a seventh begun by copying one of them ships a node whose `@id`,

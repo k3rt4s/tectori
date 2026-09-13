@@ -1909,6 +1909,186 @@ def find_graph_nodes(data, node_type: str) -> list:
     ]
 
 
+# The size a link preview is rendered at. Carried here rather than read from a
+# page, because no sentence on this site promises it: it is what Facebook,
+# LinkedIn, Slack and X each ask for, and a smaller file is either upscaled or
+# dropped for a blank card. Nothing else in the tree states it.
+SOCIAL_IMAGE_SIZE = (1200, 630)
+
+IMG_ATTRS_RE = re.compile(r"<img\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+PICTURE_RE = re.compile(r"<picture\b[^>]*>(.*?)</picture\s*>", re.IGNORECASE | re.DOTALL)
+SOURCE_RE = re.compile(r"<source\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+WIDTH_ATTR_RE = re.compile(r'\bwidth\s*=\s*["\']?(\d+)', re.IGNORECASE)
+HEIGHT_ATTR_RE = re.compile(r'\bheight\s*=\s*["\']?(\d+)', re.IGNORECASE)
+SRC_ATTR_RE = re.compile(r'\bsrc\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
+SRCSET_ATTR_RE = re.compile(r'\bsrcset\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
+SVG_VIEWBOX_RE = re.compile(
+    r'viewBox\s*=\s*(["\'])\s*[-\d.]+\s+[-\d.]+\s+([\d.]+)\s+([\d.]+)\s*\1',
+    re.IGNORECASE,
+)
+
+
+def image_size(path: Path):
+    """Return an image file's pixel size, or None with the reason it could not be read."""
+    raw = path.read_bytes()
+    if raw[:8] == b"\x89PNG\r\n\x1a\n" and raw[12:16] == b"IHDR":
+        return (
+            int.from_bytes(raw[16:20], "big"),
+            int.from_bytes(raw[20:24], "big"),
+        ), None
+    if raw[:4] == b"RIFF" and raw[8:12] == b"WEBP":
+        chunk = raw[12:16]
+        if chunk == b"VP8X":
+            return (
+                int.from_bytes(raw[24:27], "little") + 1,
+                int.from_bytes(raw[27:30], "little") + 1,
+            ), None
+        if chunk == b"VP8 ":
+            return (
+                int.from_bytes(raw[26:28], "little") & 0x3FFF,
+                int.from_bytes(raw[28:30], "little") & 0x3FFF,
+            ), None
+        if chunk == b"VP8L" and raw[20:21] == b"\x2f":
+            bits = int.from_bytes(raw[21:25], "little")
+            return ((bits & 0x3FFF) + 1, ((bits >> 14) & 0x3FFF) + 1), None
+        return None, "its WebP chunk type is one this check does not read"
+    if raw[:2] == b"\xff\xd8":
+        offset = 2
+        while offset + 9 < len(raw):
+            if raw[offset] != 0xFF:
+                break
+            marker = raw[offset + 1]
+            length = int.from_bytes(raw[offset + 2 : offset + 4], "big")
+            # Every start-of-frame marker but the four that are not frames.
+            if 0xC0 <= marker <= 0xCF and marker not in (0xC4, 0xC8, 0xCC, 0xD8):
+                return (
+                    int.from_bytes(raw[offset + 7 : offset + 9], "big"),
+                    int.from_bytes(raw[offset + 5 : offset + 7], "big"),
+                ), None
+            offset += 2 + length
+        return None, "its JPEG frame header could not be found"
+    if path.suffix.lower() == ".svg":
+        box = SVG_VIEWBOX_RE.search(raw.decode("utf-8", errors="ignore"))
+        if box is None:
+            return None, "the SVG declares no viewBox to take a shape from"
+        return (float(box.group(2)), float(box.group(3))), None
+    return None, "its format is one this check does not read"
+
+
+def check_image_dimensions(pages: list[Path], docs_root: Path) -> bool:
+    """A declared image size is the file's real size, and a picture's halves are one shape.
+
+    width and height on an image are a statement about the file, and the
+    browser believes them before the file arrives: they are what reserves the
+    space so the page does not jump once it does. Nothing read them, and on
+    2026-09-12 five of the six solution marks declared 640 by 640 for files
+    that are 300 by 300, because the sixth is an SVG whose viewBox really is
+    640 and the other five were copied from it. A declared shape that does not
+    match the file is the one thing here a visitor sees rather than a crawler:
+    the wrong ratio distorts the image, and the wrong size reserves a hole of
+    the wrong height that the page collapses out of when the image loads.
+
+    The same question applies to the two halves of a picture element and to the
+    social card. A WebP and the PNG behind it that are different shapes swap
+    the layout for whoever's browser takes the fallback, and a card image below
+    the size a link preview is rendered at is upscaled or dropped, which is
+    visible everywhere the site is shared and nowhere on the site.
+    """
+    problems: list[str] = []
+    sizes: dict[Path, tuple] = {}
+
+    def measure(value: str, page: Path, what: str):
+        """Return the pixel size of an image a page names, or None."""
+        kind, target = resolve_internal(value, page, docs_root)
+        if kind != "internal" or target is None or not target.is_file():
+            # The stated-URL and link checks own an image that is not there.
+            return None
+        if target not in sizes:
+            size, reason = image_size(target)
+            if size is None:
+                problems.append(f"{target.name}: {reason}, so {what} went unchecked")
+            sizes[target] = size
+        return sizes[target]
+
+    declared = 0
+    for page in pages:
+        text = page.read_text(encoding="utf-8")
+        for match in IMG_ATTRS_RE.finditer(text):
+            attrs = match.group(1)
+            src = SRC_ATTR_RE.search(attrs)
+            width = WIDTH_ATTR_RE.search(attrs)
+            height = HEIGHT_ATTR_RE.search(attrs)
+            if not (src and width and height):
+                continue
+            size = measure(src.group(2), page, "its declared size")
+            if size is None:
+                continue
+            declared += 1
+            stated = (float(width.group(1)), float(height.group(1)))
+            if stated != tuple(float(part) for part in size):
+                problems.append(
+                    f"{page.name}: declares {src.group(2)} as "
+                    f"{width.group(1)} by {height.group(1)} and the file is "
+                    f"{size[0]:g} by {size[1]:g}, so the space the browser "
+                    "reserves for it is the wrong shape"
+                )
+
+        for picture in PICTURE_RE.finditer(text):
+            body = picture.group(1)
+            fallback = IMG_ATTRS_RE.search(body)
+            src = SRC_ATTR_RE.search(fallback.group(1)) if fallback else None
+            if src is None:
+                problems.append(
+                    f"{page.name}: a <picture> has no <img> inside it, so a "
+                    "browser that takes none of the sources shows nothing"
+                )
+                continue
+            base = measure(src.group(2), page, "the picture it falls back to")
+            for source in SOURCE_RE.finditer(body):
+                srcset = SRCSET_ATTR_RE.search(source.group(1))
+                if srcset is None:
+                    continue
+                for candidate in srcset.group(2).split(","):
+                    url = candidate.strip().split(" ")[0]
+                    if not url:
+                        continue
+                    size = measure(url, page, "a picture source")
+                    if base and size and tuple(size) != tuple(base):
+                        problems.append(
+                            f"{page.name}: {url} is {size[0]:g} by {size[1]:g} "
+                            f"and the {src.group(2)} behind it is {base[0]:g} "
+                            f"by {base[1]:g}, so which one a browser can read "
+                            "changes the shape of the page"
+                        )
+
+    card = SITE.get("social_image_filename")
+    if card:
+        target = docs_root / "assets" / card
+        if target.is_file():
+            size, reason = image_size(target)
+            if size is None:
+                problems.append(f"{card}: {reason}, so the card size went unchecked")
+            elif (size[0], size[1]) < SOCIAL_IMAGE_SIZE:
+                problems.append(
+                    f"{card} is {size[0]:g} by {size[1]:g} and a link preview "
+                    f"is rendered at {SOCIAL_IMAGE_SIZE[0]} by "
+                    f"{SOCIAL_IMAGE_SIZE[1]}, so every share of this site "
+                    "shows it upscaled or shows nothing"
+                )
+        else:
+            problems.append(f"{card} is declared as the card image and is not in assets/")
+
+    ok = not problems
+    print(
+        f"[{'PASS' if ok else 'FAIL'}] a declared image size is the file's "
+        f"real size: {declared} declarations and {len(sizes)} image files "
+        f"read, {len(problems)} problems"
+    )
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_jsonld_mirrors_title(pages: list[Path]) -> bool:
     """Where the tree already mirrors it, JSON-LD name/description match the title/meta description.
 
@@ -2301,6 +2481,7 @@ def main() -> int:
         check_keyboard_operable(pages, docs_root),
         check_colour_contrast(docs_root),
         check_stated_urls_resolve(pages, docs_root),
+        check_image_dimensions(pages, docs_root),
         check_contact_form(pages, docs_root),
         check_cname(docs_root),
         check_phone_is_one_number(pages, docs_root),
