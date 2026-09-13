@@ -1,9 +1,5 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-12 08:30. An orchestrator session is live in this
-working copy and is running unattended. Do not work this tree until the
-marker is cleared.
-
 ## Current state
 
 Records, not work. Nothing here is dispatchable.
@@ -34,6 +30,14 @@ Records, not work. Nothing here is dispatchable.
   are rendered from, so it can no longer drift and needs no separate step.
   `scripts/check_llms_drift.py` still runs inside `scripts/check_site.py`
   as a second opinion. This line said the opposite until 2026-09-12.
+- `verify_site.py` runs 25 checks and `check_site.py` runs 15, or 16 with
+  `--full`, which adds the rebrand rehearsal. Four defects that were live on
+  the published site were found and fixed on 2026-09-12 by asking what a tree
+  would look like that passes the existing checks while being wrong: the
+  founder's identity surviving a rebrand in structured data, body text on the
+  gold band at 4.40 to 1 against a stated 4.5, structured data that names the
+  page it was copied from, and five image declarations claiming a size the
+  files are not. Each is in `CHANGELOG.md` with the tree that proved it.
 - Decided on 2026-09-11 by Jon, closing question 1. Tectori stays
   nationally targeted. No location pages, no LocalBusiness schema, no
   Nashville modified keyword targets across the site, and the nationwide
@@ -45,13 +49,11 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Jon set this session unattended on 2026-09-11 at about 23:10. Standing
-instruction for the night: do not prompt him, take the recommended path, use
-workers, merge and push as needed, do not stop until he stops it, and do no
-work that does not score well enough to be worth doing. The approval covers
-this night only and expires with it. The objective he named is to finish the
-board so the site can become a reproducible product that can be sold or
-hosted.
+You have no next action here. The board is finished, and that is the
+answer rather than a gap to fill: ask Jon what he wants before starting
+anything. The unattended run of 2026-09-11 to 09-12 is closed and its
+standing instruction expired with it, so do not read it as authority to
+work unprompted.
 
 Every repo item that was on this board has shipped, and the productization
 lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
@@ -67,6 +69,12 @@ one is to take a check and ask what a tree would look like that passes it
 while being wrong. That question is what produced the stale-file report, the
 reachability check, the source-only build, the live deploy check, the deploy
 gate, the 404 probe, and the two machine paths nobody had noticed.
+
+The hunt is still productive and is the obvious thing to resume if Jon wants
+more of it. It has not run dry: the last four passes each found something
+live rather than only guarding against something. It is also no longer the
+highest-value thing available, because what is left on this board needs Jon
+rather than another check.
 
 - **`THEORY.md` stops above the 60 line standard on purpose.** It is over 100
   lines. Every bullet left states a constraint no check can see, so reaching
