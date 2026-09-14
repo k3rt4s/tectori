@@ -1,7 +1,5 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-14 (Question 5, license decision; working in this tree)
-
 ## Current state
 
 Records, not work. Nothing here is dispatchable.
@@ -57,12 +55,6 @@ Records, not work. Nothing here is dispatchable.
   agreement with a buyer still needs a lawyer; reopen only when one exists.
 
 ## In Progress
-
-Checkpoint 2026-09-14: the license files, README, CHANGELOG and THEORY
-changes are on branch `feature/q5-license`, uncommitted or committed but not
-pushed. If you are resuming here, run `python scripts/check_site.py --full`,
-then ask Jon through the question tool whether to push, because a push to
-`main` deploys. Remove this paragraph at close-out.
 
 You have no next action here. The board is finished, and that is the
 answer rather than a gap to fill: ask Jon what he wants before starting
