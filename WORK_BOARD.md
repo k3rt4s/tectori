@@ -1,5 +1,7 @@
 # WORK_BOARD
 
+ACTIVE THREAD: 2026-09-14 (Question 5, license decision; working in this tree)
+
 ## Current state
 
 Records, not work. Nothing here is dispatchable.
@@ -46,8 +48,21 @@ Records, not work. Nothing here is dispatchable.
   and to each of those pages' mirrored JSON-LD, because Jon asked for the
   city to appear in some keyword bearing fields. Reopen the targeting
   question only if the Search Console export shows real local query volume.
+- Decided on 2026-09-14 by Jon, closing question 5. The repository is
+  licensed in two halves: `LICENSE` publishes the generator, checks, chrome
+  and runbooks for review only, with a commercial license by written
+  agreement, and `NOTICE` reserves the copy, images, declared values and the
+  founder outright and names what no license grants. The inventory and the
+  three options he chose from are at `C:\Code_data\tectori\license\`. A paid
+  agreement with a buyer still needs a lawyer; reopen only when one exists.
 
 ## In Progress
+
+Checkpoint 2026-09-14: the license files, README, CHANGELOG and THEORY
+changes are on branch `feature/q5-license`, uncommitted or committed but not
+pushed. If you are resuming here, run `python scripts/check_site.py --full`,
+then ask Jon through the question tool whether to push, because a push to
+`main` deploys. Remove this paragraph at close-out.
 
 You have no next action here. The board is finished, and that is the
 answer rather than a gap to fill: ask Jon what he wants before starting
@@ -198,7 +213,8 @@ No pending items. Every scored lane feature has shipped.
 
 Each is a decision only Jon can make inside a third-party interface. The
 original numbering is kept because other records cite it; question 1, the
-national versus local targeting call, was closed on 2026-09-11.
+national versus local targeting call, was closed on 2026-09-11, and question
+5, the license, on 2026-09-14. Both are recorded under Current state.
 
 - **Question 2, Google Business Profile category.** Lane 2 could not verify
   whether `Computer Security Service`, `Computer Consultant`, or `Business
@@ -208,14 +224,6 @@ national versus local targeting call, was closed on 2026-09-11.
   included the video rule from a lower-confidence source and marked
   home-business specifics unresolved. Follow whatever verification method
   Google offers in the GBP interface.
-- **Question 5, what a buyer is licensed to do with the tree.** The
-  repository carries no LICENSE and no statement of what is being sold. The
-  generator, the checks and the runbooks are the part with resale value; the
-  copy, the case study, the images and the three third-party identifiers are
-  this business and are not. Which of those a buyer receives, and under what
-  terms, is a decision with legal weight and no default worth guessing, so
-  nothing was written. The rebrand rehearsal already proves the two halves
-  separate cleanly, which is the evidence a split license would rest on.
 - **Question 4, LinkedIn personal headline.** Lane 8 did not write a
   paste-ready personal profile headline because the source marked the
   current headline as `CONFIRM`. The default it would take if confirmed is

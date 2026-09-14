@@ -49,9 +49,10 @@ against it with the same result it gives against the live site.
   for every push and pull request, and adds one they cannot make on their
   own: that `docs/` is byte identical to what the build produces, not merely
   render identical to it. A hand edit to whitespace, an entity or a line
-  ending renders the same and fails there. Nothing in it gates the deploy.
-  GitHub Pages publishes from `main` and `docs/` whether or not it passes,
-  so it reports rather than blocks.
+  ending renders the same and fails there. Its deploy job is the only route
+  to the site: on a push to `main` it uploads `docs/` to GitHub Pages after
+  the checks pass, and a red run publishes nothing, so the site already up
+  keeps serving. A pull request runs the checks and deploys nothing.
 - `scripts/check_site.py` runs every check below in one command and prints a
   pass or fail line for each, exiting non-zero if any failed. It is the entry
   point to use before a deploy; the individual scripts are there for when one
@@ -176,8 +177,8 @@ against it with the same result it gives against the live site.
   other check still passes while a failing run ships.
 - `scripts/check_live_deploy.py` fetches every file in `docs/` from the live
   site and reports any that differs. It is the only check that reads what a
-  visitor gets: the others read the tree about to be deployed, and Pages
-  serves whatever is on `main` whether they passed or not. It also fetches
+  visitor gets: the others read the tree about to be deployed, and what a
+  visitor is served can still lag a deploy that passed them. It also fetches
   the extensionless path of every page, because a host that serves files
   literally returns all 43 files correctly and 404s on every link on every
   page. It needs the network, so it is not one of the fifteen.
@@ -202,6 +203,21 @@ and the three third-party identifiers, are declared once in
 `site/content/site.json`. The domain in particular is a single value:
 changing `site_url` reaches every file in a rebuilt tree. `PERMISSIONS.md`
 covers hosting, DNS, and the from-scratch deploy.
+
+## Licensing
+
+`LICENSE` and `NOTICE` at the repository root say what may be done with the
+tree, and they split it in two. The generator, the checks, the chrome, the
+stylesheet and script, the workflow and these runbooks are published for
+review: read them, clone them, run every check and the rehearsal to see
+that they work, and cite the approach. Using them to build, rebrand or host
+a site, copying them elsewhere, or reselling them needs a written license,
+which is available by agreement. The copy, the structured data, the images,
+the values in `site/content/` and the founder's identity are Tectori's and
+are not licensed at all; `NOTICE` lists the paths and what no license here
+grants, including the trademarks and the third-party account identifiers.
+The steps below are the runbook a licensee follows, not a grant to follow
+it.
 
 ## Making this site yours
 

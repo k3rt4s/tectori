@@ -2,6 +2,37 @@
 
 Tectori website changes are recorded here.
 
+## 2026-09-14
+
+- The repository now says what may be done with it. It carried no `LICENSE`,
+  `NOTICE` or `COPYING`, which in a public repository meant everything was
+  reserved by default and nothing was written that a buyer could be sold
+  against, and that was board question 5. `LICENSE` publishes the generator,
+  the checks, the chrome, the stylesheet and script, the workflow and the
+  runbooks for review: reading, cloning, running the checks and the rehearsal
+  to evaluate, and citing the patterns are permitted; building, rebranding,
+  hosting, copying elsewhere or reselling need a written license, available
+  by agreement. `NOTICE` maps the two halves by path, reserves the copy, the
+  structured data, the images, the declared values and the founder's identity
+  outright, and states what no license here grants: trademark rights in the
+  Tectori name, logo and six product names, the three third-party account
+  identifiers and the social URLs, the founder's name and biography, and
+  exclusivity in the generated hero image. `site/content/LICENSE` and
+  `site/pages/LICENSE` repeat the reservation where the copy lives. Nothing
+  went into `docs/` or `site/static/assets/`, because the build copies the
+  second into the first and both `--check` and the documented file count fail
+  on a file the build did not write. The line between the halves is the one
+  `rehearse_rebrand.py` already draws, run again on 2026-09-14 and passing:
+  it replaces or counts every value in the reserved half, touches nothing in
+  the published half, and every check passes on the result. The shape was
+  Jon's decision from three; the inventory and the options are at
+  `C:\Code_data\tectori\license\`. None of it is legal advice, and a paid
+  agreement with a buyer needs a lawyer before it is signed.
+- `README.md` gained a Licensing section ahead of the runbook, and two
+  passages that still said GitHub Pages published from `main` whether or not
+  the checks passed now describe the deploy gate that has held since
+  2026-09-12.
+
 ## 2026-09-12
 
 - Five of the six solution marks declared themselves 640 by 640 on both pages

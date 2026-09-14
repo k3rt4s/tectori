@@ -1,0 +1,66 @@
+NOTICE
+
+This repository is Tectori's public website and the generator that builds
+it. LICENSE in this directory governs the first of the two halves below.
+Nothing governs the second: it is all rights reserved, and it is public only
+because GitHub Pages serves the site from this repository.
+
+Half A, the generator, checks, chrome and runbooks, published for review
+under LICENSE:
+
+  scripts/                       the build, every check, the rehearsal and
+                                 the local server
+  site/fragments/                the chrome templates
+  site/static/styles.css         the stylesheet
+  site/static/site.js            the script
+  site/content/public_pages.json
+  site/content/pages.json        its structure: slugs, outputs, robots,
+                                 navigation, footer order and fragment
+                                 names. The title, description and og
+                                 fields in it are copy and belong to half B.
+  README.md, site/README.md, PERMISSIONS.md, SEARCH_SETUP.md, THEORY.md,
+  CLAUDE.md                      the runbooks and records
+  .github/workflows/verify.yml, .gitattributes, .gitignore, .env.example
+
+Half B, this business, all rights reserved and not licensed under any
+terms:
+
+  site/content/site.json         every declared value: the brand name and
+                                 tagline, the domain, the image filenames,
+                                 the contact strings, the third-party
+                                 identifiers and the social profiles
+  site/content/founder.json      the founder's name, given name, job title,
+                                 anchor and biography
+  site/pages/                    every body fragment, every JSON-LD fragment
+                                 and the login page: the copy, the case
+                                 study and the structured data
+  site/static/assets/            every image: the logo, the hero, the band,
+                                 the social card, the favicon and the six
+                                 solution marks
+  docs/                          the built site as served at
+                                 https://www.tectori.com. The terms at
+                                 https://www.tectori.com/terms govern what
+                                 a visitor may do with it.
+
+The line between the halves is the one scripts/rehearse_rebrand.py draws:
+it replaces or counts every value in half B against a fixture business,
+touches nothing in half A, and the result passes every check.
+
+What no license here grants, and what no agreement over half A grants
+either:
+
+- Trademark rights. "Tectori", the Tectori logo, and the product names
+  Fortivra, Compliance Compass, MailSweep, FileIQ, Architect Copilot and
+  Lumenwatch identify this business and its products. A copyright license
+  is not a trademark license.
+- The third-party identifiers in site/content/site.json: the Cloudflare
+  beacon token, the Scarf pixel id and the Formspree endpoint. They are
+  handles on accounts held by the copyright holder, and the two social URLs
+  are the same. Anyone licensed to use the generator replaces them with
+  their own, as README.md step 1 says.
+- The founder. The name, given name, anchor slug and biography strings in
+  site/content/founder.json identify a real person and are replaced under
+  README.md steps 2 and 5. No use of them is licensed.
+- Exclusivity in the hero image. tectori-hero.png and tectori-hero.webp are
+  recorded in CHANGELOG.md as a generated visual, and no claim of exclusive
+  rights in a generated image is made.
