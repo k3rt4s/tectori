@@ -106,6 +106,17 @@ What a session needs to believe before it changes anything in this repo.
 - `docs/404.html` deliberately has no canonical, and its links and assets are
   root-absolute so it renders when Pages serves it for a deep path, which is
   why reviewing it needs a local server rather than a `file://` open.
+- The tree is licensed in two halves, and the split is the rehearsal's.
+  `LICENSE` publishes the generator, checks, chrome and runbooks for review
+  only, and `NOTICE` reserves everything `rehearse_rebrand.py` replaces or
+  counts: the declared values, the founder, the copy, the images, `docs/`. A
+  permissive license on the published half would give away the part with
+  resale value for every version already shipped and could never be taken
+  back, while this shape can be loosened later, which is why Jon chose it on
+  2026-09-14. No notice file can live in `docs/` or `site/static/assets/`:
+  the build copies the second into the first and `--check` fails on a file it
+  did not write. The residue scan reads `docs/` only, so a root file may name
+  the domain. A paid agreement with a buyer needs a lawyer; none exists yet.
 
 ## Known soft spots
 

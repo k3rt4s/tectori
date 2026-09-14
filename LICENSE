@@ -1,0 +1,38 @@
+All Rights Reserved
+
+Copyright (c) 2026 Jon Bowker
+
+This repository is published for review.
+
+It holds two things, and NOTICE in this directory says which files are
+which. The first is the site generator, its checks, the chrome templates,
+the stylesheet and script, the deploy workflow and the runbooks. The second
+is the copy, the structured data, the images, the declared business values
+and the founder's identity that make this Tectori's website. The second is
+not licensed under any terms. The trademarks, the account identifiers and
+the founder's identity are set out in NOTICE and no permission below reaches
+them.
+
+For the first, you may:
+
+- read the repository and reference its patterns in your own discussion or
+  work, with attribution;
+- clone it and run the build, the checks and the rebrand rehearsal on your
+  own machine to evaluate it.
+
+You may not, without prior written permission from the copyright holder:
+
+- use it to build, rebrand, publish or host a website, for yourself or for
+  anyone else;
+- copy any part of it into another repository or product;
+- modify it beyond what evaluation needs, or distribute, sublicense or sell
+  it or a derivative of it, in whole or in part, for any commercial or
+  non-commercial purpose.
+
+A commercial license, exclusive or non-exclusive, is available by written
+agreement. Contact: through GitHub at https://github.com/k3rt4s or through
+the contact page at https://www.tectori.com/contact.
+
+THE CONTENTS OF THIS REPOSITORY ARE PROVIDED "AS IS", WITHOUT WARRANTY OF
+ANY KIND, EXPRESS OR IMPLIED. THE COPYRIGHT HOLDER IS NOT LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM THEM OR FROM THEIR USE.
