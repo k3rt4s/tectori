@@ -15,19 +15,24 @@ them.
 
 For the first, you may:
 
-- read the repository and reference its patterns in your own discussion or
-  work, with attribution;
+- read the repository and describe or cite its approach in your own
+  discussion or writing, naming this repository, without copying its code;
 - clone it and run the build, the checks and the rebrand rehearsal on your
-  own machine to evaluate it.
+  own machine to evaluate it. Cloning copies the second half as well; that
+  copy is for evaluation and nothing else.
 
 You may not, without prior written permission from the copyright holder:
 
 - use it to build, rebrand, publish or host a website, for yourself or for
-  anyone else;
+  anyone else, beyond the local build that evaluation permits;
 - copy any part of it into another repository or product;
-- modify it beyond what evaluation needs, or distribute, sublicense or sell
-  it or a derivative of it, in whole or in part, for any commercial or
-  non-commercial purpose.
+- change it, except locally and only as far as running the build, the
+  checks and the rehearsal requires, and nothing changed leaves your
+  machine;
+- distribute, sublicense or sell it or a derivative of it, in whole or in
+  part, for any commercial or non-commercial purpose.
+
+The permission above ends if you exceed it.
 
 A commercial license, exclusive or non-exclusive, is available by written
 agreement. Contact: through GitHub at https://github.com/k3rt4s or through
