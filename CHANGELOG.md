@@ -2,6 +2,24 @@
 
 Tectori website changes are recorded here.
 
+## 2026-09-15
+
+- `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
+  five sentences that could be read two ways were tightened without moving
+  the line between the halves. Referencing the approach now means describing
+  or citing it, naming the repository, without copying code, so it cannot be
+  read as licence to re-implement. Cloning is stated to copy the reserved
+  half as well, with that copy permitted for evaluation only, so the
+  permission and the reservation no longer contradict each other. The
+  prohibition on building a website now excludes the local build that
+  evaluation permits, the modification limit is spelled out as local changes
+  the build, checks and rehearsal require that never leave the machine, and
+  the permission ends when it is exceeded. `NOTICE` no longer says nothing
+  governs the reserved half, which contradicted the line citing the site
+  terms; it says no license here covers it. `CHANGELOG.md`, `WORK_BOARD.md`
+  and `BOARD_ARCHIVE_2026.md` join the records line, since the file cited
+  the changelog without placing it in either half.
+
 ## 2026-09-14
 
 - The repository now says what may be done with it. It carried no `LICENSE`,

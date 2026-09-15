@@ -2,8 +2,8 @@ NOTICE
 
 This repository is Tectori's public website and the generator that builds
 it. LICENSE in this directory governs the first of the two halves below.
-Nothing governs the second: it is all rights reserved, and it is public only
-because GitHub Pages serves the site from this repository.
+No license here covers the second: it is all rights reserved, and it is
+public only because GitHub Pages serves the site from this repository.
 
 Half A, the generator, checks, chrome and runbooks, published for review
 under LICENSE:
@@ -19,7 +19,8 @@ under LICENSE:
                                  names. The title, description and og
                                  fields in it are copy and belong to half B.
   README.md, site/README.md, PERMISSIONS.md, SEARCH_SETUP.md, THEORY.md,
-  CLAUDE.md                      the runbooks and records
+  CLAUDE.md, CHANGELOG.md, WORK_BOARD.md, BOARD_ARCHIVE_2026.md
+                                 the runbooks and records
   .github/workflows/verify.yml, .gitattributes, .gitignore, .env.example
 
 Half B, this business, all rights reserved and not licensed under any
