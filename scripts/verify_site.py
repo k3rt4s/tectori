@@ -1405,70 +1405,294 @@ def check_colour_contrast(docs_root: Path) -> bool:
                 )
 
     # The table above only measures the fixed pairs it names, so a rule that
-    # sets its own color and background together, on a class the table has
-    # never heard of, passes unmeasured. A rule is only skipped, not failed,
-    # when its background does not resolve to one opaque colour: a gradient,
+    # sets its own color and background together, on a selector the table
+    # has never heard of, passes unmeasured. Pairing is per selector rather
+    # than per rule, because a selector can gain its color from one rule and
+    # its background from another, but only within the same cascade context:
+    # an @media or @supports block, found by matching braces after ruling
+    # out an at-rule statement (a semicolon before the next unquoted brace,
+    # such as @charset or @import, which has no block and is left in the
+    # base rather than swallowing whatever rule follows it), changes what a
+    # browser paints without touching what the rest of the stylesheet
+    # paints outside it. The base context is the stylesheet with every such
+    # block removed, folded and measured on its own. Each block is then
+    # folded twice: once starting from a copy of the base fold alone, and
+    # once cumulatively, starting from the base plus every earlier block in
+    # source order, because a desktop-first stylesheet can split a pair
+    # across two narrowing breakpoints that only ever apply together, and
+    # each block folded on the base alone never sees the other. The
+    # cumulative fold can pair blocks that never apply on screen together,
+    # for instance one breakpoint printed alongside another, but that only
+    # ever produces a failure to double-check by eye, never a pass this
+    # check is trusting, so the false positive it risks is the safe one.
+    # Within any one fold, each rule's selector list is split on commas,
+    # whitespace is normalised, and every selector's color and
+    # background/background-color declarations are folded in source order,
+    # a later declaration winning unless the earlier one is !important and
+    # the later one is not, the same rule a browser applies within one
+    # rule's own duplicate declarations. A selector and value pair already
+    # measured once, in the base or in any earlier fold, is not measured or
+    # reported again, so the two folds per block and the source order never
+    # double-report or double-count the same pair. @keyframes and @font-face
+    # hold no selectors, so both are ignored rather than treated as
+    # contexts. A selector is only skipped, not failed, when its folded
+    # background does not resolve to one opaque colour: a gradient,
     # currentColor, transparent, an image, or a translucent colour whose
     # rendered result depends on whatever sits behind it.
-    rule_measured = 0
-    rule_skipped = 0
-    for selector, body in CSS_RULE_RE.findall(css):
-        text_value = None
-        text_important = False
-        background_value = None
-        background_important = False
-        for declaration in body.split(";"):
-            if ":" not in declaration:
+    ignored_at_rules = {
+        "@keyframes",
+        "@-webkit-keyframes",
+        "@-moz-keyframes",
+        "@-o-keyframes",
+        "@font-face",
+    }
+
+    def skip_quoted(text: str, pos: int) -> int:
+        # text[pos] is a quote character; returns the index just past its
+        # matching close, honouring backslash escapes, or len(text) if the
+        # string never closes. Shared by every scan below so a "}" or "{"
+        # or ";" inside a quoted string, such as content: "}"; on a rule,
+        # is never read as structure.
+        quote = text[pos]
+        j = pos + 1
+        n = len(text)
+        while j < n:
+            if text[j] == "\\":
+                j += 2
                 continue
-            name, value = declaration.split(":", 1)
-            name = name.strip().lower()
-            raw_value = value.strip()
-            is_important = bool(CSS_IMPORTANT_RE.search(raw_value))
-            value = CSS_IMPORTANT_RE.sub("", value).strip()
-            if name == "color":
-                if text_value is not None and text_important and not is_important:
+            if text[j] == quote:
+                return j + 1
+            j += 1
+        return n
+
+    def find_at_rule_blocks(text: str):
+        # Top-level @rule { ... } blocks, found by matching braces rather
+        # than by regex alone, since a block nests its inner rules one
+        # level deep and CSS_RULE_RE cannot balance that on its own. Every
+        # scan here skips quoted strings with skip_quoted, in the main
+        # depth count, the at-rule prelude scan and the block-end brace
+        # match alike, because a quoted brace desyncs whichever of the
+        # three does not skip it, and CSS_RULE_RE already mis-reads a
+        # selector with one on its own, which is a wider, pre-existing gap
+        # this function cannot close from inside check_colour_contrast. An
+        # at-rule whose first unquoted "{" or ";" is the ";" has no block
+        # at all, for example @charset "UTF-8"; or @import url(x.css); or
+        # @layer base, site;, so it is skipped as a statement rather than
+        # read as the start of a block, and the rule that follows it stays
+        # in the base instead of being swallowed as that block's body.
+        blocks = []
+        depth = 0
+        i = 0
+        n = len(text)
+        while i < n:
+            ch = text[i]
+            if ch in ("'", '"'):
+                i = skip_quoted(text, i)
+                continue
+            if depth == 0 and ch == "@":
+                j = i
+                brace_pos = None
+                semi_pos = None
+                while j < n:
+                    c = text[j]
+                    if c in ("'", '"'):
+                        j = skip_quoted(text, j)
+                        continue
+                    if c == "{":
+                        brace_pos = j
+                        break
+                    if c == ";":
+                        semi_pos = j
+                        break
+                    j += 1
+                if brace_pos is None and semi_pos is None:
+                    break
+                if semi_pos is not None and (brace_pos is None or semi_pos < brace_pos):
+                    i = semi_pos + 1
                     continue
-                text_value = value
-                text_important = is_important
-            elif name in ("background", "background-color"):
-                # Whichever of the two properties is written last in the
-                # rule is what a browser paints, so the later one overwrites
-                # the earlier one here too, regardless of which name it used,
-                # unless an !important declaration already set this slot and
-                # this one is not itself !important, in which case a browser
-                # keeps the important value and this later one is ignored.
-                if (
-                    background_value is not None
-                    and background_important
-                    and not is_important
-                ):
+                prelude = text[i:brace_pos]
+                d = 1
+                j = brace_pos + 1
+                while j < n and d > 0:
+                    c = text[j]
+                    if c in ("'", '"'):
+                        j = skip_quoted(text, j)
+                        continue
+                    if c == "{":
+                        d += 1
+                    elif c == "}":
+                        d -= 1
+                    j += 1
+                blocks.append((i, j, prelude, text[brace_pos + 1 : j - 1]))
+                i = j
+                continue
+            if ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+            i += 1
+        return blocks
+
+    def fold_rules(rules, colour, background):
+        # Folds (selector, body) rules onto the given per-selector colour
+        # and background dicts in place, in source order, with the same
+        # precedence a browser applies within one rule's own duplicate
+        # declarations. Returns the selectors touched here, in the order
+        # first touched.
+        touched: list[str] = []
+        for selector, body in rules:
+            text_value = None
+            text_important = False
+            background_value = None
+            background_important = False
+            for declaration in body.split(";"):
+                if ":" not in declaration:
                     continue
-                background_value = value
-                background_important = is_important
-        if not text_value or not background_value:
-            continue
+                name, value = declaration.split(":", 1)
+                name = name.strip().lower()
+                raw_value = value.strip()
+                is_important = bool(CSS_IMPORTANT_RE.search(raw_value))
+                value = CSS_IMPORTANT_RE.sub("", value).strip()
+                if name == "color":
+                    if text_value is not None and text_important and not is_important:
+                        continue
+                    text_value = value
+                    text_important = is_important
+                elif name in ("background", "background-color"):
+                    # Whichever of the two properties is written last in
+                    # the rule is what a browser paints, so the later one
+                    # overwrites the earlier one here too, regardless of
+                    # which name it used, unless an !important declaration
+                    # already set this slot and this one is not itself
+                    # !important, in which case a browser keeps the
+                    # important value and this later one is ignored.
+                    if (
+                        background_value is not None
+                        and background_important
+                        and not is_important
+                    ):
+                        continue
+                    background_value = value
+                    background_important = is_important
+            if text_value is None and background_value is None:
+                continue
+            for raw_selector in selector.split(","):
+                single = re.sub(r"\s+", " ", raw_selector.strip())
+                if not single:
+                    continue
+                if single not in touched:
+                    touched.append(single)
+                if text_value is not None:
+                    prior = colour.get(single)
+                    if prior is not None and prior[1] and not text_important:
+                        pass
+                    else:
+                        colour[single] = (text_value, text_important)
+                if background_value is not None:
+                    prior = background.get(single)
+                    if prior is not None and prior[1] and not background_important:
+                        pass
+                    else:
+                        background[single] = (background_value, background_important)
+        return touched
+
+    counted_pairs: set[tuple[str, str, str]] = set()
+
+    def measure_pair(single, colour, background, condition):
+        # Measures one selector's folded pair in one context, returning
+        # "measured", "skipped", or None when the selector is not fully
+        # paired here or this exact selector and value pair was already
+        # measured in an earlier context.
+        text_entry = colour.get(single)
+        background_entry = background.get(single)
+        if not text_entry or not background_entry:
+            return None
+        text_value, background_value = text_entry[0], background_entry[0]
+        key = (single, text_value, background_value)
+        if key in counted_pairs:
+            return None
+        counted_pairs.add(key)
         text_colour = css_colour(text_value, palette)
         background_colour = css_colour(background_value, palette)
         if not text_colour or not background_colour or background_colour[3] != 1.0:
-            rule_skipped += 1
-            continue
-        rule_measured += 1
+            return "skipped"
         ratio = contrast_ratio(composite(text_colour, background_colour), background_colour)
         if ratio < minimum:
+            where = f" inside {condition}" if condition else ""
             problems.append(
-                f"{selector.strip()!r} paints {text_value!r} on "
+                f"{single!r}{where} paints {text_value!r} on "
                 f"{background_value!r} at {ratio:.2f} to 1, and WCAG {version} "
                 f"level {level} asks for {minimum} to 1 for ordinary text, "
                 "which the accessibility statement says this site targets"
             )
+        return "measured"
+
+    at_rule_blocks = find_at_rule_blocks(css)
+    pieces = []
+    last = 0
+    contexts: list[tuple[str, str]] = []
+    for start, end, prelude, inner in at_rule_blocks:
+        name_match = re.match(r"@[-a-zA-Z]+", prelude.strip())
+        name = name_match.group(0).lower() if name_match else ""
+        pieces.append(css[last:start])
+        last = end
+        if name in ignored_at_rules:
+            continue
+        condition = re.sub(r"\s+", " ", prelude.strip())
+        contexts.append((condition, inner))
+    pieces.append(css[last:])
+    base_css = "".join(pieces)
+
+    base_colour: dict[str, tuple[str, bool]] = {}
+    base_background: dict[str, tuple[str, bool]] = {}
+    base_order = fold_rules(CSS_RULE_RE.findall(base_css), base_colour, base_background)
+
+    selector_measured = 0
+    selector_skipped = 0
+    for single in base_order:
+        result = measure_pair(single, base_colour, base_background, None)
+        if result == "measured":
+            selector_measured += 1
+        elif result == "skipped":
+            selector_skipped += 1
+
+    context_count = 1
+    cumulative_colour = dict(base_colour)
+    cumulative_background = dict(base_background)
+    for condition, inner in contexts:
+        context_count += 1
+        rules = CSS_RULE_RE.findall(inner)
+
+        colour = dict(base_colour)
+        background = dict(base_background)
+        touched = fold_rules(rules, colour, background)
+        for single in touched:
+            result = measure_pair(single, colour, background, condition)
+            if result == "measured":
+                selector_measured += 1
+            elif result == "skipped":
+                selector_skipped += 1
+
+        # Folded again cumulatively, on top of every earlier block in
+        # source order rather than the base alone, so a pair split across
+        # two stacking breakpoints is still caught.
+        stacked = fold_rules(rules, cumulative_colour, cumulative_background)
+        stacked_condition = f"{condition} after earlier @media blocks"
+        for single in stacked:
+            result = measure_pair(single, cumulative_colour, cumulative_background, stacked_condition)
+            if result == "measured":
+                selector_measured += 1
+            elif result == "skipped":
+                selector_skipped += 1
 
     ok = not problems
     print(
         f"[{'PASS' if ok else 'FAIL'}] every text colour meets the contrast "
         f"the statement targets: {len(CONTRAST_READ_ON)} colours on "
         f"{measured} surfaces at {minimum} to 1 for WCAG {version} level "
-        f"{level}, {rule_measured} rules with their own color and background "
-        f"measured directly, {rule_skipped} skipped, {len(problems)} problems"
+        f"{level}, {selector_measured} selector pairs with their own color "
+        f"and background measured directly across {context_count} contexts, "
+        f"{selector_skipped} skipped, {len(problems)} problems"
     )
     for problem in problems[:20]:
         print(f"       {problem}")
