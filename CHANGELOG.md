@@ -104,6 +104,12 @@ Tectori website changes are recorded here.
   stylesheet, a style block or a style attribute went unnoticed. The check
   now reads those too.
 
+- The checks that in-page links and ARIA references land on a real element
+  read ids inside HTML comments as if they were on the page. Renaming a
+  section and leaving the old markup commented out passed, though the link
+  went nowhere. Those checks, and the accessibility statement check, now
+  ignore commented-out markup.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
