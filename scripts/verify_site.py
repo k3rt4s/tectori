@@ -2816,23 +2816,50 @@ def check_login_promise(docs_root: Path) -> bool:
 def check_login_tracking(pages: list[Path]) -> bool:
     """login.html carries no analytics beacon or tracking pixel; every other page carries both."""
     problems: list[str] = []
+    beacon_host = BEACON_MARKER.decode("utf-8")
+    pixel_host = PIXEL_MARKER.decode("utf-8")
     for page in pages:
         raw = page.read_bytes()
-        has_beacon = BEACON_MARKER in raw
-        has_pixel = PIXEL_MARKER in raw
         if page.name == "login.html":
+            has_beacon = BEACON_MARKER in raw
+            has_pixel = PIXEL_MARKER in raw
             if has_beacon or has_pixel:
                 problems.append(f"login.html: carries {'a beacon' if has_beacon else ''}"
                                  f"{' and ' if has_beacon and has_pixel else ''}"
                                  f"{'a tracking pixel' if has_pixel else ''}")
-        else:
-            if not has_beacon or not has_pixel:
-                missing = []
-                if not has_beacon:
-                    missing.append("beacon")
-                if not has_pixel:
-                    missing.append("tracking pixel")
-                problems.append(f"{page.name}: missing {' and '.join(missing)}")
+            continue
+
+        # A commented-out element renders nothing, so the beacon and the
+        # pixel are read from the src attribute of a live start tag only,
+        # never from raw bytes that could sit inside a comment or a prose
+        # mention of the host. SCRIPT_SRC_ATTR_RE is what keeps a
+        # renamed data-src attribute from counting.
+        text = HTML_COMMENT_RE.sub("", raw.decode("utf-8"))
+        has_beacon = False
+        for match in SCRIPT_START_TAG_RE.finditer(text):
+            src_match = SCRIPT_SRC_ATTR_RE.search(match.group(1))
+            if not src_match:
+                continue
+            value = src_match.group(2) if src_match.group(2) is not None else src_match.group(3)
+            if value and beacon_host in value:
+                has_beacon = True
+                break
+        has_pixel = False
+        for match in IMG_RE.finditer(text):
+            src_match = SCRIPT_SRC_ATTR_RE.search(match.group(1))
+            if not src_match:
+                continue
+            value = src_match.group(2) if src_match.group(2) is not None else src_match.group(3)
+            if value and pixel_host in value:
+                has_pixel = True
+                break
+        if not has_beacon or not has_pixel:
+            missing = []
+            if not has_beacon:
+                missing.append("beacon")
+            if not has_pixel:
+                missing.append("tracking pixel")
+            problems.append(f"{page.name}: missing {' and '.join(missing)}")
 
     ok = not problems
     print(f"[{'PASS' if ok else 'FAIL'}] login.html has no analytics tag, every other page has both: "

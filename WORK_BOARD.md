@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the runner reachability fix to
-`check_checks_wired.py` is on branch `feature/hunt-wired-dead`, from
-worktree `C:\Code\worktrees\tectori-hunt-wired-dead`.
+Checkpoint, 2026-09-16 run: the live tracking tag fix to
+`verify_site.py` is on branch `feature/hunt-tracking-live`, from
+worktree `C:\Code\worktrees\tectori-hunt-tracking-live`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own
