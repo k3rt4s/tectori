@@ -2849,6 +2849,8 @@ def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
     traffic and its inbound mail somewhere else, and pass every other check
     here. The comparison is against site.json, which is also what the build
     renders from, so the two cannot disagree without one of them being wrong.
+    Each declared host must also still be found in the tree, so a vendor
+    retired from every page but left in the declaration fails too.
     """
     third_party = SITE["third_party"]
     expected_ids = {
@@ -2880,6 +2882,9 @@ def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
         label: url.split("://", 1)[1].split("/", 1)[0] for label, url in social.items()
     }
     found_social = {label: 0 for label in social}
+    # A host is declared for a reason named in site.json; if nothing in the
+    # tree still links or loads it, the declaration is the leftover.
+    found_declared_hosts = {host: 0 for host in SITE["allowed_external_hosts"]}
 
     problems: list[str] = []
     found_ids = {label: 0 for label in expected_ids}
@@ -2904,6 +2909,8 @@ def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
                 problems.append(
                     f"{path.name}: links to {host!r}, which site.json does not allow"
                 )
+            elif host in found_declared_hosts:
+                found_declared_hosts[host] += 1
         for url in ABSOLUTE_URL_RE.findall(text):
             url = url.rstrip('".,)')
             for label, profile in social.items():
@@ -2944,6 +2951,14 @@ def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
             problems.append(
                 f"the declared {label} {social[label]!r} is linked from nowhere "
                 "in the tree"
+            )
+    # Counted rather than merely present in site.json, because a vendor
+    # removed from every page still passes if only the declaration is checked.
+    for host, count in found_declared_hosts.items():
+        if not count:
+            problems.append(
+                f"site.json allows {host!r}, which nothing in the tree links to "
+                "or loads"
             )
 
     ok = not problems
