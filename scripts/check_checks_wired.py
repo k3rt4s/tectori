@@ -29,6 +29,20 @@ EXPECTED_UNWIRED = {
 }
 
 
+def iter_check_files(root: Path) -> list[Path]:
+    """Return every check_*.py file under root, recursively, skipping build artifacts."""
+    paths = []
+    for candidate in root.rglob("check_*.py"):
+        relative = candidate.relative_to(root)
+        if any(
+            part == "__pycache__" or part.startswith(".")
+            for part in relative.parts[:-1]
+        ):
+            continue
+        paths.append(candidate)
+    return sorted(paths)
+
+
 def called_scripts(path: Path) -> set[str]:
     """Return every script name the runner passes to its script() helper."""
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
@@ -79,13 +93,19 @@ def main() -> int:
 
     wired = called_scripts(RUNNER)
     readme = " ".join(README.read_text(encoding="utf-8").split())
-    for path in sorted(SCRIPT_DIR.glob("check_*.py")):
+    for path in iter_check_files(SCRIPT_DIR):
+        # check_site.py passes the runner a name relative to SCRIPT_DIR, its
+        # own directory, so a top level script is wired by its filename and a
+        # nested one only by the same relative path the runner would need to
+        # pass to reach it. EXPECTED_UNWIRED still keys on the plain filename,
+        # because every exception in it names a top level script.
+        rel = path.relative_to(SCRIPT_DIR).as_posix()
         name = path.name
-        if name in wired:
+        if rel in wired:
             continue
         if name not in EXPECTED_UNWIRED:
             problems.append(
-                f"{name} is a check that check_site.py does not run, so it "
+                f"{rel} is a check that check_site.py does not run, so it "
                 "passes or fails where nobody looks. Either add it to the "
                 "runner or say in this check why it cannot be run there"
             )
@@ -93,7 +113,7 @@ def main() -> int:
         reason, sentence = EXPECTED_UNWIRED[name]
         if sentence and not re.search(" ".join(sentence.split()), readme):
             problems.append(
-                f"{name} is left out of the runner because it {reason}, and "
+                f"{rel} is left out of the runner because it {reason}, and "
                 "README.md no longer carries the sentence saying so, so a "
                 "reader counting the checks is counting a different number"
             )
