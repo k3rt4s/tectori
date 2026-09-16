@@ -58,10 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the attribute selector fix to
-`check_class_names.py` is on branch
-`feature/hunt-class-names-attr-selector`, from worktree
-`C:\Code\worktrees\tectori-hunt-class-names-attr-selector`.
+Checkpoint, 2026-09-16 run: the credential spelling fix to
+`verify_site.py` is on branch `feature/hunt-forbidden-text-split-tag`,
+from worktree `C:\Code\worktrees\tectori-hunt-forbidden-text-split-tag`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own

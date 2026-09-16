@@ -1920,6 +1920,11 @@ def check_no_forbidden_claims(pages: list[Path]) -> bool:
     offers markup, and the credential is Internal Security Assessor (ISA),
     never Qualified Security Assessor. Both are exact, mechanically checkable
     strings, not a restated style preference.
+
+    The forbidden phrase is checked two ways: as decoded, whitespace-collapsed,
+    casefolded markup, which still catches it inside an attribute value where
+    there is no rendered text; and as `visible_text`, which also catches a
+    split inline tag. A page matching either is reported once.
     """
     problems: list[str] = []
     for page in pages:
@@ -1927,8 +1932,11 @@ def check_no_forbidden_claims(pages: list[Path]) -> bool:
         for label, pattern in FORBIDDEN_MARKUP:
             if pattern.search(raw):
                 problems.append(f"{page.name}: contains {label!r}")
+        markup_text = " ".join(html_lib.unescape(raw.decode("utf-8")).split()).casefold()
+        visible = " ".join(visible_text(raw).split()).casefold()
         for marker in FORBIDDEN_TEXT:
-            if marker.encode("utf-8") in raw:
+            folded = marker.casefold()
+            if folded in markup_text or folded in visible:
                 problems.append(f"{page.name}: contains {marker!r}")
 
     ok = not problems
