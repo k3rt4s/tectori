@@ -11,7 +11,14 @@ REPO_ROOT = SCRIPT_DIR.parent
 STYLESHEET = REPO_ROOT / "site" / "static" / "styles.css"
 DOCS = REPO_ROOT / "docs"
 
-CLASS_ATTR_RE = re.compile(r'class\s*=\s*"([^"]*)"', re.IGNORECASE)
+# Matches double-quoted, single-quoted or unquoted class attribute values,
+# any case of "class" and whitespace around "=". A negative lookbehind
+# stops it from matching inside "data-class=" or "subclass=", where the
+# character right before "class" is a word character or a hyphen.
+CLASS_ATTR_RE = re.compile(
+    r'(?<![\w-])class\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s\"\'=<>`]+))',
+    re.IGNORECASE,
+)
 # A class the stylesheet names, anywhere in any selector, including inside a
 # media query and as part of a compound selector. ":not(.x)" and ":is(.x)"
 # still match here; only attribute-selector brackets and quoted strings are
@@ -70,7 +77,10 @@ def main() -> int:
     for page in pages:
         text = page.read_text(encoding="utf-8")
         for attribute in CLASS_ATTR_RE.finditer(text):
-            for name in attribute.group(1).split():
+            value = next(
+                group for group in attribute.groups() if group is not None
+            )
+            for name in value.split():
                 used.setdefault(name, set()).add(page.name)
 
     problems = []

@@ -171,6 +171,11 @@ Tectori website changes are recorded here.
   `docs/`, judged by content, and also searches each file with tags and
   line breaks folded, tolerating a comma dropped at a break.
 
+- The class name check read only double-quoted class attributes, so a
+  class written in single quotes or with no quotes, and defined nowhere,
+  passed. It now reads all three forms, and still skips attributes such
+  as `data-class`.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
