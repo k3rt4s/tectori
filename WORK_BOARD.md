@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the CSS fetch fix to `verify_site.py` is on
-branch `feature/hunt-privacy-style-import`, from worktree
-`C:\Code\worktrees\tectori-hunt-privacy-style-import`.
+Checkpoint, 2026-09-16 run: the HTML comment fix to `verify_site.py` is on
+branch `feature/hunt-id-refs-in-comments`, from worktree
+`C:\Code\worktrees\tectori-hunt-id-refs-in-comments`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own

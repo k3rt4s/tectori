@@ -605,6 +605,11 @@ NAV_ARIA_LABEL_RE = re.compile(
 )
 ID_ATTR_RE = re.compile(r'\bid\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
 
+# A commented-out element renders nothing, so an id or a reference to one
+# inside a comment is not part of the page a visitor sees. Every check that
+# collects ids or scans for references to them strips comments first.
+HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
+
 # The sentences on the accessibility page that a tree can be measured against.
 # Each is read from the page itself, so a claim that is reworded or withdrawn
 # fails here rather than leaving a check enforcing a promise the site no longer
@@ -770,6 +775,7 @@ NAME_ANCHOR_RE = re.compile(
 
 def anchor_targets(text: str) -> set[str]:
     """Return every name a fragment on this page can legitimately point at."""
+    text = HTML_COMMENT_RE.sub("", text)
     names = {match.group(2) for match in ID_ATTR_RE.finditer(text)}
     names.update(match.group(2) for match in NAME_ANCHOR_RE.finditer(text))
     return names
@@ -798,6 +804,7 @@ def check_id_references(pages: list[Path]) -> bool:
     checked = 0
     for page in pages:
         text = page.read_text(encoding="utf-8")
+        text = HTML_COMMENT_RE.sub("", text)
         ids = {match.group(2) for match in ID_ATTR_RE.finditer(text)}
         for match in ID_REFERENCE_RE.finditer(text):
             attribute = match.group(1).lower()
@@ -838,6 +845,7 @@ def check_fragments_resolve(pages: list[Path], docs_root: Path) -> bool:
     checked = 0
     for page in pages:
         text = page.read_text(encoding="utf-8")
+        text = HTML_COMMENT_RE.sub("", text)
         for match in ANCHOR_RE.finditer(text):
             value = html_lib.unescape(match.group(2)).strip()
             if "#" not in value:
@@ -1510,7 +1518,9 @@ def check_accessibility_statement(pages: list[Path], docs_root: Path) -> bool:
     if not statement.is_file():
         print("[FAIL] the accessibility statement is true: accessibility.html is missing")
         return False
-    text = " ".join(statement.read_text(encoding="utf-8").split())
+    text = " ".join(
+        HTML_COMMENT_RE.sub("", statement.read_text(encoding="utf-8")).split()
+    )
     for claim in ACCESSIBILITY_CLAIMS:
         if text.count(claim) != 1:
             problems.append(
@@ -1522,7 +1532,7 @@ def check_accessibility_statement(pages: list[Path], docs_root: Path) -> bool:
 
     images = 0
     for page in pages:
-        page_text = page.read_text(encoding="utf-8")
+        page_text = HTML_COMMENT_RE.sub("", page.read_text(encoding="utf-8"))
         identifiers = {
             match.group(2) for match in ID_ATTR_RE.finditer(page_text)
         }
