@@ -192,6 +192,11 @@ Tectori website changes are recorded here.
   the README passed. It now also reads python3, python3.N, python.exe,
   `py -3`, an interpreter path, a backslash path and a leading `./`.
 
+- The site verifier read a login label's class and style only when the
+  value was quoted, and took `data-alt` on an image as its alt text, so
+  `<label class=sr-only>` and an image with only `data-alt` passed. Each
+  attribute is now read by its own name, quoted or not.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
