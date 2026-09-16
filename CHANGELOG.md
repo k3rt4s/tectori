@@ -87,6 +87,12 @@ Tectori website changes are recorded here.
   missing, empty or only spaces, so a screen reader user can still tell
   the menus apart.
 
+- The check that every class a page uses has a style rule counted text
+  inside an attribute selector, such as the `.pdf` in a rule for PDF
+  links, as a rule for a class named `pdf`. A page could then use a class
+  nothing styles and still pass. The check now reads only the selector
+  itself.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
