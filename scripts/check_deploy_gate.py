@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Confirm the workflow still deploys only after the checks pass."""
+"""Confirm the workflow still deploys only after the checks pass.
+
+The deploy job's ``needs`` list is parsed as GitHub Actions parses it
+(scalar, flow list, or block list) and matched against the verify job's
+id exactly, not as a substring, so a decoy job such as ``verify-real``
+does not count.
+"""
 
 # The deploy job is the only route to the site, so it is the one thing in this
 # repository whose removal is silent. Delete the `needs` line and every check
@@ -53,6 +59,78 @@ def jobs(text):
     return {name: "\n".join(body) for name, body in found.items()}
 
 
+def _strip_comment(text):
+    """Drop a trailing ``#comment`` from a YAML scalar.
+
+    YAML ends an unquoted value at a comment marker that is either the
+    very start of the (stripped) text or preceded by whitespace, a
+    space or a tab, and a job id never contains `#`, so truncating at
+    the first such marker is exact rather than a heuristic.
+    """
+    match = re.search(r"(?:^|[ \t])#", text)
+    return text[:match.start()] if match else text
+
+
+def needs_job_ids(body):
+    """Return the job ids listed in a job's ``needs:`` key.
+
+    GitHub Actions accepts a scalar (``needs: verify``), a flow list
+    (``needs: [verify, other]``), or a block list (``needs:`` followed by
+    indented ``- verify`` lines), each optionally quoted and each
+    optionally followed by an unquoted `` #`` comment. Matching any of
+    these against a single job id, rather than searching the raw text for
+    the id as a substring, is the point: a word-boundary search on
+    ``\\bverify\\b`` still matches inside ``verify-real``, because a hyphen
+    is a word boundary too.
+    """
+    lines = body.splitlines()
+    for i, line in enumerate(lines):
+        match = re.match(r"^(\s*)needs:\s*(.*)$", line)
+        if not match:
+            continue
+        indent = match.group(1)
+        rest = _strip_comment(match.group(2)).strip()
+        if not rest:
+            # Block list: the more-indented `- name` lines that follow.
+            ids = []
+            for later in lines[i + 1:]:
+                stripped_later = later.strip()
+                if not stripped_later or stripped_later.startswith("#"):
+                    # Blank line or comment-only line between items:
+                    # keep reading rather than treating it as the end
+                    # of the block list.
+                    continue
+                candidate = _strip_comment(later).rstrip()
+                if not candidate.strip():
+                    continue
+                item = re.match(
+                    r"^(\s*)-\s*[\'\"]?([A-Za-z0-9_-]+)[\'\"]?\s*$", candidate
+                )
+                if item and len(item.group(1)) > len(indent):
+                    ids.append(item.group(2))
+                    continue
+                break
+            return ids
+        if rest.startswith("["):
+            # Flow list. GitHub allows it to wrap onto later lines, so
+            # keep reading until the closing bracket shows up.
+            text = rest
+            j = i
+            while "]" not in text and j + 1 < len(lines):
+                j += 1
+                text += " " + _strip_comment(lines[j]).strip()
+            text = text[: text.index("]") + 1] if "]" in text else text
+            inner = text.strip("[]")
+            return [
+                item.strip().strip("'\"")
+                for item in inner.split(",")
+                if item.strip()
+            ]
+        # Scalar.
+        return [rest.strip("'\"")]
+    return []
+
+
 def main():
     problems = []
     if not os.path.exists(WORKFLOW):
@@ -75,7 +153,8 @@ def main():
         )
     else:
         body = found[DEPLOY_JOB]
-        if not re.search(rf"^\s*needs:.*\b{VERIFY_JOB}\b", body, re.MULTILINE):
+        needed = needs_job_ids(body)
+        if VERIFY_JOB not in needed:
             problems.append(
                 f"the {DEPLOY_JOB} job does not need {VERIFY_JOB}, so a failing "
                 "check no longer stops the deploy"

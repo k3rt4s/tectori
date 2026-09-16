@@ -76,6 +76,11 @@ Tectori website changes are recorded here.
   `scripts/` only. All three now read every folder under it, and a nested
   check counts as run only when the runner names its path.
 
+- The check that the site deploys only after the checks pass accepted a
+  deploy job waiting on any job whose name began with `verify-`, such as
+  a new `verify-real` that checks nothing. It now reads the list of jobs
+  the deploy waits for and requires the verify job by its exact name.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
