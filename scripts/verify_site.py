@@ -649,6 +649,14 @@ SKIP_LINK_RE = re.compile(
 )
 HREF_RE = re.compile(r'\bhref\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
 IMG_RE = re.compile(r"<img\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+# The attribute name must stand alone, so data-alt or x-alt is not it;
+# an unquoted value counts, matching the house shape in
+# NAV_ARIA_LABEL_RE.
+ALT_ATTR_RE = re.compile(
+    r'(?<![\w:.-])alt\s*=\s*'
+    r'(?:(["\'])(.*?)\1|([^\s"\'<>=`]+))',
+    re.IGNORECASE | re.DOTALL,
+)
 NAV_RE = re.compile(r"<nav\b([^>]*)>", re.IGNORECASE | re.DOTALL)
 # The attribute name must stand alone, so data-aria-label or x-aria-label
 # is not it; an unquoted value counts.
@@ -1184,6 +1192,19 @@ UNLABELLED_TYPES = ("hidden", "submit", "button", "reset", "image")
 # Class names that take a label out of the page while leaving it in the
 # markup. The claim is that the labels are visible, not that they exist.
 HIDDEN_LABEL_CLASSES = ("sr-only", "visually-hidden", "screen-reader-only", "hidden")
+# The attribute name must stand alone, so data-class or x-class is not
+# it; an unquoted value counts, matching the house shape in
+# NAV_ARIA_LABEL_RE.
+LABEL_CLASS_RE = re.compile(
+    r'(?<![\w:.-])class\s*=\s*'
+    r'(?:(["\'])(.*?)\1|([^\s"\'<>=`]+))',
+    re.IGNORECASE | re.DOTALL,
+)
+LABEL_STYLE_RE = re.compile(
+    r'(?<![\w:.-])style\s*=\s*'
+    r'(?:(["\'])(.*?)\1|([^\s"\'<>=`]+))',
+    re.IGNORECASE | re.DOTALL,
+)
 # A boolean "hidden" attribute on a label. Matched against a copy of
 # the attribute string with every quoted value blanked out first (see
 # the call site), so it catches hidden, hidden="" and hidden="hidden"
@@ -1836,10 +1857,12 @@ def check_keyboard_operable(pages: list[Path], docs_root: Path) -> bool:
                 problems.append(
                     f"{NO_MENU}: the label for {identifier.group(2)!r} has no text"
                 )
-            classes = re.search(
-                r'\bclass\s*=\s*(["\'])(.*?)\1', label_attributes, re.IGNORECASE
-            )
-            named = set((classes.group(2) if classes else "").split())
+            classes = LABEL_CLASS_RE.search(label_attributes)
+            if classes:
+                class_value = classes.group(2) if classes.group(1) else classes.group(3)
+            else:
+                class_value = ""
+            named = set(class_value.split())
             hidden = named.intersection(HIDDEN_LABEL_CLASSES)
             if hidden:
                 problems.append(
@@ -1847,10 +1870,16 @@ def check_keyboard_operable(pages: list[Path], docs_root: Path) -> bool:
                     f"{sorted(hidden)}, which takes it out of the page, and the "
                     "statement promises a visible one"
                 )
-            style_attribute = re.search(
-                r'\bstyle\s*=\s*(["\'])(.*?)\1', label_attributes, re.IGNORECASE
-            )
-            if style_attribute and style_is_hidden(style_attribute.group(2)):
+            style_attribute = LABEL_STYLE_RE.search(label_attributes)
+            if style_attribute:
+                style_value = (
+                    style_attribute.group(2)
+                    if style_attribute.group(1)
+                    else style_attribute.group(3)
+                )
+            else:
+                style_value = ""
+            if style_value and style_is_hidden(style_value):
                 problems.append(
                     f"{NO_MENU}: the label for {identifier.group(2)!r} is "
                     "hidden by its inline style, and the statement promises "
@@ -1940,7 +1969,7 @@ def check_accessibility_statement(pages: list[Path], docs_root: Path) -> bool:
 
         for match in IMG_RE.finditer(page_text):
             images += 1
-            if not re.search(r'\balt\s*=', match.group(1), re.IGNORECASE):
+            if not ALT_ATTR_RE.search(match.group(1)):
                 problems.append(
                     f"{page.name}: an <img> has no alt attribute, so a screen "
                     "reader reads its filename to the visitor"
