@@ -2,6 +2,16 @@
 
 Tectori website changes are recorded here.
 
+## 2026-09-16
+
+- The board's In Progress section held nine bold-lead bullets that were
+  records rather than work, and the board scorer listed each as an unscored
+  live item. They moved verbatim to `BOARD_ARCHIVE_2026.md` under a new
+  2026-09-16 heading, with one sentence left pointing there; none of them
+  carried an unanswered question. `COPY-SERVICE` under Owner-Only Tasks had
+  no score block and now has one, so `score_board.py --strict` reports no
+  unscored items and scores the four owner tasks.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
