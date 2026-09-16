@@ -1876,6 +1876,20 @@ CSP_META_RE = re.compile(
     re.IGNORECASE | re.DOTALL,
 )
 FORM_TAG_RE = re.compile(r"<form\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+SCRIPT_START_TAG_RE = re.compile(r"<script\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+SCRIPT_ELEMENT_RE = re.compile(
+    r"<script\b([^>]*)>(.*?)</script>", re.IGNORECASE | re.DOTALL
+)
+# The lookbehind is what keeps this from matching data-src or any other
+# attribute that merely ends in "src". The unquoted branch is what an owner
+# who leaves the quotes off still gets read; group(2) is the quoted value,
+# group(3) is the unquoted one, and exactly one of them is set. Named apart
+# from SRC_ATTR_RE below, which is the image checks' quoted-only version and
+# is left alone.
+SCRIPT_SRC_ATTR_RE = re.compile(
+    r'(?<![\w:.-])src\s*=\s*(?:(["\'])(.*?)\1|([^\s"\'<>=`]+))',
+    re.IGNORECASE | re.DOTALL,
+)
 LOGIN_PROMISE = "transmits or stores nothing entered into it"
 # The directives that make the promise true rather than merely intended. A
 # form with no action posts to its own URL, so 'none' is what stops it.
@@ -1915,6 +1929,15 @@ def check_login_promise(docs_root: Path) -> bool:
     other check here would pass: the page would still be valid, reachable,
     byte identical to the build, and free of the analytics tags the login
     check already forbids.
+
+    A script element is read the same way, whatever it points at. One with a
+    src on another host, absolute or protocol-relative, is a second delivery
+    path for exactly what the CSP and the fetch scan below exist to stop, so
+    it fails here rather than relying on a browser to enforce the policy. The
+    promise names what happens to what a visitor types, not only what the
+    named site.js does, so an inline script counts too: it is scanned for the
+    same forbidden calls as an external one. A script inside an HTML comment
+    loads nowhere, so comments are stripped before any of this runs.
     """
     problems: list[str] = []
     page = docs_root / "login.html"
@@ -1966,6 +1989,47 @@ def check_login_promise(docs_root: Path) -> bool:
             if token in script_text:
                 problems.append(
                     f"{name} is loaded by login.html and contains {token!r}, "
+                    "which sends or keeps what a visitor types"
+                )
+
+    # site.json declares the site's own host once; a script element pointing
+    # anywhere else is a second delivery path for what a visitor types,
+    # whatever the byte-string tracking markers elsewhere do or do not match.
+    # Compared lower-cased on both sides, so an uppercase spelling of either
+    # is not a false fail or a false pass.
+    own_host = SITE["site_url"].split("://", 1)[1].rstrip("/").lower()
+    scannable = HTML_COMMENT_RE.sub(" ", text)
+
+    def script_src_host(src: str) -> str | None:
+        if src.startswith("//"):
+            return src[2:].split("/", 1)[0].lower()
+        scheme_match = re.match(r"^[A-Za-z][A-Za-z0-9+.-]*://([^/]+)", src)
+        return scheme_match.group(1).lower() if scheme_match else None
+
+    # Read from every script start tag, not only ones with a closing tag, so
+    # an unclosed <script src=...> still counts; the inline body scan below
+    # needs a complete element and stays separate.
+    for attributes in SCRIPT_START_TAG_RE.findall(scannable):
+        src_match = SCRIPT_SRC_ATTR_RE.search(attributes)
+        if not src_match:
+            continue
+        raw_src = src_match.group(2) if src_match.group(1) else src_match.group(3)
+        src = html_lib.unescape(raw_src).strip()
+        host = script_src_host(src)
+        if host is not None and host != own_host:
+            problems.append(
+                f"login.html: a script element loads {src!r}, whose host "
+                f"is not the site's own {own_host!r}, so what a visitor "
+                "types can be sent wherever that host wants"
+            )
+
+    for attributes, body in SCRIPT_ELEMENT_RE.findall(scannable):
+        if SCRIPT_SRC_ATTR_RE.search(attributes):
+            continue
+        for token in FORBIDDEN_IN_SCRIPT:
+            if token in body:
+                problems.append(
+                    f"login.html: an inline script contains {token!r}, "
                     "which sends or keeps what a visitor types"
                 )
 

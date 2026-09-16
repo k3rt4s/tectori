@@ -110,6 +110,12 @@ Tectori website changes are recorded here.
   went nowhere. Those checks, and the accessibility statement check, now
   ignore commented-out markup.
 
+- The login page check read the page's security policy and the site's own
+  script, but not the script tags on the page, so a script loaded from
+  another site passed while the page says it sends nothing anywhere. A
+  script on the login page that loads from anywhere but this site now
+  fails, and an inline script is checked for the same calls.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
