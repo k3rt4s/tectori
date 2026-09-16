@@ -592,7 +592,12 @@ REQUIRED_FIELDS = ("name", "email", "message")
 # Formspree discards a submission whose spam trap was filled in. The trap only
 # works while it is invisible, and a visitor who can see it fills it in.
 HONEYPOT_FIELD = "_gotcha"
-HIDING_DECLARATIONS = ("position: absolute", "display: none")
+# A honeypot is invisible to a visitor only if the cascade's winning
+# declarations end in display: none, visibility: hidden, or an absolute
+# or fixed position pulled off screen by a negative left or top. These
+# are the properties class_is_hidden tracks to decide which one applies.
+CASCADE_HIDING_PROPERTIES = ("display", "visibility", "position", "left", "top")
+OFF_SCREEN_POSITIONS = ("absolute", "fixed")
 
 
 def attributes(tag_body: str) -> dict:
@@ -1672,6 +1677,112 @@ def check_stated_urls_resolve(pages: list[Path], docs_root: Path) -> bool:
     return ok
 
 
+# A negative length starts with a minus sign and is not a zero value, so
+# "-0", "-0px" and "-0%" do not count as pulling an element off screen.
+NEGATIVE_LENGTH_RE = re.compile(r"^-(\d*\.?\d+)")
+
+
+def is_negative_length(value: str) -> bool:
+    """True if a CSS length is negative and not a zero-valued negative."""
+    match = NEGATIVE_LENGTH_RE.match(value.strip())
+    return bool(match) and float(match.group(1)) != 0
+
+
+def class_is_hidden(stylesheet: str, class_name: str) -> bool:
+    """Decide whether a class ends up hidden after the cascade resolves it.
+
+    Walks every rule whose selector list names the class. A selector that,
+    stripped, is exactly the bare class selector ("." + class_name) joins
+    the ordered cascade in source order and keeps the last value written
+    for each property in CASCADE_HIDING_PROPERTIES, which is how
+    equal-specificity rules resolve: a later declaration beats an earlier
+    one, unless the earlier one carries !important and the later one does
+    not, in which case the !important declaration keeps winning until a
+    later !important replaces it. CSS_RULE_RE already reads through an
+    @media wrapper to the plain rules inside it, so a rule inside one is
+    checked the same as a top-level rule: this does not evaluate the media
+    condition, so it treats every @media rule as though it might apply,
+    which is the safe assumption for a check.
+
+    Any other selector naming the class, a compound, descendant, attribute
+    or pseudo-class selector, cannot be ranked against the bare selector by
+    this function, so if it declares any CASCADE_HIDING_PROPERTIES property
+    this function returns False immediately instead of joining the
+    cascade: in a browser that selector could win over the bare one and
+    put the element back on screen, and this function will not vouch for
+    the class being hidden when it cannot tell. A rule whose selector list
+    contains both the bare class and such a selector counts as both.
+
+    The class counts as hidden only if the winning declarations give
+    display: none, visibility: hidden, or an absolute or fixed position
+    together with a winning left or top that is a negative length. A
+    position: absolute on its own is not enough, since an element can be
+    absolutely positioned and still sit on screen; it is the negative
+    offset that pulls it out of the viewport.
+
+    This is not a CSS engine. It does not rank selectors by specificity,
+    so a selector naming the class that is not exactly the bare class
+    selector fails the check closed when it touches a hiding property,
+    rather than being ranked against the bare one. It does not resolve
+    combinators or pseudo-classes beyond that check, it does not see
+    inline styles, and it does not add left or top to the element's own
+    size and position to know whether a small negative offset still
+    leaves part of the element visible. Equal-specificity bare class
+    selectors and a fully off-screen offset are the only case it reasons
+    about, which is what a spam-trap class actually uses.
+    """
+    selector_pattern = re.compile(
+        r"(?<![\w-])\." + re.escape(class_name) + r"(?![\w-])"
+    )
+    bare_selector = "." + class_name
+    winning_value: dict[str, str] = {}
+    winning_important: dict[str, bool] = {}
+    for selectors, body in CSS_RULE_RE.findall(stylesheet):
+        matching = [
+            selector
+            for selector in selectors.split(",")
+            if selector_pattern.search(selector)
+        ]
+        if not matching:
+            continue
+        bare_match = any(selector.strip() == bare_selector for selector in matching)
+        other_match = any(selector.strip() != bare_selector for selector in matching)
+        declarations = [
+            declaration.split(":", 1)
+            for declaration in body.split(";")
+            if ":" in declaration
+        ]
+        if other_match and any(
+            name.strip().lower() in CASCADE_HIDING_PROPERTIES
+            for name, _ in declarations
+        ):
+            return False
+        if not bare_match:
+            continue
+        for name, value in declarations:
+            name = name.strip().lower()
+            if name not in CASCADE_HIDING_PROPERTIES:
+                continue
+            important = value.strip().lower().endswith("!important")
+            if important:
+                value = value.rsplit("!", 1)[0]
+            value = value.strip().lower()
+            if winning_important.get(name) and not important:
+                continue
+            winning_value[name] = value
+            winning_important[name] = important
+    if winning_value.get("display") == "none":
+        return True
+    if winning_value.get("visibility") == "hidden":
+        return True
+    if winning_value.get("position") in OFF_SCREEN_POSITIONS and (
+        is_negative_length(winning_value.get("left", ""))
+        or is_negative_length(winning_value.get("top", ""))
+    ):
+        return True
+    return False
+
+
 def check_contact_form(pages: list[Path], docs_root: Path) -> bool:
     """The contact form posts to the declared endpoint and carries every field it needs.
 
@@ -1759,23 +1870,19 @@ def check_contact_form(pages: list[Path], docs_root: Path) -> bool:
     else:
         offset = form.index(HONEYPOT_FIELD)
         wrappers = WRAPPER_CLASS_RE.findall(form[:offset])
-        stylesheet = (docs_root / "styles.css").read_text(encoding="utf-8")
+        stylesheet = CSS_COMMENT_RE.sub(
+            " ", (docs_root / "styles.css").read_text(encoding="utf-8")
+        )
         hidden = False
         for _quote, classes in wrappers[-1:]:
             for name in classes.split():
-                rule = re.search(
-                    r"\." + re.escape(name) + r"\s*\{([^}]*)\}", stylesheet
-                )
-                if rule and any(
-                    declaration in rule.group(1)
-                    for declaration in HIDING_DECLARATIONS
-                ):
+                if class_is_hidden(stylesheet, name):
                     hidden = True
         if not hidden:
             problems.append(
-                f"{page.name}: nothing in styles.css hides the element holding "
-                f"the {HONEYPOT_FIELD!r} field, so a visitor can see it and "
-                "fill it in, and every submission that does is discarded"
+                f"{page.name}: nothing in styles.css reliably hides the element "
+                f"holding the {HONEYPOT_FIELD!r} field, so a visitor might see it "
+                "and fill it in, and every submission that does is discarded"
             )
 
     redirect = None
