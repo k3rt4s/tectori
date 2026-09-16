@@ -207,6 +207,12 @@ Tectori website changes are recorded here.
   commented out still passed. It now requires each host in the src of a
   live script or img tag, outside HTML comments.
 
+- The head tag check counted only a bare `<title>`, a meta description
+  with name before content, and a quoted rel=canonical, so a second title
+  with an attribute or a second description in the other order passed.
+  It now counts title start tags in the head, meta tags by a standalone
+  name attribute, and link tags by a standalone rel holding canonical.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
