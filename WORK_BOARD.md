@@ -58,14 +58,14 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the JSON-LD every-block fix is on branch
-`feature/hunt-jsonld-every-block`, from worktree
-`C:\Code\worktrees\tectori-hunt-jsonld-every-block`. Gates: check_site
---full, then the pre-push review, then PR, verify, merge. If `main` does not
-yet carry that change, check that branch and `gh pr list` first. Fixes
-queued behind it, each in its own worktree under `C:\Code\worktrees\`:
-the README and PERMISSIONS counts in `check_doc_claims.py`, and duplicate
-sitemap and llms.txt entries. Probe log:
+Checkpoint, 2026-09-16 run: the duplicate-address fix to
+`verify_site.py` is on branch `feature/hunt-sitemap-duplicates`, from
+worktree `C:\Code\worktrees\tectori-hunt-sitemap-duplicates`.
+Gates: check_site --full, then the pre-push review, then PR, verify, merge.
+If `main` does not yet carry that change, check that branch and
+`gh pr list` first. Other fixes in flight, each on its own
+`feature/hunt-*` branch and worktree under `C:\Code\worktrees\`: see
+`git worktree list`. Probe log:
 `C:\Code_data\tectori\hunt_2026-09-16\probes.md`.
 
 You have no next action here. The board is finished, and that is the

@@ -65,6 +65,11 @@ Tectori website changes are recorded here.
   block twice fails, and so does a second block whose breadcrumb ends at
   the home page.
 
+- A page listed twice in `public_pages.json` put the same address in the
+  sitemap and in `llms.txt` twice, and both checks passed, because each
+  compared sets of paths and a set keeps one copy. Both now count each
+  address and fail one that appears more than once.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the

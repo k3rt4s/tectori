@@ -7,6 +7,7 @@ import html as html_lib
 import json
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -342,7 +343,7 @@ def check_noindex_and_navigation(pages: list[Path], docs_root: Path) -> bool:
 
 
 def check_sitemap(pages: list[Path], docs_root: Path) -> bool:
-    """sitemap.xml lists every indexed page, by its own canonical path, and no noindex page."""
+    """sitemap.xml lists every indexed page once, by its own canonical path, with no noindex page and no duplicate <loc>."""
     sitemap = docs_root / "sitemap.xml"
     problems: list[str] = []
     if not sitemap.is_file():
@@ -350,7 +351,11 @@ def check_sitemap(pages: list[Path], docs_root: Path) -> bool:
         return False
 
     sitemap_paths = set()
-    for loc in re.findall(r"<loc>(.*?)</loc>", sitemap.read_text(encoding="utf-8")):
+    locs = re.findall(r"<loc>(.*?)</loc>", sitemap.read_text(encoding="utf-8"))
+    for loc, count in sorted(Counter(locs).items()):
+        if count > 1:
+            problems.append(f"sitemap.xml: <loc>{loc}</loc> appears {count} times")
+    for loc in locs:
         if not loc.startswith(SITE_PREFIX):
             problems.append(f"sitemap.xml: <loc>{loc}</loc> is not on the site domain")
             continue
@@ -396,7 +401,7 @@ def check_sitemap(pages: list[Path], docs_root: Path) -> bool:
 
 
 def check_llms_txt(docs_root: Path) -> bool:
-    """llms.txt covers the sitemap's page set and repeats each page's meta description."""
+    """llms.txt covers the sitemap's page set once each and repeats each page's meta description."""
     llms_file = docs_root / "llms.txt"
     sitemap = docs_root / "sitemap.xml"
     problems: list[str] = []
@@ -423,6 +428,10 @@ def check_llms_txt(docs_root: Path) -> bool:
         if match:
             llms_paths.add(match.group(1))
             llms_lines.append((number, match.group(1), " ".join(match.group(2).split())))
+
+    for url_path, count in sorted(Counter(path for _, path, _ in llms_lines).items()):
+        if count > 1:
+            problems.append(f"llms.txt: {url_path!r} appears {count} times")
 
     # The sitemap lists absolute https://www.tectori.com URLs and llms.txt
     # lists site-relative paths. That format difference is expected and is
