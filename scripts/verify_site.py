@@ -631,6 +631,64 @@ RESOURCE_URL_RE = re.compile(
 )
 ABSOLUTE_HOST_RE = re.compile(r"^https?://([^/]+)", re.IGNORECASE)
 
+# CSS also fetches: an @import brings in a whole second stylesheet and a
+# url() loads a font, an image or anything else a browser resolves the way
+# it resolves a source attribute, but neither sits inside a tag the scan
+# above looks at, so a <style> block, a style="" attribute or a .css file
+# could name a third party host and every check here still pass.
+STYLE_ELEMENT_RE = re.compile(
+    r"<style\b[^>]*>(.*?)</style\s*>", re.IGNORECASE | re.DOTALL
+)
+STYLE_ATTR_RE = re.compile(
+    r'\bstyle\s*=\s*([\"\'])(.*?)\1', re.IGNORECASE | re.DOTALL
+)
+CSS_URL_FUNC_RE = re.compile(
+    r'\burl\(\s*([\"\']?)(.*?)\1\s*\)', re.IGNORECASE | re.DOTALL
+)
+CSS_IMPORT_STRING_RE = re.compile(
+    r'@import\s+([\"\'])(.*?)\1', re.IGNORECASE | re.DOTALL
+)
+# http(s):// or the protocol-relative //host a browser also fetches from.
+# data: URIs and same-host or relative paths have no leading // and never
+# match, so they are never counted as a fetch here either.
+CSS_ABS_HOST_RE = re.compile(r"^(?:https?:)?//([^/?#]+)", re.IGNORECASE)
+
+
+def css_fetch_urls(css_text: str):
+    """Yield every url() or @import target in a block of CSS text.
+
+    Comments are stripped first, with the same regex the palette reader
+    uses below, so a commented-out @import is not a live fetch.
+    """
+    css_text = CSS_COMMENT_RE.sub(" ", css_text)
+    for match in CSS_URL_FUNC_RE.finditer(css_text):
+        yield match.group(2).strip()
+    for match in CSS_IMPORT_STRING_RE.finditer(css_text):
+        yield match.group(2).strip()
+
+
+def css_fetch_problems(name: str, css_text: str, is_disclosed):
+    """Return (fetch count, problem strings) for the url()/@import targets in one CSS source.
+
+    Shared by the per-page style scan and the standalone .css file scan
+    below, so the host test and the failure wording live in one place.
+    """
+    count = 0
+    css_problems: list[str] = []
+    for candidate in css_fetch_urls(css_text):
+        host = CSS_ABS_HOST_RE.match(candidate)
+        if not host:
+            continue
+        count += 1
+        if not is_disclosed(host.group(1)):
+            css_problems.append(
+                f"{name}: a CSS fetch loads from "
+                f"{host.group(1)!r}, which the privacy policy does "
+                "not tell a visitor about"
+            )
+    return count, css_problems
+
+
 # Ways a page keeps something on a visitor's machine. The policy says it does
 # none of them, which is a sentence no check read.
 STORAGE_MARKERS = (
@@ -987,6 +1045,35 @@ def check_privacy_statement(pages: list[Path], docs_root: Path) -> bool:
                             f"loads from {host.group(1)!r}, which the privacy "
                             "policy does not tell a visitor about"
                         )
+
+        # CSS is invisible to RESOURCE_RE: a <style> block or a style=""
+        # attribute can @import or url() a third party host with no tag
+        # the scan above matches. A browser decodes entities in an
+        # attribute value before its CSS parser sees it, so &quot; still
+        # fetches; <style> element text is not decoded, so it is left raw.
+        for element in STYLE_ELEMENT_RE.finditer(page_text):
+            count, css_problems = css_fetch_problems(
+                page.name, element.group(1), is_disclosed
+            )
+            fetched += count
+            problems.extend(css_problems)
+        for element in STYLE_ATTR_RE.finditer(page_text):
+            css_text = html_lib.unescape(element.group(2))
+            count, css_problems = css_fetch_problems(
+                page.name, css_text, is_disclosed
+            )
+            fetched += count
+            problems.extend(css_problems)
+
+    # A stylesheet does not have to be inlined in a page to fetch from a
+    # third party; every .css file under the built tree gets the same read.
+    for css_path in sorted(docs_root.rglob("*.css")):
+        css_text = css_path.read_text(encoding="utf-8", errors="ignore")
+        count, css_problems = css_fetch_problems(
+            css_path.name, css_text, is_disclosed
+        )
+        fetched += count
+        problems.extend(css_problems)
 
     stored = sorted(
         path
