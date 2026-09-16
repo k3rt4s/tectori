@@ -197,6 +197,11 @@ Tectori website changes are recorded here.
   `<label class=sr-only>` and an image with only `data-alt` passed. Each
   attribute is now read by its own name, quoted or not.
 
+- The runner wiring check counted a `script()` call anywhere in
+  check_site.py, even inside a function nothing calls. It now counts a
+  call only from module-level code or from a function that reachable code
+  names.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the

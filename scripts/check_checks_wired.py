@@ -43,21 +43,84 @@ def iter_check_files(root: Path) -> list[Path]:
     return sorted(paths)
 
 
+def _is_script_call(node: ast.AST) -> bool:
+    """Return whether node is a call to the script() helper with a literal name."""
+    return (
+        isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id == "script"
+        and bool(node.args)
+        and isinstance(node.args[0], ast.Constant)
+        and isinstance(node.args[0].value, str)
+    )
+
+
+def _scan_scope(stmts: list, calls: set, names: set) -> None:
+    """Collect script() calls and referenced names from one scope.
+
+    Follows control flow (if/for/while/try/with) inside the given statements
+    but does not step into a nested function, lambda or class body, since that
+    is a separate scope that only runs when something calls or references it
+    by name.
+    """
+
+    def walk(node: ast.AST) -> None:
+        for child in ast.iter_child_nodes(node):
+            if isinstance(
+                child,
+                (ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda, ast.ClassDef),
+            ):
+                continue
+            if _is_script_call(child):
+                calls.add(child.args[0].value)
+            if isinstance(child, ast.Name):
+                names.add(child.id)
+            elif isinstance(child, ast.Attribute):
+                names.add(child.attr)
+            walk(child)
+
+    for stmt in stmts:
+        walk(stmt)
+
+
 def called_scripts(path: Path) -> set[str]:
-    """Return every script name the runner passes to its script() helper."""
+    """Return every script name reachable when the runner actually runs.
+
+    Reachable means module-level code, including the if __name__ block, plus
+    any function that reachable code calls or passes by name (as a callback
+    or inside a list, for example), applied the same way to nested functions
+    and methods. This is a name match over the source, not a trace of
+    execution: a script() call that only sits inside a function nothing
+    reachable ever names by that name does not count.
+    """
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-    names: set[str] = set()
+    functions_by_name: dict = {}
     for node in ast.walk(tree):
-        if (
-            isinstance(node, ast.Call)
-            and isinstance(node.func, ast.Name)
-            and node.func.id == "script"
-            and node.args
-            and isinstance(node.args[0], ast.Constant)
-            and isinstance(node.args[0].value, str)
-        ):
-            names.add(node.args[0].value)
-    return names
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            functions_by_name.setdefault(node.name, []).append(node)
+
+    calls: set[str] = set()
+    seed = [
+        stmt
+        for stmt in tree.body
+        if not isinstance(stmt, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+    ]
+    names_found: set = set()
+    _scan_scope(seed, calls, names_found)
+
+    visited_functions: set = set()
+    to_expand = list(names_found)
+    while to_expand:
+        name = to_expand.pop()
+        for func in functions_by_name.get(name, []):
+            if id(func) in visited_functions:
+                continue
+            visited_functions.add(id(func))
+            new_names: set = set()
+            _scan_scope(func.body, calls, new_names)
+            to_expand.extend(new_names)
+
+    return calls
 
 
 def verifier_checks(path: Path) -> tuple[set[str], set[str]]:
