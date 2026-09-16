@@ -1187,8 +1187,9 @@ CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
 CSS_RULE_RE = re.compile(r"([^{}]+)\{([^{}]*)\}", re.DOTALL)
 CSS_VAR_RE = re.compile(r"--([a-z0-9-]+)\s*:\s*([^;}]+)")
 CSS_VAR_USE_RE = re.compile(r"var\(\s*--([a-z0-9-]+)\s*\)$")
-CSS_HEX_RE = re.compile(r"#([0-9a-fA-F]{6})$")
+CSS_HEX_RE = re.compile(r"#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$")
 CSS_RGBA_RE = re.compile(r"rgba?\(([^)]*)\)$")
+CSS_IMPORTANT_RE = re.compile(r"!\s*important\s*$", re.IGNORECASE)
 
 # The surfaces the site paints text on. Four, because the palette is four
 # opaque colours wide, and each is confirmed below to still be used as a
@@ -1245,6 +1246,8 @@ def css_colour(value: str, palette: dict[str, str], depth: int = 0):
     written = CSS_HEX_RE.match(value)
     if written:
         digits = written.group(1)
+        if len(digits) == 3:
+            digits = "".join(digit * 2 for digit in digits)
         return (
             int(digits[0:2], 16),
             int(digits[2:4], 16),
@@ -1393,12 +1396,71 @@ def check_colour_contrast(docs_root: Path) -> bool:
                     "which the accessibility statement says this site targets"
                 )
 
+    # The table above only measures the fixed pairs it names, so a rule that
+    # sets its own color and background together, on a class the table has
+    # never heard of, passes unmeasured. A rule is only skipped, not failed,
+    # when its background does not resolve to one opaque colour: a gradient,
+    # currentColor, transparent, an image, or a translucent colour whose
+    # rendered result depends on whatever sits behind it.
+    rule_measured = 0
+    rule_skipped = 0
+    for selector, body in CSS_RULE_RE.findall(css):
+        text_value = None
+        text_important = False
+        background_value = None
+        background_important = False
+        for declaration in body.split(";"):
+            if ":" not in declaration:
+                continue
+            name, value = declaration.split(":", 1)
+            name = name.strip().lower()
+            raw_value = value.strip()
+            is_important = bool(CSS_IMPORTANT_RE.search(raw_value))
+            value = CSS_IMPORTANT_RE.sub("", value).strip()
+            if name == "color":
+                if text_value is not None and text_important and not is_important:
+                    continue
+                text_value = value
+                text_important = is_important
+            elif name in ("background", "background-color"):
+                # Whichever of the two properties is written last in the
+                # rule is what a browser paints, so the later one overwrites
+                # the earlier one here too, regardless of which name it used,
+                # unless an !important declaration already set this slot and
+                # this one is not itself !important, in which case a browser
+                # keeps the important value and this later one is ignored.
+                if (
+                    background_value is not None
+                    and background_important
+                    and not is_important
+                ):
+                    continue
+                background_value = value
+                background_important = is_important
+        if not text_value or not background_value:
+            continue
+        text_colour = css_colour(text_value, palette)
+        background_colour = css_colour(background_value, palette)
+        if not text_colour or not background_colour or background_colour[3] != 1.0:
+            rule_skipped += 1
+            continue
+        rule_measured += 1
+        ratio = contrast_ratio(composite(text_colour, background_colour), background_colour)
+        if ratio < minimum:
+            problems.append(
+                f"{selector.strip()!r} paints {text_value!r} on "
+                f"{background_value!r} at {ratio:.2f} to 1, and WCAG {version} "
+                f"level {level} asks for {minimum} to 1 for ordinary text, "
+                "which the accessibility statement says this site targets"
+            )
+
     ok = not problems
     print(
         f"[{'PASS' if ok else 'FAIL'}] every text colour meets the contrast "
         f"the statement targets: {len(CONTRAST_READ_ON)} colours on "
         f"{measured} surfaces at {minimum} to 1 for WCAG {version} level "
-        f"{level}, {len(problems)} problems"
+        f"{level}, {rule_measured} rules with their own color and background "
+        f"measured directly, {rule_skipped} skipped, {len(problems)} problems"
     )
     for problem in problems[:20]:
         print(f"       {problem}")
