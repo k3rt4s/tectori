@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import ast
 import re
+import shlex
 import sys
 from pathlib import Path
 
@@ -26,6 +27,58 @@ NETWORK_PROGRAMS = {
     "curl", "wget", "Invoke-WebRequest", "Invoke-RestMethod", "scp", "sftp",
     "ssh", "rsync",
 }
+
+# A string constant can also be a shell command line, as os.system, os.popen
+# and subprocess with shell=True all take one. Split it into commands on the
+# shell separators below and read only the first word of each: a network
+# program named later in the line is an argument or a path, not the command
+# being run, and reading past the first word would also catch the program
+# name inside ordinary prose that only mentions it. The comparison against
+# NETWORK_PROGRAMS stays case-sensitive for the same reason, so a sentence
+# that opens with a capitalised word does not match the lowercase command it
+# only refers to. Before taking that word, skip any leading shell assignment
+# (FOO=1) and any leading wrapper command (env, sudo, nohup, exec, command,
+# time, nice) together with that wrapper's own option flags, since none of
+# those is the program actually being run.
+COMMAND_SPLIT_RE = re.compile(r"&&|\|\||[;|&\n]")
+ASSIGNMENT_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=")
+WRAPPER_COMMANDS = {"env", "sudo", "nohup", "exec", "command", "time", "nice"}
+
+
+def command_words(value: str) -> list[str]:
+    """Return the command word of each shell command segment found in value."""
+    words = []
+    for segment in COMMAND_SPLIT_RE.split(value):
+        stripped = segment.strip()
+        try:
+            tokens = shlex.split(stripped, posix=True)
+        except ValueError:
+            tokens = stripped.split()
+        seen_wrapper = False
+        index = 0
+        while index < len(tokens):
+            token = tokens[index]
+            if ASSIGNMENT_RE.match(token):
+                index += 1
+                continue
+            if token in WRAPPER_COMMANDS:
+                seen_wrapper = True
+                index += 1
+                continue
+            if seen_wrapper and token.startswith("-"):
+                index += 1
+                continue
+            break
+        if index >= len(tokens):
+            continue
+        word = tokens[index]
+        # shlex.split already removes matched quotes; this still strips them
+        # from the plain-split fallback path above.
+        if len(word) >= 2 and word[0] == word[-1] and word[0] in "\"'":
+            word = word[1:-1]
+        words.append(word)
+    return words
+
 
 CLAIM_RE = re.compile(
     r"Two\s+scripts\s+here\s+can\s+reach\s+the\s+network\s+and\s+nothing"
@@ -75,6 +128,14 @@ def network_reasons(path: Path) -> list[str]:
             name = node.value.split("/")[-1].split("\\")[-1]
             if name in NETWORK_PROGRAMS or name.removesuffix(".exe") in NETWORK_PROGRAMS:
                 reasons.append(f"runs {node.value}")
+            else:
+                for word in command_words(node.value):
+                    word_name = word.split("/")[-1].split("\\")[-1]
+                    if (
+                        word_name in NETWORK_PROGRAMS
+                        or word_name.removesuffix(".exe") in NETWORK_PROGRAMS
+                    ):
+                        reasons.append(f"runs {word}")
     return sorted(set(reasons))
 
 

@@ -181,6 +181,12 @@ Tectori website changes are recorded here.
   unchecked against the declared hosts. It now reads hosts in any form
   there, and skips file names by the extensions the repository holds.
 
+- The network check flagged a string only when the whole string was a
+  network program's name, so `os.system("curl -s https://...")` passed.
+  It now also splits each string into shell commands, tokenised as a
+  shell would, and checks the command word of each, after any leading
+  assignment or wrapper such as env or sudo.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
