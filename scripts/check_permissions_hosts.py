@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -19,10 +20,28 @@ CLAIM = (
     "Every host above is declared in `site/content/site.json` with the reason "
     "it is there"
 )
-# A hostname as this document writes them: inside backticks or bold, dotted,
-# and with no slash, which is what separates `github.com` from
-# `docs/login.html` and from `scripts/verify_site.py`.
-HOST_RE = re.compile(r"[`*]{1,2}([a-z0-9][a-z0-9.-]*\.[a-z]{2,})[`*]{1,2}")
+# A hostname as any prose can write it: bare, inside backticks or bold, or
+# inside a URL. Labels are alnum and hyphen, the last label is letters only
+# and at least two of them, and the match cannot start or continue mid-word,
+# so `docs/login.html`, `e.g.` and `v1.2` never look like one on their own;
+# what still reads as a file (`site.json`, `verify.yml`) is dropped below by
+# its extension instead of by a hard-coded name.
+HOST_RE = re.compile(
+    r"(?<![\w.-])"
+    r"((?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,})"
+    r"(?![a-zA-Z0-9-])"
+)
+
+
+def repo_file_extensions() -> set[str]:
+    """Return every file extension present under the repo tree, lower case."""
+    extensions: set[str] = set()
+    for dirpath, dirnames, filenames in os.walk(REPO_ROOT):
+        dirnames[:] = [name for name in dirnames if name != ".git"]
+        for filename in filenames:
+            if "." in filename:
+                extensions.add(filename.rsplit(".", 1)[1].lower())
+    return extensions
 
 
 def manifest_hosts(text: str) -> set[str]:
@@ -31,7 +50,14 @@ def manifest_hosts(text: str) -> set[str]:
     rest = text[start + len(SECTION_HEADING) :]
     end = rest.find("\n## ")
     section = rest if end == -1 else rest[:end]
-    return {match.group(1) for match in HOST_RE.finditer(section)}
+    extensions = repo_file_extensions()
+    found: set[str] = set()
+    for match in HOST_RE.finditer(section):
+        host = match.group(1).lower()
+        if host.rsplit(".", 1)[1] in extensions:
+            continue
+        found.add(host)
+    return found
 
 
 def main() -> int:

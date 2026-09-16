@@ -176,6 +176,11 @@ Tectori website changes are recorded here.
   passed. It now reads all three forms, and still skips attributes such
   as `data-class`.
 
+- The egress manifest check read a host only inside backticks or bold, so
+  a host written as plain text or inside a URL in the egress section went
+  unchecked against the declared hosts. It now reads hosts in any form
+  there, and skips file names by the extensions the repository holds.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
