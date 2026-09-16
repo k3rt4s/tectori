@@ -93,6 +93,12 @@ Tectori website changes are recorded here.
   nothing styles and still pass. The check now reads only the selector
   itself.
 
+- The check that no page names the wrong security credential looked for
+  one exact spelling, so the phrase passed when a source line wrapped
+  between its words, a tag or a non-breaking space sat between them, or
+  the case changed. The check now reads the page the way a visitor does
+  and catches each of those.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
