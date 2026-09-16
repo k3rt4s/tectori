@@ -158,6 +158,12 @@ Tectori website changes are recorded here.
   the base stylesheet and for each screen-width block on top of it, so an
   override at one width cannot hide a failure at another.
 
+- The login form check treated a label as hidden only when it was moved
+  off screen, so a label clipped to nothing, shrunk to one pixel, or made
+  fully transparent passed, though the accessibility statement promises
+  visible labels. Those patterns now count as hidden, and a label class
+  that a more specific rule might hide fails instead of passing.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the

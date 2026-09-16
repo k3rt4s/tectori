@@ -595,10 +595,25 @@ REQUIRED_FIELDS = ("name", "email", "message")
 # works while it is invisible, and a visitor who can see it fills it in.
 HONEYPOT_FIELD = "_gotcha"
 # A honeypot is invisible to a visitor only if the cascade's winning
-# declarations end in display: none, visibility: hidden, or an absolute
-# or fixed position pulled off screen by a negative left or top. These
-# are the properties class_is_hidden tracks to decide which one applies.
-CASCADE_HIDING_PROPERTIES = ("display", "visibility", "position", "left", "top")
+# declarations end in display: none, visibility: hidden, opacity: 0, or a
+# clip-path: inset(50%) or larger, none of which need a position, or an
+# absolute or fixed position combined with one of: a negative left or top,
+# a clip: rect(...) whose four lengths are all zero, or a width and height
+# each at most 1px paired with overflow: hidden. These are the properties
+# class_is_hidden tracks to decide which one applies.
+CASCADE_HIDING_PROPERTIES = (
+    "display",
+    "visibility",
+    "position",
+    "left",
+    "top",
+    "clip",
+    "clip-path",
+    "width",
+    "height",
+    "overflow",
+    "opacity",
+)
 OFF_SCREEN_POSITIONS = ("absolute", "fixed")
 
 
@@ -1851,7 +1866,9 @@ def check_keyboard_operable(pages: list[Path], docs_root: Path) -> bool:
                     "promises a visible one"
                 )
             for name in sorted(named - hidden):
-                if class_is_hidden(login_stylesheet, name):
+                if class_is_hidden(
+                    login_stylesheet, name, assume_hidden_when_unsure=True
+                ):
                     problems.append(
                         f"{NO_MENU}: the label for {identifier.group(2)!r} is "
                         f"hidden by its {name!r} class in styles.css, and the "
@@ -2018,6 +2035,185 @@ def is_negative_length(value: str) -> bool:
     return bool(match) and float(match.group(1)) != 0
 
 
+# A CSS length or plain number that resolves to zero regardless of sign or
+# unit, "0", "0px", "-0%" and "0.0" alike. Anchored to the whole value: a
+# browser drops a declaration whose value carries anything past a bare
+# signed number and, at most, one recognized unit, "0 important" (a missing
+# !) and "0foo" included, so this must not read either as zero. Used to
+# read each of clip: rect(...)'s four offsets, which are lengths and may
+# carry any of these units; opacity is not a length and reads with
+# is_zero_opacity instead.
+ZERO_LENGTH_RE = re.compile(
+    r"^[+-]?(\d*\.?\d+)"
+    r"(px|%|em|rem|ex|ch|vw|vh|vmin|vmax|pt|pc|cm|mm|in|q)?$",
+    re.IGNORECASE,
+)
+
+
+def is_zero_length(value: str) -> bool:
+    """True if a CSS length or plain number is zero, false for anything the value carries beyond a number and a unit."""
+    match = ZERO_LENGTH_RE.match(value.strip())
+    return bool(match) and float(match.group(1)) == 0
+
+
+# opacity takes an <alpha-value>, a plain number or a percentage, and
+# nothing else: a length unit like "0px" is not a valid opacity and a
+# browser drops the declaration, so it must not read as zero either.
+# Anchored to the whole value the same way ZERO_LENGTH_RE is.
+ZERO_OPACITY_RE = re.compile(r"^[+-]?(\d*\.?\d+)%?$")
+
+
+def is_zero_opacity(value: str) -> bool:
+    """True if an opacity value is a signed number, with an optional %, that is zero."""
+    match = ZERO_OPACITY_RE.match(value.strip())
+    return bool(match) and float(match.group(1)) == 0
+
+
+CLIP_RECT_RE = re.compile(r"rect\(\s*([^)]*)\)", re.IGNORECASE)
+
+
+def clip_rect_is_zero(value: str) -> bool:
+    """True if a clip: rect(...) value's four lengths are all zero.
+
+    The legacy rect() syntax separates its four offsets with commas or,
+    non-standard but still shipped by browsers, with plain whitespace.
+    Anything other than exactly four lengths, or any of the four not zero,
+    is not hidden.
+    """
+    match = CLIP_RECT_RE.search(value)
+    if not match:
+        return False
+    parts = [part for part in re.split(r"[\s,]+", match.group(1).strip()) if part]
+    return len(parts) == 4 and all(is_zero_length(part) for part in parts)
+
+
+CLIP_PATH_INSET_RE = re.compile(r"inset\(\s*([^)]*)\)", re.IGNORECASE)
+
+
+ROUND_KEYWORD_RE = re.compile(r"\bround\b", re.IGNORECASE)
+
+
+def inset_side_value(part: str):
+    """Read one inset() argument as a percentage, or None if it is not one.
+
+    A percentage parses as its number. A bare zero, the one length CSS
+    lets through without a unit, parses as 0. Anything else, a length with
+    a unit such as "10px", a unitless non-zero number, or unparseable
+    text, is not a percentage and returns None.
+    """
+    if part.endswith("%"):
+        try:
+            return float(part[:-1])
+        except ValueError:
+            return None
+    try:
+        if float(part) == 0:
+            return 0.0
+    except ValueError:
+        pass
+    return None
+
+
+def clip_path_is_full_inset(value: str) -> bool:
+    """True if a clip-path: inset(...) collapses the box to nothing wide or tall.
+
+    Reads one to four percentage values and expands them the way CSS
+    expands inset()'s own shorthand: one value applies to all four sides;
+    two are top/bottom then left/right; three are top, left/right, then
+    bottom; four are top, right, bottom, left. Anything from a round
+    keyword onward, the corner-rounding syntax, is ignored first. Hidden
+    when the top and bottom insets add to 100% or more, or the left and
+    right insets do, either of which collapses the box's height or width
+    to nothing. A value that is not a percentage, a length with a unit
+    such as "10px" included, means not hidden, and so does anything
+    malformed: more than four values, no values, or text that does not
+    parse as a percentage or a bare zero.
+    """
+    match = CLIP_PATH_INSET_RE.search(value)
+    if not match:
+        return False
+    inside = match.group(1)
+    keyword = ROUND_KEYWORD_RE.search(inside)
+    if keyword:
+        inside = inside[: keyword.start()]
+    parts = inside.split()
+    if not parts or len(parts) > 4:
+        return False
+    sides = [inset_side_value(part) for part in parts]
+    if any(side is None for side in sides):
+        return False
+    if len(sides) == 1:
+        top = right = bottom = left = sides[0]
+    elif len(sides) == 2:
+        top = bottom = sides[0]
+        right = left = sides[1]
+    elif len(sides) == 3:
+        top = sides[0]
+        right = left = sides[1]
+        bottom = sides[2]
+    else:
+        top, right, bottom, left = sides
+    return top + bottom >= 100 or left + right >= 100
+
+
+# The screen-reader-only pattern shrinks an element to at most a pixel
+# rather than moving it off screen: a unitless 0, or a non-negative number
+# in px that is at most 1, "0.5px", "1.0px" and ".5px" included. A plain
+# "1" with no unit, anything over 1px, any other unit, a percentage, auto
+# and calc() are all not hidden by size.
+TINY_DIMENSION_RE = re.compile(r"^(\d*\.\d+|\d+\.?\d*)(px)?$")
+
+
+def is_tiny_dimension(value: str) -> bool:
+    """True for a unitless 0, or a non-negative px length at most 1px."""
+    match = TINY_DIMENSION_RE.match(value.strip().lower())
+    if not match:
+        return False
+    number = float(match.group(1))
+    if match.group(2) == "px":
+        return 0 <= number <= 1
+    return number == 0
+
+
+def declarations_are_hidden(winning_value: dict[str, str]) -> bool:
+    """True if a resolved set of cascade declarations hides its element.
+
+    display: none, visibility: hidden, opacity: 0, and clip-path:
+    inset(50%) or larger hide an element on their own, position included
+    or not: clip-path applies to any box, not only an absolutely
+    positioned one. The remaining three only take an element off screen
+    when it is also positioned absolute or fixed: a negative left or top,
+    a clip: rect(...) whose four lengths are all zero, since clip only
+    applies to an absolutely positioned box, and a width and height each
+    at most 1px paired with overflow: hidden, since shrinking the box does
+    nothing to an element still sitting in normal flow. This is the one
+    place style_is_hidden and class_is_hidden both read to turn a resolved
+    set of declarations into a yes or no.
+    """
+    if winning_value.get("display") == "none":
+        return True
+    if winning_value.get("visibility") == "hidden":
+        return True
+    if is_zero_opacity(winning_value.get("opacity", "1")):
+        return True
+    if clip_path_is_full_inset(winning_value.get("clip-path", "")):
+        return True
+    if winning_value.get("position") in OFF_SCREEN_POSITIONS:
+        if is_negative_length(winning_value.get("left", "")) or is_negative_length(
+            winning_value.get("top", "")
+        ):
+            return True
+        if clip_rect_is_zero(winning_value.get("clip", "")):
+            return True
+        if (
+            winning_value.get("overflow") == "hidden"
+            and is_tiny_dimension(winning_value.get("width", ""))
+            and is_tiny_dimension(winning_value.get("height", ""))
+        ):
+            return True
+    return False
+
+
 def style_is_hidden(style_text: str) -> bool:
     """Decide whether an inline style attribute hides its element outright.
 
@@ -2026,9 +2222,12 @@ def style_is_hidden(style_text: str) -> bool:
     written for each of CASCADE_HIDING_PROPERTIES wins, unless an earlier
     declaration carries !important and the later one does not, in which
     case the !important declaration keeps winning until a later
-    !important replaces it. Hidden only for display: none, visibility:
-    hidden, or an absolute or fixed position paired with a negative left
-    or top, which is class_is_hidden's own definition of hidden.
+    !important replaces it. Hidden for display: none, visibility: hidden,
+    opacity: 0, or clip-path: inset(50%) or larger regardless of position,
+    or an absolute or fixed position combined with a negative left or top
+    or a clip: rect(...) whose four lengths are all zero, or a width and
+    height each at most 1px paired with overflow: hidden, which is
+    declarations_are_hidden's definition, shared with class_is_hidden.
     """
     winning_value: dict[str, str] = {}
     winning_important: dict[str, bool] = {}
@@ -2047,19 +2246,12 @@ def style_is_hidden(style_text: str) -> bool:
             continue
         winning_value[name] = value
         winning_important[name] = important
-    if winning_value.get("display") == "none":
-        return True
-    if winning_value.get("visibility") == "hidden":
-        return True
-    if winning_value.get("position") in OFF_SCREEN_POSITIONS and (
-        is_negative_length(winning_value.get("left", ""))
-        or is_negative_length(winning_value.get("top", ""))
-    ):
-        return True
-    return False
+    return declarations_are_hidden(winning_value)
 
 
-def class_is_hidden(stylesheet: str, class_name: str) -> bool:
+def class_is_hidden(
+    stylesheet: str, class_name: str, assume_hidden_when_unsure: bool = False
+) -> bool:
     """Decide whether a class ends up hidden after the cascade resolves it.
 
     Walks every rule whose selector list names the class. A selector that,
@@ -2077,30 +2269,51 @@ def class_is_hidden(stylesheet: str, class_name: str) -> bool:
 
     Any other selector naming the class, a compound, descendant, attribute
     or pseudo-class selector, cannot be ranked against the bare selector by
-    this function, so if it declares any CASCADE_HIDING_PROPERTIES property
-    this function returns False immediately instead of joining the
-    cascade: in a browser that selector could win over the bare one and
-    put the element back on screen, and this function will not vouch for
-    the class being hidden when it cannot tell. A rule whose selector list
-    contains both the bare class and such a selector counts as both.
+    this function, since it does not know that selector's specificity
+    relative to the bare one. What happens with that uncertainty depends on
+    assume_hidden_when_unsure, because unsure is safe in opposite directions
+    for a spam trap and for a visible label.
 
-    The class counts as hidden only if the winning declarations give
-    display: none, visibility: hidden, or an absolute or fixed position
-    together with a winning left or top that is a negative length. A
-    position: absolute on its own is not enough, since an element can be
-    absolutely positioned and still sit on screen; it is the negative
-    offset that pulls it out of the viewport.
+    With assume_hidden_when_unsure left at its default, False, any such
+    selector that declares a CASCADE_HIDING_PROPERTIES property makes this
+    function return False immediately instead of joining the cascade: in a
+    browser that selector could win over the bare one and put the element
+    back on screen, and this function will not vouch for the class being
+    hidden when it cannot tell. This is the honeypot's direction: unsure
+    means assume visible, so the spam-trap check fails rather than trust a
+    class that might not hide anything.
 
-    This is not a CSS engine. It does not rank selectors by specificity,
-    so a selector naming the class that is not exactly the bare class
-    selector fails the check closed when it touches a hiding property,
-    rather than being ranked against the bare one. It does not resolve
-    combinators or pseudo-classes beyond that check, it does not see
-    inline styles, and it does not add left or top to the element's own
-    size and position to know whether a small negative offset still
-    leaves part of the element visible. Equal-specificity bare class
-    selectors and a fully off-screen offset are the only case it reasons
-    about, which is what a spam-trap class actually uses.
+    With assume_hidden_when_unsure True, the question flips from "is it
+    certainly hidden" to "could it plausibly still be hidden": this
+    function resolves the bare-selector fold exactly as above and returns
+    True if that alone is hidden; otherwise it walks the non-bare rules
+    that name the class and declare a CASCADE_HIDING_PROPERTIES property,
+    in source order, overlaying each one's declarations onto the bare
+    fold in turn, on the assumption that a non-bare rule outranks a bare
+    one unless the bare declaration carries !important and the non-bare
+    one does not, and returns True the moment any of those overlaid
+    states is hidden. This is the label's direction: unsure means assume
+    hidden, so a label is flagged rather than trusted as visible on the
+    strength of a bare rule some other selector might override into
+    something that still hides it. A rule whose selector list contains
+    both the bare class and such a selector counts as both.
+
+    A resolved set of declarations counts as hidden under
+    declarations_are_hidden's definition: display: none, visibility:
+    hidden, opacity: 0, or clip-path: inset(50%) or larger on their own,
+    or an absolute or fixed position together with one of: a winning left
+    or top that is a negative length, a clip: rect(...) whose four
+    lengths are all zero, or a width and height each at most 1px combined
+    with overflow: hidden. A position: absolute on its own is not enough,
+    since an element can be absolutely positioned and still sit on
+    screen.
+
+    This is not a CSS engine. It does not rank selectors by specificity
+    beyond the one assumption named above, it does not resolve
+    combinators or pseudo-classes beyond that, it does not see inline
+    styles, and it does not add left or top to the element's own size and
+    position to know whether a small negative offset still leaves part of
+    the element visible.
     """
     selector_pattern = re.compile(
         r"(?<![\w-])\." + re.escape(class_name) + r"(?![\w-])"
@@ -2108,6 +2321,7 @@ def class_is_hidden(stylesheet: str, class_name: str) -> bool:
     bare_selector = "." + class_name
     winning_value: dict[str, str] = {}
     winning_important: dict[str, bool] = {}
+    non_bare_declarations: list[list[list[str]]] = []
     for selectors, body in CSS_RULE_RE.findall(stylesheet):
         matching = [
             selector
@@ -2127,7 +2341,9 @@ def class_is_hidden(stylesheet: str, class_name: str) -> bool:
             name.strip().lower() in CASCADE_HIDING_PROPERTIES
             for name, _ in declarations
         ):
-            return False
+            if not assume_hidden_when_unsure:
+                return False
+            non_bare_declarations.append(declarations)
         if not bare_match:
             continue
         for name, value in declarations:
@@ -2142,15 +2358,29 @@ def class_is_hidden(stylesheet: str, class_name: str) -> bool:
                 continue
             winning_value[name] = value
             winning_important[name] = important
-    if winning_value.get("display") == "none":
+
+    if declarations_are_hidden(winning_value):
         return True
-    if winning_value.get("visibility") == "hidden":
-        return True
-    if winning_value.get("position") in OFF_SCREEN_POSITIONS and (
-        is_negative_length(winning_value.get("left", ""))
-        or is_negative_length(winning_value.get("top", ""))
-    ):
-        return True
+    if not assume_hidden_when_unsure:
+        return False
+
+    overlay_value = dict(winning_value)
+    overlay_important = dict(winning_important)
+    for declarations in non_bare_declarations:
+        for name, value in declarations:
+            name = name.strip().lower()
+            if name not in CASCADE_HIDING_PROPERTIES:
+                continue
+            important = value.strip().lower().endswith("!important")
+            if important:
+                value = value.rsplit("!", 1)[0]
+            value = value.strip().lower()
+            if overlay_important.get(name) and not important:
+                continue
+            overlay_value[name] = value
+            overlay_important[name] = important
+        if declarations_are_hidden(overlay_value):
+            return True
     return False
 
 
