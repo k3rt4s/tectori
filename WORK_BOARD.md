@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the login label attribute fix to
-`verify_site.py` is on branch `feature/hunt-label-attrs`, from
-worktree `C:\Code\worktrees\tectori-hunt-label-attrs`.
+Checkpoint, 2026-09-16 run: the runner reachability fix to
+`check_checks_wired.py` is on branch `feature/hunt-wired-dead`, from
+worktree `C:\Code\worktrees\tectori-hunt-wired-dead`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own
