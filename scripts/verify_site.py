@@ -1947,6 +1947,7 @@ def find_graph_nodes(data, node_type: str) -> list:
 SOCIAL_IMAGE_SIZE = (1200, 630)
 
 IMG_ATTRS_RE = re.compile(r"<img\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+META_TAG_RE = re.compile(r"<meta\b([^>]*)>", re.IGNORECASE | re.DOTALL)
 PICTURE_RE = re.compile(r"<picture\b[^>]*>(.*?)</picture\s*>", re.IGNORECASE | re.DOTALL)
 SOURCE_RE = re.compile(r"<source\b([^>]*)>", re.IGNORECASE | re.DOTALL)
 WIDTH_ATTR_RE = re.compile(r'\bwidth\s*=\s*["\']?(\d+)', re.IGNORECASE)
@@ -1960,7 +1961,12 @@ SVG_VIEWBOX_RE = re.compile(
 
 
 def image_size(path: Path):
-    """Return an image file's pixel size, or None with the reason it could not be read."""
+    """Return an image file's pixel size, or None with the reason it could not be read.
+
+    build_site.py imports this to render the og:image width and height from
+    the card's real size instead of a literal, which is why it stays a plain
+    function rather than a method on something else.
+    """
     raw = path.read_bytes()
     if raw[:8] == b"\x89PNG\r\n\x1a\n" and raw[12:16] == b"IHDR":
         return (
@@ -2024,6 +2030,10 @@ def check_image_dimensions(pages: list[Path], docs_root: Path) -> bool:
     the layout for whoever's browser takes the fallback, and a card image below
     the size a link preview is rendered at is upscaled or dropped, which is
     visible everywhere the site is shared and nowhere on the site.
+
+    The og:image:width and og:image:height a page states are read by the same
+    crawlers before the file arrives, so a card swapped for one of a different
+    shape leaves them false even though the file itself is large enough.
     """
     problems: list[str] = []
     sizes: dict[Path, tuple] = {}
@@ -2099,7 +2109,7 @@ def check_image_dimensions(pages: list[Path], docs_root: Path) -> bool:
             size, reason = image_size(target)
             if size is None:
                 problems.append(f"{card}: {reason}, so the card size went unchecked")
-            elif (size[0], size[1]) < SOCIAL_IMAGE_SIZE:
+            elif size[0] < SOCIAL_IMAGE_SIZE[0] or size[1] < SOCIAL_IMAGE_SIZE[1]:
                 problems.append(
                     f"{card} is {size[0]:g} by {size[1]:g} and a link preview "
                     f"is rendered at {SOCIAL_IMAGE_SIZE[0]} by "
@@ -2108,6 +2118,47 @@ def check_image_dimensions(pages: list[Path], docs_root: Path) -> bool:
                 )
         else:
             problems.append(f"{card} is declared as the card image and is not in assets/")
+
+    for page in pages:
+        text = page.read_text(encoding="utf-8")
+        og_image = None
+        widths: list[str] = []
+        heights: list[str] = []
+        for match in META_TAG_RE.finditer(text):
+            attrs = attributes(match.group(1))
+            prop = attrs.get("property")
+            if prop == "og:image":
+                og_image = attrs.get("content")
+            elif prop == "og:image:width":
+                widths.append(attrs.get("content"))
+            elif prop == "og:image:height":
+                heights.append(attrs.get("content"))
+        if og_image is None:
+            continue
+        if len(widths) != 1 or len(heights) != 1:
+            problems.append(
+                f"{page.name}: og:image is declared and og:image:width/height "
+                f"appear {len(widths)}/{len(heights)} times, not once each"
+            )
+            continue
+        size = measure(html_lib.unescape(og_image), page, "its og:image declaration")
+        if size is None:
+            continue
+        try:
+            stated_wh = (float(widths[0]), float(heights[0]))
+        except (TypeError, ValueError):
+            problems.append(
+                f"{page.name}: og:image:width/height is {widths[0]!r} by "
+                f"{heights[0]!r}, which is not a number"
+            )
+            continue
+        declared += 1
+        if stated_wh != tuple(float(part) for part in size):
+            problems.append(
+                f"{page.name}: declares og:image as {widths[0]} by "
+                f"{heights[0]} and the file is {size[0]:g} by {size[1]:g}, so "
+                "a crawler reads a false card size"
+            )
 
     ok = not problems
     print(

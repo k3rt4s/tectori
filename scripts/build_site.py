@@ -8,6 +8,7 @@ import re
 import shutil
 import sys
 import tempfile
+from pathlib import Path
 
 CRLF = chr(13) + chr(10)
 
@@ -16,6 +17,9 @@ REPO_ROOT = os.path.dirname(SCRIPT_DIR)
 SITE_DIR = os.path.join(REPO_ROOT, "site")
 DOCS_DIR = os.path.join(REPO_ROOT, "docs")
 STATIC_DIR = os.path.join(REPO_ROOT, "site", "static")
+
+sys.path.insert(0, SCRIPT_DIR)
+from verify_site import image_size  # noqa: E402  (the same header reader the checks use)
 
 # Desktop nav order, shared by every page. The trailing "Contact" link is
 # handled separately below because its label and href-class differ from the
@@ -330,6 +334,17 @@ def social_image_alt():
     return SITE["brand_name"] + ", " + SITE["tagline"]
 
 
+def social_image_dims():
+    """Return the og:image width and height, read from the card file rather than written as a literal."""
+    # A new owner who swaps the card for a larger, correct one otherwise ships
+    # a size declaration that was only ever true for the file this repo shipped.
+    path = Path(STATIC_DIR) / "assets" / SITE["social_image_filename"]
+    size, reason = image_size(path)
+    if size is None:
+        raise ValueError(f"{path}: {reason}, so its og:image width and height cannot be rendered")
+    return int(size[0]), int(size[1])
+
+
 def render_page(entry, cache):
     def cached_fragment(name):
         if name not in cache:
@@ -351,8 +366,9 @@ def render_page(entry, cache):
     out.append(render_head_field_inline("og:type", "property", entry["og_type"]))
     out.append(render_head_field_inline("og:url", "property", site_absolute(entry["og_url"])))
     out.append(render_head_field_inline("og:image", "property", social_image_url()))
-    out.append(('    <meta property="og:image:width" content="1200">' + CRLF).encode("utf-8"))
-    out.append(('    <meta property="og:image:height" content="630">' + CRLF).encode("utf-8"))
+    social_width, social_height = social_image_dims()
+    out.append(render_head_field_inline("og:image:width", "property", str(social_width)))
+    out.append(render_head_field_inline("og:image:height", "property", str(social_height)))
     out.append(render_head_field_inline("og:image:alt", "property", social_image_alt()))
     out.append(('    <meta property="og:site_name" content="' + attr(SITE["brand_name"]) + '">' + CRLF).encode("utf-8"))
     out.append(('    <meta name="twitter:card" content="summary_large_image">' + CRLF).encode("utf-8"))
