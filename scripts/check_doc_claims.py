@@ -13,6 +13,9 @@ DOCS_ROOT = PROJECT_ROOT / "docs"
 SITE_DIR = PROJECT_ROOT / "site"
 SCRIPT_DIR = Path(__file__).resolve().parent
 
+sys.path.insert(0, str(SCRIPT_DIR))
+from verify_site import CONTACT_STRINGS  # noqa: E402  (the same mapping check_contact_details compares)
+
 # Written-out numbers, because the prose spells them. Digits are read as
 # digits, so a claim may use either.
 WORDS = {
@@ -119,6 +122,16 @@ def image_filenames() -> int:
     return sum(1 for key in SITE if key.endswith("_filename"))
 
 
+def third_party_identifiers() -> int:
+    """Return how many third-party identifiers site.json declares."""
+    return len(SITE["third_party"])
+
+
+def contact_strings() -> int:
+    """Return how many contact strings check_contact_details in verify_site.py compares."""
+    return len(CONTACT_STRINGS)
+
+
 def brand_in_login() -> int:
     """Return how many times the login page writes the brand name as prose."""
     page = (SITE_DIR / "pages" / "login.page.frag").read_text(encoding="utf-8")
@@ -189,7 +202,7 @@ CLAIMS = (
     ),
     (
         "README.md",
-        rf"the {NUMBER} image filenames, the three contact strings",
+        rf"the {NUMBER} image filenames, the [a-z]+ contact strings",
         image_filenames,
         "image filenames site.json declares",
     ),
@@ -210,6 +223,36 @@ CLAIMS = (
         rf"and the anchor slug\. These {NUMBER} reach",
         founder_tokens,
         "founder values that reach a page through a token",
+    ),
+    (
+        "README.md",
+        rf"the domain, the {NUMBER} image filenames",
+        image_filenames,
+        "image filenames site.json declares",
+    ),
+    (
+        "README.md",
+        rf"the social profiles and the {NUMBER} third-party identifiers",
+        third_party_identifiers,
+        "third-party identifiers site.json declares",
+    ),
+    (
+        "README.md",
+        rf"the accounts behind the {NUMBER} third-party services",
+        third_party_identifiers,
+        "third-party identifiers site.json declares",
+    ),
+    (
+        "PERMISSIONS.md",
+        rf"The {NUMBER} third-party identifiers in",
+        third_party_identifiers,
+        "third-party identifiers site.json declares",
+    ),
+    (
+        "README.md",
+        rf"the {NUMBER} contact strings",
+        contact_strings,
+        "contact strings check_contact_details compares",
     ),
 )
 

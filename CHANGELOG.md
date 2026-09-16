@@ -47,6 +47,16 @@ Tectori website changes are recorded here.
   `20260901`. Dates two days out and in 2031 both fail, and so does a
   month of 13.
 
+- The README's Configuration sentence could say five image filenames and
+  four third-party identifiers while the site declared six and three, and
+  the check on documented counts passed, because it read each fact from one
+  sentence and never read the third-party count at all. It now reads the
+  image filename count in both README sentences that state it, the
+  third-party count in the two README sentences and the `PERMISSIONS.md`
+  sentence that state it, and the contact string count from the same list
+  the contact details check compares. Seventeen counts are checked, up
+  from twelve.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the

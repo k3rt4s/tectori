@@ -58,15 +58,15 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the future-dated `lastmod` fix is on branch
-`feature/hunt-lastmod-future-date`, from worktree
-`C:\Code\worktrees\tectori-hunt-lastmod-future-date`. Gates: check_site
---full, then the pre-push review, then PR, verify, merge. If `main` does not
-yet carry that change, check that branch and `gh pr list` first. Fixes
-queued behind it, each in its own worktree under `C:\Code\worktrees\`:
-the README and PERMISSIONS counts in `check_doc_claims.py`, the JSON-LD
-checks reading every block, and duplicate sitemap and llms.txt entries.
-Probe log: `C:\Code_data\tectori\hunt_2026-09-16\probes.md`.
+Checkpoint, 2026-09-16 run: the documented-counts fix to
+`check_doc_claims.py` is on branch `feature/hunt-doc-claims-config-counts`,
+from worktree `C:\Code\worktrees\tectori-hunt-doc-claims-config-counts`.
+Gates: check_site --full, then the pre-push review, then PR, verify, merge.
+If `main` does not yet carry that change, check that branch and
+`gh pr list` first. Other fixes in flight, each on its own
+`feature/hunt-*` branch and worktree under `C:\Code\worktrees\`: see
+`git worktree list`. Probe log:
+`C:\Code_data\tectori\hunt_2026-09-16\probes.md`.
 
 You have no next action here. The board is finished, and that is the
 answer rather than a gap to fill: ask Jon what he wants before starting
