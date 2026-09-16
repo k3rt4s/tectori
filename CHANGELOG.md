@@ -213,6 +213,11 @@ Tectori website changes are recorded here.
   It now counts title start tags in the head, meta tags by a standalone
   name attribute, and link tags by a standalone rel holding canonical.
 
+- The hunt run closed. THEORY.md now states the rule most of its fixes
+  applied: a check reads a tag's attributes by standalone name, quoted or
+  bare, and ignores comments. The board records the run's end and points
+  to the report of the gaps left open.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the

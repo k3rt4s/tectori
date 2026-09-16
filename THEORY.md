@@ -38,6 +38,10 @@ What a session needs to believe before it changes anything in this repo.
   in a second place it should not be, and that is where every defect found in
   this tree has been. When adding a check, ask what a tree would look like that
   passes it while being wrong, and whether a new owner could produce that tree.
+  Most such trees in this repo were markup a browser reads and a check did
+  not: an attribute in another order, unquoted or with a prefixed name, a
+  tag commented out, a second element with an attribute. A check reads a
+  tag's attributes by standalone name, quoted or bare, and ignores comments.
 - The site claims no clients, client counts, testimonials, ratings, prices or
   results. Copy never implies employees beyond the founder, and never frames
   the practice as one person either. The credential is Internal Security

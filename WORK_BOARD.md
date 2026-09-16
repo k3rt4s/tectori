@@ -1,7 +1,5 @@
 # WORK_BOARD
 
-ACTIVE THREAD: 2026-09-16, unattended hunt run per C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-09-16.md
-
 ## Current state
 
 Records, not work. Nothing here is dispatchable.
@@ -58,16 +56,6 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the head tag count fix to
-`verify_site.py` is on branch `feature/hunt-head-tags`, from
-worktree `C:\Code\worktrees\tectori-hunt-head-tags`.
-Gates: check_site --full, then the pre-push review, then PR, verify, merge.
-If `main` does not yet carry that change, check that branch and
-`gh pr list` first. Other fixes in flight, each on its own
-`feature/hunt-*` branch and worktree under `C:\Code\worktrees\`: see
-`git worktree list`. Probe log:
-`C:\Code_data\tectori\hunt_2026-09-16\probes.md`.
-
 You have no next action here. The board is finished, and that is the
 answer rather than a gap to fill: ask Jon what he wants before starting
 anything. The unattended run of 2026-09-11 to 09-12 is closed and its
@@ -89,11 +77,14 @@ while being wrong. That question is what produced the stale-file report, the
 reachability check, the source-only build, the live deploy check, the deploy
 gate, the 404 probe, and the two machine paths nobody had noticed.
 
-The hunt is still productive and is the obvious thing to resume if Jon wants
-more of it. It has not run dry: the last four passes each found something
-live rather than only guarding against something. It is also no longer the
-highest-value thing available, because what is left on this board needs Jon
-rather than another check.
+The unattended hunt of 2026-09-16 probed every check script and the
+verifier's arms, shipped 32 fixes (listed in `CHANGELOG.md` under that date)
+and stopped when every target had a probe and the last seven probes found
+the check sound. No branch is held. The gaps it logged and left open are in
+`C:\Code_data\tectori\hunt_2026-09-16\REPORT.md`; each either needs a
+declaration the site does not have, cannot be produced by an ordinary edit,
+or already fails closed. Resume the hunt only if Jon asks for it: what is
+left on this board needs Jon rather than another check.
 
 The nine record bullets that stood here are in `BOARD_ARCHIVE_2026.md` under `## Archived 2026-09-16: In Progress records`.
 
