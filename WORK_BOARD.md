@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the egress prose host fix to
-`check_permissions_hosts.py` is on branch `feature/hunt-egress-prose`, from
-worktree `C:\Code\worktrees\tectori-hunt-egress-prose`.
+Checkpoint, 2026-09-16 run: the shell command string fix to
+`check_no_network_calls.py` is on branch `feature/hunt-shell-network`, from
+worktree `C:\Code\worktrees\tectori-hunt-shell-network`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own
