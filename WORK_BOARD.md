@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the spam trap cascade fix to
-`verify_site.py` is on branch `feature/hunt-honeypot-cascade`, from
-worktree `C:\Code\worktrees\tectori-hunt-honeypot-cascade`.
+Checkpoint, 2026-09-16 run: the per-rule contrast fix to
+`verify_site.py` is on branch `feature/hunt-contrast-unlisted-pair`, from
+worktree `C:\Code\worktrees\tectori-hunt-contrast-unlisted-pair`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own

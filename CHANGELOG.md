@@ -129,6 +129,13 @@ Tectori website changes are recorded here.
   screen. A more specific rule that touches the trap also fails, since
   the check does not rank selectors.
 
+- The contrast check measured only a fixed list of text and background
+  pairs, so a new style with unreadable text on its own background
+  passed. Every style rule that sets both its text colour and its
+  background within that rule is now measured against the level the
+  accessibility statement promises, with a later declaration in the rule
+  winning unless an earlier one is marked !important.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
