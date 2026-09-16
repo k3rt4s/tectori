@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the clip-hidden label fix to
-`verify_site.py` is on branch `feature/hunt-label-clip-hidden`, from
-worktree `C:\Code\worktrees\tectori-hunt-label-clip-hidden`.
+Checkpoint, 2026-09-16 run: the rebrand rehearsal residue fix to
+`rehearse_rebrand.py` is on branch `feature/hunt-rehearse-residue`, from
+worktree `C:\Code\worktrees\tectori-hunt-rehearse-residue`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own

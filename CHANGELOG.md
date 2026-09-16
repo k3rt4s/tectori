@@ -164,6 +164,13 @@ Tectori website changes are recorded here.
   visible labels. Those patterns now count as hidden, and a label class
   that a more specific rule might hide fails instead of passing.
 
+- The rebrand rehearsal looked for old declared values one line at a time
+  and only in files with a known text suffix, so an address typed by hand
+  across a line break, or the site URL inside an SVG or a web manifest,
+  survived a rebrand unreported. It now reads every text file under
+  `docs/`, judged by content, and also searches each file with tags and
+  line breaks folded, tolerating a comma dropped at a break.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
