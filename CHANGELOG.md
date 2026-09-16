@@ -140,6 +140,11 @@ Tectori website changes are recorded here.
   it or loaded anything from it any more. The check now fails a declared
   host that nothing in the built site uses.
 
+- A page whose only incoming links were commented out of the HTML still
+  counted as reachable, because the check read links inside comments.
+  The link, navigation and reachability checks now ignore anything inside
+  an HTML comment, as a browser does.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the

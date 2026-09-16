@@ -201,6 +201,7 @@ def link_values(text: str):
     renamed or deleted file behind it would have shipped as a broken image to
     every browser that prefers webp while all ten checks passed.
     """
+    text = HTML_COMMENT_RE.sub("", text)
     for match in ATTR_RE.finditer(text):
         yield match.group(2)
     for match in SRCSET_RE.finditer(text):
@@ -268,6 +269,7 @@ def check_pages_are_reachable(pages: list[Path], docs_root: Path) -> bool:
     edges: dict[Path, set[Path]] = {}
     for page in pages:
         text = page.read_text(encoding="utf-8")
+        text = HTML_COMMENT_RE.sub("", text)
         out: set[Path] = set()
         for match in ANCHOR_RE.finditer(text):
             value = html_lib.unescape(match.group(2)).strip()
