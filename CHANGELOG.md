@@ -57,6 +57,14 @@ Tectori website changes are recorded here.
   the contact details check compares. Seventeen counts are checked, up
   from twelve.
 
+- A second structured-data block appended to a page's JSON-LD fragment,
+  with a wrong name or with a node copied whole from another page, passed
+  both structured-data checks, because each read only the first block on
+  the page. Both now read every block, and since the build writes one per
+  page, a page carrying two fails on that alone. A page carrying its own
+  block twice fails, and so does a second block whose breadcrumb ends at
+  the home page.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the

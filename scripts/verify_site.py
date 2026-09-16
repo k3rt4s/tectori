@@ -2172,70 +2172,92 @@ def check_image_dimensions(pages: list[Path], docs_root: Path) -> bool:
 
 
 def check_jsonld_mirrors_title(pages: list[Path]) -> bool:
-    """Where the tree already mirrors it, JSON-LD name/description match the title/meta description.
+    """Where the tree already mirrors it, every JSON-LD block's name/description match the title/meta description.
 
     See the JSONLD_* tables above check_links for exactly which pages and
     nodes this covers, and why index.html and faq.html are intentionally
-    excluded rather than checked against an invented rule.
+    excluded rather than checked against an invented rule. The build writes
+    at most one application/ld+json block per page (see jsonld_fragment in
+    build_site.py), so a page carrying more than one is a stale block left
+    behind by an edit, and this check reads every block on the page and
+    fails that on its own before it fails on what the extra block says.
+    Every block on every page that carries one is parsed here, including
+    index.html and faq.html, which are excused from the mirror rule but not
+    from being valid JSON: this is the only check that owns a block that
+    fails to parse.
     """
     problems: list[str] = []
     checked = 0
     for page in pages:
         name = page.name
+        raw = page.read_bytes()
+        matches = list(LDJSON_RE.finditer(raw))
+
+        if len(matches) > 1:
+            problems.append(
+                f"{name}: {len(matches)} application/ld+json script blocks. The "
+                "build writes one per page, so the rest are a stale block an "
+                "edit left behind"
+            )
+
+        parsed: list[dict] = []
+        for match in matches:
+            try:
+                parsed.append(json.loads(match.group(2).decode("utf-8")))
+            except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+                problems.append(f"{name}: JSON-LD did not parse ({exc})")
+
         in_top = name in JSONLD_TOP_LEVEL_MIRROR_PAGES
         graph_node_type = JSONLD_GRAPH_MIRROR_NODE_TYPE.get(name)
         in_service = name in JSONLD_GRAPH_SERVICE_DESCRIPTION_PAGES
         if not (in_top or graph_node_type or in_service):
             if name in JSONLD_NO_MIRROR_PAGES:
                 continue
-            if LDJSON_RE.search(page.read_bytes()) is not None:
+            if matches:
                 problems.append(
                     f"{name}: carries JSON-LD but no rule covers it. Add it to one of the"
                     " JSONLD_ tables, or to JSONLD_NO_MIRROR_PAGES with the reason."
                 )
             continue
 
-        raw = page.read_bytes()
-        match = LDJSON_RE.search(raw)
-        if match is None:
+        if not matches:
             problems.append(f"{name}: no application/ld+json script block found")
-            continue
-        try:
-            data = json.loads(match.group(2).decode("utf-8"))
-        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
-            problems.append(f"{name}: JSON-LD did not parse ({exc})")
             continue
 
         title = page_title(raw)
         description = check_llms_drift.meta_description(page)
 
-        if in_top:
-            nodes = [data]
-        else:
-            wanted = graph_node_type or "Service"
-            nodes = find_graph_nodes(data, wanted)
-            if not nodes:
-                problems.append(f"{name}: no {wanted!r} node found in @graph")
-                continue
-            if len(nodes) > 1:
-                problems.append(
-                    f"{name}: {len(nodes)} {wanted!r} nodes in @graph. One of them is "
-                    "stale, and reading only the first is how it stays"
-                )
-
-        checked += 1
-        for node in nodes:
-            if in_top or graph_node_type:
-                if title is not None and node.get("name") != title:
+        page_checked = False
+        for data in parsed:
+            if in_top:
+                nodes = [data]
+            else:
+                wanted = graph_node_type or "Service"
+                nodes = find_graph_nodes(data, wanted)
+                if not nodes:
+                    problems.append(f"{name}: no {wanted!r} node found in @graph")
+                    continue
+                if len(nodes) > 1:
                     problems.append(
-                        f"{name}: JSON-LD name {node.get('name')!r} does not match "
-                        f"<title> {title!r}"
+                        f"{name}: {len(nodes)} {wanted!r} nodes in @graph. One of them is "
+                        "stale, and reading only the first is how it stays"
                     )
-            if description is not None and node.get("description") != description:
-                problems.append(
-                    f"{name}: JSON-LD description {node.get('description')!r} does not "
-                    f"match meta description {description!r}"
-                )
+
+            page_checked = True
+            for node in nodes:
+                if in_top or graph_node_type:
+                    if title is not None and node.get("name") != title:
+                        problems.append(
+                            f"{name}: JSON-LD name {node.get('name')!r} does not match "
+                            f"<title> {title!r}"
+                        )
+                if description is not None and node.get("description") != description:
+                    problems.append(
+                        f"{name}: JSON-LD description {node.get('description')!r} does not "
+                        f"match meta description {description!r}"
+                    )
+        if page_checked:
+            checked += 1
 
     ok = not problems
     print(f"[{'PASS' if ok else 'FAIL'}] JSON-LD name/description mirror the title/meta description "
@@ -2306,6 +2328,13 @@ def check_jsonld_identifies_its_own_page(pages: list[Path], docs_root: Path) -> 
     only an @id points at something defined elsewhere in the tree, and renaming
     the thing it points at leaves a dangling reference that no parser complains
     about and no page shows.
+
+    A page can carry more than one application/ld+json block only if an edit
+    left a stale one behind, since the build writes at most one, so this reads
+    every block on the page rather than the first: a node copied whole into a
+    second block still defines an @id, and a duplicate definition or a url
+    naming another page is caught the same way whichever block it is in. The
+    mirror check is the one that fails on the block count itself.
     """
     problems: list[str] = []
     defined: dict[str, str] = {}
@@ -2315,13 +2344,8 @@ def check_jsonld_identifies_its_own_page(pages: list[Path], docs_root: Path) -> 
 
     for page in pages:
         raw = page.read_bytes()
-        match = LDJSON_RE.search(raw)
-        if match is None:
-            continue
-        try:
-            data = json.loads(match.group(2).decode("utf-8"))
-        except (json.JSONDecodeError, UnicodeDecodeError):
-            # The mirror check owns structured data that does not parse.
+        matches = list(LDJSON_RE.finditer(raw))
+        if not matches:
             continue
         path = canonical_path(raw)
         if path is None:
@@ -2332,60 +2356,70 @@ def check_jsonld_identifies_its_own_page(pages: list[Path], docs_root: Path) -> 
             continue
         canonical = SITE_PREFIX.rstrip("/") + path
 
-        for node in jsonld_nodes(data):
-            identifier = node.get("@id")
-            if isinstance(identifier, str):
-                if set(node) - {"@id"}:
-                    checked += 1
-                    owner = defined.get(identifier)
-                    if owner is not None:
-                        problems.append(
-                            f"{page.name}: defines {identifier!r}, which "
-                            f"{owner} already defines, so one of the two is a "
-                            "copy nobody edited and a crawler reading both "
-                            "cannot tell which is meant"
-                        )
-                    defined[identifier] = page.name
-                    base, _, fragment = identifier.partition("#")
-                    if base != canonical:
-                        problems.append(
-                            f"{page.name}: defines {identifier!r}, which names "
-                            f"{base!r} rather than {canonical!r}, the page it "
-                            "is published on"
-                        )
-                    else:
-                        url = node.get("url")
-                        key = (page.name, "#" + fragment)
-                        if key in JSONLD_URL_ELSEWHERE:
-                            excused.add(key)
-                            if isinstance(url, str) and url == canonical:
-                                problems.append(
-                                    f"{page.name}: {identifier!r} is excused "
-                                    "here for naming another page, and it now "
-                                    "names its own, so the excuse is stale"
-                                )
-                        elif isinstance(url, str) and url != canonical:
-                            problems.append(
-                                f"{page.name}: {identifier!r} gives its url as "
-                                f"{url!r} rather than {canonical!r}, the page "
-                                "it is published on"
-                            )
-                else:
-                    referenced.setdefault(identifier, page.name)
+        parsed = []
+        for match in matches:
+            try:
+                data = json.loads(match.group(2).decode("utf-8"))
+            except (json.JSONDecodeError, UnicodeDecodeError):
+                # The mirror check owns structured data that does not parse.
+                continue
+            parsed.append(data)
 
-            if node.get("@type") == "BreadcrumbList":
-                items = node.get("itemListElement")
-                if not isinstance(items, list) or not items:
-                    problems.append(f"{page.name}: a BreadcrumbList lists nothing")
-                    continue
-                last = items[-1]
-                item = last.get("item") if isinstance(last, dict) else None
-                if item != canonical:
-                    problems.append(
-                        f"{page.name}: its breadcrumb ends at {item!r} rather "
-                        f"than at {canonical!r}, so the trail a search result "
-                        "shows is for a different page"
-                    )
+        for data in parsed:
+            for node in jsonld_nodes(data):
+                identifier = node.get("@id")
+                if isinstance(identifier, str):
+                    if set(node) - {"@id"}:
+                        checked += 1
+                        owner = defined.get(identifier)
+                        if owner is not None:
+                            problems.append(
+                                f"{page.name}: defines {identifier!r}, which "
+                                f"{owner} already defines, so one of the two is a "
+                                "copy nobody edited and a crawler reading both "
+                                "cannot tell which is meant"
+                            )
+                        defined[identifier] = page.name
+                        base, _, fragment = identifier.partition("#")
+                        if base != canonical:
+                            problems.append(
+                                f"{page.name}: defines {identifier!r}, which names "
+                                f"{base!r} rather than {canonical!r}, the page it "
+                                "is published on"
+                            )
+                        else:
+                            url = node.get("url")
+                            key = (page.name, "#" + fragment)
+                            if key in JSONLD_URL_ELSEWHERE:
+                                excused.add(key)
+                                if isinstance(url, str) and url == canonical:
+                                    problems.append(
+                                        f"{page.name}: {identifier!r} is excused "
+                                        "here for naming another page, and it now "
+                                        "names its own, so the excuse is stale"
+                                    )
+                            elif isinstance(url, str) and url != canonical:
+                                problems.append(
+                                    f"{page.name}: {identifier!r} gives its url as "
+                                    f"{url!r} rather than {canonical!r}, the page "
+                                    "it is published on"
+                                )
+                    else:
+                        referenced.setdefault(identifier, page.name)
+
+                if node.get("@type") == "BreadcrumbList":
+                    items = node.get("itemListElement")
+                    if not isinstance(items, list) or not items:
+                        problems.append(f"{page.name}: a BreadcrumbList lists nothing")
+                        continue
+                    last = items[-1]
+                    item = last.get("item") if isinstance(last, dict) else None
+                    if item != canonical:
+                        problems.append(
+                            f"{page.name}: its breadcrumb ends at {item!r} rather "
+                            f"than at {canonical!r}, so the trail a search result "
+                            "shows is for a different page"
+                        )
 
     for identifier, page_name in sorted(referenced.items()):
         if identifier not in defined:
