@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the rebrand rehearsal residue fix to
-`rehearse_rebrand.py` is on branch `feature/hunt-rehearse-residue`, from
-worktree `C:\Code\worktrees\tectori-hunt-rehearse-residue`.
+Checkpoint, 2026-09-16 run: the class attribute quoting fix to
+`check_class_names.py` is on branch `feature/hunt-class-quotes`, from
+worktree `C:\Code\worktrees\tectori-hunt-class-quotes`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own
