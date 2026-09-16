@@ -12,6 +12,17 @@ Tectori website changes are recorded here.
   no score block and now has one, so `score_board.py --strict` reports no
   unscored items and scores the four owner tasks.
 
+- A `robots.txt` whose catch-all group read `Disallow: /*` above `Allow: /`
+  passed all twenty-five checks, and every crawler that follows RFC 9309
+  reads it as a block on the whole site, because the longer rule wins. The
+  robots check compared each Disallow value to page paths with `startswith`,
+  which takes `*` and a trailing `$` as literal characters, so a wildcard
+  matched nothing it was tested against. It now compiles each value the way
+  the RFC does and tests it against every page's file path and its canonical
+  path, since a crawler requests either. The tree above fails, and so do
+  `Disallow: /$` under the catch-all, which blocks only the home page by its
+  canonical, and `Disallow: /service-*` under Googlebot, which blocks six.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the

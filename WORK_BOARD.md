@@ -58,11 +58,14 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: step 0 (board records archived, COPY-SERVICE
-scored) is on branch `feature/board-step0-records`. Gates: check_site
---full and the pre-push review run before the push; if `main` does not yet
-carry that change, check the branch and `gh pr list` before redoing it.
-Probe log: `C:\Code_data\tectori\hunt_2026-09-16\probes.md`.
+Checkpoint, 2026-09-16 run: probe `check_robots_policy` (wildcard Disallow)
+is on branch `feature/hunt-robots-wildcard`. Gates: check_site --full, then
+the pre-push review, then PR, verify, merge. If `main` does not yet carry
+the robots wildcard change, check that branch and `gh pr list` first. Open
+gaps queued behind it, both proven by probe: the social card size test
+(tuple comparison) and `check_documented_commands.py` not reading
+`site/README.md`. Probe log:
+`C:\Code_data\tectori\hunt_2026-09-16\probes.md`.
 
 You have no next action here. The board is finished, and that is the
 answer rather than a gap to fill: ask Jon what he wants before starting
