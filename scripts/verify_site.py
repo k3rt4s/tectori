@@ -671,6 +671,24 @@ def robots_groups(text: str):
     return groups, other
 
 
+def robots_disallow_pattern(value: str) -> re.Pattern[str]:
+    """Compile a robots.txt Disallow value into the match RFC 9309 defines.
+
+    `path.startswith(value)` treats `*` and a trailing `$` as the literal
+    characters they are in a Disallow value, so `/*`, `/*.html` and
+    `/about$` match nothing this check ever tests them against while the
+    crawler that actually reads robots.txt treats `*` as any run of
+    characters and a trailing `$` as an end anchor. This compiles the same
+    rule: `*` becomes `.*`, a trailing `$` anchors the end, everything else
+    is matched literally, and the match still starts at the beginning of
+    the path per the spec's prefix rule.
+    """
+    anchored = value.endswith("$")
+    body = value[:-1] if anchored else value
+    escaped = ".*".join(re.escape(part) for part in body.split("*"))
+    return re.compile("^" + escaped + ("$" if anchored else ""))
+
+
 NAME_ANCHOR_RE = re.compile(
     r'<a[^>]*?\bname\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL
 )
@@ -817,17 +835,30 @@ def check_robots_policy(pages: list[Path], docs_root: Path) -> bool:
 
     # What a crawler is being asked to fetch: the path of every page that is
     # not noindex, which is the set the sitemap check already treats as the
-    # site proper.
-    wanted = sorted(
-        "/" + page.relative_to(docs_root).as_posix()
-        for page in pages
-        if page.name not in NOINDEX_ALLOWED
-    )
+    # site proper. A crawler can request a page by its file path or by its
+    # canonical path, so a Disallow rule is tested against both; a rule
+    # naming only the one a page does not use would otherwise pass unseen.
+    requested: list[tuple[str, set[str]]] = []
+    for page in pages:
+        if page.name in NOINDEX_ALLOWED:
+            continue
+        file_path = "/" + page.relative_to(docs_root).as_posix()
+        page_paths = {file_path}
+        canon = canonical_path(page.read_bytes())
+        if canon:
+            page_paths.add(canon if canon.startswith("/") else "/" + canon)
+        requested.append((file_path, page_paths))
+    wanted = sorted(file_path for file_path, _ in requested)
     for agents, rules in groups:
         for field, value in rules:
             if field != "disallow" or not value:
                 continue
-            blocked = [path for path in wanted if path.startswith(value)]
+            pattern = robots_disallow_pattern(value)
+            blocked = [
+                file_path
+                for file_path, page_paths in requested
+                if any(pattern.match(path) for path in page_paths)
+            ]
             if value == "/" or blocked:
                 problems.append(
                     f"robots.txt tells {', '.join(agents)} to stay out of "
