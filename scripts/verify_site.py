@@ -50,6 +50,32 @@ TITLE_RE = re.compile(rb"<title>(.*?)</title>", re.IGNORECASE | re.DOTALL)
 CANONICAL_RE = re.compile(
     rb'<link[^>]*?rel=(["\'])canonical\1[^>]*?>', re.IGNORECASE | re.DOTALL
 )
+
+# <title> is counted as a start tag only, so <title lang="en"> counts too;
+# restricted to the document head so an inline SVG <title> in the body is
+# never counted.
+TITLE_TAG_RE = re.compile(rb"<title\b[^>]*>", re.IGNORECASE)
+
+# The attribute name must stand alone, so data-name or x-name is not it;
+# an unquoted value counts, matching the house shape in NAV_ARIA_LABEL_RE.
+META_NAME_ATTR_RE = re.compile(
+    rb'(?<![\w:.-])name\s*=\s*'
+    rb'(?:(["\'])(.*?)\1|([^\s"\'<>=`]+))',
+    re.IGNORECASE | re.DOTALL,
+)
+# Named apart from the later, unrelated str-based META_TAG_RE used for
+# image attribute checks.
+HEAD_META_TAG_RE = re.compile(rb"<meta\b[^>]*>", re.IGNORECASE | re.DOTALL)
+
+# The attribute name must stand alone, so data-rel or x-rel is not it; an
+# unquoted value counts, and the value is split on whitespace so a
+# space-separated rel list still finds the canonical token.
+REL_ATTR_RE = re.compile(
+    rb'(?<![\w:.-])rel\s*=\s*'
+    rb'(?:(["\'])(.*?)\1|([^\s"\'<>=`]+))',
+    re.IGNORECASE | re.DOTALL,
+)
+LINK_TAG_RE = re.compile(rb"<link\b[^>]*>", re.IGNORECASE | re.DOTALL)
 ROBOTS_RE = re.compile(
     rb'<meta[^>]*?name=(["\'])robots\1[^>]*?content=(["\'])(.*?)\2',
     re.IGNORECASE | re.DOTALL,
@@ -315,9 +341,25 @@ def check_head_tags(pages: list[Path]) -> bool:
     problems: list[str] = []
     for page in pages:
         raw = page.read_bytes()
-        titles = len(TITLE_RE.findall(raw))
-        descriptions = len(check_llms_drift.META_DESCRIPTION.findall(raw))
-        canonicals = len(CANONICAL_RE.findall(raw))
+        head_end = raw.find(b"</head>")
+        head = raw if head_end == -1 else raw[:head_end]
+        titles = len(TITLE_TAG_RE.findall(head))
+        descriptions = 0
+        for meta in HEAD_META_TAG_RE.findall(raw):
+            match = META_NAME_ATTR_RE.search(meta)
+            if match is None:
+                continue
+            value = match.group(2) if match.group(2) is not None else match.group(3)
+            if value.strip().lower() == b"description":
+                descriptions += 1
+        canonicals = 0
+        for link in LINK_TAG_RE.findall(raw):
+            match = REL_ATTR_RE.search(link)
+            if match is None:
+                continue
+            value = match.group(2) if match.group(2) is not None else match.group(3)
+            if b"canonical" in value.strip().lower().split():
+                canonicals += 1
         if titles != 1:
             problems.append(f"{page.name}: {titles} <title> elements")
         if descriptions != 1:

@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the live tracking tag fix to
-`verify_site.py` is on branch `feature/hunt-tracking-live`, from
-worktree `C:\Code\worktrees\tectori-hunt-tracking-live`.
+Checkpoint, 2026-09-16 run: the head tag count fix to
+`verify_site.py` is on branch `feature/hunt-head-tags`, from
+worktree `C:\Code\worktrees\tectori-hunt-head-tags`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own
