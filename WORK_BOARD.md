@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the login page script fix to
-`verify_site.py` is on branch `feature/hunt-login-external-script`, from
-worktree `C:\Code\worktrees\tectori-hunt-login-external-script`.
+Checkpoint, 2026-09-16 run: the path letter case fix to
+`verify_site.py` is on branch `feature/hunt-stated-urls-case`, from
+worktree `C:\Code\worktrees\tectori-hunt-stated-urls-case`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own

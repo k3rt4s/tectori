@@ -116,6 +116,11 @@ Tectori website changes are recorded here.
   script on the login page that loads from anywhere but this site now
   fails, and an inline script is checked for the same calls.
 
+- A link or stated address whose letter case differed from the real file
+  passed on Windows, which ignores case, though the live site would
+  return a missing page for it. The checks now compare the case of every
+  part of a local path with the files on disk.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
