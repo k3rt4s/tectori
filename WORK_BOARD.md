@@ -1,5 +1,7 @@
 # WORK_BOARD
 
+ACTIVE THREAD: 2026-09-16, unattended hunt run per C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-09-16.md
+
 ## Current state
 
 Records, not work. Nothing here is dispatchable.
@@ -56,6 +58,12 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
+Checkpoint, 2026-09-16 run: step 0 (board records archived, COPY-SERVICE
+scored) is on branch `feature/board-step0-records`. Gates: check_site
+--full and the pre-push review run before the push; if `main` does not yet
+carry that change, check the branch and `gh pr list` before redoing it.
+Probe log: `C:\Code_data\tectori\hunt_2026-09-16\probes.md`.
+
 You have no next action here. The board is finished, and that is the
 answer rather than a gap to fill: ask Jon what he wants before starting
 anything. The unattended run of 2026-09-11 to 09-12 is closed and its
@@ -83,60 +91,7 @@ live rather than only guarding against something. It is also no longer the
 highest-value thing available, because what is left on this board needs Jon
 rather than another check.
 
-- **`THEORY.md` stops above the 60 line standard on purpose.** It is over 100
-  lines. Every bullet left states a constraint no check can see, so reaching
-  60 would mean deleting one, and an earlier attempt at that did exactly
-  that and had to put it back. Treat the gap as a decision, not a task.
-- **A push to `main` runs the checks, and only then deploys.**
-  `.github/workflows/verify.yml` runs `verify_site.py`, `check_site.py`, the
-  rebrand rehearsal and a byte comparison of `docs/` against what the build
-  produces, then a second job uploads `docs/` to Pages. The repository
-  publishes from the workflow, not from the branch, so a red run deploys
-  nothing and the site that is already up keeps serving. It published either
-  way until 2026-09-12, when a red run meant a broken tree was already live.
-- **Nothing a new owner would read or run names this machine.**
-  `build_site.py` requires `--out` rather than defaulting to a directory under
-  the data root, the rehearsal clones into the system temporary directory, and
-  the READMEs call the interpreter `python`. `CLAUDE.md` and `.gitignore` both
-  still carried an absolute path until 2026-09-12; this bullet claimed
-  otherwise for a day. What remains is this board and the two history files,
-  which cite report paths under the data root on purpose, as records.
-- **`--check` fails on a file `docs/` carries that the build did not write.**
-  A build writes and never deletes, so a dropped page or a renamed image used
-  to leave a live file that every check passed over.
-- **`docs/` is output with no exceptions, and that is now literally true.**
-  The stylesheet, the script and the images are source under `site/static/`.
-  A tree with no `docs/` at all builds a complete deployable site; before
-  2026-09-12 it built the pages and silently shipped no styling.
-- **Page weight was measured on 2026-09-12 and needs nothing.** The heaviest
-  page is the home page at about 646 KB across 11 files, and `solutions` is
-  555 KB. The hero ships through a `picture` element, so a browser fetches the
-  85 KB WebP and never the 1.5 MB PNG beside it, and counting the fallback is
-  what makes a naive measurement read 2.1 MB. Most of the rest is six solution
-  marks at about 78 KB each, all of them lazy loaded and below the fold. The
-  only heavy thing above the fold is the 118 KB logo. Re-encoding any of it
-  would mean an image library, which the build refuses on purpose, and a
-  change to `docs/` that cannot be reviewed without a browser, so none of it
-  was done. Treat this as measured rather than as a task.
-- **The founder is declared content, not prose in six files.**
-  `site/content/founder.json` holds the name, the given name, the job title
-  and the anchor, and the rebrand rehearsal fails on any of the first, second
-  or fourth that survives a rebrand. His credentials, schools and employers
-  are counted and reported by page instead, because nobody can generate a
-  replacement biography. Until 2026-09-12 none of it was in the content model
-  and the rehearsal printed REHEARSAL PASSED on a fixture site still naming
-  him in its structured data.
-- **The documentation's numbers are checked against the tree.**
-  `scripts/check_doc_claims.py` reads twelve countable claims in `README.md`
-  and `PERMISSIONS.md` and compares each against what the tree holds, and
-  `check_site.py` runs it. A claim whose sentence it cannot find fails rather
-  than passes. Three documents were corrected by hand on 2026-09-12 before it
-  existed, which is what asked for it; it found two more wrong the moment it
-  ran. Rewording one of those sentences means updating the check with it.
-- **The buyer read of the repository is done and its findings are fixed.**
-  The report is at
-  `C:\Code_data\tectori\reproducible\buyer_read_2026-09-12.md`. It is a
-  record; a second read would be new work, not a repeat of this one.
+The nine record bullets that stood here are in `BOARD_ARCHIVE_2026.md` under `## Archived 2026-09-16: In Progress records`.
 
 Nothing on this board is dispatchable. Every repo item has shipped, and what
 remains under Owner-Only Tasks and Questions for Jon needs Jon's account, his
@@ -160,6 +115,9 @@ say so and ask him what he wants rather than inventing work from the archive.
   separates the offer from a staffing placement. That call is Jon's, and it
   is the only place in the six pages where a stated commitment and the
   shipped words point different ways.
+  `score: kind=feature gain=1/4/12 p=0.5 hours=0.5/1/2 rev=two-way conf=opinion id=copy-service`
+  `return: likelihood 1 in 2 that a reader of service-fractional-leadership notices the stock wording or the solo-delivery sentence, estimated, no traffic data by page yet; impact the page most worth rewriting keeps its weakest copy and one sentence stays in tension with the no-one-person rule, 1 to 12 h of lost positioning value; evidence C:\Code_data\tectori\reproducible\service_copy_read_2026-09-12.md and the THEORY.md Invariants bullet on one-person framing`
+  - worker: sonnet 1/1.5/2 h
 
 - **EXPORT-GSC, get the Search Console export.** Verify the property at
   search.google.com/search-console for `www.tectori.com`, export Performance
