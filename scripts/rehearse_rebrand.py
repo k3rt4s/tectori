@@ -107,7 +107,14 @@ UNREBRANDED = {
     ),
 }
 
-TEXT_SUFFIXES = {".html", ".xml", ".txt", ".css", ".js", ""}
+HTML_ENTITIES = {
+    "&amp;": "&",
+    "&nbsp;": " ",
+    "&#39;": "'",
+    "&quot;": '"',
+}
+
+TOKEN_SPLIT_RE = re.compile(r"[\s,]+")
 
 
 def fixture_gaps(original, founder):
@@ -279,12 +286,110 @@ def run(out_dir, args):
     )
 
 
+def is_text_file(path):
+    """Return whether a file is text: it decodes as UTF-8 and holds no NUL byte."""
+    # Binary images are excluded by content rather than by a suffix list, so a
+    # text file the build starts writing in a new format is still read.
+    try:
+        with open(path, "rb") as f:
+            raw = f.read()
+    except OSError:
+        return False
+    if b"\x00" in raw:
+        return False
+    try:
+        raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return False
+    return True
+
+
 def text_files(docs_root):
-    """Yield every file under a built tree that a reader or a crawler can read."""
+    """Yield every file under a built tree that is text, judged by content."""
     for dir_path, _, file_names in os.walk(docs_root):
         for name in sorted(file_names):
-            if os.path.splitext(name)[1].lower() in TEXT_SUFFIXES:
-                yield os.path.join(dir_path, name)
+            path = os.path.join(dir_path, name)
+            if is_text_file(path):
+                yield path
+
+
+def normalize_with_linemap(text):
+    """Return text with tags and entities collapsed to plain words and runs of
+    whitespace collapsed to one space, alongside the 1-based source line each
+    output character came from."""
+    # A declared value split across a tag or a line break reads as one string
+    # here even though no single line of the built file carries it whole.
+    chars = []
+    lines = []
+    line = 1
+    i = 0
+    n = len(text)
+    while i < n:
+        ch = text[i]
+        # A "<" starts a tag only when a letter, "/", "!" or "?" follows, which
+        # is every real tag, comment and processing instruction. Otherwise it is
+        # a literal character, such as the "<" in "a < b" in CSS or JS, and
+        # swallowing up to the next ">" there would hide whatever came between.
+        if ch == "<" and i + 1 < n and (text[i + 1].isalpha() or text[i + 1] in "/!?"):
+            end = text.find(">", i)
+            if end == -1:
+                end = n - 1
+            tag = text[i:end + 1]
+            chars.append(" ")
+            lines.append(line)
+            line += tag.count("\n")
+            i = end + 1
+            continue
+        if ch == "&":
+            entity_hit = None
+            for entity, replacement in HTML_ENTITIES.items():
+                if text.startswith(entity, i):
+                    entity_hit = (entity, replacement)
+                    break
+            if entity_hit is not None:
+                entity, replacement = entity_hit
+                chars.append(replacement)
+                lines.append(line)
+                i += len(entity)
+                continue
+        chars.append(ch)
+        lines.append(line)
+        if ch == "\n":
+            line += 1
+        i += 1
+    collapsed_chars = []
+    collapsed_lines = []
+    j = 0
+    total = len(chars)
+    while j < total:
+        if chars[j].isspace():
+            start_line = lines[j]
+            k = j
+            while k < total and chars[k].isspace():
+                k += 1
+            collapsed_chars.append(" ")
+            collapsed_lines.append(start_line)
+            j = k
+        else:
+            collapsed_chars.append(chars[j])
+            collapsed_lines.append(lines[j])
+            j += 1
+    return "".join(collapsed_chars), collapsed_lines
+
+
+def normalized_value_pattern(value):
+    """Return a regex matching a declared value in normalised text: its tokens,
+    split on runs of whitespace and commas, joined by a run of whitespace or
+    commas of any length. A value with one token behaves as an exact match, and
+    a value with no token (blank) has no pattern."""
+    # A hand-typed copy of an address commonly drops the comma the line break
+    # replaces, "Suite 305<br>Brentwood" for the declared "Suite 305, Brentwood",
+    # so the joiner between tokens has to accept either with or without one.
+    tokens = [token for token in TOKEN_SPLIT_RE.split(value) if token]
+    if not tokens:
+        return None
+    joined = r"[\s,]+".join(re.escape(token) for token in tokens)
+    return re.compile(joined, re.IGNORECASE)
 
 
 def declared_values(original):
@@ -325,26 +430,66 @@ def value_residue(out_dir, original, founder):
     hits = []
     declared = declared_values(original)
     declared.update(founder_values(founder))
+    docs = os.path.join(out_dir, "docs")
+    # Read and normalise each file once for the whole run, however many
+    # declared values it is checked against, rather than once per value.
+    file_cache = {}
     for label, value in sorted(declared.items()):
-        hits.extend(residue_for(out_dir, label, value))
+        hits.extend(residue_for(docs, label, value, file_cache))
     return hits
 
 
-def residue_for(out_dir, label, value):
-    """Return every line of the rebranded tree that still carries one old value."""
+def residue_data(docs, path, file_cache):
+    """Return, from the cache or freshly read, the split lines, the normalised
+    text and its line map for one file. None if the file no longer decodes."""
+    if path in file_cache:
+        return file_cache[path]
+    try:
+        with open(path, "rb") as f:
+            text = f.read().decode("utf-8")
+    except (UnicodeDecodeError, OSError):
+        file_cache[path] = None
+        return None
+    # split("\n") rather than splitlines(), and matched by the same count in
+    # normalize_with_linemap, so a line number from one pass means the same
+    # line in the other. splitlines() also breaks on a lone "\r", "\x0b",
+    # "\x0c" and other separators split("\n") does not, which would disagree.
+    lines = text.split("\n")
+    normalized_text, line_map = normalize_with_linemap(text)
+    data = (lines, normalized_text, line_map)
+    file_cache[path] = data
+    return data
+
+
+def residue_for(docs, label, value, file_cache):
+    """Return every line of the rebranded tree that still carries one old value,
+    read line by line and again in a tag- and entity-normalised form so a value
+    split across a tag or a line break is still found."""
     pattern = re.compile(re.escape(value), re.IGNORECASE)
-    docs = os.path.join(out_dir, "docs")
+    normalized_pattern = normalized_value_pattern(value)
     hits = []
     for path in text_files(docs):
-        try:
-            with open(path, "rb") as f:
-                text = f.read().decode("utf-8")
-        except (UnicodeDecodeError, OSError):
+        data = residue_data(docs, path, file_cache)
+        if data is None:
             continue
-        for number, line in enumerate(text.splitlines(), 1):
-            if pattern.search(line):
-                rel = os.path.relpath(path, docs)
-                hits.append(f"{label}: {rel}:{number}: {line.strip()[:70]}")
+        lines, normalized_text, line_map = data
+        rel = os.path.relpath(path, docs).replace(os.sep, "/")
+        found_lines = set()
+        for number, raw_line in enumerate(lines, 1):
+            if pattern.search(raw_line):
+                display = raw_line.rstrip("\r").strip()[:70]
+                hits.append(f"{label}: {rel}:{number}: {display}")
+                found_lines.add(number)
+        if normalized_pattern is None:
+            continue
+        for match in normalized_pattern.finditer(normalized_text):
+            number = line_map[match.start()]
+            if number in found_lines:
+                continue
+            found_lines.add(number)
+            raw_line = lines[number - 1] if 0 <= number - 1 < len(lines) else ""
+            display = raw_line.rstrip("\r").strip()[:70]
+            hits.append(f"{label}: {rel}:{number}: (normalised) {display}")
     return hits
 
 
