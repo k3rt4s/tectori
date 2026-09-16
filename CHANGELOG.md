@@ -121,6 +121,14 @@ Tectori website changes are recorded here.
   return a missing page for it. The checks now compare the case of every
   part of a local path with the files on disk.
 
+- The contact form check read only the first style rule for the hidden
+  spam trap field, so a later rule that put the field back on screen
+  passed, and every message from a visitor who filled it in would be
+  dropped. The check now reads the trap's own rules in order, honours
+  !important, and fails when the rule that applies leaves the trap on
+  screen. A more specific rule that touches the trap also fails, since
+  the check does not rank selectors.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
