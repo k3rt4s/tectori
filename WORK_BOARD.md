@@ -58,9 +58,10 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the duplicate-address fix to
-`verify_site.py` is on branch `feature/hunt-sitemap-duplicates`, from
-worktree `C:\Code\worktrees\tectori-hunt-sitemap-duplicates`.
+Checkpoint, 2026-09-16 run: the nested-scripts fix to
+`check_stdlib_only.py`, `check_no_network_calls.py` and
+`check_checks_wired.py` is on branch `feature/hunt-scripts-subdir-globs`,
+from worktree `C:\Code\worktrees\tectori-hunt-scripts-subdir-globs`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own

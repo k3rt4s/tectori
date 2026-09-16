@@ -15,6 +15,20 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 CLAIM = "The scripts import only the standard library"
 
 
+def iter_py_files(root: Path) -> list[Path]:
+    """Return every .py file under root, recursively, skipping build artifacts."""
+    paths = []
+    for candidate in root.rglob("*.py"):
+        relative = candidate.relative_to(root)
+        if any(
+            part == "__pycache__" or part.startswith(".")
+            for part in relative.parts[:-1]
+        ):
+            continue
+        paths.append(candidate)
+    return sorted(paths)
+
+
 def imported_modules(path: Path) -> set[str]:
     """Return the top level module name of every import a script makes."""
     names = set()
@@ -41,16 +55,26 @@ def main() -> int:
             "was withdrawn, in which case delete this check"
         )
 
-    # A file beside the scripts is importable by them, and a module the tree
-    # carries is not a dependency however it is spelled.
-    local = {path.stem for path in SCRIPT_DIR.glob("*.py")}
-    allowed = set(sys.stdlib_module_names) | local
-
-    scripts = sorted(SCRIPT_DIR.glob("*.py"))
+    # Every .py file under scripts/ is importable by the tree: a top level
+    # script by its own filename, and anything inside a directory holding
+    # Python files (with or without __init__.py) by that directory's name.
+    # A script can also import a sibling in its own directory by bare name.
+    # Neither is a dependency however it is spelled. __pycache__ and any
+    # dotted directory are build artifacts, not scripts.
+    scripts = iter_py_files(SCRIPT_DIR)
+    local_files = {path.stem for path in scripts if path.parent == SCRIPT_DIR}
+    local_packages = {
+        path.relative_to(SCRIPT_DIR).parts[0]
+        for path in scripts
+        if path.parent != SCRIPT_DIR
+    }
+    allowed = set(sys.stdlib_module_names) | local_files | local_packages
     for path in scripts:
-        for name in sorted(imported_modules(path) - allowed):
+        rel = path.relative_to(SCRIPT_DIR).as_posix()
+        siblings = {p.stem for p in scripts if p.parent == path.parent}
+        for name in sorted(imported_modules(path) - allowed - siblings):
             problems.append(
-                f"{path.name}: imports {name!r}, which is not in the standard "
+                f"{rel}: imports {name!r}, which is not in the standard "
                 "library, so a clone of this repository no longer runs on a "
                 "machine with nothing installed"
             )

@@ -70,6 +70,12 @@ Tectori website changes are recorded here.
   compared sets of paths and a set keeps one copy. Both now count each
   address and fail one that appears more than once.
 
+- A script placed in a folder under `scripts/` was read by none of the
+  checks that promise the scripts use only the standard library, make no
+  network calls and are all run, because each listed the top level of
+  `scripts/` only. All three now read every folder under it, and a nested
+  check counts as run only when the runner names its path.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the

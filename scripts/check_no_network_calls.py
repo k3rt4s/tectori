@@ -32,7 +32,21 @@ CLAIM_RE = re.compile(
     r"\s+else\s+can:(.*?)\n\s*\n",
     re.DOTALL,
 )
-SCRIPT_RE = re.compile(r"`(scripts/[A-Za-z0-9_]+\.py)`")
+SCRIPT_RE = re.compile(r"`(scripts/[A-Za-z0-9_/]+\.py)`")
+
+
+def iter_py_files(root: Path) -> list[Path]:
+    """Return every .py file under root, recursively, skipping build artifacts."""
+    paths = []
+    for candidate in root.rglob("*.py"):
+        relative = candidate.relative_to(root)
+        if any(
+            part == "__pycache__" or part.startswith(".")
+            for part in relative.parts[:-1]
+        ):
+            continue
+        paths.append(candidate)
+    return sorted(paths)
 
 
 def network_reasons(path: Path) -> list[str]:
@@ -84,11 +98,12 @@ def main() -> int:
     problems: list[str] = [problem] if problem else []
 
     found: dict[str, list[str]] = {}
-    scripts = sorted(SCRIPT_DIR.glob("*.py"))
+    scripts = iter_py_files(SCRIPT_DIR)
     for path in scripts:
         reasons = network_reasons(path)
         if reasons:
-            found[f"scripts/{path.name}"] = reasons
+            rel = path.relative_to(SCRIPT_DIR).as_posix()
+            found[f"scripts/{rel}"] = reasons
 
     for name in sorted(set(found) - named):
         problems.append(
