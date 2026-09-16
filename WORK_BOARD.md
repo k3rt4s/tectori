@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the hidden login label fix to
-`verify_site.py` is on branch `feature/hunt-keyboard-offscreen-label`, from
-worktree `C:\Code\worktrees\tectori-hunt-keyboard-offscreen-label`.
+Checkpoint, 2026-09-16 run: the split-rule contrast fix to
+`verify_site.py` is on branch `feature/hunt-contrast-split-rules`, from
+worktree `C:\Code\worktrees\tectori-hunt-contrast-split-rules`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own

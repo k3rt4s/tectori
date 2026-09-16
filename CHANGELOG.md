@@ -151,6 +151,13 @@ Tectori website changes are recorded here.
   labels. The check now also fails a label hidden by its inline style,
   by a hidden attribute, or by a class that styles.css hides.
 
+- The contrast check paired a text colour with a background only when
+  both were set in the same style rule, so unreadable text whose colour
+  and background were set in two rules for the same selector passed. The
+  check now gathers each selector's colours across rules, separately for
+  the base stylesheet and for each screen-width block on top of it, so an
+  override at one width cannot hide a failure at another.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
