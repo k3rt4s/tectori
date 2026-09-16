@@ -1,8 +1,13 @@
-"""Check that every sitemap lastmod date is at least as recent as the page's own source."""
+"""Check that every sitemap lastmod date is valid, not future dated, and at least as recent as the page's own source.
+
+A malformed date, or a date more than a day past today, fails without looking up the page's source history.
+"""
 
 from __future__ import annotations
 
+import datetime
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -14,6 +19,12 @@ CONTENT_DIR = REPO_ROOT / "site" / "content"
 # login.html has no entry in the content model, so its source is named here the
 # way build_site.py names it.
 VERBATIM_SOURCES = {"/login.html": "pages/login.page.frag"}
+
+# The sitemap protocol takes a W3C Datetime, and every lastmod here is written as
+# just the date part, YYYY-MM-DD. date.fromisoformat() on this Python also accepts
+# ISO basic form, "20260901", which the sitemap must not use, so the shape is
+# checked here before fromisoformat is asked whether it is a real calendar date.
+ISO_DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
 
 
 def page_sources() -> dict[str, str]:
@@ -50,6 +61,16 @@ def main() -> int:
     problems: list[str] = []
     checked = 0
 
+    # A stated date can be wrong before any git history is even consulted:
+    # it can be spelled wrong, or it can claim a change that has not
+    # happened yet. Both are caught here, per page, before the source
+    # lookup below.
+    today = datetime.date.today()
+    # One day of slack absorbs a UTC/local boundary: a page edited today
+    # can be built on a server in a later time zone before local midnight
+    # catches up.
+    latest_allowed = today + datetime.timedelta(days=1)
+
     # A repository cloned one commit deep answers every one of these questions
     # with the same date, which would pass this check while measuring nothing.
     # Refusing to run is the only honest answer.
@@ -72,6 +93,25 @@ def main() -> int:
 
     for item in public_pages:
         path, stated = item["path"], item["lastmod"]
+        if not ISO_DATE_RE.fullmatch(stated):
+            problems.append(
+                f"{path}: the sitemap lastmod {stated!r} is not a date in the "
+                "YYYY-MM-DD form the sitemap uses"
+            )
+            continue
+        try:
+            stated_date = datetime.date.fromisoformat(stated)
+        except ValueError:
+            problems.append(
+                f"{path}: the sitemap lastmod {stated!r} is not a valid ISO date"
+            )
+            continue
+        if stated_date > latest_allowed:
+            problems.append(
+                f"{path}: the sitemap says this page last changed {stated}, "
+                f"which is more than a day after today, {today.isoformat()}"
+            )
+            continue
         source = sources.get(path)
         if source is None:
             problems.append(

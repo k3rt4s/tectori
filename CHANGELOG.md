@@ -39,6 +39,14 @@ Tectori website changes are recorded here.
   records it skips and the list the README names cannot drift apart. It
   found nothing stale in the three documents it had not been reading.
 
+- A sitemap `lastmod` set to 2099-01-01 passed the date check, which only
+  asked whether a page's source had changed after its stated date, so a
+  date in the future always passed. It now fails any date more than a day
+  past today, with a day of slack for a build in a later time zone, and any
+  date not written as YYYY-MM-DD, since the Python it runs on also accepts
+  `20260901`. Dates two days out and in 2031 both fail, and so does a
+  month of 13.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
