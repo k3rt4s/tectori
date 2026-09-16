@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the exact job-name fix to
-`check_deploy_gate.py` is on branch `feature/hunt-deploy-gate-job-name`,
-from worktree `C:\Code\worktrees\tectori-hunt-deploy-gate-job-name`.
+Checkpoint, 2026-09-16 run: the empty nav label fix to
+`verify_site.py` is on branch `feature/hunt-nav-empty-aria-label`, from
+worktree `C:\Code\worktrees\tectori-hunt-nav-empty-aria-label`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own

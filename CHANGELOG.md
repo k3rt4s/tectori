@@ -81,6 +81,12 @@ Tectori website changes are recorded here.
   a new `verify-real` that checks nothing. It now reads the list of jobs
   the deploy waits for and requires the verify job by its exact name.
 
+- A navigation menu with an empty label passed the accessibility check,
+  which looked for the word `aria-label` in the tag rather than at what
+  the label said. The check now reads the label and fails one that is
+  missing, empty or only spaces, so a screen reader user can still tell
+  the menus apart.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
