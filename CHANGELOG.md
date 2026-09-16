@@ -23,6 +23,14 @@ Tectori website changes are recorded here.
   `Disallow: /$` under the catch-all, which blocks only the home page by its
   canonical, and `Disallow: /service-*` under Googlebot, which blocks six.
 
+- A social card replaced with a 1500 by 400 image passed all twenty-five
+  checks, because the size test compared width and height as one tuple, so
+  any card wider than 1200 passed whatever its height. It now tests each
+  dimension. Every page also stated its card as 1200 by 630 from a literal in
+  the build, which stays false once an owner swaps in a larger card; the
+  build now reads the size from the card file, and a check fails any page
+  whose stated `og:image` width or height differs from the file it names.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
