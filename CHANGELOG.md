@@ -187,6 +187,11 @@ Tectori website changes are recorded here.
   shell would, and checks the command word of each, after any leading
   assignment or wrapper such as env or sudo.
 
+- The documented commands check read a command only when it was written
+  as `python scripts/<name>.py`, so `python3 scripts/no_such_script.py` in
+  the README passed. It now also reads python3, python3.N, python.exe,
+  `py -3`, an interpreter path, a backslash path and a leading `./`.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the

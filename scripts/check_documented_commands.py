@@ -30,7 +30,10 @@ EXCLUDED_RECORDS = ("CHANGELOG.md", "WORK_BOARD.md", "BOARD_ARCHIVE_*.md")
 README = REPO_ROOT / "README.md"
 BULLET_START = "`scripts/check_documented_commands.py`"
 
-COMMAND_RE = re.compile(r"python\s+(scripts/[A-Za-z0-9_]+\.py)([^\n`]*)")
+COMMAND_RE = re.compile(
+    r"(?<![\w.])(?:[\w./\\-]*[/\\])?(?:python3(?:\.\d+)?|python\.exe|python|py)"
+    r"(?:\s+-3(?:\.\d+)?)?\s+(?:\.[/\\])?scripts[/\\]([A-Za-z0-9_]+)\.py([^\n`]*)"
+)
 FLAG_RE = re.compile(r"(--[a-z][a-z0-9-]*)")
 
 
@@ -120,7 +123,8 @@ def main() -> int:
         text = path.read_text(encoding="utf-8")
         for match in COMMAND_RE.finditer(text):
             commands += 1
-            relative, tail = match.group(1), match.group(2)
+            name, tail = match.group(1), match.group(2)
+            relative = f"scripts/{name}.py"
             script = REPO_ROOT / relative
             if not script.is_file():
                 problems.append(
