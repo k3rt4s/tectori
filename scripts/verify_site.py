@@ -1169,6 +1169,12 @@ UNLABELLED_TYPES = ("hidden", "submit", "button", "reset", "image")
 # Class names that take a label out of the page while leaving it in the
 # markup. The claim is that the labels are visible, not that they exist.
 HIDDEN_LABEL_CLASSES = ("sr-only", "visually-hidden", "screen-reader-only", "hidden")
+# A boolean "hidden" attribute on a label. Matched against a copy of
+# the attribute string with every quoted value blanked out first (see
+# the call site), so it catches hidden, hidden="" and hidden="hidden"
+# without also matching the word inside a class list or inside another
+# attribute's quoted value, such as aria-label="field hidden text".
+LABEL_HIDDEN_ATTR_RE = re.compile(r"(?:^|\s)hidden(?:\s|=|$)", re.IGNORECASE)
 # login.html is rendered without the shared header, so it has no mobile menu
 # to operate. Naming it here rather than skipping every page without one is
 # what stops the menu disappearing from all twenty-four of the others.
@@ -1551,6 +1557,17 @@ def check_keyboard_operable(pages: list[Path], docs_root: Path) -> bool:
         problems.append(f"{NO_MENU} is not in the tree, so its form cannot be read")
     else:
         login_text = login.read_text(encoding="utf-8")
+        login_css = docs_root / "styles.css"
+        if login_css.is_file():
+            login_stylesheet = CSS_COMMENT_RE.sub(
+                " ", login_css.read_text(encoding="utf-8")
+            )
+        else:
+            login_stylesheet = ""
+            problems.append(
+                f"{NO_MENU}: styles.css is not in the tree, so the login "
+                "labels' classes cannot be read"
+            )
         labels = {}
         for attributes, inner in LABEL_RE.findall(login_text):
             target = re.search(r'\bfor\s*=\s*(["\'])(.*?)\1', attributes, re.IGNORECASE)
@@ -1591,6 +1608,31 @@ def check_keyboard_operable(pages: list[Path], docs_root: Path) -> bool:
                     f"{sorted(hidden)}, which takes it out of the page, and the "
                     "statement promises a visible one"
                 )
+            style_attribute = re.search(
+                r'\bstyle\s*=\s*(["\'])(.*?)\1', label_attributes, re.IGNORECASE
+            )
+            if style_attribute and style_is_hidden(style_attribute.group(2)):
+                problems.append(
+                    f"{NO_MENU}: the label for {identifier.group(2)!r} is "
+                    "hidden by its inline style, and the statement promises "
+                    "a visible one"
+                )
+            attrs_without_quoted_values = re.sub(
+                r'(["\']).*?\1', '""', label_attributes, flags=re.DOTALL
+            )
+            if LABEL_HIDDEN_ATTR_RE.search(attrs_without_quoted_values):
+                problems.append(
+                    f"{NO_MENU}: the label for {identifier.group(2)!r} is "
+                    "hidden by its hidden attribute, and the statement "
+                    "promises a visible one"
+                )
+            for name in sorted(named - hidden):
+                if class_is_hidden(login_stylesheet, name):
+                    problems.append(
+                        f"{NO_MENU}: the label for {identifier.group(2)!r} is "
+                        f"hidden by its {name!r} class in styles.css, and the "
+                        "statement promises a visible one"
+                    )
 
     ok = not problems
     print(
@@ -1750,6 +1792,47 @@ def is_negative_length(value: str) -> bool:
     """True if a CSS length is negative and not a zero-valued negative."""
     match = NEGATIVE_LENGTH_RE.match(value.strip())
     return bool(match) and float(match.group(1)) != 0
+
+
+def style_is_hidden(style_text: str) -> bool:
+    """Decide whether an inline style attribute hides its element outright.
+
+    Folds the style attribute's own declarations in source order the same
+    way class_is_hidden folds a stylesheet's cascade: the last value
+    written for each of CASCADE_HIDING_PROPERTIES wins, unless an earlier
+    declaration carries !important and the later one does not, in which
+    case the !important declaration keeps winning until a later
+    !important replaces it. Hidden only for display: none, visibility:
+    hidden, or an absolute or fixed position paired with a negative left
+    or top, which is class_is_hidden's own definition of hidden.
+    """
+    winning_value: dict[str, str] = {}
+    winning_important: dict[str, bool] = {}
+    for declaration in style_text.split(";"):
+        if ":" not in declaration:
+            continue
+        name, value = declaration.split(":", 1)
+        name = name.strip().lower()
+        if name not in CASCADE_HIDING_PROPERTIES:
+            continue
+        important = value.strip().lower().endswith("!important")
+        if important:
+            value = value.rsplit("!", 1)[0]
+        value = value.strip().lower()
+        if winning_important.get(name) and not important:
+            continue
+        winning_value[name] = value
+        winning_important[name] = important
+    if winning_value.get("display") == "none":
+        return True
+    if winning_value.get("visibility") == "hidden":
+        return True
+    if winning_value.get("position") in OFF_SCREEN_POSITIONS and (
+        is_negative_length(winning_value.get("left", ""))
+        or is_negative_length(winning_value.get("top", ""))
+    ):
+        return True
+    return False
 
 
 def class_is_hidden(stylesheet: str, class_name: str) -> bool:
