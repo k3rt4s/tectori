@@ -31,6 +31,14 @@ Tectori website changes are recorded here.
   build now reads the size from the card file, and a check fails any page
   whose stated `og:image` width or height differs from the file it names.
 
+- The check that every documented command would run read three documents
+  by name, so `site/README.md` could tell a reader to run a renamed script
+  or a retired flag and nothing failed. It now reads every Markdown document
+  in the repository except the dated records, which quote retired commands
+  on purpose, and it reads its own sentence in `README.md` so the list of
+  records it skips and the list the README names cannot drift apart. It
+  found nothing stale in the three documents it had not been reading.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the

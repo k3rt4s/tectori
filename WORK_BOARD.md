@@ -58,14 +58,13 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the social card size fix is on branch
-`feature/hunt-social-card-size`. Gates: check_site --full, then the
-pre-push review, then PR, verify, merge. If `main` does not yet carry the
-social card change, check that branch and `gh pr list` first. Open gaps
-queued behind it, each proven by probe: `check_documented_commands.py` not
-reading `site/README.md`, `check_doc_claims.py` not covering the README
-Configuration counts, the img arm skipping an img with no size, a future
-sitemap `lastmod`, and a declared host no page uses. Probe log:
+Checkpoint, 2026-09-16 run: the documented-commands scope fix is on branch
+`feature/hunt-documented-commands-all-docs`. Gates: check_site --full, then
+the pre-push review, then PR, verify, merge. If `main` does not yet carry
+that change, check that branch and `gh pr list` first. Open gaps queued
+behind it, each proven by probe: `check_doc_claims.py` not covering the
+README Configuration counts, the img arm skipping an img with no size, a
+future sitemap `lastmod`, and a declared host no page uses. Probe log:
 `C:\Code_data\tectori\hunt_2026-09-16\probes.md`.
 
 You have no next action here. The board is finished, and that is the
