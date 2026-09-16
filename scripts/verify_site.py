@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import html as html_lib
 import json
+import os
 import re
 import sys
 from collections import Counter
@@ -160,6 +161,37 @@ def resolve_internal(url_value: str, current_file: Path, docs_root: Path):
     return "internal", candidate
 
 
+def path_case_matches(target: Path, root: Path) -> bool:
+    """Return True only if target is a file whose case matches root's listing exactly.
+
+    Path.is_file() answers a question a case-insensitive filesystem gets
+    wrong: it says yes for a file that exists under a different case, which
+    is every Windows run of this check. GitHub Pages serves case
+    sensitively, so a stated or linked URL spelled with the wrong case
+    passes here and 404s for a visitor. This walks target's path under root
+    component by component against the real directory listing, so a case
+    mismatch anywhere along it fails instead of passing.
+    """
+    if not target.is_file():
+        return False
+    normalized_target = Path(os.path.normpath(target))
+    normalized_root = Path(os.path.normpath(root))
+    try:
+        relative = normalized_target.relative_to(normalized_root)
+    except ValueError:
+        return False
+    current = normalized_root
+    for part in relative.parts:
+        try:
+            names = {entry.name for entry in current.iterdir()}
+        except OSError:
+            return False
+        if part not in names:
+            return False
+        current = current / part
+    return True
+
+
 def link_values(text: str):
     """Yield every URL a page points at, including each candidate in a srcset.
 
@@ -200,7 +232,7 @@ def check_links(pages: list[Path], docs_root: Path) -> bool:
                 checked += 1
             else:
                 checked += 1
-                if not target.is_file():
+                if not path_case_matches(target, docs_root):
                     broken += 1
                     broken_examples.append(f"{page.name}: {value!r} -> {target}")
     ok = broken == 0 and skipped == 0
@@ -858,7 +890,7 @@ def check_fragments_resolve(pages: list[Path], docs_root: Path) -> bool:
             kind, target = resolve_internal(value, page, docs_root)
             if kind == "external" or target is None:
                 continue
-            if not target.is_file():
+            if not path_case_matches(target, docs_root):
                 # A target file that does not exist is the link check's.
                 continue
             checked += 1
@@ -1625,7 +1657,7 @@ def check_stated_urls_resolve(pages: list[Path], docs_root: Path) -> bool:
                 continue
             checked += 1
             kind, target = resolve_internal(value, page, docs_root)
-            if kind != "internal" or target is None or not target.is_file():
+            if kind != "internal" or target is None or not path_case_matches(target, docs_root):
                 problems.append(
                     f"{page.name}: states {value!r}, which is not a file this "
                     "site publishes"
@@ -1758,7 +1790,7 @@ def check_contact_form(pages: list[Path], docs_root: Path) -> bool:
         )
     else:
         kind, target = resolve_internal(redirect, page, docs_root)
-        if kind != "internal" or target is None or not target.is_file():
+        if kind != "internal" or target is None or not path_case_matches(target, docs_root):
             problems.append(
                 f"{page.name}: _next points at {redirect!r}, which is not a "
                 "page of this site"
@@ -2235,7 +2267,7 @@ def check_image_dimensions(pages: list[Path], docs_root: Path) -> bool:
     def measure(value: str, page: Path, what: str):
         """Return the pixel size of an image a page names, or None."""
         kind, target = resolve_internal(value, page, docs_root)
-        if kind != "internal" or target is None or not target.is_file():
+        if kind != "internal" or target is None or not path_case_matches(target, docs_root):
             # The stated-URL and link checks own an image that is not there.
             return None
         if target not in sizes:
@@ -2299,7 +2331,7 @@ def check_image_dimensions(pages: list[Path], docs_root: Path) -> bool:
     card = SITE.get("social_image_filename")
     if card:
         target = docs_root / "assets" / card
-        if target.is_file():
+        if path_case_matches(target, docs_root):
             size, reason = image_size(target)
             if size is None:
                 problems.append(f"{card}: {reason}, so the card size went unchecked")
