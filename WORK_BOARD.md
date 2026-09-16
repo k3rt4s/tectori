@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the comment-link reachability fix to
-`verify_site.py` is on branch `feature/hunt-reachability-comments`, from
-worktree `C:\Code\worktrees\tectori-hunt-reachability-comments`.
+Checkpoint, 2026-09-16 run: the hidden login label fix to
+`verify_site.py` is on branch `feature/hunt-keyboard-offscreen-label`, from
+worktree `C:\Code\worktrees\tectori-hunt-keyboard-offscreen-label`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own

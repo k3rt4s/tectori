@@ -145,6 +145,12 @@ Tectori website changes are recorded here.
   The link, navigation and reachability checks now ignore anything inside
   an HTML comment, as a browser does.
 
+- The login form check failed a label only when its class was one of a
+  few known screen-reader-only names, so a label moved off screen by its
+  own style passed, though the accessibility statement promises visible
+  labels. The check now also fails a label hidden by its inline style,
+  by a hidden attribute, or by a class that styles.css hides.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
