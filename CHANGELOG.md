@@ -136,6 +136,10 @@ Tectori website changes are recorded here.
   accessibility statement promises, with a later declaration in the rule
   winning unless an earlier one is marked !important.
 
+- A host listed as allowed in site.json passed even when no page linked to
+  it or loaded anything from it any more. The check now fails a declared
+  host that nothing in the built site uses.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
