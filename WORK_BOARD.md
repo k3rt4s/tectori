@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the shell command string fix to
-`check_no_network_calls.py` is on branch `feature/hunt-shell-network`, from
-worktree `C:\Code\worktrees\tectori-hunt-shell-network`.
+Checkpoint, 2026-09-16 run: the documented command forms fix to
+`check_documented_commands.py` is on branch `feature/hunt-doc-python3`, from
+worktree `C:\Code\worktrees\tectori-hunt-doc-python3`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own
