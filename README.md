@@ -134,11 +134,12 @@ against it with the same result it gives against the live site.
   found three on the day it was written, one of them on ten pages, and none
   of them had ever existed in the stylesheet.
 - `scripts/check_documented_commands.py` reads every `python scripts/...`
-  command in `README.md`, `PERMISSIONS.md` and `SEARCH_SETUP.md` and requires
-  the script to exist and the parser to accept each option the command passes.
-  The runbook is the first thing a new owner types, so a renamed script or a
-  retired flag fails at the moment they are deciding whether any of this
-  works.
+  command in every Markdown document under the repository root except the
+  dated records `CHANGELOG.md`, `WORK_BOARD.md` and `BOARD_ARCHIVE_*.md`, and
+  requires the script to exist and the parser to accept each option the
+  command passes. The runbook is the first thing a new owner types, so a
+  renamed script or a retired flag fails at the moment they are deciding
+  whether any of this works.
 - `scripts/check_stdlib_only.py` reads every script's imports and requires
   each one to name a standard library module. `PERMISSIONS.md` promises that
   a clone runs on a machine with nothing installed, which is why there is no
