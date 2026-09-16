@@ -596,6 +596,13 @@ SKIP_LINK_RE = re.compile(
 HREF_RE = re.compile(r'\bhref\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
 IMG_RE = re.compile(r"<img\b([^>]*)>", re.IGNORECASE | re.DOTALL)
 NAV_RE = re.compile(r"<nav\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+# The attribute name must stand alone, so data-aria-label or x-aria-label
+# is not it; an unquoted value counts.
+NAV_ARIA_LABEL_RE = re.compile(
+    r'(?<![\w:.-])aria-label\s*=\s*'
+    r'(?:(["\'])(.*?)\1|([^\s"\'<>=`]+))',
+    re.IGNORECASE | re.DOTALL,
+)
 ID_ATTR_RE = re.compile(r'\bid\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
 
 # The sentences on the accessibility page that a tree can be measured against.
@@ -1466,10 +1473,19 @@ def check_accessibility_statement(pages: list[Path], docs_root: Path) -> bool:
                 f"{page.name}: has {headings} <h1> headings rather than one"
             )
         for match in NAV_RE.finditer(page_text):
-            if "aria-label" not in match.group(1).lower():
+            label = NAV_ARIA_LABEL_RE.search(match.group(1))
+            if not label:
                 problems.append(
                     f"{page.name}: a <nav> has no aria-label, so a visitor "
                     "moving between landmarks cannot tell which one it is"
+                )
+                continue
+            value = label.group(2) if label.group(1) else label.group(3)
+            if not html_lib.unescape(value).strip():
+                problems.append(
+                    f"{page.name}: a <nav> has an empty aria-label, so a "
+                    "visitor moving between landmarks cannot tell which "
+                    "one it is"
                 )
 
     ok = not problems
