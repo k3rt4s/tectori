@@ -99,6 +99,11 @@ Tectori website changes are recorded here.
   the case changed. The check now reads the page the way a visitor does
   and catches each of those.
 
+- The check that the privacy policy names every outside host a page
+  loads from read HTML tags only. A web font or image pulled in from a
+  stylesheet, a style block or a style attribute went unnoticed. The check
+  now reads those too.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the

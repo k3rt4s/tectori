@@ -58,9 +58,9 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-Checkpoint, 2026-09-16 run: the credential spelling fix to
-`verify_site.py` is on branch `feature/hunt-forbidden-text-split-tag`,
-from worktree `C:\Code\worktrees\tectori-hunt-forbidden-text-split-tag`.
+Checkpoint, 2026-09-16 run: the CSS fetch fix to `verify_site.py` is on
+branch `feature/hunt-privacy-style-import`, from worktree
+`C:\Code\worktrees\tectori-hunt-privacy-style-import`.
 Gates: check_site --full, then the pre-push review, then PR, verify, merge.
 If `main` does not yet carry that change, check that branch and
 `gh pr list` first. Other fixes in flight, each on its own
