@@ -202,6 +202,11 @@ Tectori website changes are recorded here.
   call only from module-level code or from a function that reachable code
   names.
 
+- The login tracking check found the analytics beacon and the tracking
+  pixel by their host anywhere in a page, so a page with both tags
+  commented out still passed. It now requires each host in the src of a
+  live script or img tag, outside HTML comments.
+
 ## 2026-09-15
 
 - `LICENSE` and `NOTICE` were read back as a buyer would read them, and the
