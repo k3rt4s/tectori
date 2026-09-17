@@ -56,11 +56,21 @@ Records, not work. Nothing here is dispatchable.
 
 ## In Progress
 
-You have no next action here. The board is finished, and that is the
-answer rather than a gap to fill: ask Jon what he wants before starting
-anything. The unattended run of 2026-09-11 to 09-12 is closed and its
-standing instruction expired with it, so do not read it as authority to
-work unprompted.
+- **CONTACT-AJAX, submit the contact form with JavaScript.** Your next
+  action: confirm with Jon that you are starting it, then run the brief at
+  `C:\Code_data\tectori\ORCHESTRATOR_PROMPT_2026-09-16_contact_ajax.md`.
+  Jon's live test on 2026-09-16 delivered the Formspree email with every
+  field intact, but the browser landed on Formspree's thank-you page because
+  the free plan ignores custom redirects, so `_next` does nothing today. Jon
+  decided on 2026-09-16 to submit with JavaScript and keep the plain POST as
+  the no-JavaScript fallback; the brief holds the evidence, the tree
+  readings, and the defaults for Formspree's production checklist.
+  `score: kind=feature gain=0.5/2/6 p=0.6 hours=1/2/4 rev=two-way conf=assessed id=contact-ajax`
+
+Apart from CONTACT-AJAX the board is finished, and that is the answer rather
+than a gap to fill: ask Jon what he wants before starting anything else. The
+unattended run of 2026-09-11 to 09-12 is closed and its standing instruction
+expired with it, so do not read it as authority to work unprompted.
 
 Every repo item that was on this board has shipped, and the productization
 lane PROD-1 through PROD-8 shipped tonight. What each one changed is in
@@ -88,13 +98,17 @@ left on this board needs Jon rather than another check.
 
 The nine record bullets that stood here are in `BOARD_ARCHIVE_2026.md` under `## Archived 2026-09-16: In Progress records`.
 
-Nothing on this board is dispatchable. Every repo item has shipped, and what
-remains under Owner-Only Tasks and Questions for Jon needs Jon's account, his
-judgment on copy, or a buyer who does not exist yet. If you are a fresh
-thread with no instruction from Jon, that is the answer: the board is done,
-say so and ask him what he wants rather than inventing work from the archive.
+CONTACT-AJAX above is the only repo item. What remains under Owner-Only
+Tasks and Questions for Jon needs Jon's account, his judgment on copy, or a
+buyer who does not exist yet. Do not invent work from the archive.
 
 ## Owner-Only Tasks
+
+- **FORMSPREE-RECIPIENT, confirm the notification address.** In the
+  Formspree dashboard, open the form `mljeabad` settings and confirm
+  notifications go only to the address Jon wants. The 2026-09-16 test
+  proved delivery, not the recipient list.
+  - worker: none, owner task, 0.1 h
 
 - **COPY-SERVICE, decide what to change on the six service pages.** The read
   is done and the findings are at
