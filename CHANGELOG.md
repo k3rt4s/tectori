@@ -2,6 +2,16 @@
 
 Tectori website changes are recorded here.
 
+## 2026-09-17
+
+- Scored every live board item with `docs/board-scoring.md` and wrote the
+  what-is-left report to `C:\Code_data\tectori\board_review_2026-09-17.md`.
+  `CONTACT-AJAX`, `FORMSPREE-RECIPIENT` and the three open questions for Jon
+  had no score blocks and now have them, so `score_board.py --strict` reports
+  no unscored live item across In Progress, Owner-Only Tasks and Questions
+  for Jon. Nine items are live: seven are Jon's in a third-party interface,
+  and two are repo work joined by the `docs/` build output.
+
 ## 2026-09-16
 
 - The board's In Progress section held nine bold-lead bullets that were
