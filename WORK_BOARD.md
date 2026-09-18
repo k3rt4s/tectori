@@ -166,7 +166,20 @@ buyer who does not exist yet. Do not invent work from the archive.
 
 ## Post-Lane Queue
 
-No pending items. Every scored lane feature has shipped.
+One item, added 2026-09-18. Every scored lane feature had shipped before it.
+
+- **Adopt the README diagram standard: a generated status block in `README.md` and a hand-written `ARCHITECTURE.md`.**
+  Why: opening this repo does not say where the work stands or how the app fits together, and both answers already exist in files nobody opens first.
+  Status block, generated: add the `<!-- BEGIN STATUS (auto-generated, do not edit by hand) -->` and `<!-- END STATUS -->` pair to `README.md`, then render it from `WORK_BOARD.md` with `check_rules.py --json` findings scoped to this project. Broken means a Blocked board item or a checker finding and nothing else; nothing is inferred from file age, stale branches or untested code.
+  `ARCHITECTURE.md`, hand-written: the components, what calls what, where data enters and leaves, and the trust boundaries it crosses, as Mermaid so it renders on GitHub with no external service in the path. It is not `THEORY.md`: architecture is the shape of the system, theory is what the code does not say. The status block links to it.
+  Standard and tooling: `C:\Code\ai_development\docs\readme-diagrams.md`, rule R11 in `C:\Code\ai_development\docs\readme-standards.md`, and `C:\Code\ai_development\scripts\render_status_diagram.py`.
+  Checked against this board on 2026-09-18, so the tool is known to read it: 1 item in progress, 0 pending, nothing blocked.
+  This repo is public, so either hosted diagram service could be used on it; the standard still says to commit the output rather than link to somebody else's render.
+  Out of scope: changing any board's content. A digest, if one is wanted, comes from `gitingest` run locally against the working tree, and it is generated data under CORE-01.
+  Done when: `README.md` carries the marker pair and a rendered block, `ARCHITECTURE.md` exists and its diagrams parse, and `render_status_diagram.py <readme> --board <board> --check` exits 0. Rollback: delete `ARCHITECTURE.md` and the marker block, one commit.
+  `score: kind=docs gain=0.05/0.1/0.3 freq=12/y hours=0.25/0.5/1 ai=30m rev=two-way conf=opinion id=readme-diagrams`
+  `return: likelihood every session or reader that opens this repo cold reconstructs status from the board, about 12 occasions a year, estimated rather than counted because nobody has logged how often it happens; impact about 0.1 h of re-reading per occasion, borne by whoever opens the repo and by Jon when he is asked where things stand; evidence this board is 190 lines across 5 sections, the repo has no ARCHITECTURE.md, and the 2026-09-18 render of this board with render_status_diagram.py`
+  - worker: sonnet 1/2/4 h
 
 ## Questions for Jon
 
