@@ -2,6 +2,17 @@
 
 Tectori website changes are recorded here.
 
+## 2026-09-24
+
+- Unwrapped THEORY.md's hard-wrapped bullets to clear the DOC-03 line
+  ceiling: 129 lines to 35, character count essentially unchanged
+  (8,454 to 8,266). The file was over on lines only; joining each bullet's
+  continuation lines onto its first line, with no word changed, was
+  enough, so no entry was merged, shortened, dropped, or moved to a
+  topic doc. Verified against the pre-prune text with a
+  whitespace-insensitive comparison. Review at
+  `C:\Code_data\tectori\THEORY_PRUNE_REVIEW.md`.
+
 ## 2026-09-17
 
 - Scored every live board item with `docs/board-scoring.md` and wrote the
