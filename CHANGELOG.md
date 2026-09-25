@@ -4,6 +4,19 @@ Tectori website changes are recorded here.
 
 ## 2026-09-24
 
+- Moved `WORK_BOARD.md` off this public repo per the board-location rule
+  (`docs/workspace-rules.md`, "Project board location"): a public repo's
+  board is never committed. The working copy (with the pending
+  GEO-RESEARCH item) was copied byte-for-byte to
+  `C:\Code_data\tectori\WORK_BOARD.md` before the tracked file was removed
+  and gitignored; README names the new location. The data-root board was
+  then archived under the 200-line ceiling into a new
+  `C:\Code_data\tectori\BOARD_ARCHIVE_2026.md` (distinct from this repo's
+  own tracked `BOARD_ARCHIVE_2026.md`), carrying every superseded
+  Current-state record, the closed question 1/5 decisions, and the
+  In Progress narrative across verbatim. A history review of the 131
+  commits that touched the published board is at
+  `C:\Code_data\tectori\history_review_2026-09-24.md`.
 - Unwrapped THEORY.md's hard-wrapped bullets to clear the DOC-03 line
   ceiling: 129 lines to 35, character count essentially unchanged
   (8,454 to 8,266). The file was over on lines only; joining each bullet's
