@@ -192,7 +192,8 @@ against it with the same result it gives against the live site.
 - `THEORY.md` holds the working mental model: the invariants, the
   constraints the site is bent around, and the changes that look like fixes
   but are not. Read it before changing anything.
-- `WORK_BOARD.md` tracks active project work.
+- `WORK_BOARD.md` tracks active project work. This repo is public, so the
+  board lives at `C:\Code_data\tectori\WORK_BOARD.md`, never committed here.
 - `CHANGELOG.md` records completed changes.
 
 ## Configuration
