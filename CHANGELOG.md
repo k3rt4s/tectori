@@ -4,6 +4,16 @@ Tectori website changes are recorded here.
 
 ## 2026-09-24
 
+- Removed the board and its archive from this repository's published
+  history. `WORK_BOARD.md` and `BOARD_ARCHIVE_2026.md` were stripped from
+  every commit with `git filter-branch --index-filter`, commits that only
+  touched them were pruned (252 to 216), and `main` was force-pushed.
+  Both are private working records under the board-location rule; the
+  archive now lives at `C:\Code_data\tectori\BOARD_ARCHIVE_2026_repo.md`
+  and is gitignored. The site tree is unchanged. A mirror of the
+  pre-rewrite repository is at
+  `C:\Code_data\tectori\repo_mirror_pre_rewrite_2026-09-24.git`.
+
 - Moved `WORK_BOARD.md` off this public repo per the board-location rule
   (`docs/workspace-rules.md`, "Project board location"): a public repo's
   board is never committed. The working copy (with the pending

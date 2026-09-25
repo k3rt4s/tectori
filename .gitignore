@@ -21,3 +21,7 @@ logs/
 # The board lives at C:\Code_data\tectori\WORK_BOARD.md, never in this
 # public repo (workspace-rules.md, "Project board location").
 **/WORK_BOARD.md
+
+# The board archive lives beside the board, at
+# C:\Code_data\tectori\BOARD_ARCHIVE_2026_repo.md, for the same reason.
+**/BOARD_ARCHIVE_*.md
