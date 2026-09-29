@@ -5,7 +5,7 @@ Tectori website changes are recorded here.
 ## 2026-09-29
 
 - INSIGHTS: added the Insights section, a hub at `/insights` and one
-  archive page per ISO week, carrying 343 short takes on security and
+  archive page per ISO week, carrying 214 short takes on security and
   AI reporting drawn from the newsletter_linkedin post database. The
   pages are generated source: `newsletter_linkedin export-site` in the
   personal-automation repo writes the fragments and their `pages.json`
