@@ -4,6 +4,16 @@ Tectori website changes are recorded here.
 
 ## 2026-09-29
 
+- CONTACT-AJAX: the contact form now submits with JavaScript over
+  fetch, staying on `/contact` and showing an on-page thank-you
+  message on success, or Formspree's error text plus the phone
+  fallback on failure; the plain HTML POST remains the fallback with
+  JavaScript off. Added a `scripts/verify_site.py` check that the
+  contact page loads a same-origin handler script referencing the
+  form. Jon's live test against the deployed site, including whether
+  reCAPTCHA on form `mljeabad` blocks the AJAX path, is still
+  outstanding.
+
 - Added `ARCHITECTURE.md`: Mermaid diagrams for the build and check
   pipeline, the verify-and-deploy workflow, the runtime egress to
   Cloudflare, Scarf and Formspree, and the trust boundaries each edge
