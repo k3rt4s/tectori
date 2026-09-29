@@ -3,7 +3,7 @@
           <p class="eyebrow">Insights archive</p>
           <h1 id="page-title">7 to 13 September 2026.</h1>
           <p class="page-lead">
-            88 short takes on the security and AI stories of that week, newest first. Each one credits the publication that reported it.
+            88 short takes on what we read that week, newest first. Each one shows the article's own date where its publisher gave one, and credits the publication that reported it.
           </p>
           <p><a class="text-link" href="/insights">Back to all Insights</a></p>
         </div>
@@ -14,14 +14,6 @@
           <h2 id="archive-title">What we read, and what it meant.</h2>
         </div>
         <div class="faq-list">
-          <article class="archive-item" id="post-2645">
-            <p class="archive-meta"><time datetime="2026-09-24">24 September 2026</time> &middot; on Semgrep</p>
-            <h3>GitHub Actions SHA Pinning, Org-Wide | Semgrep</h3>
-            <p>SHA pinning in GitHub Actions is a critical supply chain security practice that prevents malicious code from slipping into your CI/CD pipelines. The tj-actions/changed-files incident highlighted the risks of unpinned dependencies, and it’s a wake-up call for all organizations. Enforcing SHA pinning org-wide isn’t easy, but it’s essential for securing your GitHub Actions.</p>
-            <p>GitHub’s “Require actions to be pinned to a full-length commit SHA” setting is a powerful tool, but it requires careful implementation. You must pin all dependencies, including transitive ones, to ensure nothing slips through. This means converting tags, branches, and even internal actions to SHAs. It’s a tedious process, but one that pays off in reduced attack surfaces and greater control over your infrastructure.</p>
-            <p>Tools like pinact and Renovate can help automate this work, but they’re not foolproof. You’ll need to monitor for failures, adjust workflows, and ensure your team understands the importance of pinning. It’s a balancing act between automation and manual oversight, but it’s worth the effort to secure your CI/CD pipelines.</p>
-            <p class="archive-tags">Cybersecurity DevSecOps CI_CD SupplyChainSecurity GitHubActions ZeroTrust</p>
-          </article>
           <article class="archive-item" id="post-2277">
             <p class="archive-meta"><time datetime="2026-09-12">12 September 2026</time> &middot; on SANS Institute</p>
             <h3>SANS Stay Ahead of Ransomware August 2026: Hot Off the Press</h3>
@@ -540,6 +532,14 @@
             <p>AI plays a role, but it&#x27;s not a silver bullet. Tines combines AI-assisted analysis with deterministic automation. AI helps teams reason through complex inputs and build workflows faster. Once approved, automation handles execution without forcing analysts through the same manual steps each time. The result? Faster answers and a shorter path to action.</p>
             <p>The next vulnerability won’t come with a map of where it lives. Your tools may already hold the answer. The key is integrating data and automating decision-making. Register for the webinar to see how Tines built a faster way to find it.</p>
             <p class="archive-tags">AIsecurity VulnerabilityManagement SecOps CloudSecurity CyberResilience ZeroTrust</p>
+          </article>
+          <article class="archive-item" id="post-2645">
+            <p class="archive-meta"><time datetime="2026-09-08">8 September 2026</time> &middot; on Semgrep</p>
+            <h3>GitHub Actions SHA Pinning, Org-Wide | Semgrep</h3>
+            <p>SHA pinning in GitHub Actions is a critical supply chain security practice that prevents malicious code from slipping into your CI/CD pipelines. The tj-actions/changed-files incident highlighted the risks of unpinned dependencies, and it’s a wake-up call for all organizations. Enforcing SHA pinning org-wide isn’t easy, but it’s essential for securing your GitHub Actions.</p>
+            <p>GitHub’s “Require actions to be pinned to a full-length commit SHA” setting is a powerful tool, but it requires careful implementation. You must pin all dependencies, including transitive ones, to ensure nothing slips through. This means converting tags, branches, and even internal actions to SHAs. It’s a tedious process, but one that pays off in reduced attack surfaces and greater control over your infrastructure.</p>
+            <p>Tools like pinact and Renovate can help automate this work, but they’re not foolproof. You’ll need to monitor for failures, adjust workflows, and ensure your team understands the importance of pinning. It’s a balancing act between automation and manual oversight, but it’s worth the effort to secure your CI/CD pipelines.</p>
+            <p class="archive-tags">Cybersecurity DevSecOps CI_CD SupplyChainSecurity GitHubActions ZeroTrust</p>
           </article>
           <article class="archive-item" id="post-1799">
             <p class="archive-meta"><time datetime="2026-09-08">8 September 2026</time> &middot; on Malwarebytes</p>

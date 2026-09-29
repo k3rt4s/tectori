@@ -3,7 +3,7 @@
           <p class="eyebrow">Insights archive</p>
           <h1 id="page-title">28 September to 4 October 2026.</h1>
           <p class="page-lead">
-            14 short takes on the security and AI stories of that week, newest first. Each one credits the publication that reported it.
+            14 short takes on what we read that week, newest first. Each one shows the article's own date where its publisher gave one, and credits the publication that reported it.
           </p>
           <p><a class="text-link" href="/insights">Back to all Insights</a></p>
         </div>
