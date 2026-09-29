@@ -3,7 +3,7 @@
           <p class="eyebrow">Insights archive</p>
           <h1 id="page-title">7 to 13 September 2026.</h1>
           <p class="page-lead">
-            88 short takes on what we read that week, newest first. Each one shows the article's own date where its publisher gave one, and credits the publication that reported it.
+            54 short takes on what we read that week, newest first. Each one shows the article's own date where its publisher gave one, and credits the publication that reported it.
           </p>
           <p><a class="text-link" href="/insights">Back to all Insights</a></p>
         </div>
@@ -23,15 +23,6 @@
             <p>Leaked data from groups like The Gentlemen provides critical insights into TTPs and victimology. Extracting actionable intelligence from such leaks can support both technical and legal actions. The key is turning raw data into strategic advantage before the next attack hits.</p>
             <p class="archive-tags">AIsecurity RansomwareDefense CyberThreats ZeroTrust EDR ThreatIntel</p>
           </article>
-          <article class="archive-item" id="post-1464">
-            <p class="archive-meta"><time datetime="2026-09-12">12 September 2026</time> &middot; on The Hacker News</p>
-            <h3>Russian State-Sponsored Hackers Use Claude to Rebuild Malware After Detection</h3>
-            <p>Russian state-sponsored hackers are using generative AI to stay ahead of detection. A threat group linked to Midnight Blizzard leveraged Claude to automate malware redevelopment after it was flagged by security tools. This lets them bypass static defenses and maintain operational momentum.</p>
-            <p>The attack lifecycle includes AI-driven domain registration, phishing infrastructure setup, and C2 channel monitoring. Malware variants are tailored to specific platforms, with payloads designed to evade endpoint detection. This level of automation shifts the advantage to the adversary.</p>
-            <p>Defenders must rethink how we detect and respond to evolving threats. AI is no longer just a tool for attackers—it&#x27;s a core component of their operational strategy. We need to build systems that can adapt to these intelligent, autonomous workflows.</p>
-            <p>This underscores the urgency of integrating AI into our defensive posture. Detection must be dynamic, not static. We need to stay ahead by embracing the same technologies that are being weaponized against us.</p>
-            <p class="archive-tags">AIsecurity CyberDefense ThreatIntel ZeroTrust MalwareAnalysis CyberOps</p>
-          </article>
           <article class="archive-item" id="post-1458">
             <p class="archive-meta"><time datetime="2026-09-12">12 September 2026</time> &middot; on The Hacker News</p>
             <h3>Claude Used to Automate Exploitation and Data Theft Across Multiple Victims</h3>
@@ -47,15 +38,6 @@
             <p>Illicit distillation is a growing threat, with attackers using sophisticated methods to bypass defenses. Proxy services act as relay stations, enabling unauthorized labs to harvest training data without user consent. This creates a secondary market where stolen transcripts are sold to other labs, accelerating the spread of illicitly derived capabilities.</p>
             <p>To combat this, Anthropic has updated its models to summarize internal reasoning before responses, reducing the utility of stolen data. Features like preserved thinking and encrypted reasoning add layers of defense, making it harder for attackers to exploit stolen transcripts. These measures underscore the need for continuous innovation in safeguarding AI models against evolving threats.</p>
             <p class="archive-tags">AIsecurity LLMsecurity AgenticAI ModelGovernance ZeroTrust Cybersecurity</p>
-          </article>
-          <article class="archive-item" id="post-1446">
-            <p class="archive-meta"><time datetime="2026-09-12">12 September 2026</time> &middot; on The Hacker News</p>
-            <h3>GitLab CVSS 10 File-Read Flaw Draws In-the-Wild Probes After Disclosure</h3>
-            <p>GitLab has patched a critical vulnerability, CVE-2026-85706, with a CVSS score of 10.0. It&#x27;s a path traversal flaw in the repository commits API that allows unauthenticated users to read arbitrary files. This is already being probed in the wild, which shows how quickly attackers act. The issue affects several versions of GitLab CE and EE, and it&#x27;s a clear risk for organizations running self-managed instances.</p>
-            <p>The flaw stems from improper path confinement and missing authentication checks. Attackers can access log files and configuration files to extract credentials and secrets. This is particularly dangerous because it can lead to exfiltration of sensitive data and even code injection into CI/CD pipelines. It&#x27;s a reminder of how critical it is to patch quickly and monitor for suspicious activity.</p>
-            <p>CISA has added this to its KEV catalog, and FCEB agencies must patch by September 14. Threat actors are already exploiting this, and we&#x27;ve seen exfiltration of config files and SSH credentials. This highlights the need for proactive monitoring and rapid response. Organizations should review logs for HTTP POST requests to the affected API endpoints to detect potential exploitation attempts.</p>
-            <p>The GitLab vulnerability underscores the importance of maintaining up-to-date systems and limiting exposure. Rapid patching and continuous monitoring are key to preventing data breaches and supply chain attacks. As we&#x27;ve seen, the window for defenders is shrinking, and action is essential. Let&#x27;s stay vigilant and act swiftly.</p>
-            <p class="archive-tags">Cybersecurity ZeroTrust SupplyChainSecurity IncidentResponse PatchManagement ThreatIntel</p>
           </article>
           <article class="archive-item" id="post-1434">
             <p class="archive-meta"><time datetime="2026-09-12">12 September 2026</time> &middot; on The Hacker News</p>
@@ -84,24 +66,6 @@
             <p>Deliberate inefficiency in training is a long-term investment. It costs now but protects capability for years to come. The organizations that survive will be those willing to trade short-term margin for long-term expertise.</p>
             <p class="archive-tags">AIsecurity EngineeringLeadership TeamCulture SkillPreservation Cybersecurity AIgovernance</p>
           </article>
-          <article class="archive-item" id="post-2807">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on Cloud Security Partners</p>
-            <h3>Cloud Security Assessments | Identify &amp; Mitigate Risks | CSP</h3>
-            <p>Cloud security assessments go beyond checking boxes. They uncover systemic risks and architectural gaps that matter most. A holistic view of your cloud posture helps build lasting resilience. We start with a deep dive into your cloud accounts to understand where you stand.</p>
-            <p>By analyzing IAM roles, logging behavior, encryption settings, and communication protocols, we lay the foundation for a thorough assessment. Our mix of manual and automated methods identifies vulnerabilities that could lead to breaches if left unaddressed.</p>
-            <p>Each finding comes with a risk rating, summary, and clear steps to reproduce and mitigate the issue. This ensures you have a prioritized roadmap to improve your security posture. The result is a detailed report that guides your team toward actionable improvements.</p>
-            <p>Cloud security is complex, especially in multi-cloud environments. Our assessments are tailored to your needs, leveraging expertise across major providers and compliance frameworks. The goal is to protect your assets while aligning with business objectives.</p>
-            <p class="archive-tags">CloudSecurity RiskManagement ZeroTrust Compliance AIsecurity CyberResilience</p>
-          </article>
-          <article class="archive-item" id="post-2241">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on CERT Polska</p>
-            <h3>Critical vulnerabilities in MikroTik RouterOS are being actively exploited. Immediate update recommended</h3>
-            <p>MikroTik RouterOS vulnerabilities are being actively exploited in the wild. CERT Polska confirmed attackers are using a chain of flaws to take full control of devices with SSH access. This underscores the urgency of patching. We&#x27;ve seen confirmed attacks leveraging two critical flaws to bypass authentication and escalate privileges. Immediate action is required to secure your infrastructure.</p>
-            <p>The vulnerabilities impact SSH, bandwidth-test, and certificate handling. MikroTik released patches that block these attacks. However, the &quot;Flagged&quot; marker in RouterOS logs is not definitive proof of compromise. It indicates potential tampering but doesn&#x27;t guarantee a breach. Administrators should treat this as a red flag and investigate thoroughly.</p>
-            <p>AI played a key role in identifying these flaws. CERT Polska used LLMs to automate testing and explore attack vectors. The models helped uncover vulnerabilities that would have taken far longer to find manually. Yet, real-world validation and deep analysis remained critical. Automation accelerates discovery but doesn&#x27;t replace human insight.</p>
-            <p>Update your RouterOS devices to the latest patched versions. Check logs for suspicious entries and review configurations for unknown users or scripts. If flagged, isolate the device and secure logs before resetting. This isn&#x27;t just a technical fix—it&#x27;s a strategic step in defending your network.</p>
-            <p class="archive-tags">CyberSecurity VulnerabilityManagement ZeroTrust AIsecurity NetworkDefense IncidentResponse</p>
-          </article>
           <article class="archive-item" id="post-2238">
             <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on SANS Internet Storm Center</p>
             <h3>SANS ISC Stormcast: Daily Network Security News Summary; Cyber Security Podcast</h3>
@@ -119,48 +83,6 @@
             <p>The fix was deployed swiftly, but the lesson remains clear: secure by design is better than secure after the fact. Teams must audit proxy configurations and ensure all access points are rigorously controlled.</p>
             <p class="archive-tags">Cybersecurity ZeroTrust ProxySecurity AccessControl AIsecurity DevOpsSecurity</p>
           </article>
-          <article class="archive-item" id="post-2227">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on Hunt</p>
-            <h3>UK Council Attack Linked to SonicWall SMA 1000 Campaign</h3>
-            <p>The SonicWall SMA 1000 vulnerability is a stark reminder of how quickly public research can be weaponized. A threat actor exploited CVE-2026-15409 to gain command execution, extract LDAP configurations, and decrypt credentials. This allowed them to pivot into internal networks and perform DCSync attacks across multiple Active Directory domains. The attack was opportunistic, targeting organizations with exposed appliances rather than specific sectors.</p>
-            <p>The visibility gap between security appliances and EDR systems made these devices ideal for stealthy operations. Attackers deployed a standalone Linux build of Impacket to automate credential theft, leveraging the lack of oversight. This highlights the need for proactive infrastructure hardening and continuous monitoring of all network components. We must assume everything is already under attack and prepare accordingly.</p>
-            <p>Organizations must treat every device as a potential entry point. Regularly audit configurations, enforce least privilege, and implement zero-trust principles. The SonicWall incident underscores the importance of supply chain security and the risks of unpatched, internet-facing systems. Stay ahead of threats by integrating AI-driven detection and real-time threat intelligence into your security operations.</p>
-            <p class="archive-tags">Cybersecurity SupplyChainSecurity ZeroTrust ActiveDirectory ThreatIntel AIsecurity</p>
-          </article>
-          <article class="archive-item" id="post-2223">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on SANS Internet Storm Center</p>
-            <h3>Redtail Payload Analysis [Guest Diary] - SANS ISC</h3>
-            <p>RedTail&#x27;s evasion techniques highlight the need for robust monitoring. It uses process masquerading to hide its presence, appearing as legitimate services like PHP-FPM. This makes detection harder without deep inspection.</p>
-            <p>The malware also terminates monitoring processes with SIGKILL, disrupting analysis. This shows how adversaries target defense mechanisms. Without proper process tracking, these actions go unnoticed.</p>
-            <p>Persistence through cron and firewall rules ensures RedTail remains after reboot. Dynamic listener ports and hidden network activity further complicate detection. These tactics underscore the importance of continuous monitoring and behavioral analysis.</p>
-            <p class="archive-tags">CyberSecurity ThreatIntel MalwareAnalysis RedTail ProcessMasquerading ZeroTrust</p>
-          </article>
-          <article class="archive-item" id="post-2218">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on SC Media</p>
-            <h3>CISA: WatchGuard Firebox bug exploited in ransomware campaigns</h3>
-            <p>The WatchGuard Firebox bug being weaponized in ransomware campaigns underscores a critical gap in security operations. CISA added the vulnerability to the KEV catalog in December, yet it took nearly a year for ransomware actors to exploit it. This delay highlights the risk of waiting for real-world impact before patching. Teams must treat KEV listings as immediate priorities, not waiting for ransomware to confirm the threat.</p>
-            <p>Patching is only part of the equation. CVE-2025-14733 and CVE-2025-9242 show a pattern of similar flaws in the same product. This suggests a deeper issue with how WatchGuard handles out-of-bounds writes. The fact that attackers exfiltrated configs and management databases means even patched systems aren&#x27;t safe unless credentials are rotated. It&#x27;s not enough to apply a patch — you must validate the fix works as intended.</p>
-            <p>The timeline from disclosure to exploitation is normal, but the gap between CISA’s KEV listing and real-world use is too long. Ransomware operators are opportunistic, and they don’t wait for official alerts. Security teams must close the remediation gap by applying patches quickly and verifying configurations. This is especially critical for IKEv2 and branch-office tunnels, which are prime targets for pre-auth exploitation.</p>
-            <p class="archive-tags">SecurityOperations ZeroTrust RansomwareDefense PatchManagement CyberResilience CVEAwareness</p>
-          </article>
-          <article class="archive-item" id="post-2201">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on The Hacker News</p>
-            <h3>Google Releases Chrome Update to Patch Actively Exploited V8 Zero-Day</h3>
-            <p>Google released a Chrome update to address 12 vulnerabilities including a high-severity zero-day actively exploited in the wild. The flaw, CVE-2026-85046, is a type confusion bug in V8 allowing arbitrary code execution via a crafted HTML page. This underscores the need for rapid patching in enterprise environments to mitigate risks from emerging threats.</p>
-            <p>The vulnerability was reported by Salvatore Gulizia who received a $1,000 bounty for responsible disclosure. Google acknowledged the existence of an exploit but withheld details to prioritize user protection and prevent further exploitation. This approach highlights the balance between transparency and security.</p>
-            <p>With six actively exploited Chrome zero-days addressed this year, the pace of attacks continues to escalate. Enterprises must prioritize timely updates and continuous monitoring to stay ahead of adversaries leveraging these vulnerabilities. Patch management remains a critical line of defense.</p>
-            <p>CISA added CVE-2026-85046 to its KEV catalog requiring FCEB agencies to patch by September 18. This reinforces the importance of proactive security measures and compliance with regulatory frameworks. Staying informed and acting swiftly is essential in today&#x27;s threat landscape.</p>
-            <p class="archive-tags">ZeroDay PatchManagement CyberSecurity EnterpriseSecurity VulnerabilityManagement ThreatDefense</p>
-          </article>
-          <article class="archive-item" id="post-2184">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on The HIPAA Journal</p>
-            <h3>AdaptHealth Data Breach Affects 4.1 Million Individuals</h3>
-            <p>The AdaptHealth data breach affecting 4.1 million individuals is a stark reminder of the vulnerabilities in healthcare cybersecurity. The breach involved the exfiltration of sensitive patient data including names, contact details, and health information. While the company claims no misuse has been detected, the potential risk to affected individuals remains significant.</p>
-            <p>The incident highlights the critical need for robust access controls and third-party risk management. A social engineering attack on a contractor led to credential compromise, underscoring how even small gaps can lead to large-scale breaches. Organizations must ensure their partners adhere to strict security protocols to prevent such scenarios.</p>
-            <p>HIPAA compliance requires more than just meeting baseline requirements. This breach demonstrates the importance of proactive monitoring, regular audits, and continuous improvement in security posture. Healthcare providers must prioritize data protection to avoid regulatory penalties and reputational damage.</p>
-            <p>The involvement of ShinyHunters suggests a pattern of extortion and data leaks. This reinforces the necessity of having comprehensive incident response plans and cybersecurity insurance. It also underscores the need for a Zero Trust approach to minimize the impact of potential breaches.</p>
-            <p class="archive-tags">HIPAACompliance Cybersecurity HealthcareSecurity DataBreaches RiskManagement RegTech</p>
-          </article>
           <article class="archive-item" id="post-2178">
             <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on NASCIO</p>
             <h3>The Expanding Cyber Perimeter: States and Critical Infrastructure Protection – NASCIO</h3>
@@ -169,41 +91,6 @@
             <p>Whole-of-state approaches are proving effective, but they demand more than good intentions. Meaningful action, consistent delivery, and measurable value are critical to building trust. States must prioritize high-risk systems, modernize outdated infrastructure, and ensure local entities adopt basic cyber hygiene practices.</p>
             <p>The path forward requires clear governance, stronger local capacity, and federal support. States must act now to secure critical infrastructure, even in the absence of full funding or authority. Collaboration across sectors and sustained investment are non-negotiable.</p>
             <p class="archive-tags">Cybersecurity CriticalInfrastructure StateGovernance ZeroTrust AIsecurity CyberResilience</p>
-          </article>
-          <article class="archive-item" id="post-2177">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on StateScoop</p>
-            <h3>States confront growing cyber gaps as critical infrastructure threats rise, report finds | StateScoop</h3>
-            <p>States are increasingly shouldering the responsibility of securing critical infrastructure against cyber threats, yet many local governments and special districts face staffing shortages, outdated technology, and rising cyber-physical risks. The report highlights that nearly 90% of state CIOs view cyberattacks on infrastructure as a top concern, with 73% integrating these protections into whole-of-state plans. This shift underscores the need for coordinated efforts across all levels of government.</p>
-            <p>The gap in resources is stark. While 65% of state CIO budgets allocate funds for critical infrastructure cybersecurity, only 31% support local governments and special districts. Many smaller facilities lack dedicated IT or cybersecurity expertise, leaving them vulnerable. Operational technology systems, often overlooked, present unique challenges. These systems, some running for decades, are now increasingly exposed to the internet, amplifying attack surfaces.</p>
-            <p>Cybersecurity must be embedded into operational risk discussions, not treated as a separate issue. Reducing unnecessary internet exposure, identifying vendor contacts, and conducting tabletop exercises can help align OT and cybersecurity goals. The report recommends inventorying high-risk infrastructure, formalizing governance, and adopting sustainable funding models to ensure long-term resilience.</p>
-            <p>Examples like Texas&#x27; Project Watershed 250 show how collaboration and shared expertise can strengthen defenses. Despite challenges, progress in awareness and education offers hope. States must prioritize funding, partnerships, and integrated risk management to protect the systems that underpin our daily lives.</p>
-            <p class="archive-tags">Cybersecurity CriticalInfrastructure RiskManagement Compliance ZeroTrust AIsecurity</p>
-          </article>
-          <article class="archive-item" id="post-2162">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on TechCrunch</p>
-            <h3>ID verification giant IDScan confirms data breach with more than 150 million driver&#x27;s licenses stolen | TechCrunch</h3>
-            <p>The recent breach at IDScan exposing over 150 million driver’s licenses underscores the urgent need for stronger cloud security in identity verification services. As someone who has spent over 19 years in cybersecurity and cloud operations, I see how critical it is to build defenses that can withstand sophisticated attacks. The fact that this data was hosted in the cloud and accessed by hackers highlights the importance of securing infrastructure and implementing robust incident response strategies.</p>
-            <p>This breach also reveals the challenges of managing sensitive data in regulated environments. Identity verification services handle vast amounts of personal information, and the stakes are high when that data is compromised. Teams must be prepared to respond quickly, communicate transparently, and mitigate risks. It’s not just about preventing breaches—it’s about being ready when they happen.</p>
-            <p>One of the key takeaways is the need for continuous monitoring and zero-trust architectures. Traditional security models are no longer enough. We must integrate AI and automation into our security operations to detect anomalies and respond faster. This breach should serve as a wake-up call for organizations that still rely on outdated security practices.</p>
-            <p>The incident also raises questions about third-party risk and supply chain security. Many organizations depend on external vendors for critical services, and a single breach can have far-reaching consequences. It’s time to rethink how we assess and manage these risks. Strong governance, clear contracts, and regular audits are essential to protecting sensitive data.</p>
-            <p class="archive-tags">Cybersecurity CloudSecurity IncidentResponse ZeroTrust DataBreach IdentityVerification</p>
-          </article>
-          <article class="archive-item" id="post-2149">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on Help Net Security</p>
-            <h3>September 2026 Patch Tuesday: Record patch count, 2 zero-days, and a SigRed successor - Help Net Security</h3>
-            <p>Microsoft’s September 2026 Patch Tuesday delivered a record number of patches including two zero-days already in use by attackers. The pace of vulnerability discovery is accelerating with AI tools now capable of identifying flaws faster than ever. This means defenders must focus on prioritization not just volume.</p>
-            <p>The zero-day targeting Microsoft Defender shows how quickly threats evolve. Attackers are finding ways to bypass patches and exploit privilege escalation bugs in critical systems. These flaws are being used to move laterally and gain SYSTEM access, making them high-priority targets for remediation.</p>
-            <p>Organizations should treat patch management as a strategic imperative. While the number of vulnerabilities grows, the subset that actually affects most environments remains small. Prioritizing based on real-world risk and exploitability is more effective than chasing CVSS scores.</p>
-            <p>The rise in one-off patches highlights the need for resilient processes. Teams are under pressure to keep up with frequent updates. Supporting them with clear guidance and resources is key to maintaining security without burnout. Let’s make patching a sustainable practice.</p>
-            <p class="archive-tags">ZeroDay PatchManagement AIsecurity CyberResilience RiskPrioritization MicrosoftSecurity</p>
-          </article>
-          <article class="archive-item" id="post-2148">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on SecurityWeek</p>
-            <h3>Microsoft Patches Record 974 Vulnerabilities, Including Two Exploited Zero-Days</h3>
-            <p>Microsoft just released patches for 974 vulnerabilities, including two zero-days actively exploited in the wild. The first, CVE-2026-85880, is a heap buffer overflow in Windows ALPC that allows local privilege escalation. The second, CVE-2026-81963, is a flaw in the Windows Update Stack that similarly enables elevation of privilege. Both highlight the ongoing risk of zero-day exploits in critical components.</p>
-            <p>Patch management is more than just applying updates. It’s about understanding which vulnerabilities apply to your environment and prioritizing based on real risk. With AI-assisted discovery creating more vulnerabilities, the challenge is filtering the noise to focus on what truly matters. Proactive patching remains a cornerstone of defense, but it must be paired with smart prioritization.</p>
-            <p>Organizations should treat Patch Tuesday as a strategic exercise, not a checklist. Focus on high-impact issues like remote code execution or elevation of privilege. Remember, not all vulnerabilities are equally dangerous. A well-informed remediation strategy is far more effective than a reactive approach.</p>
-            <p class="archive-tags">Cybersecurity PatchManagement ZeroDays AIsecurity RiskManagement IncidentResponse</p>
           </article>
           <article class="archive-item" id="post-1908">
             <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on Gen Digital</p>
@@ -232,15 +119,6 @@
             <p>The key takeaway is that attackers are exploiting human trust, not just technical vulnerabilities. By strengthening authentication and monitoring suspicious activity, we can make compromised accounts far less valuable. This approach is more effective than trying to eliminate BYOD, which is not realistic for most organizations.</p>
             <p class="archive-tags">Cybersecurity MFA ZeroTrust IdentitySecurity Microsoft365 ThreatIntel</p>
           </article>
-          <article class="archive-item" id="post-1896">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on Dark Reading</p>
-            <h3>Nightmare-Eclipse Strikes Again With ShieldCrash Windows Exploit</h3>
-            <p>The latest ShieldCrash exploit from Nightmare-Eclipse highlights a critical flaw in how Microsoft is addressing zero-day vulnerabilities. This new attack bypasses recent patches for CVE-2026-69441, showing the same issue can still be triggered under specific conditions. It&#x27;s a reminder that even after patches, there can be gaps in remediation.</p>
-            <p>The researcher&#x27;s ongoing feud with Microsoft underscores a broader issue in the security landscape. While vendors work to patch flaws, attackers are finding ways to exploit these weaknesses. This creates a cycle where each patch is followed by a new exploit, leaving organizations in a constant state of reactive defense.</p>
-            <p>Continuous monitoring and patch management are more important than ever. Teams must stay vigilant and not assume that applying patches is the end of the story. The ShieldCrash example demonstrates that attackers are always looking for new ways to exploit known and unknown vectors.</p>
-            <p>Organizations should focus on proactive defense strategies. This includes enabling tamper protection, restricting administrative access, and closely following Microsoft&#x27;s guidance. The key is to build a resilient security posture that can adapt to evolving threats.</p>
-            <p class="archive-tags">ZeroTrust PatchManagement AIsecurity CyberResilience ThreatIntel DefensiveOps</p>
-          </article>
           <article class="archive-item" id="post-1419">
             <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on The Hacker News</p>
             <h3>Google Play Early Access Abused to Push Thousands of Deceptive Android Apps</h3>
@@ -267,42 +145,6 @@
             <p>Operationalizing this means ensuring AI agents work within regulatory, budget, and audit requirements while still functioning as effective digital business partners. Governance must be proactive, not reactive. It&#x27;s about control, not just compliance. The foundation is trust, and the goal is safety</p>
             <p>#AgenticAI #AI Governance #ZeroTrust #CloudSecurity #AIControl #AICompliance</p>
           </article>
-          <article class="archive-item" id="post-1407">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on The Hacker News</p>
-            <h3>Cisco FMC Flaws Exploited to Steal Credentials and Deploy Qilin Ransomware</h3>
-            <p>Cisco FMC flaws are being exploited in the wild to steal credentials and deploy ransomware. Two critical vulnerabilities, CVE-2026-20079 and CVE-2026-20316, are being leveraged by threat actors to gain unauthorized access and escalate privileges. These attacks highlight the importance of timely patching to prevent credential theft and ransomware deployment.</p>
-            <p>UAT-12197 uses CVE-2026-20079 to deploy web shells and command executors. UAT-11823 combines both flaws to deliver reverse shells and modular implants. UAT-11988 exploits CVE-2026-20316 for initial access and then uses FMC tooling for reconnaissance and ransomware deployment. These tactics show how attackers are exploiting known weaknesses to move laterally and exfiltrate data.</p>
-            <p>Timely patching is non-negotiable. Cisco has released hotfixes, and CISA has added these to its KEV catalog. FCEB agencies must patch by September 12. This is a clear signal that organizations must prioritize patch management to stay ahead of threats.</p>
-            <p>If you&#x27;re using Cisco FMC, apply the patches now. Don&#x27;t wait. These vulnerabilities are being actively exploited, and the consequences can be severe. Stay proactive and ensure your systems are protected.</p>
-            <p class="archive-tags">Cybersecurity ZeroTrust PatchManagement RansomwareDefense ThreatIntel AIsecurity</p>
-          </article>
-          <article class="archive-item" id="post-1401">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on The Hacker News</p>
-            <h3>PaperCut Replaces Emergency Patches With Fixes for Two Actively Exploited Flaws</h3>
-            <p>PaperCut recently released a maintenance update that replaces emergency patches for two actively exploited flaws. The new releases include all previous emergency fixes plus additional hardening. This shows the importance of timely patching and the risks of relying on temporary solutions.</p>
-            <p>Emergency patches, while necessary in a crisis, often lack the thorough testing of regular updates. This can leave systems vulnerable to further exploitation. The recent attack highlights how bad actors are using AI agents to scale their operations and bypass defenses.</p>
-            <p>The use of AI in attacks is a growing concern. These tools allow threat actors to target multiple organizations efficiently while evading detection. The recent breach underscores the need for robust patch management and continuous monitoring.</p>
-            <p>Organizations must prioritize applying verified security updates. Relying on emergency patches without proper validation can create new risks. As AI-driven threats evolve, so must our defenses. Stay proactive and ensure your systems are up to date.</p>
-            <p class="archive-tags">Cybersecurity PatchManagement AIsecurity ThreatDefense ZeroTrust IncidentResponse</p>
-          </article>
-          <article class="archive-item" id="post-1395">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on The Hacker News</p>
-            <h3>China-Linked UNC3569 Exploited Sogou Input Method Flaw to Deploy GRAYRABBIT Backdoor</h3>
-            <p>The Sogou Input Method flaw exploited by UNC3569 shows how supply chain risks can be exploited through third-party components. A crafted link bypassed security checks to load a malicious browser instance. The attack chain relied on unpatched Chromium code and weak argument validation. This highlights the need for strict controls over how external links are handled and the software they trigger.</p>
-            <p>The fix from Tencent blocked the initial exploit vector but left the browser engine unchanged. The sandbox and same-origin policy remain disabled. This means the underlying vulnerability still exists. Secure software development must include regular audits of third-party dependencies and their security settings. It&#x27;s not enough to patch a single component.</p>
-            <p>The GRAYRABBIT backdoor demonstrates how a simple link can lead to full system compromise. The attack chain relied on a 2021 vulnerability that remained unpatched in Sogou&#x27;s build. This underscores the importance of continuous monitoring and timely updates. Organizations must ensure their software supply chains are secure and up to date.</p>
-            <p>If you use Sogou Input Method, update to version 16.3.0.3498. The fix addresses the initial exploit but doesn&#x27;t eliminate all risks. Check for the indicators listed by Gen Digital to determine if your system may have been compromised. Supply chain security is a shared responsibility. We must all be vigilant.</p>
-            <p class="archive-tags">SupplyChainSecurity ZeroTrust AIsecurity CyberDefense ThreatIntel SoftwareSecurity</p>
-          </article>
-          <article class="archive-item" id="post-1383">
-            <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on The Hacker News</p>
-            <h3>Attackers Chain JFrog Artifactory Flaws to Gain Admin Control and Plant Backdoors</h3>
-            <p>Attackers exploited chained vulnerabilities in JFrog Artifactory to gain admin control and plant backdoors. The flaws, CVE-2026-42018 and CVE-2026-42016, allowed low-privilege tokens to be upgraded to admin-level access. This highlights how critical it is to patch promptly, especially in CI/CD pipelines where delays can lead to serious security risks.</p>
-            <p>The attack chain required both flaws to be present, making it a narrow window for exploitation. Servers not updated to the fixed versions were vulnerable. This shows how quickly attackers can move from unauthenticated requests to full control, often in under five minutes. It’s a reminder that outdated systems are a liability.</p>
-            <p>Even after patching, attackers may have left behind admin accounts or malicious plugins. Upgrades don’t automatically remove these remnants. Teams must audit their environments, check for unusual accounts, and review configuration changes. This is part of a broader zero-trust approach to security.</p>
-            <p>Timely patching remains the first line of defense, but it’s not enough. Continuous monitoring and proactive checks are essential. The JFrog case underscores the need for a layered security strategy that includes both technical controls and operational discipline.</p>
-            <p class="archive-tags">CyberSecurity ZeroTrust DevSecOps AIsecurity SupplyChainSecurity Compliance</p>
-          </article>
           <article class="archive-item" id="post-1377">
             <p class="archive-meta"><time datetime="2026-09-11">11 September 2026</time> &middot; on The Hacker News</p>
             <h3>Your Critical Vulnerabilities Might Not Be Your Biggest Risk</h3>
@@ -320,15 +162,6 @@
             <p>Enforcement capabilities further strengthen governance by allowing rules to be applied selectively. With numbat, organizations can define policies that block or prevent specific behaviors, ensuring alignment with compliance frameworks. The ability to package findings into structured investigations also streamlines incident response, providing clear evidence for audits and remediation.</p>
             <p>In short, numbat represents a significant step forward in managing agentic AI at scale. It bridges the gap between capability and control, offering a practical solution for enterprises navigating the complexities of AI agent sprawl.</p>
             <p class="archive-tags">AgenticAI AIsecurity ZeroTrust Observability AIgovernance Cybersecurity</p>
-          </article>
-          <article class="archive-item" id="post-1863">
-            <p class="archive-meta"><time datetime="2026-09-10">10 September 2026</time> &middot; on Cybersecurity Dive</p>
-            <h3>New FBI cyber strategy promises increase in adversary disruptions</h3>
-            <p>The FBI’s new strategy to increase adversary disruptions through collaboration is a clear step toward a more proactive and consistent approach to cyber defense. It reflects the reality that no single entity can manage the growing complexity of threats alone. This aligns with my experience in supply chain security and adversarial operations, where coordinated efforts are essential to neutralize sophisticated attacks. The shift from ad-hoc disruptions to a steady-state model is a necessary evolution.</p>
-            <p>The bureau’s emphasis on information sharing with victims and partners is critical. Companies often hesitate to engage due to concerns about regulatory exposure and uncertainty about the FBI’s value. My work in regulated industries has shown that transparency and trust are foundational to effective collaboration. The FBI’s push to reassure organizations that they won’t share sensitive details with regulators is a positive move toward building that trust.</p>
-            <p>A culture shift within the FBI is also evident, moving from secrecy to a “share until it hurts” mindset. This mirrors the need for open communication in my own practice, where sharing threat intelligence early can prevent widespread damage. The victim perspective is central to this approach, ensuring that actions taken are not only effective but also aligned with the broader goal of protecting critical infrastructure.</p>
-            <p>The FBI’s plan to expand partnerships with private entities is promising but requires careful coordination. Uncoordinated efforts could complicate monitoring and attribution. As someone who has led cross-functional teams in regulated environments, I understand the importance of structured collaboration. The goal is to make industry an operational partner, not just a source of intelligence. This strategy sets a new standard for how we collectively defend against evolving threats.</p>
-            <p class="archive-tags">Cybersecurity FBI SupplyChainSecurity AIsecurity ZeroTrust ThreatIntelligence</p>
           </article>
           <article class="archive-item" id="post-1856">
             <p class="archive-meta"><time datetime="2026-09-10">10 September 2026</time> &middot; on Dark Reading</p>
@@ -374,24 +207,6 @@
             <p>Zero Trust principles like never trust, always verify, and assume breach must guide our segmentation strategies. Microsegmentation enables continuous validation of identity, context, and policy, preserving evidence of enforcement decisions. This ensures we can detect, respond to, and prevent threats before they escalate.</p>
             <p class="archive-tags">ZeroTrust Microsegmentation AIsecurity Cybersecurity CloudSecurity AgenticAI</p>
           </article>
-          <article class="archive-item" id="post-14097">
-            <p class="archive-meta"><time datetime="2026-09-10">10 September 2026</time> &middot; on Cloud Security Alliance</p>
-            <h3>Certificate of Cloud Security Knowledge (CCSK) | CSA</h3>
-            <p>The CCSK v5 aligns well with the evolving landscape of cloud security. Its emphasis on Zero Trust, DevSecOps, and Cloud Workload Security reflects the priorities of modern enterprises. These areas are critical for building resilient infrastructure and securing sensitive data in dynamic environments.</p>
-            <p>This update supports my work in agentic AI orchestration by integrating AI into the security framework. The inclusion of AI and GenAI in the curriculum underscores the need for proactive governance and risk management in emerging technologies.</p>
-            <p>The focus on DevSecOps and Cloud Workload Security is particularly relevant. These domains address the challenges of continuous integration and secure deployment, which are essential for maintaining compliance and operational efficiency in regulated industries.</p>
-            <p>For professionals like myself, the CCSK v5 provides a structured approach to mastering the intersection of cloud, security, and AI. It bridges the gap between theoretical knowledge and practical implementation, which is vital for leading secure and innovative teams.</p>
-            <p class="archive-tags">CloudSecurity ZeroTrust DevSecOps AIgovernance CloudWorkloadSecurity CyberResilience</p>
-          </article>
-          <article class="archive-item" id="post-1362">
-            <p class="archive-meta"><time datetime="2026-09-10">10 September 2026</time> &middot; on The Hacker News</p>
-            <h3>Four Spy Groups Used the Same Chrome and Windows Exploit Kit Within a Week</h3>
-            <p>The BlueMoon exploit kit is a stark reminder of how quickly threat actors can weaponize known vulnerabilities. It leverages three Chrome and Windows flaws, some of which were already patched but not yet in stable releases. This creates a patch-gap window that malicious actors exploit to deploy sophisticated attacks. The rapid deployment across multiple threat clusters shows the urgency of proactive patch management and real-time monitoring.</p>
-            <p>The exploit chain uses phishing as a vector, followed by a series of precise attacks to achieve code execution and privilege escalation. The use of reflectively loaded DLLs and obfuscated components highlights the sophistication of the kit. What&#x27;s more, the presence of AI-assisted development indicators suggests that threat actors are increasingly leveraging tools to accelerate exploit creation. This trend demands stronger AI security and governance frameworks.</p>
-            <p>The implications for supply chain security are profound. With upstream patches available but not yet rolled out, organizations must act quickly to apply updates and scan for residual artifacts. The persistence of malware like GemStone underscores the need for continuous monitoring and thorough incident response. Teams must bridge the gap between detection and remediation to stay ahead of these evolving threats.</p>
-            <p>This incident reinforces the importance of Zero Trust and continuous compliance. Every patch, every update, and every policy must be treated as a critical line of defense. As AI continues to reshape threat landscapes, our focus on AI security, governance, and operational resilience will define our ability to protect critical infrastructure. Stay vigilant.</p>
-            <p class="archive-tags">CyberSecurity AIsecurity ZeroTrust SupplyChainSecurity ThreatIntel ExploitKit</p>
-          </article>
           <article class="archive-item" id="post-1356">
             <p class="archive-meta"><time datetime="2026-09-10">10 September 2026</time> &middot; on The Hacker News</p>
             <h3>Anthropic Discloses Fourth AI Hacking Incident Involving Claude Opus 4.6</h3>
@@ -409,15 +224,6 @@
             <p>LiteLLM&#x27;s security model assumes administrators are trusted, which is why the flaw isn&#x27;t labeled a vulnerability. But in practice, this trust can be exploited. The solution lies in governance and monitoring. Regular audits, strict key management, and limiting outbound network access are essential. These steps ensure that even if a default key is used, the damage is contained.</p>
             <p class="archive-tags">AIsecurity LLMsecurity ZeroTrust CloudSecurity CyberRisk Governance</p>
           </article>
-          <article class="archive-item" id="post-1344">
-            <p class="archive-meta"><time datetime="2026-09-10">10 September 2026</time> &middot; on The Hacker News</p>
-            <h3>Gigabud Creates Android Work Profiles to Hide From Banking App Malware Checks</h3>
-            <p>The Gigabud trojan is evolving. It now uses Android&#x27;s work profile feature to hide malware from banking app security checks. This split isolates the trojan from the personal space, making it harder to detect. It&#x27;s a new attack vector that enterprises must understand.</p>
-            <p>The work profile acts as a sandbox, allowing the trojan to run without triggering the banking app&#x27;s own malware scans. This means fraudulent transactions can bypass alerts, making detection more challenging. It&#x27;s a tactic that leverages Android&#x27;s built-in security features against them.</p>
-            <p>Security teams need to monitor for work profiles on consumer devices, especially in regions like Indonesia where this method has been confirmed. The presence of a work profile without user setup is a red flag. It&#x27;s a sign of deeper compromise that requires immediate action.</p>
-            <p>This isn&#x27;t just about Android. It&#x27;s about how threat actors adapt to existing security models. We must rethink how we secure both the device and the apps that run on it. The line between personal and corporate is blurring, and so must our defenses.</p>
-            <p class="archive-tags">AndroidSecurity ZeroTrust MalwareDefense ThreatIntel MobileSecurity CyberThreats</p>
-          </article>
           <article class="archive-item" id="post-1332">
             <p class="archive-meta"><time datetime="2026-09-10">10 September 2026</time> &middot; on The Hacker News</p>
             <h3>PaperCut Attacker Uses Hundreds of AI Agents to Compromise 440+ Instances</h3>
@@ -427,14 +233,6 @@
             <p>Organizations must prioritize visibility into AI-driven attack patterns and invest in tools that can detect and mitigate these threats. We need to build stronger defenses that account for the speed and adaptability of AI-powered adversaries. This includes implementing robust monitoring, continuous model evaluation, and strict access controls. The time to act is now—before these tactics become the norm.</p>
             <p class="archive-tags">AIsecurity LLMsecurity AgenticAI ZeroTrust CyberDefense ThreatIntel</p>
           </article>
-          <article class="archive-item" id="post-1326">
-            <p class="archive-meta"><time datetime="2026-09-10">10 September 2026</time> &middot; on The Hacker News</p>
-            <h3>Check Point Discloses Two 9.8-Rated VPN Certificate Flaws Enabling Unauthenticated RCE</h3>
-            <p>Check Point recently patched two critical vulnerabilities in its firewall and management products that could allow unauthenticated remote code execution. Both flaws relate to how the system handles VPN certificates. The first is a trust validation failure during VPN negotiation. The second is a heap-based buffer overflow when decoding certificate structures. Both are rated 9.8 on the CVSS scale, highlighting their severity.</p>
-            <p>These issues underscore the importance of maintaining up-to-date systems and rigorous patch management. Organizations relying on Check Point&#x27;s infrastructure must ensure their environments are running patched versions. The affected versions include specific R81, R82, and R82.10 branches, but the exact fixes and conditions remain unclear. This ambiguity can complicate mitigation efforts.</p>
-            <p>Proactive security requires more than just applying patches. It demands a deep understanding of your infrastructure and the potential attack vectors it exposes. When critical components like VPN systems have flaws, the entire security posture is at risk. Teams must be prepared to act quickly and decisively, even when details are incomplete.</p>
-            <p class="archive-tags">Cybersecurity ZeroTrust PatchManagement AIsecurity IncidentResponse SecurityOperations</p>
-          </article>
           <article class="archive-item" id="post-1834">
             <p class="archive-meta"><time datetime="2026-09-09">9 September 2026</time> &middot; on Aikido Security</p>
             <h3>A Shai-Hulud npm payload came back 111 days later</h3>
@@ -442,33 +240,6 @@
             <p>The gap between detection and reactivation highlights a critical flaw. If a known malicious file can sit dormant for over three months, how many other threats are lurking in the shadows? Publish-time scanning is meant to catch the basics, but this case shows it’s not foolproof. We should be more alarmed by what slips through the easy bar than what’s harder to detect.</p>
             <p>This incident isn’t just about a single payload. It’s about the broader challenge of maintaining visibility across the entire supply chain. When a known threat resurfaces, it’s a sign that our defenses are still being tested. We need to ask harder questions about how well our systems are holding up against even the most basic forms of attack.</p>
             <p class="archive-tags">SupplyChainSecurity MalwareDefense ZeroTrust AIsecurity Cybersecurity ThreatIntel</p>
-          </article>
-          <article class="archive-item" id="post-1833">
-            <p class="archive-meta"><time datetime="2026-09-09">9 September 2026</time> &middot; on Cybersecurity Dive</p>
-            <h3>N-able issues patch for zero-day flaw</h3>
-            <p>N-able recently released a critical patch for a zero-day flaw in its N-central platform. The vulnerability, tracked as CVE-2026-86218, allows remote code execution through a pre-authentication flaw. This is a severe issue with a score of 10, the highest on the scale. It highlights the need for immediate attention to such flaws in enterprise systems.</p>
-            <p>The vendor has issued four consecutive patches, showing a pattern of vulnerabilities in the platform. This underscores the importance of proactive patch management and continuous monitoring. Organizations must prioritize upgrades to mitigate risks before exploitation.</p>
-            <p>A recent incident involved an attacker bypassing authentication in a fully patched N-central instance. The attacker created a user account to blend in and installed Cloudflared, a Cloudflare tunneling tool. This shows how even patched systems can be targeted through chained vulnerabilities.</p>
-            <p>Supply chain security and timely patching are critical. Zero-day flaws can be exploited before patches are available, making it essential to stay ahead of threats. Security operations must be agile and integrated with threat intelligence to respond effectively.</p>
-            <p class="archive-tags">ZeroTrust PatchManagement SupplyChainSecurity ThreatIntelligence CyberResilience AIsecurity</p>
-          </article>
-          <article class="archive-item" id="post-1832">
-            <p class="archive-meta"><time datetime="2026-09-09">9 September 2026</time> &middot; on TechTarget</p>
-            <h3>Billington Summit highlights blurring public-private cybersecurity lines | TechTarget</h3>
-            <p>Public-private collaboration is no longer a choice but a necessity in defending critical infrastructure and supply chains against nation-state threats. The Billington Cybersecurity Summit highlighted how adversaries now target both public and private sectors simultaneously, making shared intelligence and coordinated defense essential.</p>
-            <p>Government agencies have unique insights into threat patterns and vulnerabilities, while private industry brings real-time attack data and sector-specific expertise. When these perspectives merge, organizations can detect and respond to threats faster, closing blind spots that adversaries exploit.</p>
-            <p>The summit also revealed how nation-state actors view corporate networks as strategic infrastructure. Private companies own and operate systems vital to national resilience, making their security a national priority. Attacks on supply chains or data aren&#x27;t just business risks—they&#x27;re threats to economic stability and public safety.</p>
-            <p>As defenders, we must recognize that our operations are now part of a broader national security framework. The lines between public and private are blurring, and collaboration is the only way to stay ahead of increasingly sophisticated threats.</p>
-            <p class="archive-tags">Cybersecurity PublicPrivatePartnership CriticalInfrastructure SupplyChainSecurity ZeroTrust AIsecurity</p>
-          </article>
-          <article class="archive-item" id="post-1822">
-            <p class="archive-meta"><time datetime="2026-09-09">9 September 2026</time> &middot; on Dark Reading</p>
-            <h3>ClickFix Campaigns Abuse Legitimate Services for Persistence</h3>
-            <p>ClickFix-style attacks are evolving to exploit trusted services like Google Sheets and cloud infrastructure to maintain persistence. These campaigns leverage social engineering to trick users into executing malicious code through seemingly legitimate actions. The result is a deeper compromise that blends with normal user behavior, making detection harder.</p>
-            <p>The first campaign targeted browsers by injecting malicious code via Chrome extensions and Google Sheets. Later versions shifted to using Google Docs and Sheets for hosting malicious scripts. This shows attackers are adapting to avoid detection by mimicking routine user activities.</p>
-            <p>The second attack on a Ukrainian government entity used a fake Google CAPTCHA to prompt users to run a malicious command. This command deployed malware that stole credentials and cryptocurrency, while also enabling remote access. These examples highlight the growing threat of abuse against trusted cloud and browser environments.</p>
-            <p>Defenders must treat browsers as managed execution environments, not just tools for accessing websites. Limiting developer-level functionality and educating users about the risks of copy-paste code is critical. We need stronger browser security and awareness to counter these evolving threats.</p>
-            <p class="archive-tags">Cybersecurity AIsecurity ZeroTrust CloudSecurity ThreatIntel BrowserSecurity</p>
           </article>
           <article class="archive-item" id="post-1821">
             <p class="archive-meta"><time datetime="2026-09-09">9 September 2026</time> &middot; on Dark Reading</p>
@@ -487,33 +258,6 @@
             <p>Breaking down silos is essential. Teams are all right about their piece of the identity puzzle, but security requires a unified view. Privilege is the common thread that ties IAM, PAM, cloud security, and SOC together. Modern platforms that focus on privilege offer visibility, intelligence, and protection. They let teams see the same problems, understand them, and act. This is how you start reducing the identity attack surface.</p>
             <p>Control privilege, and you control risk. Avoid point solutions that create new silos. Look for platforms that surface risk, prioritize it, and make it actionable. The goal isn’t to fix one team’s problem—it’s to secure the whole environment. That’s how you finally see the whole elephant.</p>
             <p class="archive-tags">IdentitySecurity PrivilegeManagement AIsecurity ZeroTrust CyberRisk Cybersecurity</p>
-          </article>
-          <article class="archive-item" id="post-1818">
-            <p class="archive-meta"><time datetime="2026-09-09">9 September 2026</time> &middot; on Dark Reading</p>
-            <h3>Hackers Use Brazilian Government Servers to Host Phishing Sites</h3>
-            <p>Cybercriminals are exploiting government infrastructure to host phishing sites, leveraging the trust associated with public domains. This tactic highlights a critical gap in supply chain security and infrastructure protection. When attackers compromise servers, they can manipulate them to boost the visibility of malicious content, making it harder to detect.</p>
-            <p>The use of Brazilian government servers by groups like Gambling Goblin underscores the need for stronger oversight and defense mechanisms. These attacks often rely on reverse-proxy networks to mask malicious activity, which can easily evolve into broader network compromises. The infrastructure built for phishing can just as easily be repurposed for malware distribution or data exfiltration.</p>
-            <p>This trend reflects a shift in the cyber threat landscape, where global syndicates are increasingly targeting regions with less robust defenses. AI tools are enabling these groups to scale their operations, translating content and bypassing language barriers. The result is a more connected and sophisticated threat environment that demands proactive and adaptive security strategies.</p>
-            <p>Organizations must prioritize securing their infrastructure and supply chains, especially when dealing with third-party services. Visibility, continuous monitoring, and rapid response are key to mitigating risks. The lessons from Brazil should serve as a wake-up call for all entities handling sensitive data or public-facing systems.</p>
-            <p class="archive-tags">Cybersecurity SupplyChainSecurity PhishingDefense ZeroTrust AIsecurity ThreatIntelligence</p>
-          </article>
-          <article class="archive-item" id="post-1310">
-            <p class="archive-meta"><time datetime="2026-09-09">9 September 2026</time> &middot; on The Hacker News</p>
-            <h3>Researcher Drops New Microsoft Defender PoC Showing ShieldBreak Patch Can Be Bypassed</h3>
-            <p>A new zero-day in Microsoft Defender has surfaced, showing that the recent ShieldBreak patch isn&#x27;t fully effective. The vulnerability dubbed ShieldCrash allows for arbitrary file read as SYSTEM across all supported Windows versions. This highlights the ongoing challenge of patch management in enterprise environments.</p>
-            <p>The PoC demonstrates how the latest Defender update can be bypassed. Microsoft has released a fix for CVE-2026-69414 but the researcher claims there&#x27;s still a gap. This underscores the need for continuous monitoring and proactive updates.</p>
-            <p>Timely patch management is critical. Enterprises must ensure systems are configured for automatic updates and that all components are kept current. The default settings in Microsoft antimalware software are a good start but vigilance is key.</p>
-            <p>This isn&#x27;t an isolated incident. Other vendors have faced similar issues with their products. The threat landscape is evolving rapidly and organizations must stay ahead. Automation and governance play a vital role in securing the infrastructure.</p>
-            <p>#ZeroDay #PatchManagement #MicrosoftDefender #SecurityOperations #AI Security #Cybersecurity</p>
-          </article>
-          <article class="archive-item" id="post-1298">
-            <p class="archive-meta"><time datetime="2026-09-09">9 September 2026</time> &middot; on The Hacker News</p>
-            <h3>Chrome V8 Zero-Day Exploited in the Wild Enables Code Execution Inside Sandbox</h3>
-            <p>Google released updates to patch 230 security vulnerabilities including a zero-day in Chrome&#x27;s V8 engine. The flaw allows remote code execution inside a sandbox via a crafted HTML page. This highlights the ongoing threat of zero-day exploits and the need for proactive patch management.</p>
-            <p>Security operations must prioritize timely updates to mitigate risks from such vulnerabilities. The fact that an exploit exists in the wild underscores the importance of continuous monitoring and rapid response.</p>
-            <p>Organizations should treat zero-days as a top priority. Even with patches available, delays in deployment can leave systems exposed. This is where security operations and incident response teams play a critical role.</p>
-            <p>The broader implications for infrastructure and supply chain security are clear. Third-party dependencies can introduce risk, making collaboration and shared responsibility more important than ever.</p>
-            <p class="archive-tags">Cybersecurity ZeroDay PatchManagement SupplyChainSecurity IncidentResponse SecurityOperations</p>
           </article>
           <article class="archive-item" id="post-1280">
             <p class="archive-meta"><time datetime="2026-09-09">9 September 2026</time> &middot; on The Hacker News</p>
@@ -540,15 +284,6 @@
             <p>GitHub’s “Require actions to be pinned to a full-length commit SHA” setting is a powerful tool, but it requires careful implementation. You must pin all dependencies, including transitive ones, to ensure nothing slips through. This means converting tags, branches, and even internal actions to SHAs. It’s a tedious process, but one that pays off in reduced attack surfaces and greater control over your infrastructure.</p>
             <p>Tools like pinact and Renovate can help automate this work, but they’re not foolproof. You’ll need to monitor for failures, adjust workflows, and ensure your team understands the importance of pinning. It’s a balancing act between automation and manual oversight, but it’s worth the effort to secure your CI/CD pipelines.</p>
             <p class="archive-tags">Cybersecurity DevSecOps CI_CD SupplyChainSecurity GitHubActions ZeroTrust</p>
-          </article>
-          <article class="archive-item" id="post-1799">
-            <p class="archive-meta"><time datetime="2026-09-08">8 September 2026</time> &middot; on Malwarebytes</p>
-            <h3>MikroTik router flaws allow takeover without a password</h3>
-            <p>MikroTik routers are being exploited through a chain of vulnerabilities known as MikroTrick. Attackers can bypass SSH authentication and escalate privileges without needing a password. This highlights how critical it is to secure remote management interfaces.</p>
-            <p>The flaws, CVE-2026-67276 and CVE-2026-86060, allow full control of vulnerable devices. A compromised router can redirect traffic, change DNS settings, or act as a foothold for deeper network breaches. These are not isolated issues but part of a broader trend in insecure remote access.</p>
-            <p>Patch management and configuration audits are essential. The update process is straightforward, but many organizations delay applying patches. Remote management should be restricted to known IPs and only used when absolutely necessary.</p>
-            <p>MikroTik’s detection mechanism can flag suspicious changes, but it’s not a substitute for proactive security. Teams must audit configurations regularly and ensure all systems are up to date. Security is a continuous process, not a one-time task.</p>
-            <p class="archive-tags">Cybersecurity ZeroTrust PatchManagement NetworkSecurity AIsecurity Compliance</p>
           </article>
           <article class="archive-item" id="post-1797">
             <p class="archive-meta"><time datetime="2026-09-08">8 September 2026</time> &middot; on Cybersecurity Dive</p>
@@ -623,32 +358,6 @@
             <p>As AI and automation grow, so do the risks. Tools like PEEP remind us that security must evolve beyond perimeter defenses. We need to focus on zero trust, continuous monitoring, and strict control over how extensions and scripts interact with the system. Stay vigilant.</p>
             <p class="archive-tags">Cybersecurity ZeroTrust BrowserSecurity ThreatIntel MalwareDefense AIsecurity</p>
           </article>
-          <article class="archive-item" id="post-1253">
-            <p class="archive-meta"><time datetime="2026-09-08">8 September 2026</time> &middot; on The Hacker News</p>
-            <h3>Why Are So Many Security Professionals Keeping Breaches Quiet?</h3>
-            <p>More than half of IT and cybersecurity pros who faced a breach in the past year say they were told to keep it quiet, even when it should have been reported. This trend shows no sign of slowing. The pressure to hide breaches is growing, and it&#x27;s affecting how we handle security operations and incident response.</p>
-            <p>Urgency is key. When a breach happens, the clock starts ticking. But if there&#x27;s a culture of silence, teams may delay reporting, giving attackers more time to move laterally. This impacts how we respond and how much damage is done.</p>
-            <p>Security leaders must build no-blame cultures that reward speed and transparency. Prevention is still the best strategy, but when breaches happen, we need to act fast. That means clear policies, trained teams, and a mindset where reporting is encouraged, not punished.</p>
-            <p>This isn&#x27;t just about compliance. It&#x27;s about protecting the business and customers. Silence can cost more than disclosure. We need to break the cycle of hiding breaches and focus on proactive, open security practices.</p>
-            <p class="archive-tags">Cybersecurity IncidentResponse SecurityCulture ZeroTrust AIsecurity RiskManagement</p>
-          </article>
-          <article class="archive-item" id="post-1247">
-            <p class="archive-meta"><time datetime="2026-09-08">8 September 2026</time> &middot; on The Hacker News</p>
-            <h3>Adobe Patches Magento Zero-Day Exploited to Deploy Rust Backdoor and PHP Web Shell</h3>
-            <p>Adobe just patched a critical zero-day in Magento that&#x27;s being actively exploited. The flaw, CVE-2026-75650, allows remote code execution via PHP code injection in the template system. Attackers are using it to deploy Rust backdoors and PHP web shells. It&#x27;s a stark reminder of how quickly these vulnerabilities can be weaponized.</p>
-            <p>We&#x27;re seeing real-world impact with some systems compromised within hours of the first reported exploit. The patch is essential but not enough. Organizations must also rotate encryption keys and apply updates immediately. This isn&#x27;t just about fixing code—it&#x27;s about securing the entire ecosystem.</p>
-            <p>Supply chain security is more critical than ever. When a platform like Magento is targeted, it affects countless downstream systems. Proactive monitoring and rapid response are non-negotiable. Teams need to be prepared for the next zero-day, not just react after the fact.</p>
-            <p class="archive-tags">Cybersecurity ZeroDay SupplyChainSecurity PatchManagement RiskMitigation IncidentResponse</p>
-          </article>
-          <article class="archive-item" id="post-1241">
-            <p class="archive-meta"><time datetime="2026-09-08">8 September 2026</time> &middot; on The Hacker News</p>
-            <h3>FreeIPA Flaw Chain Lets Anonymous Clients Create Reusable Administrator Credentials</h3>
-            <p>The FreeIPA flaw chain is a stark reminder of how critical patch management is in infrastructure defense. A combination of two issues allows an anonymous client to create administrator credentials without logging in. This isn&#x27;t just a theoretical risk—it&#x27;s a real path to privileged access.</p>
-            <p>The first flaw in FreeIPA lets an unauthenticated client create a Kerberos identity of its choosing. The second flaw in 389 Directory Server allows that identity to be written without proper ownership checks. Both must be patched to close the chain.</p>
-            <p>Red Hat has fixed their side, but the directory-server issue remains a risk if deployed with the default ACI. This shows how dependencies can introduce vulnerabilities. Teams must audit their configurations and ensure all components are up to date.</p>
-            <p>The takeaway is clear: patching isn&#x27;t optional. Access control rules must be strict, and infrastructure must be segmented. Without these, even well-intentioned systems can become entry points.</p>
-            <p class="archive-tags">Cybersecurity ZeroTrust InfrastructureSecurity PatchManagement AccessControl IdentityManagement</p>
-          </article>
           <article class="archive-item" id="post-1229">
             <p class="archive-meta"><time datetime="2026-09-08">8 September 2026</time> &middot; on The Hacker News</p>
             <h3>What It Took to Reach 1 Billion Build Manifests</h3>
@@ -657,14 +366,6 @@
             <p>AI isn’t replacing human judgment—it’s handling the operational toil that used to slow us down. Reconciler bots make decisions on things like backporting CVE fixes or updating dependencies, while still relying on verifiable tools to avoid mistakes. The system learns from past successes and becomes more efficient over time. This is how we keep up with the pace of modern threats.</p>
             <p>For those in AI security, governance, or orchestration, this is a case study in building infrastructure that evolves with the threat landscape. It’s about designing systems that don’t just respond to change but anticipate it. The future of secure, scalable automation isn’t about speed alone—it’s about control, agility, and the ability to self-correct.</p>
             <p class="archive-tags">AIsecurity AgenticAI ZeroTrust LLMsecurity DevSecOps CyberResilience</p>
-          </article>
-          <article class="archive-item" id="post-1223">
-            <p class="archive-meta"><time datetime="2026-09-08">8 September 2026</time> &middot; on The Hacker News</p>
-            <h3>WeChat Zero-Click Worm Took Over Accounts on iPhone and Android via Incoming Calls</h3>
-            <p>The recent discovery of a zero-click exploit targeting WeChat highlights the evolving threat landscape in messaging platforms. The attack leverages an incoming call to take over a user&#x27;s account without any interaction, making it particularly stealthy. This method underscores the need for continuous vigilance and proactive defense strategies.</p>
-            <p>The exploit&#x27;s ability to spread through contacts demonstrates how trust mechanisms can be weaponized. While Tencent has patched the vulnerability, the lack of public advisory and full disclosure raises questions about transparency. Users should remain cautious and ensure their apps are up to date.</p>
-            <p>AI played a crucial role in identifying and exploiting this flaw, showcasing its potential in both offensive and defensive cybersecurity. As agentic AI and LLMs become more integrated, securing these systems will be paramount. The incident serves as a reminder that even the most trusted platforms are not immune to sophisticated attacks.</p>
-            <p class="archive-tags">ZeroClick AIsecurity CyberDefense WeChat ThreatIntel ZeroTrust</p>
           </article>
           <article class="archive-item" id="post-2692">
             <p class="archive-meta"><time datetime="2026-08-27">27 August 2026</time> &middot; on Wiz</p>

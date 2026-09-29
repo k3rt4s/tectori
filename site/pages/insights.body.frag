@@ -10,7 +10,7 @@
       <section class="content-section" aria-labelledby="weeks-title">
         <div class="section-heading">
           <p class="eyebrow">Archive</p>
-          <h2 id="weeks-title">343 entries, a week at a time.</h2>
+          <h2 id="weeks-title">214 entries, a week at a time.</h2>
         </div>
         <div class="faq-list">
           <article class="archive-item">
@@ -19,19 +19,19 @@
             <p>Including BBC, Bishop Fox, Ctrl Alt Intel, DIVD, and 9 more.</p>
           </article>
           <article class="archive-item">
-            <p class="archive-meta">126 entries &middot; 43 publications</p>
+            <p class="archive-meta">72 entries &middot; 28 publications</p>
             <h3><a class="text-link" href="/insights-2026-w39">21 to 27 September 2026</a></h3>
-            <p>Including 7AI, Accomplish, Aikido Security, Air Security, and 39 more.</p>
+            <p>Including 7AI, Aikido Security, Air Security, Anthropic, and 24 more.</p>
           </article>
           <article class="archive-item">
-            <p class="archive-meta">107 entries &middot; 34 publications</p>
+            <p class="archive-meta">66 entries &middot; 26 publications</p>
             <h3><a class="text-link" href="/insights-2026-w38">14 to 20 September 2026</a></h3>
-            <p>Including Acronis, Akto, Andon Labs, Anthropic, and 30 more.</p>
+            <p>Including Akto, Andon Labs, Anthropic, Bitsight, and 22 more.</p>
           </article>
           <article class="archive-item">
-            <p class="archive-meta">88 entries &middot; 37 publications</p>
+            <p class="archive-meta">54 entries &middot; 26 publications</p>
             <h3><a class="text-link" href="/insights-2026-w37">7 to 13 September 2026</a></h3>
-            <p>Including Aikido Security, Am I Being Pwned, Anil Madhavapeddy, BrightTALK, and 33 more.</p>
+            <p>Including Aikido Security, Am I Being Pwned, Anil Madhavapeddy, BrightTALK, and 22 more.</p>
           </article>
           <article class="archive-item">
             <p class="archive-meta">8 entries &middot; 8 publications</p>
