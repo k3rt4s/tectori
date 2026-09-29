@@ -4,8 +4,12 @@ Tectori website changes are recorded here.
 
 ## 2026-09-29
 
+- INSIGHTS: the section is live and indexable. Every page declares
+  `index, follow` with full snippet and preview limits, all six are in
+  `sitemap.xml` and `llms.txt`, and `robots.txt` already allowed GPTBot,
+  ClaudeBot and Google-Extended, so the AI crawlers may read it.
 - INSIGHTS: added the Insights section, a hub at `/insights` and one
-  archive page per ISO week, carrying 175 short takes on security and
+  archive page per ISO week, carrying 153 short takes on security and
   AI reporting drawn from the newsletter_linkedin post database. The
   pages are generated source: `newsletter_linkedin export-site` in the
   personal-automation repo writes the fragments and their `pages.json`
@@ -13,9 +17,8 @@ Tectori website changes are recorded here.
   page, so `check_source_only_build.py` still rebuilds from git alone.
   Each post credits its publication by name with no outbound link,
   because `site.json` declares a closed egress allowlist. Linked from
-  `/resources`; added `.archive-item`, `.archive-meta` and
-  `.archive-tags` to the stylesheet and bumped its cache-buster to
-  `v=20260929`; the page count in `build_site.py` is now read from
+  `/resources`; added `.archive-item` and `.archive-meta` to the
+  stylesheet and bumped its cache-buster to `v=20260929`; the page count in `build_site.py` is now read from
   `pages.json` rather than written into the message.
 
 - CONTACT-AJAX: the contact form now submits with JavaScript over
