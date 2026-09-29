@@ -2,6 +2,19 @@
 
 Tectori website changes are recorded here.
 
+## 2026-09-29
+
+- Added `ARCHITECTURE.md`: Mermaid diagrams for the build and check
+  pipeline, the verify-and-deploy workflow, the runtime egress to
+  Cloudflare, Scarf and Formspree, and the trust boundaries each edge
+  crosses. Every edge was verified against `scripts/`,
+  `.github/workflows/verify.yml`, `PERMISSIONS.md` and
+  `site/content/site.json` before it was drawn. The generated status
+  block from the same standard was deliberately not added: rendering it
+  against the work board emits board item titles, and the board was moved
+  out of this public repo on 2026-09-24, so publishing them needs an
+  explicit decision.
+
 ## 2026-09-24
 
 - Removed the board and its archive from this repository's published
