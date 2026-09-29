@@ -842,7 +842,7 @@ def main():
             identical, differing = compare(tmp_dir, written)
         finally:
             shutil.rmtree(tmp_dir, ignore_errors=True)
-        print(f"Files compared: {len(written)}, the 24 modelled pages, login.html, CNAME, robots.txt, sitemap.xml, llms.txt, and the static files")
+        print(f"Files compared: {len(written)}, the {len(load_pages())} modelled pages, login.html, CNAME, robots.txt, sitemap.xml, llms.txt, and the static files")
         print(f"Identical to docs/: {identical}")
         print(f"Differing from docs/: {len(differing)}")
         for name, reason in differing:
@@ -856,7 +856,7 @@ def main():
         sys.exit(0 if not differing and not stale else 1)
     else:
         written = build(args.out)
-        print(f"Wrote {len(written)} files to {args.out}, the 24 modelled pages, login.html, and CNAME, robots.txt, sitemap.xml and llms.txt")
+        print(f"Wrote {len(written)} files to {args.out}, the {len(load_pages())} modelled pages, login.html, and CNAME, robots.txt, sitemap.xml and llms.txt")
         rendered, copied = copy_static_files(args.out)
         print(
             f"Rendered {len(rendered)} static files from site/static and copied "

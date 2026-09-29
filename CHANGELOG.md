@@ -4,6 +4,20 @@ Tectori website changes are recorded here.
 
 ## 2026-09-29
 
+- INSIGHTS: added the Insights section, a hub at `/insights` and one
+  archive page per ISO week, carrying 365 short takes on security and
+  AI reporting drawn from the newsletter_linkedin post database. The
+  pages are generated source: `newsletter_linkedin export-site` in the
+  personal-automation repo writes the fragments and their `pages.json`
+  entries, and the site build then treats them like any hand-written
+  page, so `check_source_only_build.py` still rebuilds from git alone.
+  Each post credits its publication by name with no outbound link,
+  because `site.json` declares a closed egress allowlist. Linked from
+  `/resources`; added `.archive-item`, `.archive-meta` and
+  `.archive-tags` to the stylesheet and bumped its cache-buster to
+  `v=20260929`; the page count in `build_site.py` is now read from
+  `pages.json` rather than written into the message.
+
 - CONTACT-AJAX: the contact form now submits with JavaScript over
   fetch, staying on `/contact` and showing an on-page thank-you
   message on success, or Formspree's error text plus the phone

@@ -44,6 +44,21 @@
         </div>
       </section>
 
+      <section class="content-section split-section" aria-labelledby="insights-title">
+        <div class="section-heading">
+          <p class="eyebrow">Insights</p>
+          <h2 id="insights-title">What we read this week, and what it meant.</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Tectori reads the security and AI press every day and writes a short, plain take on what each story means for a regulated organization. The takes are collected a week at a time, newest first, each one crediting the publication that reported it.
+          </p>
+          <p>
+            Start at <a class="text-link" href="/insights">Insights</a> and pick a week.
+          </p>
+        </div>
+      </section>
+
       <section class="content-section" aria-labelledby="glossary-title">
         <div class="section-heading">
           <p class="eyebrow">Glossary</p>
