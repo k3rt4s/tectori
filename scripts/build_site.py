@@ -31,8 +31,9 @@ DESKTOP_NAV_ITEMS = [
     ("audit_ready_it", "/audit-ready-it", "Audit-ready IT"),
     ("ai_governance", "/ai-governance", "AI governance"),
     ("case_study", "/case-study", "Case study"),
-    ("about", "/about", "About"),
     ("how_we_work", "/how-we-work", "How we work"),
+    ("insights", "/insights", "Insights"),
+    ("about", "/about", "About"),
 ]
 
 # Mobile nav order, shared by every page. "faq" is only reachable from the
@@ -46,8 +47,9 @@ MOBILE_NAV_ITEMS = [
     ("audit_ready_it", "/audit-ready-it", "Audit-ready IT"),
     ("ai_governance", "/ai-governance", "AI governance"),
     ("case_study", "/case-study", "Case study"),
-    ("about", "/about", "About"),
     ("how_we_work", "/how-we-work", "How we work"),
+    ("insights", "/insights", "Insights"),
+    ("about", "/about", "About"),
     ("faq", "/faq", "FAQ"),
 ]
 

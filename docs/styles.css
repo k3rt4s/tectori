@@ -241,9 +241,18 @@ a, .button, summary, .service-card, .path-card, .solution-card, .flow-step, inpu
 .footer-contact { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
 .tracking-pixel { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
-@media (max-width: 1180px) {
+/* Nine items is more than .desktop-nav's flex row (gap: clamp(16px, 1.8vw,
+   30px), no wrap) has ever fit without crowding the Contact button; the
+   eight-item bar already overflowed near 1366px. Collapse to the hamburger
+   menu earlier than the other 1180px breakpoints below, instead of
+   shrinking the row to fit, since the hamburger is already a working
+   pattern at every narrower width. */
+@media (max-width: 1400px) {
   .desktop-nav { display: none; }
   .nav-menu { display: block; }
+}
+
+@media (max-width: 1180px) {
   .solution-grid, .buyer-path-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .flow-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .portfolio-item { grid-template-columns: 120px 1fr; }
