@@ -2605,7 +2605,12 @@ def check_contact_form(pages: list[Path], docs_root: Path) -> bool:
         if host is not None and host != own_host:
             continue
         script_path = src.split("?", 1)[0].split("#", 1)[0].lstrip("/")
-        candidate = docs_root / script_path
+        candidate = (docs_root / script_path).resolve()
+        # A src of "../something" resolves outside the published tree, so
+        # refuse to read it rather than let a page point this check at any
+        # file on the machine running it.
+        if not candidate.is_relative_to(docs_root.resolve()):
+            continue
         if not candidate.is_file():
             continue
         if CONTACT_FORM_HANDLER_ID in candidate.read_text(encoding="utf-8"):
