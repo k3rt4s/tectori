@@ -10,6 +10,7 @@
   const errorRegion = document.querySelector("#contact-form-error");
   const errorText = document.querySelector("#contact-form-error-text");
 
+  let submitting = false;
   const GENERIC_ERROR =
     "Something went wrong sending your message. Please try again.";
 
@@ -56,6 +57,11 @@
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
+    // Disabling the button is not enough on its own: a return keypress in a
+    // field can fire submit again before the browser settles the disabled
+    // state, and Formspree would record the message twice.
+    if (submitting) return;
+    submitting = true;
     hideErrorRegion();
     if (submitButton) submitButton.disabled = true;
 
@@ -76,6 +82,7 @@
         showErrorRegion(GENERIC_ERROR);
       })
       .finally(() => {
+        submitting = false;
         if (submitButton) submitButton.disabled = false;
       });
   });
