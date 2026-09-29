@@ -6,11 +6,13 @@
   if (!form) return;
 
   const submitButton = form.querySelector('button[type="submit"]');
+  let idleLabel = null;
   const successRegion = document.querySelector("#contact-form-success");
   const errorRegion = document.querySelector("#contact-form-error");
   const errorText = document.querySelector("#contact-form-error-text");
 
   let submitting = false;
+  const SENDING_LABEL = "Sending…";
   const GENERIC_ERROR =
     "Something went wrong sending your message. Please try again.";
 
@@ -57,13 +59,23 @@
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    // Disabling the button is not enough on its own: a return keypress in a
-    // field can fire submit again before the browser settles the disabled
-    // state, and Formspree would record the message twice.
+    // The submitting flag, not the button's state, is what stops a second
+    // send: a return keypress in a field can fire submit again before the
+    // browser settles a disabled button, and Formspree would record the
+    // message twice.
     if (submitting) return;
     submitting = true;
     hideErrorRegion();
-    if (submitButton) submitButton.disabled = true;
+    // aria-disabled rather than disabled. The visitor just activated this
+    // button, so it holds focus; disabling it drops focus to the document
+    // with nothing announced, and the label never changes, so a screen
+    // reader user gets silence for as long as Formspree takes to answer.
+    // Changing the label inside the button reports the state instead.
+    if (submitButton) {
+      submitButton.setAttribute("aria-disabled", "true");
+      idleLabel = submitButton.textContent;
+      submitButton.textContent = SENDING_LABEL;
+    }
 
     const data = new FormData(form);
     fetch(form.action, {
@@ -83,7 +95,10 @@
       })
       .finally(() => {
         submitting = false;
-        if (submitButton) submitButton.disabled = false;
+        if (submitButton) {
+          submitButton.removeAttribute("aria-disabled");
+          if (idleLabel !== null) submitButton.textContent = idleLabel;
+        }
       });
   });
 })();

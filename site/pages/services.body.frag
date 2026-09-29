@@ -237,15 +237,19 @@
       </section>
       <section class="cta-band">
         <div class="cta-inner">
-          <h2>
-            If your technology must satisfy examiners and still move the
-            business forward, let's talk.
-          </h2>
-          <a class="button primary" href="/contact">Let's talk</a>
-          <p>
-            <a class="text-link" href="/service-agentic-ai"
-              >Read the full agentic AI orchestration page</a
-            >
-          </p>
+          <div>
+            <h2>
+              If your technology must satisfy examiners and still move the
+              business forward, let's talk.
+            </h2>
+            <p>
+              <a class="text-link" href="/service-agentic-ai"
+                >Read the full agentic AI orchestration page</a
+              >
+            </p>
+          </div>
+          <div class="action-row">
+            <a class="button primary" href="/contact">Let's talk</a>
+          </div>
         </div>
       </section>

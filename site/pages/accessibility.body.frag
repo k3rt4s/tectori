@@ -10,8 +10,9 @@
           <h2 id="target-title">The target</h2>
           <p>
             Tectori's target for this website is Web Content Accessibility
-            Guidelines (WCAG) 2.1 level AA. The site is reviewed against that
-            target as content changes.
+            Guidelines (WCAG) 2.2 level AA. The site is reviewed against that
+            target as content changes, and in full at least once a quarter.
+            The last full review was September 29, 2026.
           </p>
           <h2>What the site does today</h2>
           <p>

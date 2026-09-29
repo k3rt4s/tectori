@@ -26,12 +26,22 @@ h3 { font-size: 1.25rem; }
 :focus-visible { outline: 3px solid var(--charcoal); outline-offset: 3px; }
 .utility-bar :focus-visible, .dark-band :focus-visible, .cta-band :focus-visible, .page-hero :focus-visible, .hero :focus-visible, .login-brand :focus-visible { outline-color: var(--gold); }
 
+/* Interactive state changes ease instead of snapping. Only the properties
+   the hover and focus rules below actually change are listed, so nothing
+   animates that was not already moving. The reduced-motion block turns all
+   of it off, along with the smooth scrolling declared on html. */
+a, .button, summary, .service-card, .path-card, .solution-card, .flow-step, input, textarea, select { transition: color 140ms ease, background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}
+
 .skip-link { position: fixed; top: 10px; left: 10px; z-index: 100; padding: 10px 14px; background: var(--charcoal); color: var(--white); transform: translateY(-160%); }
 .skip-link:focus { transform: translateY(0); }
 
 .utility-bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 34px; padding: 6px clamp(20px, 4vw, 72px); background: var(--charcoal); color: rgba(254, 255, 254, 0.76); font-size: 0.75rem; font-weight: 650; }
 .utility-bar div { display: flex; gap: 22px; }
-.utility-bar a { text-decoration: none; }
+.utility-bar a { padding: 4px 0; text-decoration: none; }
 .utility-bar a:hover { color: var(--gold); }
 
 .site-header { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 28px; min-height: 78px; padding: 12px clamp(20px, 4vw, 72px); border-bottom: 1px solid var(--line); background: rgba(254, 255, 254, 0.96); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
@@ -39,8 +49,9 @@ h3 { font-size: 1.25rem; }
 .brand img { display: block; width: 178px; height: auto; }
 .desktop-nav { display: flex; align-items: center; gap: clamp(16px, 1.8vw, 30px); font-size: 0.91rem; font-weight: 750; }
 .desktop-nav a, .nav-menu a { text-decoration: none; }
+.desktop-nav a { display: inline-flex; align-items: center; min-height: 24px; padding: 9px 0; }
 .desktop-nav a:hover, .desktop-nav a:focus-visible, .desktop-nav a[aria-current="page"], .nav-menu a:hover, .nav-menu a[aria-current="page"] { color: var(--orange-text); }
-.desktop-nav .nav-contact { min-height: 42px; padding: 9px 15px; border: 1px solid var(--orange); border-radius: 6px; color: var(--charcoal); }
+.desktop-nav .nav-contact { min-height: 42px; padding: 9px 15px; border: 1px solid var(--orange-text); border-radius: 6px; color: var(--charcoal); }
 .desktop-nav .nav-contact:hover { background: var(--orange); color: var(--charcoal); }
 .nav-menu { position: relative; display: none; }
 .nav-menu summary { min-width: 76px; padding: 9px 13px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); cursor: pointer; font-weight: 750; list-style: none; text-align: center; }
@@ -66,7 +77,8 @@ h3 { font-size: 1.25rem; }
 .button.primary { background: var(--orange); color: var(--charcoal); }
 .button.secondary, .button.light-outline { border-color: rgba(254, 255, 254, 0.48); color: var(--white); }
 .button.dark { background: var(--charcoal); color: var(--white); }
-.button.outline { border-color: var(--orange); color: var(--charcoal); }
+.button.outline { border-color: var(--orange-text); color: var(--charcoal); }
+.button[aria-disabled="true"] { opacity: 0.68; cursor: progress; }
 .text-link { color: var(--charcoal); font-weight: 800; text-decoration-color: var(--orange); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 
 .proof-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 1px solid var(--line); background: var(--white); }

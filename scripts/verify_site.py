@@ -1390,8 +1390,13 @@ def check_colour_contrast(docs_root: Path) -> bool:
     """Every colour the stylesheet paints text in reaches the ratio the site targets.
 
     The accessibility statement says the colours are chosen for contrast and
-    names WCAG 2.1 level AA as the target, which is a number: 4.5 to 1 for
-    ordinary text. Nothing computed it, and a palette is one line to edit. On
+    names a WCAG level as the target, which is a number: at AA, 4.5 to 1 for
+    ordinary text. The level is read out of the statement rather than fixed
+    here, so raising the target raises this check with it; it moved from 2.1
+    to 2.2 on 2026-09-29 and the ratio was unchanged. Text only: the 3 to 1
+    floor SC 1.4.11 puts on a control's own boundary is not computed here,
+    and an audit that day found the header Contact pill's border sitting at
+    2.70 with every text pair passing. Nothing computed it, and a palette is one line to edit. On
     2026-09-12 the body text on the gold band sat at 4.40, so the statement had
     been promising a standard the tree missed, and every other check passed
     because a colour that is too light is still a valid page that builds,
