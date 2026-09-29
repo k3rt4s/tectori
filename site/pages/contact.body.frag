@@ -21,7 +21,7 @@
               >Call <span class="nowrap">{{PHONE_DISPLAY}}</span></a
             >
           </div>
-          <form class="contact-form" action="{{FORMSPREE_ENDPOINT}}" method="POST">
+          <form id="contact-form" class="contact-form" action="{{FORMSPREE_ENDPOINT}}" method="POST">
             <input type="hidden" name="_next" value="{{SITE_URL}}/thank-you">
             <div class="form-field">
               <label for="contact-name">Name</label>
@@ -44,6 +44,24 @@
             </p>
             <button class="button primary" type="submit">Send message</button>
           </form>
+          <div class="form-message" id="contact-form-success" role="status" aria-live="polite" tabindex="-1" hidden>
+            <p>
+              Your message reached Tectori. It goes to Tectori through
+              Formspree and is used to respond to your inquiry. If the matter
+              is active or urgent, call
+              <a href="{{PHONE_TEL_URI}}"><span class="nowrap">{{PHONE_DISPLAY}}</span></a>
+              rather than waiting on a reply.
+            </p>
+          </div>
+          <div class="form-message" id="contact-form-error" role="alert" aria-live="assertive" tabindex="-1" hidden>
+            <p id="contact-form-error-text"></p>
+            <p>
+              If this keeps happening, call
+              <a href="{{PHONE_TEL_URI}}"><span class="nowrap">{{PHONE_DISPLAY}}</span></a>
+              instead.
+            </p>
+          </div>
+          <script src="contact-form.js?v=20260929" defer></script>
           <p>Business address: {{POSTAL_ADDRESS}}.</p>
           <p>
             You can also find Tectori on

@@ -636,6 +636,10 @@ REQUIRED_FIELDS = ("name", "email", "message")
 # Formspree discards a submission whose spam trap was filled in. The trap only
 # works while it is invisible, and a visitor who can see it fills it in.
 HONEYPOT_FIELD = "_gotcha"
+# The id the contact form's own submit handler queries for. A script that
+# never mentions it could be loaded on the page and still not be the one that
+# submits this form.
+CONTACT_FORM_HANDLER_ID = "contact-form"
 # A honeypot is invisible to a visitor only if the cascade's winning
 # declarations end in display: none, visibility: hidden, opacity: 0, or a
 # clip-path: inset(50%) or larger, none of which need a position, or an
@@ -2574,6 +2578,46 @@ def check_contact_form(pages: list[Path], docs_root: Path) -> bool:
                 f"{page.name}: _next points at {redirect!r}, which is not a "
                 "page of this site"
             )
+
+    # A visitor with JavaScript stays on this page only if a script here
+    # actually submits the form. Loading some unrelated same-origin script
+    # would pass every other check, so this reads the script's own text
+    # rather than trusting that a <script> tag on the page is the right one.
+    # A third-party or inline script is somebody else's problem to catch, so
+    # this only looks at a same-origin src.
+    own_host = SITE["site_url"].split("://", 1)[1].rstrip("/").lower()
+
+    def script_src_host(src: str) -> str | None:
+        if src.startswith("//"):
+            return src[2:].split("/", 1)[0].lower()
+        scheme_match = re.match(r"^[A-Za-z][A-Za-z0-9+.-]*://([^/]+)", src)
+        return scheme_match.group(1).lower() if scheme_match else None
+
+    handler_found = False
+    scannable = HTML_COMMENT_RE.sub(" ", page.read_text(encoding="utf-8"))
+    for script_attrs in SCRIPT_START_TAG_RE.findall(scannable):
+        src_match = SCRIPT_SRC_ATTR_RE.search(script_attrs)
+        if not src_match:
+            continue
+        raw_src = src_match.group(2) if src_match.group(1) else src_match.group(3)
+        src = html_lib.unescape(raw_src).strip()
+        host = script_src_host(src)
+        if host is not None and host != own_host:
+            continue
+        script_path = src.split("?", 1)[0].split("#", 1)[0].lstrip("/")
+        candidate = docs_root / script_path
+        if not candidate.is_file():
+            continue
+        if CONTACT_FORM_HANDLER_ID in candidate.read_text(encoding="utf-8"):
+            handler_found = True
+            break
+    if not handler_found:
+        problems.append(
+            f"{page.name}: no same-origin script in the tree references "
+            f"{CONTACT_FORM_HANDLER_ID!r}, so nothing submits this form with "
+            "JavaScript and a visitor with it enabled still lands on "
+            "Formspree's own page"
+        )
 
     ok = not problems
     print(
