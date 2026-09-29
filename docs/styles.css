@@ -182,6 +182,13 @@ h3 { font-size: 1.25rem; }
 .faq-item p { max-width: 850px; margin: 13px 0 0; color: var(--muted); font-size: 1.02rem; }
 .faq-item a { color: var(--charcoal); font-weight: 750; text-decoration-color: var(--orange); text-underline-offset: 3px; }
 
+.archive-item { padding: 26px 0; border-top: 1px solid var(--line); }
+.archive-item:last-child { border-bottom: 1px solid var(--line); }
+.archive-item h3 { font-size: 1.35rem; }
+.archive-item p { max-width: 850px; margin: 13px 0 0; color: var(--muted); font-size: 1.02rem; }
+.archive-item a { color: var(--charcoal); font-weight: 750; text-decoration-color: var(--orange); text-underline-offset: 3px; }
+.archive-meta { margin: 0 0 4px; color: var(--muted); font-size: 0.92rem; letter-spacing: 0.02em; }
+
 .login-page { display: grid; min-height: 100vh; grid-template-columns: minmax(0, 0.9fr) minmax(520px, 0.7fr); background: var(--charcoal); }
 .login-brand { position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh; padding: 44px clamp(32px, 6vw, 100px); overflow: hidden; background: var(--charcoal); color: var(--white); }
 .login-brand::after { position: absolute; right: -110px; bottom: -130px; width: 470px; height: 470px; border: 90px solid var(--orange); border-radius: 50%; content: ""; opacity: 0.85; }
