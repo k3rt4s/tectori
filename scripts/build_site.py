@@ -2,12 +2,14 @@
 """Render the Tectori site's generated pages from site/ templates and content model into an output directory."""
 
 import argparse
+import datetime
 import json
 import os
 import re
 import shutil
 import sys
 import tempfile
+from email.utils import format_datetime
 from pathlib import Path
 
 CRLF = chr(13) + chr(10)
@@ -379,6 +381,12 @@ def render_page(entry, cache):
         out.append(('    <link rel="canonical" href="' + attr(canonical) + '">' + CRLF).encode("utf-8"))
     out.append(('    <link rel="icon" href="' + attr(favicon_href(entry)) + '">' + CRLF).encode("utf-8"))
     out.append(('    <link rel="stylesheet" href="' + attr(entry["stylesheet_href"]) + '">' + CRLF).encode("utf-8"))
+    if entry.get("slug") == "insights":
+        feed_href = site_absolute("/insights.xml")
+        out.append((
+            '    <link rel="alternate" type="application/rss+xml" title="'
+            + attr(SITE["brand_name"] + " Insights") + '" href="' + attr(feed_href) + '">' + CRLF
+        ).encode("utf-8"))
     if entry["jsonld_fragment"]:
         out.append(load_fragment(entry["jsonld_fragment"]))
     out.append(("  </head>" + CRLF).encode("utf-8"))
@@ -580,6 +588,13 @@ def load_public_pages():
         return json.loads(f.read().decode("utf-8"))
 
 
+def load_insights_feed():
+    """Return the Insights feed records that newsletter_linkedin export-site writes, newest first."""
+    path = os.path.join(SITE_DIR, "content", "insights_feed.json")
+    with open(path, "rb") as f:
+        return json.loads(f.read().decode("utf-8"))
+
+
 STATIC_PAGE_DESCRIPTION = re.compile(
     rb'name="description"\s*content="(.*?)"', re.DOTALL
 )
@@ -703,6 +718,61 @@ def render_llms(public_pages, entries, verbatim):
     return (CRLF.join(lines) + CRLF).encode("utf-8")
 
 
+def render_insights_feed(feed_records):
+    """Return insights.xml, an RSS 2.0 feed of every published Insights entry, newest first.
+
+    No XML namespace is declared, unlike sitemap.xml's, so nothing new goes in
+    site.json's allowed_external_hosts. Items credit the publication by name in
+    plain text and link only to the entry's own on-site anchor, never off-site,
+    per BARE_HOST_RE in verify_site.py and the closed egress allowlist.
+    """
+    brand = SITE["brand_name"]
+    site_url = SITE["site_url"]
+    # The newest record's date, not wall-clock time: build_site.py --check and
+    # check_source_only_build.py both require a build from the same tracked
+    # source to reproduce the same bytes, which "now" never does.
+    newest_date = feed_records[0]["date"] if feed_records else "1970-01-01"
+    build_date = format_datetime(
+        datetime.datetime.strptime(newest_date, "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc),
+        usegmt=True,
+    )
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        "<rss version=\"2.0\">",
+        "  <channel>",
+        f"    <title>{text(brand)} Insights</title>",
+        f"    <link>{site_url}/insights</link>",
+        "    <description>"
+        + text("Short, plain takes on the security and AI stories Tectori read and responded to.")
+        + "</description>",
+        "    <language>en-us</language>",
+        f"    <lastBuildDate>{build_date}</lastBuildDate>",
+    ]
+    for record in feed_records:
+        item_url = f'{site_url}/insights-{record["week"]}#{record["anchor"]}'
+        pub_date = format_datetime(
+            datetime.datetime.strptime(record["date"], "%Y-%m-%d").replace(
+                tzinfo=datetime.timezone.utc),
+            usegmt=True,
+        )
+        credit = record["publisher"] or "an unnamed source"
+        body = " ".join(record["paragraphs"])
+        lines.extend([
+            "    <item>",
+            f"      <title>{text(record['title'])}</title>",
+            f"      <link>{item_url}</link>",
+            f'      <guid isPermaLink="true">{item_url}</guid>',
+            f"      <pubDate>{pub_date}</pubDate>",
+            "      <description>" + text("On " + credit + ": " + body) + "</description>",
+            "    </item>",
+        ])
+    lines.extend([
+        "  </channel>",
+        "</rss>",
+    ])
+    return (CRLF.join(lines) + CRLF).encode("utf-8")
+
+
 def build(out_dir):
     entries = load_pages()
     validate(entries)
@@ -726,11 +796,13 @@ def build(out_dir):
     # page descriptions. Generating them is what makes the domain a one value
     # change and what stops llms.txt drifting from the pages it describes.
     public_pages = load_public_pages()
+    feed_records = load_insights_feed()
     for name, data in (
         ("CNAME", render_cname()),
         ("robots.txt", render_robots()),
         ("sitemap.xml", render_sitemap(public_pages)),
         ("llms.txt", render_llms(public_pages, entries, verbatim)),
+        ("insights.xml", render_insights_feed(feed_records)),
     ):
         with open(os.path.join(out_dir, name), "wb") as f:
             f.write(data)

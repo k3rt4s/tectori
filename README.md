@@ -63,7 +63,8 @@ against it with the same result it gives against the live site.
   without each check's own output.
 - `site/` holds the content model and chrome templates, and
   `scripts/build_site.py` renders them into the 30 generated pages under
-  `docs/`, along with `CNAME`, `robots.txt`, `sitemap.xml` and `llms.txt`.
+  `docs/`, along with `CNAME`, `robots.txt`, `sitemap.xml`, `llms.txt` and
+  `insights.xml`.
   `docs/` is that build's output, so `--check` reproduces it byte for
   byte. Run with `--out <dir>` to write a complete deployable tree, pages plus
   every other file `docs/` carries. `site/README.md` explains the content model
@@ -181,7 +182,7 @@ against it with the same result it gives against the live site.
   visitor gets: the others read the tree about to be deployed, and what a
   visitor is served can still lag a deploy that passed them. It also fetches
   the extensionless path of every page, because a host that serves files
-  literally returns all 50 files correctly and 404s on every link on every
+  literally returns all 51 files correctly and 404s on every link on every
   page. It needs the network, so it is not one of the fifteen.
 - `PERMISSIONS.md` lists everything the site needs to build, deploy, and
   serve: runtime, filesystem paths, every outbound host, the operator
