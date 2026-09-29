@@ -188,7 +188,6 @@ h3 { font-size: 1.25rem; }
 .archive-item p { max-width: 850px; margin: 13px 0 0; color: var(--muted); font-size: 1.02rem; }
 .archive-item a { color: var(--charcoal); font-weight: 750; text-decoration-color: var(--orange); text-underline-offset: 3px; }
 .archive-meta { margin: 0 0 4px; color: var(--muted); font-size: 0.92rem; letter-spacing: 0.02em; }
-.archive-tags { color: var(--muted); font-size: 0.88rem; letter-spacing: 0.03em; }
 
 .login-page { display: grid; min-height: 100vh; grid-template-columns: minmax(0, 0.9fr) minmax(520px, 0.7fr); background: var(--charcoal); }
 .login-brand { position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh; padding: 44px clamp(32px, 6vw, 100px); overflow: hidden; background: var(--charcoal); color: var(--white); }

@@ -10,33 +10,33 @@
       <section class="content-section" aria-labelledby="weeks-title">
         <div class="section-heading">
           <p class="eyebrow">Archive</p>
-          <h2 id="weeks-title">214 entries, a week at a time.</h2>
+          <h2 id="weeks-title">175 entries, a week at a time.</h2>
         </div>
         <div class="faq-list">
           <article class="archive-item">
-            <p class="archive-meta">14 entries &middot; 13 publications</p>
+            <p class="archive-meta">8 entries &middot; 7 publications</p>
             <h3><a class="text-link" href="/insights-2026-w40">28 September to 4 October 2026</a></h3>
-            <p>Including BBC, Bishop Fox, Ctrl Alt Intel, DIVD, and 9 more.</p>
+            <p>Including Bishop Fox, Inoti, TechTarget, The Daily Star, and 3 more.</p>
           </article>
           <article class="archive-item">
-            <p class="archive-meta">72 entries &middot; 28 publications</p>
+            <p class="archive-meta">60 entries &middot; 26 publications</p>
             <h3><a class="text-link" href="/insights-2026-w39">21 to 27 September 2026</a></h3>
-            <p>Including 7AI, Aikido Security, Air Security, Anthropic, and 24 more.</p>
+            <p>Including 7AI, Aikido Security, Air Security, Anthropic, and 22 more.</p>
           </article>
           <article class="archive-item">
-            <p class="archive-meta">66 entries &middot; 26 publications</p>
+            <p class="archive-meta">55 entries &middot; 23 publications</p>
             <h3><a class="text-link" href="/insights-2026-w38">14 to 20 September 2026</a></h3>
-            <p>Including Akto, Andon Labs, Anthropic, Bitsight, and 22 more.</p>
+            <p>Including Akto, Bryan Cantrill, Cisco Talos, Cloud Security Alliance, and 19 more.</p>
           </article>
           <article class="archive-item">
-            <p class="archive-meta">54 entries &middot; 26 publications</p>
+            <p class="archive-meta">46 entries &middot; 21 publications</p>
             <h3><a class="text-link" href="/insights-2026-w37">7 to 13 September 2026</a></h3>
-            <p>Including Aikido Security, Am I Being Pwned, Anil Madhavapeddy, BrightTALK, and 22 more.</p>
+            <p>Including Am I Being Pwned, Anil Madhavapeddy, BruteCat, Cloud Security Alliance, and 17 more.</p>
           </article>
           <article class="archive-item">
-            <p class="archive-meta">8 entries &middot; 8 publications</p>
+            <p class="archive-meta">6 entries &middot; 6 publications</p>
             <h3><a class="text-link" href="/insights-2026-w36">31 August to 6 September 2026</a></h3>
-            <p>Including Air Security, CloudSEK, Gambit Security, GitHub, and 4 more.</p>
+            <p>Including Air Security, CloudSEK, Gambit Security, PC, and 2 more.</p>
           </article>
         </div>
       </section>

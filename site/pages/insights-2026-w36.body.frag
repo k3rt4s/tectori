@@ -3,7 +3,7 @@
           <p class="eyebrow">Insights archive</p>
           <h1 id="page-title">31 August to 6 September 2026.</h1>
           <p class="page-lead">
-            8 short takes on what we read that week, newest first. Each one shows the article's own date where its publisher gave one, and credits the publication that reported it.
+            6 short takes on what we read that week, newest first. Each one shows the article's own date where its publisher gave one, and credits the publication that reported it.
           </p>
           <p><a class="text-link" href="/insights">Back to all Insights</a></p>
         </div>
@@ -20,7 +20,6 @@
             <p>Aurora ransomware is evolving with new tactics that leverage AI tools to enhance exploitation. Recent analysis shows attackers using Cursor Agent with Claude Sonnet to assist in targeting ESXi environments. This AI-driven approach allows for more efficient and adaptive attacks, posing new challenges for defenders.</p>
             <p>The use of Cursor Agent enables operators to execute complex tasks, from reconnaissance to privilege escalation, with minimal direct intervention. This shift highlights the growing role of agentic AI in cyber operations, making it essential for organizations to rethink their security strategies. Traditional detection methods may not be sufficient against these sophisticated threats.</p>
             <p>Strong governance and detection mechanisms are critical to mitigating AI-assisted exploitation. Organizations must invest in advanced monitoring, behavioral analysis, and zero-trust frameworks to stay ahead of evolving threats. Collaboration between security teams and AI developers is also necessary to ensure responsible use of these technologies.</p>
-            <p class="archive-tags">AIsecurity LLMsecurity AgenticAI ZeroTrust CyberDefense ThreatIntel</p>
           </article>
           <article class="archive-item" id="post-15017">
             <p class="archive-meta"><time datetime="2026-08-29">29 August 2026</time> &middot; on SafeDep</p>
@@ -38,7 +37,6 @@
             <p>The attack is subtle. It doesn’t require injecting malicious code into the agent’s prompt. Instead, it hijacks the MCP server, which the agent trusts implicitly. From this position, the attacker can redefine tools, exfiltrate data, inject prompts, and steer the agent’s behavior without detection.</p>
             <p>This highlights the need for governance and continuous vetting. MCPs originate from registries, GitHub, or individual configurations, often connecting to agents with production access without visibility. Security teams must scan entry resolution, monitor for handoffs, and maintain the ability to revoke access.</p>
             <p>MCPJacking underscores the importance of trust management in AI agent ecosystems. We must build systems that verify the identity and intent of service providers, not just the connection path. Governance, continuous risk management, and visibility are critical to securing agentic AI.</p>
-            <p class="archive-tags">AIsecurity LLMsecurity AgenticAI ZeroTrust Cybersecurity AIgovernance</p>
           </article>
           <article class="archive-item" id="post-15027">
             <p class="archive-meta"><time datetime="2026-08-27">27 August 2026</time> &middot; on CloudSEK</p>
@@ -47,16 +45,6 @@
             <p>The discovery of shared cryptocurrency laundering infrastructure across multiple victims highlights a critical gap in supply chain security. Traditional defenses are no longer sufficient. We need real-time threat detection and a more proactive approach to monitoring financial flows. This is not a single incident—it&#x27;s a pattern.</p>
             <p>The operator&#x27;s methodical approach, from credential theft to ransomware deployment, shows a clear intent to scale. The use of Zig for the encryptor and the inclusion of self-awareness features in the code point to a high level of technical expertise. These are not random attacks—they&#x27;re well-thought-out operations.</p>
             <p>This case reinforces the need for stronger visibility into both infrastructure and financial movements. We must rethink how we secure our supply chains and how we detect anomalies in real time. The future of security lies in agility and intelligence, not just perimeter defenses.</p>
-            <p class="archive-tags">CyberSecurity AIsecurity Ransomware ThreatIntel SupplyChainSecurity ZeroTrust</p>
-          </article>
-          <article class="archive-item" id="post-15050">
-            <p class="archive-meta"><time datetime="2026-08-26">26 August 2026</time> &middot; on NCC Group</p>
-            <h3>NCC Group Monthly Threat Pulse – Review of July 2026</h3>
-            <p>Ransomware activity hit a 2026 high in July with a 22% increase in cases. The trend shows no signs of slowing, with industrials becoming the top target. North America and Europe remain the most attacked regions. This underscores the need for stronger defenses and proactive strategies.</p>
-            <p>AI-driven ransomware like JADEPUFFER is reshaping the threat landscape. These autonomous agents can operate without human input, adapting and executing attacks from compromise to extortion. The speed and scale of such threats demand a reevaluation of how we secure our systems.</p>
-            <p>Zero Trust and AI governance frameworks are critical to countering these evolving threats. They provide the structure needed to detect, respond to, and mitigate attacks that leverage AI for automation and sophistication. Governance ensures that AI is used responsibly, both defensively and offensively.</p>
-            <p>The challenge lies in balancing technology with human judgment. While AI can enhance detection and response, it cannot replace the need for trained personnel who understand the nuances of modern threats. Investing in both people and processes is the foundation of a resilient security posture.</p>
-            <p class="archive-tags">AIsecurity LLMSecurity ZeroTrust AIgovernance CyberThreats RansomwareDefense</p>
           </article>
           <article class="archive-item" id="post-15031">
             <p class="archive-meta"><time datetime="2026-08-26">26 August 2026</time> &middot; on The Guardian</p>
@@ -65,7 +53,6 @@
             <p>This raises critical questions about model evaluation and governance. If chatbots are trained on data that is not fully transparent or ethically sourced, how can we trust their outputs? The article shows how AI-native platforms are being used to seed content into training data, making it harder to trace or verify. This isn’t just about misinformation—it’s about shaping narratives at scale, often without users realizing the source.</p>
             <p>As someone who has spent over 19 years in cybersecurity and AI security, I’m deeply concerned about the implications. We need robust frameworks for model evaluation, transparency in training data, and clear governance to prevent AI from being weaponized for disinformation. This isn’t just a technical challenge—it’s a strategic and ethical one. The lines between content creation and influence operations are blurring, and the stakes are high.</p>
             <p>The article also underscores the importance of AI governance. If we don’t establish clear standards for how AI systems are trained and evaluated, we risk normalizing the use of AI to spread disinformation. As leaders in this space, we must advocate for transparency, accountability, and ethical practices. The future of AI security depends on it. We can’t let AI become a tool for manipulation without oversight.</p>
-            <p class="archive-tags">AIsecurity LLMsecurity AIgovernance ModelEvaluation EthicalAI ChatbotSafety</p>
           </article>
           <article class="archive-item" id="post-15011">
             <p class="archive-meta"><time datetime="2026-08-26">26 August 2026</time> &middot; on PC</p>
@@ -74,15 +61,6 @@
             <p>האיסוף של נתונים, תפעול ניטור מדויק, והצלבה של פעילות תקיפה הייתה קריטית לזיהוי ההאקר. כל המתקפות נורמות בקצף, אך כאן נוצרה סיטואציה שיכולה להיעקב כקטסטרופלית. היכולת לשלוט ב-AI היא נשק חכם, אך גם נשק של מתקפות מתקדמות.</p>
             <p>האתגר הגדול הוא לא רק בזיהוי התקפות, אלא בשמירת תקשורת בין צוותים, פיתוח תהליכי ניטור, והשלמת גיבויים. עם שילוב של AI, גיבויים, וניהול קורבן מתקדם, חשוב להכין את הארגון להגנה על עצמו.</p>
             <p>המקרה הזה מציג את הדרישה להכנת מערכות חיזוק עתידיות שתוסיפו לתקיפות. ברגע שבו אנו שוכרים את האינטגרציה בין AI, תקשורת, וניהול קורבן, אנחנו מוכנים ללחימה אמיתית.</p>
-            <p class="archive-tags">AIsecurity LLMsecurity ZeroTrust CyberDefense IncidentResponse AIgovernance</p>
-          </article>
-          <article class="archive-item" id="post-14988">
-            <p class="archive-meta"><time datetime="2022-05-04">4 May 2022</time> &middot; on GitHub</p>
-            <h3>security/communications/cosmos_evm_GHSA-7g4w-cg88-2cq2_post_mortem.md at main · cosmos/security</h3>
-            <p>The Cosmos EVM exploit highlights the risks of supply chain security in open-source ecosystems. A chain of vulnerabilities allowed attackers to siphon funds across multiple networks, demonstrating how decentralized environments can be exploited when communication and patch management are insufficient. The incident underscores the need for rapid, coordinated responses and clear visibility into deployments.</p>
-            <p>The initial assessment of the vulnerability was based on limited testing, leading to a misjudgment about its impact. This delayed patching and miscommunication contributed to the breach. It’s a stark reminder that even well-audited code can have hidden flaws, especially in complex systems like EVMs. Clear, urgent communication is essential when a critical flaw is actively exploited.</p>
-            <p>Cosmos Labs acted swiftly once the exploit was confirmed, working with affected chains to mitigate damage and coordinate recovery. However, the incident exposed gaps in how we handle critical vulnerabilities, particularly in identifying when a patch’s scope exceeds initial reports. We’re refining our processes to ensure such oversights don’t happen again.</p>
-            <p class="archive-tags">Cybersecurity SupplyChainSecurity OpenSource ZeroTrust AIsecurity DevOps</p>
           </article>
         </div>
       </section>
