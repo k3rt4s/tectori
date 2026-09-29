@@ -4,6 +4,37 @@ Tectori website changes are recorded here.
 
 ## 2026-09-29
 
+- INSIGHTS-HEBREW: removed the one untranslated Hebrew entry, post-15011,
+  from the week 36 Insights archive, where it had shipped live with no
+  `lang` or `dir` attribute on a page declared `lang="en"`. Corrected the
+  three counts that included it: the week lead, the hub card for that week
+  and its publication list, and the hub total, now 152 entries. A sweep of
+  the other four weekly pages for Hebrew, Arabic, Cyrillic and CJK script
+  found nothing else. The exporter still has no language filter, so this
+  can recur; that item is on the board.
+- DESIGN-REVIEW: a Designer-persona audit of every public page, one pass on
+  visual design and information architecture and one on WCAG 2.2 Level AA,
+  returned 13 findings, each re-checked against the tree before it was
+  recorded. Written up in `DESIGN_REVIEW_2026-09-29.md` (data root). Fixed
+  in this pass: no CSS transitions existed anywhere, so every hover and
+  focus state snapped; the header Contact pill's border computed 2.70 to 1
+  against the 3 to 1 floor of SC 1.4.11, and `.button.outline` carried the
+  same border unused; `.desktop-nav a` and `.utility-bar a` had no vertical
+  padding, putting their targets at roughly 23 and 19 pixels against the 24
+  pixel floor of SC 2.5.8; and the contact form disabled the submit button
+  the visitor had just activated, dropping focus with nothing announced,
+  now `aria-disabled` with the label reporting the state. Also restructured
+  the `/services` closing call to action, which had three flat children in a
+  two-column grid and stranded its link, and corrected the accessibility
+  statement, which still named WCAG 2.1 level AA and claimed contrast and
+  keyboard behaviour the failures above contradicted.
+- One finding was rejected rather than implemented: the audit proposed
+  `repeat(auto-fit, minmax(240px, 1fr))` to stop fixed-column grids leaving
+  a lone card in the last row. `auto-fit` collapses empty tracks in the
+  grid, not a partial final row, so 7 cards would still render 3, 3, 1. The
+  underlying observation stands and is open on the board; the fix as
+  proposed does not do what it claims.
+
 - INSIGHTS: the section is live and indexable. Every page declares
   `index, follow` with full snippet and preview limits, all six are in
   `sitemap.xml` and `llms.txt`, and `robots.txt` already allowed GPTBot,
