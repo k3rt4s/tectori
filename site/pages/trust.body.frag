@@ -11,11 +11,11 @@
       <section class="content-section split-section" aria-labelledby="who-title">
         <div class="section-heading">
           <p class="eyebrow">Who you are engaging</p>
-          <h2 id="who-title">One practitioner, named, delivering the work.</h2>
+          <h2 id="who-title">A named owner, accountable for the work.</h2>
         </div>
         <div class="prose">
           <p>
-            Every engagement is delivered directly by Tectori's founder. There is no bench, no handoff to a junior resource, and no team behind the name.
+            Every engagement has a named owner who stays on it from scope to close. Work is not handed off to whoever is free, and you are not passed to a junior resource partway through.
           </p>
           <p>
             Background, credentials, training, and recognition are listed on <a class="text-link" href="/about">about</a> rather than repeated here.

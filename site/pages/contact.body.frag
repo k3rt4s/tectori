@@ -46,7 +46,7 @@
           </form>
           <div class="form-message" id="contact-form-success" role="status" aria-live="polite" tabindex="-1" hidden>
             <p>
-              Your message reached Tectori. It goes to Tectori through
+              Your message reached Tectori. It goes through
               Formspree and is used to respond to your inquiry. If the matter
               is active or urgent, call
               <a href="{{PHONE_TEL_URI}}"><span class="nowrap">{{PHONE_DISPLAY}}</span></a>
