@@ -110,7 +110,7 @@
         </div>
         <div class="solution-grid">
           <article class="solution-card">
-            <img loading="lazy" src="assets/solution-fortivra.svg" alt="Fortivra mark" width="640" height="640">
+            <img loading="lazy" src="assets/solution-fortivra.svg" alt="Fortivra mark" width="300" height="300">
             <div><h3>Fortivra</h3><p>Discovers and reports on AI security posture through authorized, read-only collection. Findings arrive with evidence and a prioritized remediation roadmap.</p></div>
           </article>
           <article class="solution-card">
