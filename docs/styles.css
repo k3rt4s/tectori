@@ -2,6 +2,12 @@
 :root {
   --orange: #f67a38; --orange-text: #c24e0f;
   --gold: #f9a63e;
+  /* Where each accent is used today. --orange fills and outlines on light
+     backgrounds: primary button and hover fills, list rules, link underlines,
+     card hover borders, the login ring. --gold is for dark backgrounds and
+     soft highlights: eyebrows, focus rings and hovers on the dark bands, the
+     resilience band fill, the disclosure rule. --orange-text is the darker
+     orange used wherever orange is text on a light background. */
   --charcoal: #273138;
   --white: #fefffe;
   --ink: #273138;
@@ -188,17 +194,12 @@ a, .button, summary, .service-card, .path-card, .solution-card, .flow-step, inpu
 
 .faq-section { grid-template-columns: minmax(260px, 0.56fr) minmax(0, 1.44fr); align-items: start; }
 .faq-list { display: grid; }
-.faq-item { padding: 26px 0; border-top: 1px solid var(--line); }
-.faq-item:last-child { border-bottom: 1px solid var(--line); }
-.faq-item h3 { font-size: 1.35rem; }
-.faq-item p { max-width: 850px; margin: 13px 0 0; color: var(--muted); font-size: 1.02rem; }
-.faq-item a { color: var(--charcoal); font-weight: 750; text-decoration-color: var(--orange); text-underline-offset: 3px; }
+.faq-item, .archive-item { padding: 26px 0; border-top: 1px solid var(--line); }
+.faq-item:last-child, .archive-item:last-child { border-bottom: 1px solid var(--line); }
+.faq-item h3, .archive-item h3 { font-size: 1.35rem; }
+.faq-item p, .archive-item p { max-width: 850px; margin: 13px 0 0; color: var(--muted); font-size: 1.02rem; }
+.faq-item a, .archive-item a { color: var(--charcoal); font-weight: 750; text-decoration-color: var(--orange); text-underline-offset: 3px; }
 
-.archive-item { padding: 26px 0; border-top: 1px solid var(--line); }
-.archive-item:last-child { border-bottom: 1px solid var(--line); }
-.archive-item h3 { font-size: 1.35rem; }
-.archive-item p { max-width: 850px; margin: 13px 0 0; color: var(--muted); font-size: 1.02rem; }
-.archive-item a { color: var(--charcoal); font-weight: 750; text-decoration-color: var(--orange); text-underline-offset: 3px; }
 .archive-meta { margin: 0 0 4px; color: var(--muted); font-size: 0.92rem; letter-spacing: 0.02em; }
 
 .login-page { display: grid; min-height: 100vh; grid-template-columns: minmax(0, 0.9fr) minmax(520px, 0.7fr); background: var(--charcoal); }

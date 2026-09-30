@@ -38,8 +38,8 @@ DESKTOP_NAV_ITEMS = [
     ("about", "/about", "About"),
 ]
 
-# Mobile nav order, shared by every page. "faq" is only reachable from the
-# mobile menu. "login" and the trailing "contact" are handled separately
+# Mobile nav order, shared by every page. "faq", "resources" and "trust" are only
+# reachable from the mobile menu. "login" and the trailing "contact" are handled separately
 # because the login href depends on root_absolute.
 MOBILE_NAV_ITEMS = [
     ("home", "/", "Home"),
@@ -52,6 +52,8 @@ MOBILE_NAV_ITEMS = [
     ("how_we_work", "/how-we-work", "How we work"),
     ("insights", "/insights", "Insights"),
     ("about", "/about", "About"),
+    ("resources", "/resources", "Resources"),
+    ("trust", "/trust", "Trust"),
     ("faq", "/faq", "FAQ"),
 ]
 
@@ -397,6 +399,10 @@ def render_page(entry, cache):
     out.append(CRLF.encode())
     out.append(('    <main id="main-content">' + CRLF).encode("utf-8"))
     out.append(load_fragment(entry["body_fragment"]))
+    # The Insights hub and weekly pages are exporter output and end at the archive list,
+    # so the closing call to action is added here rather than in their bodies.
+    if entry["slug"].startswith("insights"):
+        out.append(load_fragment("fragments/insights-cta.frag"))
     out.append(("    </main>" + CRLF).encode("utf-8"))
     out.append(CRLF.encode())
     out.append(render_footer(entry))
