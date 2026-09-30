@@ -38,8 +38,8 @@ DESKTOP_NAV_ITEMS = [
     ("about", "/about", "About"),
 ]
 
-# Mobile nav order, shared by every page. "faq" is only reachable from the
-# mobile menu. "login" and the trailing "contact" are handled separately
+# Mobile nav order, shared by every page. "faq", "resources" and "trust" are only
+# reachable from the mobile menu. "login" and the trailing "contact" are handled separately
 # because the login href depends on root_absolute.
 MOBILE_NAV_ITEMS = [
     ("home", "/", "Home"),
@@ -52,6 +52,8 @@ MOBILE_NAV_ITEMS = [
     ("how_we_work", "/how-we-work", "How we work"),
     ("insights", "/insights", "Insights"),
     ("about", "/about", "About"),
+    ("resources", "/resources", "Resources"),
+    ("trust", "/trust", "Trust"),
     ("faq", "/faq", "FAQ"),
 ]
 
