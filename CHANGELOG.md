@@ -2,6 +2,29 @@
 
 Tectori website changes are recorded here.
 
+## 2026-09-30
+
+- COPY-SOLO-SWEEP and CONTACT-COPY: the site no longer frames the practice
+  as one person. Merged `feature/copy-service-fractional` (the approved
+  fractional-leadership rewrite) and replaced the founder-delivery wording on
+  services, trust (heading and body), solutions and accessibility with the
+  named-owner sentences Jon approved on 2026-09-29, verbatim from
+  `BRIEF_COPY_2026-09-29.md`. The thank-you page carried the contact message's
+  exact sentence, so it got the same approved edit. The lane also changed the
+  home page's solutions line ("by Tectori's founder" to "by Tectori"); review
+  caught it as wording outside the brief, so it was reverted at landing and
+  held for Jon with the remaining "founder-led" wording on faq, how-we-work,
+  home, 404, services and the fractional page.
+- DESIGN-REVIEW findings 5 to 7: `/resources` and `/trust` joined the mobile
+  menu only (desktop bar is full; FAQ was already mobile-only), with
+  `current_nav` set so the current-page marker renders. `build_site.py` now
+  closes every `insights*` page with the how-we-work CTA band, from
+  `site/fragments/insights-cta.frag`. `.archive-item` shares its rules with
+  `.faq-item` through grouped selectors, same 363 rules. A comment in
+  `styles.css` records where `--orange`, `--gold` and `--orange-text` are used.
+  Finding 7's Fortivra-mark item was false: the SVG really is 640x640 and
+  `check_site.py` rejects a declared size that differs from the file.
+
 ## 2026-09-29
 
 - INSIGHTS-NAV, INSIGHTS-RSS, INSIGHTS-HUB-RECENT, `main` at `836952b`,
