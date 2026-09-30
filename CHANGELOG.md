@@ -4,6 +4,25 @@ Tectori website changes are recorded here.
 
 ## 2026-09-29
 
+- INSIGHTS-NAV, INSIGHTS-RSS, INSIGHTS-HUB-RECENT, `main` at `836952b`,
+  pushed and live. Insights joined the top bar (`DESKTOP_NAV_ITEMS`/
+  `MOBILE_NAV_ITEMS`, desktop order now ends Case study, How we work,
+  Insights, About), which also folded in the nav-overflow fix DESIGN-REVIEW
+  found: the bar now collapses to the hamburger menu below 1400px instead of
+  1180px, since nine items never fit the flex row above that. `/insights.xml`
+  publishes an RSS 2.0 feed of every entry from a new tracked source,
+  `site/content/insights_feed.json`, that `newsletter_linkedin export-site`
+  writes, so the build still never reads the post database; the hub links it
+  both visibly and via `<link rel="alternate">`. The hub now opens with a
+  "Recent" section (entries within newsletter_linkedin's export window,
+  rendered in full) above the week-by-week list; a recent entry stays on its
+  own week page too and is not moved, per THEORY.md's closed-week invariant.
+  INSIGHTS-EMAIL stays parked until Jon names a provider. A concurrent
+  session landed personal-automation's EXPORT-SCHEDULE (a daily 06:00 task)
+  during this work and pushed tectori branch `export/scheduled`
+  (`22414c3`), a sibling of this merge from the same base with no
+  nav/RSS/hub-recent content; that branch was left for Jon to review, likely
+  superseded.
 - INSIGHTS-HEBREW: removed the one untranslated Hebrew entry, post-15011,
   from the week 36 Insights archive, where it had shipped live with no
   `lang` or `dir` attribute on a page declared `lang="en"`. Corrected the
