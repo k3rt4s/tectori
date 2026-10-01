@@ -3,7 +3,7 @@
           <p class="eyebrow">Service line 06</p>
           <h1 id="page-title">AI automation that answers the same questions as any material system.</h1>
           <p class="page-lead">
-            The work delivers governed AI automation with approval gates, monitoring, decision records, and human accountability. It is built to survive the same exam questions as any material system.
+            The work delivers governed AI automation with approval gates, monitoring, decision records, and human accountability.
           </p>
         </div>
       </section>
@@ -18,7 +18,7 @@
             AI automation is easy to demonstrate and hard to account for. The questions that follow a demonstration are about who approved the action, what it did, how it is monitored, and how it is stopped.
           </p>
           <p>
-            This work suits organizations that want automation in production and need it to hold up to the same review as any other material system. Programs align with ISO/IEC 42001 and the NIST AI Risk Management Framework.
+            This work suits organizations that want automation in production and need it to hold up to the same review as any other material system. Programs use ISO/IEC 42001 and the NIST AI Risk Management Framework as reference frameworks.
           </p>
         </div>
       </section>
@@ -96,7 +96,7 @@
 
       <section class="cta-band">
         <div class="cta-inner">
-          <h2>Use AI at the speed your accountability model supports.</h2>
+          <h2>Add one agent to production at a time, each with an approval gate and a rollback path recorded before it goes live.</h2>
           <a class="button primary" href="/contact">Discuss agentic AI</a>
         </div>
       </section>
