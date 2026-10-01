@@ -11,7 +11,7 @@
       <section class="content-section split-section" aria-labelledby="who-title">
         <div class="section-heading">
           <p class="eyebrow">Who this is for</p>
-          <h2 id="who-title">For organizations that face a reviewer on a schedule.</h2>
+          <h2 id="who-title">Who needs help preparing for regulatory exams and customer diligence?</h2>
         </div>
         <div class="prose">
           <p>
@@ -27,7 +27,7 @@
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">What the work includes</p>
-            <h2 id="includes-title">From the requirement to the record that satisfies it.</h2>
+            <h2 id="includes-title">What does compliance and exam readiness work include?</h2>
           </div>
           <ul class="plain-list">
             <li>Requirement to policy to control mapping</li>
@@ -43,7 +43,7 @@
       <section class="content-section" aria-labelledby="deliverables-title">
         <div class="section-heading">
           <p class="eyebrow">Deliverables</p>
-          <h2 id="deliverables-title">What you receive.</h2>
+          <h2 id="deliverables-title">What do you receive from a compliance and risk engagement?</h2>
         </div>
         <div class="practice-grid">
           <article class="practice-item">
@@ -73,7 +73,7 @@
         <div class="section">
           <div class="section-heading">
             <p class="eyebrow">Fixed-scope starting point</p>
-            <h2 id="baseline-title">Evidence Readiness Baseline</h2>
+            <h2 id="baseline-title">What is an Evidence Readiness Baseline?</h2>
             <p>
               A practitioner-led review of one defined security or compliance boundary. It tests whether an agreed sample of controls has named owners and current records showing that the controls operate.
             </p>
@@ -109,7 +109,7 @@
       <section class="content-section split-section" aria-labelledby="readiness-title">
         <div class="section-heading">
           <p class="eyebrow">How it supports audit readiness</p>
-          <h2 id="readiness-title">Readiness is the ordinary state, not a project.</h2>
+          <h2 id="readiness-title">How do you stay exam-ready between exams?</h2>
         </div>
         <div class="prose">
           <p>
@@ -125,7 +125,7 @@
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">What this is not</p>
-            <h2 id="scope-title">What this service line does not cover.</h2>
+            <h2 id="scope-title">What does the compliance and risk service not cover?</h2>
           </div>
           <ul class="plain-list">
             <li>An audit, an assessment opinion, or a certification. Tectori prepares you for the assessor and does not replace one.</li>
