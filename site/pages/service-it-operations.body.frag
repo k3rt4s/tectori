@@ -11,7 +11,7 @@
       <section class="content-section split-section" aria-labelledby="who-title">
         <div class="section-heading">
           <p class="eyebrow">Who this is for</p>
-          <h2 id="who-title">For environments where changes are made and not recorded.</h2>
+          <h2 id="who-title">Who needs repeatable, documented IT administration?</h2>
         </div>
         <div class="prose">
           <p>
@@ -27,7 +27,7 @@
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">What the work includes</p>
-            <h2 id="includes-title">A standard practice for making changes.</h2>
+            <h2 id="includes-title">What does repeatable IT administration include?</h2>
           </div>
           <ul class="plain-list">
             <li>Dry runs before changes</li>
@@ -43,7 +43,7 @@
       <section class="content-section" aria-labelledby="deliverables-title">
         <div class="section-heading">
           <p class="eyebrow">Deliverables</p>
-          <h2 id="deliverables-title">What you receive.</h2>
+          <h2 id="deliverables-title">What do you receive from an IT operations engagement?</h2>
         </div>
         <div class="practice-grid">
           <article class="practice-item">
@@ -64,7 +64,7 @@
       <section class="content-section split-section" aria-labelledby="readiness-title">
         <div class="section-heading">
           <p class="eyebrow">How it supports audit readiness</p>
-          <h2 id="readiness-title">Every change produces a plan, a record, and a rollback path.</h2>
+          <h2 id="readiness-title">How do you document IT changes for an examiner?</h2>
         </div>
         <div class="prose">
           <p>
@@ -80,7 +80,7 @@
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">What this is not</p>
-            <h2 id="scope-title">What this service line does not cover.</h2>
+            <h2 id="scope-title">What does the IT operations service not cover?</h2>
           </div>
           <ul class="plain-list">
             <li>A help desk or end user support contract.</li>
