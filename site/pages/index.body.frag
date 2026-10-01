@@ -23,7 +23,7 @@
 
       <section class="proof-strip" aria-label="Tectori experience">
         <div><strong>20 years</strong><span>Enterprise IT and security experience</span></div>
-        <div><strong>Founder led</strong><span>Direct access to the responsible practitioner</span></div>
+        <div><strong>Named owner</strong><span>Accountable for the work from scope to close</span></div>
         <div><strong>3 years</strong><span>CISSP and Security+ instruction</span></div>
         <div><strong>Evidence first</strong><span>Controls documented as they operate</span></div>
       </section>
@@ -101,8 +101,8 @@
             <p class="eyebrow">Solutions</p>
             <h2 id="solutions-title">Purpose-built tools for accountable operations.</h2>
             <p>
-              Separate product brands, built and maintained by Tectori's
-              founder as working reference implementations of the standards
+              Separate product brands, built and maintained by Tectori
+              as working reference implementations of the standards
               behind its consulting work.
             </p>
           </div>

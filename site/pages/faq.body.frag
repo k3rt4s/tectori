@@ -3,7 +3,7 @@
           <p class="eyebrow">Frequently asked questions</p>
           <h1 id="page-title">Clear answers before the first conversation.</h1>
           <p class="page-lead">
-            Tectori is a founder-led practice for regulated and growing
+            Tectori is a consulting practice for regulated and growing
             organizations. These answers describe the work, operating model, and
             technology portfolio as they exist today.
           </p>
@@ -18,7 +18,7 @@
           <article class="faq-item">
             <h3>What does Tectori do?</h3>
             <p>
-              Tectori provides founder-led cloud architecture and operations,
+              Tectori provides cloud architecture and operations,
               cybersecurity, compliance and risk management, IT operations,
               fractional IT and security leadership, and governed AI consulting.
             </p>
@@ -54,8 +54,7 @@
           <article class="faq-item">
             <h3>Is Tectori a large consulting firm?</h3>
             <p>
-              No. Tectori is a founder-led practice. Clients work directly
-              with {{FOUNDER_NAME}}, the practitioner responsible for
+              No. Every engagement has a named owner accountable for
               recommendations, design, and delivery.
             </p>
           </article>

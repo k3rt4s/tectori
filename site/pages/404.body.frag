@@ -16,7 +16,7 @@
         <div class="path-grid">
           <a class="path-card" href="/services"><span class="path-kicker">Consulting</span><div><h3>Services</h3><p>Six service lines, from fractional leadership to cloud, security, compliance, IT operations, and governed AI.</p></div><span class="text-link">See the service lines</span></a>
           <a class="path-card" href="/tools"><span class="path-kicker">No cost</span><div><h3>Free tools</h3><p>Practical tools you can use without talking to anyone first.</p></div><span class="text-link">Open the free tools</span></a>
-          <a class="path-card" href="/contact"><span class="path-kicker">Direct</span><div><h3>Contact</h3><p>Bring the audit question or the business goal straight to the founder.</p></div><span class="text-link">Talk with Tectori</span></a>
+          <a class="path-card" href="/contact"><span class="path-kicker">Direct</span><div><h3>Contact</h3><p>Bring the audit question or the business goal straight to Tectori.</p></div><span class="text-link">Talk with Tectori</span></a>
         </div>
       </section>
       <section class="cta-band">

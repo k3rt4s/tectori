@@ -3,7 +3,7 @@
           <p class="eyebrow">Service line 01</p>
           <h1 id="page-title">A named owner for technology and security, without a full time hire.</h1>
           <p class="page-lead">
-            Tectori's founder serves as a part time CIO, CISO, or both. The work covers technology strategy, security program direction, spending discipline, and clear communication with leadership.
+            Tectori provides part time CIO and CISO leadership, or both. The work covers technology strategy, security program direction, spending discipline, and clear communication with leadership.
           </p>
         </div>
       </section>

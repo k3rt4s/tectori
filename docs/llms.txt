@@ -11,7 +11,7 @@ Tectori connects cloud, security, compliance, evidence, and governed AI for regu
 - /case-study: A real Azure Container Apps reference implementation showing versioned delivery, operating safeguards, documentation, and recovery-minded engineering.
 - /contact: Contact Tectori, Nashville based and serving organizations nationwide, about cloud governance, cybersecurity, compliance, IT operations, or AI governance.
 - /faq: Answers about Tectori's audit-ready IT, cybersecurity, compliance, fractional leadership, AI governance, and technology solutions.
-- /how-we-work: Tectori's founder-led engagement model, documentation habits, remote delivery approach, communication expectations, and current hiring status.
+- /how-we-work: Tectori's engagement model, documentation habits, remote delivery approach, communication expectations, and current hiring status.
 - /insights: Short, plain takes on the security and AI stories that matter to regulated organizations, collected a week at a time and credited to the publications that reported them.
 - /insights-2026-w36: 11 short takes on the security and AI reporting Tectori read in the week of 31 August to 6 September 2026, each credited to the publication that reported it.
 - /insights-2026-w37: 43 short takes on the security and AI reporting Tectori read in the week of 7 to 13 September 2026, each credited to the publication that reported it.
@@ -28,7 +28,7 @@ Tectori connects cloud, security, compliance, evidence, and governed AI for regu
 - /service-fractional-leadership: Part time CIO and CISO leadership from Nashville covering technology strategy, security program ownership, vendor oversight, and board and examiner communication.
 - /service-it-operations: Repeatable and documented administration for Windows, Active Directory, Azure, IIS, and Microsoft 365, with dry runs, plan records, and rollback reporting.
 - /services: Tectori's six consulting service lines, from fractional CIO and CISO leadership to cloud, cybersecurity, compliance, IT operations, and agentic AI.
-- /solutions: Explore Tectori's founder-built product brands for compliance, operations, file intelligence, security, and architecture.
+- /solutions: Explore Tectori's product brands for compliance, operations, file intelligence, security, and architecture.
 - /terms: The terms that govern use of the Tectori website, including informational content without warranty and Tennessee governing law.
 - /tools: Free, open source tools from Tectori for IT operations, security programs, incident response, and evidence review. Licensed for reuse and hosted on GitHub.
 - /trust: Who you are engaging, how client data is handled and returned, how the practice itself is secured, the third parties this site uses, and how to report a security problem.

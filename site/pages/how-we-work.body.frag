@@ -3,9 +3,7 @@
           <p class="eyebrow">How we work</p>
           <h1 id="page-title">Direct access. Clear ownership. Useful records.</h1>
           <p class="page-lead">
-            Tectori is a founder-led consultancy. Each
-            engagement provides direct access to the practitioner responsible
-            for the recommendation, the delivery, and the evidence behind it.
+            Each engagement has a named owner who stays on it.
           </p>
         </div>
       </section>

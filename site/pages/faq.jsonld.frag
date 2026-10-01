@@ -8,7 +8,7 @@
             "name": "What does Tectori do?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Tectori provides founder-led cloud architecture and operations, cybersecurity, compliance and risk management, IT operations, fractional IT and security leadership, and governed AI consulting."
+              "text": "Tectori provides cloud architecture and operations, cybersecurity, compliance and risk management, IT operations, fractional IT and security leadership, and governed AI consulting."
             }
           },
           {
@@ -40,7 +40,7 @@
             "name": "Is Tectori a large consulting firm?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. Tectori is a founder-led practice. Clients work directly with {{FOUNDER_NAME}}, the practitioner responsible for recommendations, design, and delivery."
+              "text": "No. Every engagement has a named owner accountable for recommendations, design, and delivery."
             }
           },
           {
