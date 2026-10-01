@@ -4,6 +4,19 @@ Tectori website changes are recorded here.
 
 ## 2026-09-30
 
+- FOUNDER: the remaining founder-led framing is gone from the rendered
+  site, with the named-owner wording Jon approved on 2026-09-30, verbatim
+  from `RUN_2026-09-30_FOUNDER.md` items 1 to 9 (questions 11 and 12 plus
+  seven more places). Changed: the FAQ lead and two answers (body and
+  FAQPage JSON-LD identical), the How We Work lead, the home proof strip
+  ("Named owner") and solutions line, the Organization description in the
+  home JSON-LD, the 404 contact card, the fractional-leadership sentence on
+  services and its service page, the About practice paragraph, and five
+  rendered `pages.json` descriptions. Merge `b94ff0e`, deploy passed,
+  `check_live_deploy.py` 51 of 51. Left by decision: the four `"comment"`
+  fields in `pages.json`, which render as HTML source comments, and the
+  About biography and `founder` schema object. Rollback: `git revert -m 1
+  b94ff0e` then push.
 - COPY-SOLO-SWEEP and CONTACT-COPY: the site no longer frames the practice
   as one person. Merged `feature/copy-service-fractional` (the approved
   fractional-leadership rewrite) and replaced the founder-delivery wording on
