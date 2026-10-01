@@ -96,7 +96,7 @@
 
       <section class="cta-band">
         <div class="cta-inner">
-          <h2>Design the environment so the review is a lookup.</h2>
+          <h2>Design the environment so the records come from operating it.</h2>
           <a class="button primary" href="/contact">Discuss cloud architecture</a>
         </div>
       </section>
