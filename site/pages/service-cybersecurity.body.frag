@@ -18,7 +18,7 @@
             Most organizations have a policy set. Fewer have controls with a named owner, a stated requirement behind them, and a record showing they operate. The gap between the two is where exam findings come from.
           </p>
           <p>
-            This work suits organizations running the Microsoft stack that need hardening, identity discipline, and a control set someone is accountable for.
+            This work suits organizations running Active Directory, Azure, or Microsoft 365 that cannot currently produce an access list, a hardening baseline, or a named owner for a given control.
           </p>
         </div>
       </section>
