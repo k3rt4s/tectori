@@ -96,7 +96,7 @@
 
       <section class="cta-band">
         <div class="cta-inner">
-          <h2>Add one agent to production at a time, each with an approval gate and a rollback path recorded before it goes live.</h2>
+          <h2>Use AI at the speed your accountability model supports.</h2>
           <a class="button primary" href="/contact">Discuss agentic AI</a>
         </div>
       </section>
