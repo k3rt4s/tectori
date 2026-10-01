@@ -11,7 +11,7 @@
       <section class="content-section split-section" aria-labelledby="who-title">
         <div class="section-heading">
           <p class="eyebrow">Who this is for</p>
-          <h2 id="who-title">For control sets that exist on paper and nowhere else.</h2>
+          <h2 id="who-title">Who needs security controls with named owners and records?</h2>
         </div>
         <div class="prose">
           <p>
@@ -27,7 +27,7 @@
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">What the work includes</p>
-            <h2 id="includes-title">Controls with owners, and evidence that they run.</h2>
+            <h2 id="includes-title">What does security control and hardening work include?</h2>
           </div>
           <ul class="plain-list">
             <li>Security control design mapped to the requirement it satisfies</li>
@@ -43,7 +43,7 @@
       <section class="content-section" aria-labelledby="deliverables-title">
         <div class="section-heading">
           <p class="eyebrow">Deliverables</p>
-          <h2 id="deliverables-title">What you receive.</h2>
+          <h2 id="deliverables-title">What do you receive from a cybersecurity engagement?</h2>
         </div>
         <div class="practice-grid">
           <article class="practice-item">
@@ -64,7 +64,7 @@
       <section class="content-section split-section" aria-labelledby="readiness-title">
         <div class="section-heading">
           <p class="eyebrow">How it supports audit readiness</p>
-          <h2 id="readiness-title">Collecting evidence becomes a lookup.</h2>
+          <h2 id="readiness-title">How do you collect security evidence for an examiner?</h2>
         </div>
         <div class="prose">
           <p>
@@ -80,7 +80,7 @@
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">What this is not</p>
-            <h2 id="scope-title">What this service line does not cover.</h2>
+            <h2 id="scope-title">What does the cybersecurity service not cover?</h2>
           </div>
           <ul class="plain-list">
             <li>Penetration testing or red team engagements.</li>
