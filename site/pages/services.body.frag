@@ -24,7 +24,7 @@
             without a full time hire.
           </p>
           <p>
-            Tectori's founder serves as a part time CIO, CISO, or both. The
+            Tectori provides part time CIO and CISO leadership, or both. The
             work covers technology strategy, security program direction,
             spending discipline, and clear communication with leadership.
           </p>

@@ -113,8 +113,7 @@
               Documentation explains what happened and why.
             </p>
             <p>
-              Tectori is a founder-led practice. Each engagement provides
-              direct access to the practitioner responsible for the
+              Every engagement has a named owner accountable for the
               recommendation, the design, and the delivery.
             </p>
           </div>

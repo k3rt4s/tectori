@@ -18,7 +18,7 @@
           "{{LINKEDIN_URL}}",
           "{{GITHUB_URL}}"
         ],
-        "description": "Founder-led cloud, cybersecurity, compliance, IT operations, fractional leadership, and AI governance consulting for regulated and growing organizations.",
+        "description": "Cloud, cybersecurity, compliance, IT operations, fractional leadership, and AI governance consulting for regulated and growing organizations.",
         "founder": {
           "@type": "Person",
           "name": "{{FOUNDER_NAME}}",
