@@ -15,10 +15,10 @@
         </div>
         <div class="prose">
           <p>
-            Banks, credit unions, and healthcare organizations answer to examiners on a cycle. Businesses selling into regulated buyers answer to customer diligence questionnaires instead. The work is the same.
+            Banks, credit unions, and healthcare organizations answer to examiners on a cycle. Businesses selling into regulated buyers answer to customer diligence questionnaires instead. Both answer the same question: can you produce, on request, the record that shows a control operates.
           </p>
           <p>
-            Engagements map controls to the frameworks clients face, including FFIEC, HIPAA, PCI DSS, SOC 2, HITRUST, CSA STAR, NIST 800-53, and ISO 27001.
+            Engagements map controls to the frameworks the organization faces, including FFIEC, HIPAA, PCI DSS, SOC 2, HITRUST, CSA STAR, NIST 800-53, and ISO 27001.
           </p>
         </div>
       </section>
