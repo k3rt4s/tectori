@@ -11,7 +11,7 @@
       <section class="content-section split-section" aria-labelledby="who-title">
         <div class="section-heading">
           <p class="eyebrow">Who this is for</p>
-          <h2 id="who-title">For organizations putting AI into work that matters.</h2>
+          <h2 id="who-title">Who needs governance around AI automation in production?</h2>
         </div>
         <div class="prose">
           <p>
@@ -27,7 +27,7 @@
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">What the work includes</p>
-            <h2 id="includes-title">Automation that moves, accountability that stays human.</h2>
+            <h2 id="includes-title">What does governed AI automation include?</h2>
           </div>
           <ul class="plain-list">
             <li>AI and agent inventory</li>
@@ -43,7 +43,7 @@
       <section class="content-section" aria-labelledby="deliverables-title">
         <div class="section-heading">
           <p class="eyebrow">Deliverables</p>
-          <h2 id="deliverables-title">What you receive.</h2>
+          <h2 id="deliverables-title">What do you receive from an AI automation governance engagement?</h2>
         </div>
         <div class="practice-grid">
           <article class="practice-item">
@@ -68,7 +68,7 @@
       <section class="content-section split-section" aria-labelledby="readiness-title">
         <div class="section-heading">
           <p class="eyebrow">How it supports audit readiness</p>
-          <h2 id="readiness-title">The exam answer is documentation, not a demonstration.</h2>
+          <h2 id="readiness-title">How do you answer exam questions about an AI system?</h2>
         </div>
         <div class="prose">
           <p>
@@ -84,7 +84,7 @@
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">What this is not</p>
-            <h2 id="scope-title">What this service line does not cover.</h2>
+            <h2 id="scope-title">What does the agentic AI service not cover?</h2>
           </div>
           <ul class="plain-list">
             <li>Model training, fine tuning, or data science work.</li>
