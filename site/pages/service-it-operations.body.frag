@@ -18,7 +18,7 @@
             Administrative work often happens quickly, by hand, and without a record. It works until someone asks what changed, or until a change has to be reversed and nobody knows what it replaced.
           </p>
           <p>
-            This work suits organizations that want routine administration to follow a standard practice, with the record produced as part of doing the work rather than afterward.
+            This work suits organizations where the same Active Directory or Azure changes get made by hand, with no dry run and no record of what they replaced.
           </p>
         </div>
       </section>
