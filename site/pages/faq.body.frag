@@ -18,9 +18,10 @@
           <article class="faq-item">
             <h3>What does Tectori do?</h3>
             <p>
-              Tectori provides cloud architecture and operations,
-              cybersecurity, compliance and risk management, IT operations,
-              fractional IT and security leadership, and governed AI consulting.
+              Tectori provides six service lines: fractional CIO and CISO
+              leadership, cloud architecture and operations, cybersecurity,
+              compliance and risk management, IT operations, and agentic AI
+              orchestration.
             </p>
           </article>
           <article class="faq-item">
@@ -28,8 +29,8 @@
             <p>
               Tectori is designed for banks, credit unions, healthcare
               organizations, regulated businesses, and growing companies that
-              need technology to support customer diligence, enterprise
-              expectations, or regulatory scrutiny.
+              need technology to support customer diligence or regulatory
+              scrutiny.
             </p>
           </article>
           <article class="faq-item">
@@ -45,10 +46,12 @@
           <article class="faq-item">
             <h3>How does Tectori approach AI governance?</h3>
             <p>
-              Tectori treats AI governance as an operating system with approved
-              use cases, accountable owners, data boundaries, human review,
-              monitoring, incident handling, change control, and retained
-              decision records.
+              Tectori treats AI governance as an operating model covering the
+              AI inventory, risk classification, access boundaries, change
+              control, testing, exception handling, monitoring, incident
+              response, and human decision ownership. The operating model uses
+              ISO/IEC 42001 and the NIST AI Risk Management Framework as
+              reference frameworks.
             </p>
           </article>
           <article class="faq-item">
@@ -57,6 +60,19 @@
               No. Tectori is a focused practice, not a layered firm, so every
               engagement has a named owner accountable for recommendations,
               design, and delivery.
+            </p>
+          </article>
+          <article class="faq-item">
+            <h3>How does an engagement work?</h3>
+            <p>
+              Each engagement has a named owner who stays on it, and you work
+              with that person directly. Engagements take one of three models:
+              ongoing fractional CIO or CISO support, a defined project with
+              agreed deliverables and decision owners, or an objective review
+              with findings and a practical action path. Before the work
+              starts, the engagement defines the business outcome, system
+              boundary, risks, constraints, deliverables, and work that is
+              outside the engagement.
             </p>
           </article>
           <article class="faq-item">
@@ -73,6 +89,19 @@
             </p>
           </article>
           <article class="faq-item">
+            <h3>What is an Evidence Readiness Baseline?</h3>
+            <p>
+              An Evidence Readiness Baseline is a practitioner-led review of
+              one defined security or compliance boundary. It tests whether an
+              agreed sample of controls has named owners and current records
+              showing that the controls operate. You receive a prioritized
+              action list, then choose whether to fix the gaps internally or
+              continue into implementation work. There is no maturity score and
+              no claim that the work is an audit, assessment opinion, or
+              certification.
+            </p>
+          </article>
+          <article class="faq-item">
             <h3>Where is Tectori located?</h3>
             <p>
               Tectori is based at {{POSTAL_ADDRESS}}, and works remotely with
@@ -80,12 +109,24 @@
             </p>
           </article>
           <article class="faq-item">
+            <h3>What does Tectori not do?</h3>
+            <p>
+              Tectori is not an audit firm and does not issue an audit opinion
+              or a certification. Tectori prepares you for the assessor and does
+              not replace one. Across the service lines, Tectori does not cover
+              penetration testing or red team engagements, a help desk or end
+              user support contract, or legal advice.
+            </p>
+          </article>
+          <article class="faq-item">
             <h3>How do I start a conversation with Tectori?</h3>
             <p>
-              Use the contact form or call
-              <a href="{{PHONE_TEL_URI}}"><span class="nowrap">{{PHONE_DISPLAY}}</span></a> with the business
-              outcome, technology or compliance constraint, current state, and
-              decision or deadline in view.
+              Call
+              <a href="{{PHONE_TEL_URI}}"><span class="nowrap">{{PHONE_DISPLAY}}</span></a>
+              or send the contact form. A call is the fastest path, and the form
+              works for non-urgent notes. Include what you are trying to
+              accomplish, the constraint that matters most, and any deadline
+              already in view.
             </p>
           </article>
         </div>
