@@ -30,9 +30,9 @@
             human decision ownership.
           </p>
           <p>
-            The operating model aligns with ISO/IEC 42001 and the NIST AI
-            Risk Management Framework, both applied in real programs rather
-            than adopted on paper.
+            The operating model uses ISO/IEC 42001 and the NIST AI Risk
+            Management Framework as reference frameworks, both applied in
+            real programs rather than adopted on paper.
           </p>
           <p>
             Tectori delivers this work through the

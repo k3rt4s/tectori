@@ -110,11 +110,8 @@
               Every engagement starts with the questions an examiner, auditor,
               or board will eventually ask. Decisions have owners. Controls
               connect to requirements. Systems produce records as they operate.
-              Documentation explains what happened and why.
-            </p>
-            <p>
-              Every engagement has a named owner accountable for the
-              recommendation, the design, and the delivery.
+              Documentation explains what happened and why. A named owner is
+              accountable for the recommendation, the design, and the delivery.
             </p>
           </div>
         </div>
