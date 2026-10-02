@@ -4,6 +4,17 @@ Tectori website changes are recorded here.
 
 ## 2026-10-02
 
+- FAQ-PAGE, all as Jon approved on 2026-10-02: four answers reuse shipped
+  wording (the six service lines by name; "enterprise expectations" cut;
+  the ai-governance operating model and reference frameworks; contact leads
+  with the call). Three new buyer questions, each traced to a shipped
+  sentence: How does an engagement work?, What is an Evidence Readiness
+  Baseline?, What does Tectori not do? ("Across the service lines, Tectori
+  does not cover ..."). `faq.jsonld.frag` matches the 11 visible
+  questions. Cost and timeline stay off the site; the frameworks question
+  is backlogged. Merge `8918636`, deploy passed (run 37059122226),
+  `check_live_deploy.py` 51 of 51. Rollback: `git revert -m 1 8918636`
+  then push.
 - WORDING-FOLLOWUPS (questions 15 and 16 plus the ai-governance line), all
   as Jon approved on 2026-10-02: the How We Work lead now ends "and you work
   with that person directly.", so the H1's "Direct access." is earned; the
