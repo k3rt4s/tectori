@@ -4,6 +4,12 @@ Tectori website changes are recorded here.
 
 ## 2026-10-02
 
+- FAQ-FRAMEWORKS, as Jon approved on 2026-10-02: new FAQ question "Which
+  frameworks and cloud platform does Tectori work with?", built from the
+  compliance-risk framework list, the ai-governance reference-framework
+  line and cloud-architecture's Azure sentences; schema now 12 questions.
+  Merge `e542b9f`, deploy passed (run 37062269979), `check_live_deploy.py`
+  51 of 51. Rollback: `git revert -m 1 e542b9f` then push.
 - FAQ-PAGE, all as Jon approved on 2026-10-02: four answers reuse shipped
   wording (the six service lines by name; "enterprise expectations" cut;
   the ai-governance operating model and reference frameworks; contact leads
