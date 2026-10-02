@@ -89,6 +89,19 @@
             </p>
           </article>
           <article class="faq-item">
+            <h3>What is an Evidence Readiness Baseline?</h3>
+            <p>
+              An Evidence Readiness Baseline is a practitioner-led review of
+              one defined security or compliance boundary. It tests whether an
+              agreed sample of controls has named owners and current records
+              showing that the controls operate. You receive a prioritized
+              action list, then choose whether to fix the gaps internally or
+              continue into implementation work. There is no maturity score and
+              no claim that the work is an audit, assessment opinion, or
+              certification.
+            </p>
+          </article>
+          <article class="faq-item">
             <h3>Where is Tectori located?</h3>
             <p>
               Tectori is based at {{POSTAL_ADDRESS}}, and works remotely with
