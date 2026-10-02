@@ -109,6 +109,16 @@
             </p>
           </article>
           <article class="faq-item">
+            <h3>What does Tectori not do?</h3>
+            <p>
+              Tectori is not an audit firm and does not issue an audit opinion
+              or a certification. Tectori prepares you for the assessor and does
+              not replace one. The service lines also do not cover penetration
+              testing or red team engagements, a help desk or end user support
+              contract, or legal advice.
+            </p>
+          </article>
+          <article class="faq-item">
             <h3>How do I start a conversation with Tectori?</h3>
             <p>
               Call
