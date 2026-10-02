@@ -23,7 +23,7 @@
   {
     "slug": "about",
     "output": "about.html",
-    "comment": "Tectori's About page presents the founder's verified experience, education, credentials, and teaching history.",
+    "comment": "Tectori's About page presents the principal consultant's verified experience, education, credentials, and teaching history.",
     "title": "About Tectori | Enterprise IT and security, Nashville",
     "description": "Meet {{FOUNDER_NAME}}, Tectori's Nashville based founder and principal consultant, with 20 years across enterprise IT, security, risk, and regulated technology.",
     "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
@@ -170,7 +170,7 @@
   {
     "slug": "how-we-work",
     "output": "how-we-work.html",
-    "comment": "Tectori's How We Work page states the founder-led practice's real engagement and operating model.",
+    "comment": "Tectori's How We Work page states the practice's real engagement and operating model.",
     "title": "How we work | Tectori",
     "description": "Tectori's engagement model, documentation habits, remote delivery approach, communication expectations, and current hiring status.",
     "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
@@ -191,7 +191,7 @@
   {
     "slug": "index",
     "output": "index.html",
-    "comment": "Tectori's homepage presents its audit-ready consulting practice and founder-built product brands.",
+    "comment": "Tectori's homepage presents its audit-ready consulting practice and its product brands.",
     "title": "Tectori | Audit-ready IT, security, and AI governance",
     "description": "Tectori connects cloud, security, compliance, evidence, and governed AI for regulated and growing organizations that need technology to hold up under review.",
     "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
@@ -527,7 +527,7 @@
   {
     "slug": "solutions",
     "output": "solutions.html",
-    "comment": "Tectori's solutions page documents the firm's founder-built product brands.",
+    "comment": "Tectori's solutions page documents the firm's product brands.",
     "title": "Solutions | Tectori",
     "description": "Explore Tectori's product brands for compliance, operations, file intelligence, security, and architecture.",
     "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",

@@ -54,8 +54,9 @@
           <article class="faq-item">
             <h3>Is Tectori a large consulting firm?</h3>
             <p>
-              No. Every engagement has a named owner accountable for
-              recommendations, design, and delivery.
+              No. Tectori is a focused practice, not a layered firm, so every
+              engagement has a named owner accountable for recommendations,
+              design, and delivery.
             </p>
           </article>
           <article class="faq-item">

@@ -3,7 +3,8 @@
           <p class="eyebrow">How we work</p>
           <h1 id="page-title">Direct access. Clear ownership. Useful records.</h1>
           <p class="page-lead">
-            Each engagement has a named owner who stays on it.
+            Each engagement has a named owner who stays on it, and you work
+            with that person directly.
           </p>
         </div>
       </section>
