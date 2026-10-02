@@ -2,6 +2,26 @@
 
 Tectori website changes are recorded here.
 
+## 2026-10-02
+
+- SERVICES (COPY-SERVICE plus PRODUCT-LANDING-PAGES): all six service
+  pages' section h2s now read as the questions a buyer types, each answered
+  by the section below it, and five pages carry the copy fixes from the
+  2026-09-12 read. agentic-ai drops "built to survive the same exam
+  questions" and names ISO/IEC 42001 and the NIST AI RMF as reference
+  frameworks rather than alignment; cloud-architecture's closing heading no
+  longer repeats the lookup line; compliance-risk drops "clients" and
+  replaces "The work is the same." with the record-on-request question;
+  cybersecurity and it-operations name the concrete situation they serve.
+  Jon approved all six as drafted and question 17 (b, c): the agentic-ai
+  meta description, Service JSON-LD and `llms.txt` line, and the /services
+  hub, now use the same reference-framework wording, and the hub's
+  built-to-survive sentence is gone. No Service schema change was needed.
+  Merge `1981bb5`, deploy passed (run 37007854830),
+  `check_live_deploy.py` 51 of 51. `pre_push_review.py` failed with a 401
+  from Azure OpenAI, so an independent Opus review stood in: no defects.
+  Rollback: `git revert -m 1 1981bb5` then push.
+
 ## 2026-09-30
 
 - FOUNDER: the remaining founder-led framing is gone from the rendered
