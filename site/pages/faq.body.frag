@@ -63,6 +63,19 @@
             </p>
           </article>
           <article class="faq-item">
+            <h3>How does an engagement work?</h3>
+            <p>
+              Each engagement has a named owner who stays on it, and you work
+              with that person directly. Engagements take one of three models:
+              ongoing fractional CIO or CISO support, a defined project with
+              agreed deliverables and decision owners, or an objective review
+              with findings and a practical action path. Before the work
+              starts, the engagement defines the business outcome, system
+              boundary, risks, constraints, deliverables, and work that is
+              outside the engagement.
+            </p>
+          </article>
+          <article class="faq-item">
             <h3>Does Tectori sell software?</h3>
             <p>
               Tectori builds and maintains several products as separate
