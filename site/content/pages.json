@@ -382,7 +382,7 @@
     "output": "service-agentic-ai.html",
     "comment": "Tectori's agentic AI orchestration service page, the detail behind the services.html summary.",
     "title": "Agentic AI orchestration | Tectori",
-    "description": "Governed AI automation with approval gates, monitoring, decision records, and human accountability, aligned with ISO/IEC 42001 and the NIST AI Risk Management Framework.",
+    "description": "Governed AI automation with approval gates, monitoring, decision records, and human accountability, using ISO/IEC 42001 and the NIST AI Risk Management Framework as reference frameworks.",
     "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     "og_title": "Agentic AI orchestration | Tectori",
     "og_description": "AI automation held to the same accountability as any material system.",

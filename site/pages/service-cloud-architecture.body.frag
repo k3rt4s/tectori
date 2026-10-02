@@ -11,7 +11,7 @@
       <section class="content-section split-section" aria-labelledby="who-title">
         <div class="section-heading">
           <p class="eyebrow">Who this is for</p>
-          <h2 id="who-title">For environments that have to answer for themselves.</h2>
+          <h2 id="who-title">Who needs an Azure environment designed or reviewed for governance?</h2>
         </div>
         <div class="prose">
           <p>
@@ -27,7 +27,7 @@
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">What the work includes</p>
-            <h2 id="includes-title">Design, governance, and the records that go with them.</h2>
+            <h2 id="includes-title">What does cloud architecture and governance design include?</h2>
           </div>
           <ul class="plain-list">
             <li>Architecture review of the existing environment</li>
@@ -43,7 +43,7 @@
       <section class="content-section" aria-labelledby="deliverables-title">
         <div class="section-heading">
           <p class="eyebrow">Deliverables</p>
-          <h2 id="deliverables-title">What you receive.</h2>
+          <h2 id="deliverables-title">What do you receive from a cloud architecture engagement?</h2>
         </div>
         <div class="practice-grid">
           <article class="practice-item">
@@ -68,7 +68,7 @@
       <section class="content-section split-section" aria-labelledby="readiness-title">
         <div class="section-heading">
           <p class="eyebrow">How it supports audit readiness</p>
-          <h2 id="readiness-title">Every environment decision leaves a trail.</h2>
+          <h2 id="readiness-title">How does a cloud environment stay audit-ready?</h2>
         </div>
         <div class="prose">
           <p>
@@ -84,7 +84,7 @@
         <div class="split-section section">
           <div class="section-heading">
             <p class="eyebrow">What this is not</p>
-            <h2 id="scope-title">What this service line does not cover.</h2>
+            <h2 id="scope-title">What does the cloud architecture service not cover?</h2>
           </div>
           <ul class="plain-list">
             <li>A managed service. Tectori designs, documents, and hands over. Ongoing operation stays with your team or your provider unless the engagement says otherwise.</li>
@@ -96,7 +96,7 @@
 
       <section class="cta-band">
         <div class="cta-inner">
-          <h2>Design the environment so the review is a lookup.</h2>
+          <h2>Design the environment so the records come from operating it.</h2>
           <a class="button primary" href="/contact">Discuss cloud architecture</a>
         </div>
       </section>

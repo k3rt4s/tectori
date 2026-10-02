@@ -21,7 +21,7 @@ Tectori connects cloud, security, compliance, evidence, and governed AI for regu
 - /login.html: Sign in to the Tectori client portal for project workspaces, evidence requests, and review status.
 - /privacy: How the Tectori website handles visitor data, page view counting, organization-identification pixels, contact submissions, privacy requests, and cookie-free pages.
 - /resources: Reading paths for an exam, an AI rollout, or a fractional leadership decision, plus the free tools and a plain-language glossary of the terms used across the site.
-- /service-agentic-ai: Governed AI automation with approval gates, monitoring, decision records, and human accountability, aligned with ISO/IEC 42001 and the NIST AI Risk Management Framework.
+- /service-agentic-ai: Governed AI automation with approval gates, monitoring, decision records, and human accountability, using ISO/IEC 42001 and the NIST AI Risk Management Framework as reference frameworks.
 - /service-cloud-architecture: Azure architecture reviews, governance baselines, deployment patterns, and operational runbooks for cloud environments that must stand up to review.
 - /service-compliance-risk: Requirement to policy to control mapping, gap analysis, risk registers, third party risk, and business continuity planning for FFIEC and HIPAA regulated organizations.
 - /service-cybersecurity: Security control design and ownership, hardening baselines, and identity and access management across Active Directory, Azure, and Microsoft 365.
