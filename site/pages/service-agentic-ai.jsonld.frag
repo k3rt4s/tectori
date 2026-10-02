@@ -7,7 +7,7 @@
             "@id": "{{SITE_URL}}/service-agentic-ai#service",
             "name": "Agentic AI orchestration",
             "url": "{{SITE_URL}}/service-agentic-ai",
-            "description": "Governed AI automation with approval gates, monitoring, decision records, and human accountability, aligned with ISO/IEC 42001 and the NIST AI Risk Management Framework.",
+            "description": "Governed AI automation with approval gates, monitoring, decision records, and human accountability, using ISO/IEC 42001 and the NIST AI Risk Management Framework as reference frameworks.",
             "serviceType": "Agentic AI orchestration",
             "provider": {
               "@id": "{{SITE_URL}}/#organization"

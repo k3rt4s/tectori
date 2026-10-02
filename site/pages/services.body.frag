@@ -215,12 +215,11 @@
           </p>
           <p>
             The work delivers governed AI automation with approval gates,
-            monitoring, decision records, and human accountability. It is
-            built to survive the same exam questions as any material system.
+            monitoring, decision records, and human accountability.
           </p>
           <p>
-            Programs align with ISO/IEC 42001 and the NIST AI Risk Management
-            Framework.
+            Programs use ISO/IEC 42001 and the NIST AI Risk Management
+            Framework as reference frameworks.
           </p>
           <h3>Deliverables</h3>
           <ul class="plain-list">
