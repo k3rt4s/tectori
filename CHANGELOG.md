@@ -4,6 +4,19 @@ Tectori website changes are recorded here.
 
 ## 2026-10-02
 
+- WORDING-FOLLOWUPS (questions 15 and 16 plus the ai-governance line), all
+  as Jon approved on 2026-10-02: the How We Work lead now ends "and you work
+  with that person directly.", so the H1's "Direct access." is earned; the
+  FAQ large-firm answer (body and JSON-LD) explains its No ("a focused
+  practice, not a layered firm"); About's two "Every engagement" paragraphs
+  are one; /services and fractional-leadership say "part time CIO
+  leadership, CISO leadership, or both."; the 404 contact card no longer
+  repeats its link; /ai-governance uses ISO/IEC 42001 and the NIST AI RMF
+  "as reference frameworks", matching agentic-ai and /services; the four
+  `pages.json` comments rendered into page source drop founder wording.
+  Merge `a071f3f`, deploy passed (run 37039870622), `check_live_deploy.py`
+  51 of 51. Second review skipped at Jon's call. Rollback:
+  `git revert -m 1 a071f3f` then push.
 - SERVICES (COPY-SERVICE plus PRODUCT-LANDING-PAGES): all six service
   pages' section h2s now read as the questions a buyer types, each answered
   by the section below it, and five pages carry the copy fixes from the
