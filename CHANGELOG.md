@@ -2,6 +2,15 @@
 
 Tectori website changes are recorded here.
 
+## 2026-10-03
+
+- SERVICE-EYEBROWS, question 17 (a) as Jon answered it on 2026-10-02: the
+  hero eyebrow on all six service pages now names the service, "Service
+  line 0N &middot;" then the service name, exactly as on /services. H1s
+  unchanged, six lastmods bumped. Merge `14cd281`, deploy passed (run
+  37144258172), `check_live_deploy.py` 51 of 51. Rollback:
+  `git revert -m 1 14cd281` then push.
+
 ## 2026-10-02
 
 - FAQ-FRAMEWORKS, as Jon approved on 2026-10-02: new FAQ question "Which
