@@ -1,6 +1,6 @@
       <section class="page-hero" aria-labelledby="page-title">
         <div class="page-hero-inner">
-          <p class="eyebrow">Service line 03</p>
+          <p class="eyebrow">Service line 03 &middot; Cybersecurity</p>
           <h1 id="page-title">Controls that are designed, owned, and operating.</h1>
           <p class="page-lead">
             The work includes security control design and ownership, system hardening, and identity and access management across Active Directory, Azure, and Microsoft 365.

@@ -1,6 +1,6 @@
       <section class="page-hero" aria-labelledby="page-title">
         <div class="page-hero-inner">
-          <p class="eyebrow">Service line 06</p>
+          <p class="eyebrow">Service line 06 &middot; Agentic AI orchestration</p>
           <h1 id="page-title">AI automation that answers the same questions as any material system.</h1>
           <p class="page-lead">
             The work delivers governed AI automation with approval gates, monitoring, decision records, and human accountability.
