@@ -1,6 +1,6 @@
       <section class="page-hero" aria-labelledby="page-title">
         <div class="page-hero-inner">
-          <p class="eyebrow">Service line 05</p>
+          <p class="eyebrow">Service line 05 &middot; IT operations</p>
           <h1 id="page-title">Administration that is repeatable and documented.</h1>
           <p class="page-lead">
             For organizations that run on Windows, Active Directory, Azure, IIS, and Microsoft 365 and need administration that can be repeated, explained, and undone.

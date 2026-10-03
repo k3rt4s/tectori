@@ -1,6 +1,6 @@
       <section class="page-hero" aria-labelledby="page-title">
         <div class="page-hero-inner">
-          <p class="eyebrow">Service line 01</p>
+          <p class="eyebrow">Service line 01 &middot; Fractional CIO and CISO leadership</p>
           <h1 id="page-title">A named owner for technology and security, without a full time hire.</h1>
           <p class="page-lead">
             Tectori provides part time CIO leadership, CISO leadership, or both. The work covers technology strategy, security program direction, spending discipline, and clear communication with leadership.
