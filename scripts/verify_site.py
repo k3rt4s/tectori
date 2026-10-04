@@ -3825,6 +3825,94 @@ def check_mobile_menu_is_complete(pages: list[Path], docs_root: Path) -> bool:
     return ok
 
 
+SECTION_OPEN_RE = re.compile(r"<section\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+# The pages that close without a call to action. A legal statement ending in
+# "start a conversation" reads as a sales pitch under the terms, so these
+# three carry none by design. The tree has no signal that separates them
+# from the rest (the footer lists them last but in no marked group), so they
+# are named here, and the check also fails if a name stops being a page, so
+# the list cannot drift into describing pages that are gone.
+PAGES_WITHOUT_CTA_BAND = ("privacy.html", "terms.html", "accessibility.html")
+
+
+def cta_bands(text: str):
+    """Return the inner text of each section whose class list holds cta-band, comments removed."""
+    text = HTML_COMMENT_RE.sub("", text)
+    bands = []
+    for match in SECTION_OPEN_RE.finditer(text):
+        classes = (tag_attribute(match.group(1), "class") or "").split()
+        if "cta-band" not in classes:
+            continue
+        end = text.find("</section", match.end())
+        bands.append(text[match.end(): end if end != -1 else len(text)])
+    return bands
+
+
+def check_page_endings(pages: list[Path], docs_root: Path) -> bool:
+    """Insights pages close with one call to action to /contact, the legal pages with none, the rest with one or more.
+
+    Reads the built pages under docs/. A call to action is a section element
+    whose class list holds cta-band, comments removed. Every page whose name
+    starts with insights (the hub and each archive week) carries exactly
+    one, and a link in it resolves to contact.html. privacy.html, terms.html
+    and accessibility.html (PAGES_WITHOUT_CTA_BAND) carry none. Every other
+    page with the shared header carries at least one; login.html has no
+    header and is not read.
+
+    The wrong tree this exists to catch: an Insights page that lost its band
+    or kept two (the build adds the band to every insights page, and the
+    exporter writes new weeks, so the next week is where this breaks), a band
+    whose button leads elsewhere or is a tel: link only, a band turned into a
+    div or commented out so it is no longer one, and a legal page that gained
+    a pitch. A page whose band moved to a different place on the page passes,
+    since only presence and the link are read. Added 2026-10-04 because the
+    band was added to every insights page on 2026-09-30 by a build rule no
+    check covered.
+    """
+    problems: list[str] = []
+    for name in PAGES_WITHOUT_CTA_BAND:
+        if not (docs_root / name).is_file():
+            problems.append(
+                f"{name} is listed here as a page without a call to action and "
+                "is not in the tree, so this list has drifted"
+            )
+    read = 0
+    for page in pages:
+        if page.name == NO_MENU:
+            continue
+        read += 1
+        bands = cta_bands(page.read_text(encoding="utf-8"))
+        if page.name in PAGES_WITHOUT_CTA_BAND:
+            if bands:
+                problems.append(f"{page.name}: carries {len(bands)} cta-band, and this page is meant to end without one")
+            continue
+        if page.name.startswith("insights"):
+            if len(bands) != 1:
+                problems.append(f"{page.name}: carries {len(bands)} cta-band sections, expected exactly 1")
+                continue
+            leads = False
+            for tag in MENU_ANCHOR_RE.findall(bands[0]):
+                href = html_lib.unescape(tag_attribute(tag, "href") or "").strip()
+                try:
+                    kind, target = resolve_internal(href, page, docs_root)
+                except Exception:
+                    continue
+                if kind == "internal" and target is not None and target.name == "contact.html":
+                    leads = True
+            if not leads:
+                problems.append(f"{page.name}: its cta-band does not link to /contact")
+        elif not bands:
+            problems.append(f"{page.name}: carries no cta-band section")
+
+    ok = not problems
+    print(f"[{'PASS' if ok else 'FAIL'}] insights pages end in one call to action to /contact, "
+          f"legal pages in none, every other page in at least one: {read} pages read, "
+          f"{len(problems)} problems")
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -3870,6 +3958,7 @@ def main() -> int:
         check_jsonld_mirrors_title(pages),
         check_jsonld_identifies_its_own_page(pages, docs_root),
         check_declared_identity(pages, docs_root),
+        check_page_endings(pages, docs_root),
         check_mobile_menu_is_complete(pages, docs_root),
     ]
 
