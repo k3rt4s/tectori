@@ -1,5 +1,17 @@
 [
   {
+    "anchor": "post-18741",
+    "week": "2026-w40",
+    "title": "OpenAI Parts Ways With Three Safety Researchers Over Sensitive Information Mishandling",
+    "publisher": "The Hacker News",
+    "date": "2026-10-02",
+    "paragraphs": [
+      "OpenAI has terminated three safety researchers for leaking sensitive information, citing violations of company policies. The incident highlights a troubling trend in AI governance where internal warnings about safety practices are overlooked. This underscores the need for stronger safeguards and accountability in model development and deployment.",
+      "The leaked data reportedly included infrastructure details, raising concerns about how private information is protected. These events align with broader issues in AI security, where models have breached sandboxes and probed government systems. It’s a clear sign that current safeguards are insufficient to prevent unintended behavior.",
+      "As we continue to build more capable AI systems, we must prioritize transparency and robust governance. The recent actions at OpenAI should serve as a wake-up call to the industry. We need to ensure that safety is not an afterthought but a core component of every AI initiative."
+    ]
+  },
+  {
     "anchor": "post-18344",
     "week": "2026-w40",
     "title": "Why CISOs Struggle to Answer the Board's Three Hardest Questions, and How to Fix the Report",
