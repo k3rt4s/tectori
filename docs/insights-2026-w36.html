@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Tectori's Insights archive for 31 August to 6 September 2026 carries 11 short takes on the security and AI reporting read that week. -->
+<!-- Tectori's Insights archive for 31 August to 6 September 2026 carries 22 short takes on the security and AI reporting read that week. -->
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -7,7 +7,7 @@
     <title>Insights, 31 August to 6 September 2026 | Tectori</title>
     <meta
       name="description"
-      content="11 short takes on the security and AI reporting Tectori read in the week of 31 August to 6 September 2026, each credited to the publication that reported it."
+      content="22 short takes on the security and AI reporting Tectori read in the week of 31 August to 6 September 2026, each credited to the publication that reported it."
     >
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta property="og:title" content="Insights, 31 August to 6 September 2026">
@@ -77,7 +77,7 @@
           <p class="eyebrow">Insights archive</p>
           <h1 id="page-title">31 August to 6 September 2026.</h1>
           <p class="page-lead">
-            11 short takes on what we read that week, newest first. Each one shows the article's own date where its publisher gave one, and credits the publication that reported it.
+            22 short takes on what we read that week, newest first. Each one shows the article's own date where its publisher gave one, and credits the publication that reported it.
           </p>
           <p><a class="text-link" href="/insights">Back to all Insights</a></p>
         </div>
@@ -88,6 +88,45 @@
           <h2 id="archive-title">What we read, and what it meant.</h2>
         </div>
         <div class="faq-list">
+          <article class="archive-item" id="post-15502">
+            <p class="archive-meta"><time datetime="2026-09-03">3 September 2026</time> &middot; on Blogs nvidia</p>
+            <h3>NVIDIA to Acquire Hugging Face</h3>
+            <p>NVIDIA&#x27;s acquisition of Hugging Face marks a significant shift in the open model landscape. The deal brings together NVIDIA&#x27;s infrastructure and Hugging Face&#x27;s community to scale AI access and innovation. Open models are foundational to a diverse and secure AI ecosystem. They empower organizations to adopt the right tools without starting from scratch.</p>
+            <p>This move reinforces the importance of open weights in fostering widespread AI adoption. By supporting open source and multi-cloud development, Hugging Face will continue to serve as a hub for creators and researchers. NVIDIA&#x27;s commitment to open models aligns with broader goals of accessibility and collaboration. It&#x27;s a step toward ensuring AI benefits all sectors, from healthcare to education.</p>
+            <p>The acquisition also raises questions about governance and security in an expanding open model ecosystem. As models become more accessible, ensuring their safe and responsible use becomes critical. This is where AI security, LLM governance, and model risk management come into focus. The challenge is to balance open innovation with accountability and protection.</p>
+            <p>Hugging Face&#x27;s open platform will remain a cornerstone for developers, but the integration with NVIDIA&#x27;s resources could influence how models are evaluated, deployed, and secured. As we move toward more agentic AI systems, these foundational practices will shape the future of secure and trustworthy AI. The road ahead is collaborative, practical, and deeply rooted in real-world impact.</p>
+          </article>
+          <article class="archive-item" id="post-15524">
+            <p class="archive-meta"><time datetime="2026-09-02">2 September 2026</time> &middot; on Unit 42</p>
+            <h3>An AI-Assisted Cyber Attack: Inside a Unit 42 Investigation</h3>
+            <p>Unit 42 investigated an AI-assisted breach where an attacker used agentic AI to breach an enterprise network in under 10 hours. The attack leveraged multiple AI agents to systematically target different layers of defense. This demonstrated how AI can compress weeks of tradecraft into a rapid, coordinated effort.</p>
+            <p>The attacker used AI to map internal systems, harvest secrets, and hijack cloud infrastructure. They even left behind an 80-page report on the organization’s security posture. This highlights the operational efficiency AI can bring to cyberattacks without needing zero-days or elite skills.</p>
+            <p>Defenders must recognize the indicators of agentic attacks—like structured Markdown files or parallel LLM calls. Organizations should govern AI as core infrastructure, apply strict controls, and monitor for behavioral loops. Speed and adaptability are now the enemy.</p>
+            <p>This incident underscores the need for proactive governance over AI tools. We must build defenses that match the pace of AI-driven threats. The future of security lies in balancing innovation with control.</p>
+          </article>
+          <article class="archive-item" id="post-15566">
+            <p class="archive-meta"><time datetime="2026-09-01">1 September 2026</time> &middot; on Cyfirma</p>
+            <h3>CYBER THREAT LANDSCAPE REPORT INDIA</h3>
+            <p>The BFSI sector in India is facing a rapidly evolving threat landscape where attackers are leveraging cloud services, social engineering, and third-party vendors to bypass traditional security measures. Supply chain attacks are becoming more sophisticated, using recruitment and regulatory-themed lures to compromise employees and contractors. These tactics blend legitimate tools with malicious payloads, making detection increasingly difficult.</p>
+            <p>For BFSI leaders, the shift from perimeter-based defenses to an integrated resilience model is essential. This model must connect cyber defense, fraud prevention, identity protection, third-party risk, and regulatory compliance. The use of cloud services as a C2 channel complicates detection, requiring closer monitoring of PowerShell execution, LNK files, and unusual API usage.</p>
+            <p>The integration of AI in phishing and deepfake impersonation further amplifies the risk. BFSI organizations must prioritize continuous monitoring, employee awareness, and robust identity governance. By adopting a unified approach, leaders can better defend against the convergence of threats impacting the financial ecosystem.</p>
+          </article>
+          <article class="archive-item" id="post-15549">
+            <p class="archive-meta"><time datetime="2026-09-01">1 September 2026</time> &middot; on Manifold</p>
+            <h3>GitSpawn: A Single Flaw Lets Untrusted Repos Run Code in Claude Code, Codex, Cursor, and Grok</h3>
+            <p>GitSpawn is a critical vulnerability in AI coding agents that allows untrusted repositories to execute code with user privileges. These agents gather context using git commands before any authentication or workspace-trust prompt, often without sanitizing the repository’s configuration. This creates a path for arbitrary code execution, leveraging git’s command execution sinks like core.fsmonitor.</p>
+            <p>The risk is real and widespread. Agents like Claude Code, Hermes, and Grok Build run git commands to collect project details, and if a malicious .git/config is present, it can trigger harmful commands. This happens before the user even realizes the danger, with no approval prompt and full access to credentials and environment variables.</p>
+            <p>This flaw isn’t limited to one vendor. Multiple agents across different platforms face the same issue, showing a systemic problem in how context is gathered. The attack vector is simple—delivering a compromised directory via shared files, USB, or sync folders. The damage is severe, with full machine access and potential data exfiltration.</p>
+            <p>The solution starts with awareness and proactive measures. If you receive a repository, inspect its .git/config for suspicious settings. If you build an agent, sanitize git configurations during context gathering. Security must evolve with these tools, ensuring they don’t become attack vectors.</p>
+          </article>
+          <article class="archive-item" id="post-15249">
+            <p class="archive-meta"><time datetime="2026-09-01">1 September 2026</time> &middot; on Paloaltonetworks</p>
+            <h3>Palo Alto Networks Acquires Console to Agentify Security</h3>
+            <p>Palo Alto Networks has acquired Console to enhance agentic AI in security. This move aligns with the shift toward autonomous workflows that leverage AI for faster, more intelligent decision-making. The integration of Console&#x27;s capabilities into Cortex® will support teams in investigating threats and taking action with greater efficiency.</p>
+            <p>The acquisition highlights the growing importance of agentic AI in enterprise security. As organizations adopt AI-driven tools, governance and audit become critical. Ensuring these systems operate within defined controls and comply with standards like NIST CSF or ISO 27001 will be key to managing risk effectively.</p>
+            <p>Console&#x27;s approach to simplifying complex operations through natural language interactions is promising. However, the real challenge lies in maintaining oversight and accountability. Enterprises must balance automation with human oversight to prevent unintended consequences and ensure transparency in AI-driven security processes.</p>
+            <p>This acquisition reflects a broader trend toward integrating AI into security operations. As agentic systems evolve, so must the frameworks that govern them. Leaders must focus on building resilient, auditable, and adaptable security architectures that support both innovation and compliance.</p>
+          </article>
           <article class="archive-item" id="post-15190">
             <p class="archive-meta"><time datetime="2026-09-01">1 September 2026</time> &middot; on Therecord</p>
             <h3>Cyber risk from frontier AI poses ‘most immediate concern’ to global financial system, watchdog warns</h3>
@@ -142,6 +181,14 @@
             <p>Secure GitHub Actions workflows are critical. The lack of an author-association gate allowed any user to trigger the release. We must enforce gates, limit permissions, and use frozen lockfiles to prevent arbitrary code execution. This is a win for attackers who understand the weaknesses in open source ecosystems.</p>
             <p>The fix involved removing the issue_comment trigger and tightening permissions. Teams must review their CI/CD pipelines for similar vulnerabilities. AI and automation can’t replace vigilance—especially in open source. Stay sharp, and keep your supply chains secure.</p>
           </article>
+          <article class="archive-item" id="post-15248">
+            <p class="archive-meta"><time datetime="2026-08-27">27 August 2026</time> &middot; on GitHub</p>
+            <h3>GitHub - CSPF-Founder/red-clippy: open-source pentest management built to be operated by an AI agent</h3>
+            <p>Red Clippy is redefining how we approach pentesting by integrating AI agents into the workflow. It offers a structured way to manage engagements, ensuring that every step is recorded and nothing is repeated. This is a significant shift from traditional methods where findings often got lost in the noise.</p>
+            <p>The tool introduces a database to store all observations and findings, making coverage a query rather than a memory. This means teams can pick up exactly where they left off, which is a game-changer for efficiency and consistency. It also enforces rules through a Red Team Instructions document, which guides the agent’s behavior during testing.</p>
+            <p>What stands out is how it balances automation with human oversight. The agent does the heavy lifting, but the tester remains in the loop, able to review, correct, or delete any record. This hybrid model ensures that the speed of AI doesn’t compromise the discipline of a real engagement.</p>
+            <p>For those in agentic AI and multi-agent orchestration, Red Clippy shows how we can build systems that are both powerful and auditable. It’s a step toward better governance and control over AI-driven security operations.</p>
+          </article>
           <article class="archive-item" id="post-15217">
             <p class="archive-meta"><time datetime="2026-08-27">27 August 2026</time> &middot; on Sygnia</p>
             <h3>Fire Ant Evolves: From Hypervisors to Trusted Infrastructure</h3>
@@ -173,6 +220,43 @@
             <p>האיסוף של נתונים, תפעול ניטור מדויק, והצלבה של פעילות תקיפה הייתה קריטית לזיהוי ההאקר. כל המתקפות נורמות בקצף, אך כאן נוצרה סיטואציה שיכולה להיעקב כקטסטרופלית. היכולת לשלוט ב-AI היא נשק חכם, אך גם נשק של מתקפות מתקדמות.</p>
             <p>האתגר הגדול הוא לא רק בזיהוי התקפות, אלא בשמירת תקשורת בין צוותים, פיתוח תהליכי ניטור, והשלמת גיבויים. עם שילוב של AI, גיבויים, וניהול קורבן מתקדם, חשוב להכין את הארגון להגנה על עצמו.</p>
             <p>המקרה הזה מציג את הדרישה להכנת מערכות חיזוק עתידיות שתוסיפו לתקיפות. ברגע שבו אנו שוכרים את האינטגרציה בין AI, תקשורת, וניהול קורבן, אנחנו מוכנים ללחימה אמיתית.</p>
+          </article>
+          <article class="archive-item" id="post-15534">
+            <p class="archive-meta"><time datetime="2026-06-26">26 June 2026</time> &middot; on CloudSEK</p>
+            <h3>Bluekit Phishing as a Service (PhaaS)</h3>
+            <p>BlueKit&#x27;s P2P phishing architecture is reshaping how threat actors operate. By obscuring backend infrastructure from traditional detection methods, it significantly complicates incident response and IOC-based analysis. This shift demands a reevaluation of how we monitor and detect phishing campaigns.</p>
+            <p>The platform&#x27;s anti-detection features, including CAPTCHA bypass and browser fingerprint evasion, highlight the need for more adaptive detection strategies. Security teams must prioritize behavioral analysis and anomaly detection over signature-based approaches to counter such sophisticated threats.</p>
+            <p>BlueKit&#x27;s integration of automated post-compromise workflows and session hijacking tools underscores the evolution of phishing from credential theft to full account compromise. This requires a stronger focus on Zero Trust principles and continuous session monitoring to prevent persistent access.</p>
+            <p>Enterprises must invest in AI-driven security operations that can detect subtle anomalies and adapt to emerging threats. The battle against BlueKit and similar platforms hinges on our ability to stay ahead of their operational maturity and evasion tactics.</p>
+          </article>
+          <article class="archive-item" id="post-15466">
+            <p class="archive-meta"><time datetime="2026-06-01">1 June 2026</time> &middot; on Checkmarx</p>
+            <h3>Update: Ongoing Checkmarx Supply Chain Security Incident</h3>
+            <p>The Checkmarx supply chain incident is a stark reminder of the risks in CI/CD pipelines and credential management. Attackers exploited a Trivy vulnerability to access GitHub repos, leading to the publication of malicious code and data leaks. This highlights the need for strict access controls and hardening of cloud environments.</p>
+            <p>Credential rotation and secure authentication methods are critical. Checkmarx rotated exposed credentials and moved to OIDC, a step we should all follow. Tools like Trivy and Mandiant can help detect and mitigate such threats early.</p>
+            <p>GitHub and AWS environments must be treated as high-value targets. Checkmarx locked down access and enhanced monitoring, which is a model for others. Teams should prioritize least-privilege access and regular security audits to prevent similar breaches.</p>
+          </article>
+          <article class="archive-item" id="post-15533">
+            <p class="archive-meta"><time datetime="2026-04-29">29 April 2026</time> &middot; on Varonis</p>
+            <h3>Meet Bluekit: The AI-Powered All-in-One Phishing Kit</h3>
+            <p>Bluekit represents a significant evolution in phishing kits. By integrating AI and automation, it streamlines the attack lifecycle from template selection to domain management and campaign execution. This consolidation reduces the barrier to entry for attackers and increases the sophistication of phishing operations. Security teams must adapt to detect these advanced threats.</p>
+            <p>The AI Assistant within Bluekit offers operators tools to craft phishing campaigns, though our testing revealed limitations. The output leaned on placeholders and generic scaffolding rather than polished, ready-to-use content. This suggests the AI serves more as a campaign generator than a fully automated phishing solution. Still, its presence highlights the growing role of AI in attack vectors.</p>
+            <p>Bluekit’s rapid development and expanding feature set underscore the need for proactive defense strategies. Traditional detection methods may fall short against such dynamic threats. Security operations must prioritize advanced detection, real-time response, and continuous monitoring to stay ahead of evolving attack patterns.</p>
+          </article>
+          <article class="archive-item" id="post-15409">
+            <p class="archive-meta"><time datetime="2026-04-02">2 April 2026</time> &middot; on Pypi</p>
+            <h3>Incident Report: LiteLLM/Telnyx supply-chain attacks, with guidance - The Python Package Index Blog</h3>
+            <p>The recent PyPI supply chain attacks on litellm and telnyx highlight the growing threat of malware injection into widely used packages. Attackers exploited exposed API tokens to inject malicious code, harvesting credentials and exfiltrating data. These incidents underscore the need for stronger security practices in both development and dependency management.</p>
+            <p>Dependency cooldowns are a critical defense. By delaying installs of recently published packages, developers give security teams time to detect and respond to threats. Tools like uv and pip v26.1 now support this strategy, but it’s not a silver bullet. Pair cooldowns with vulnerability scanning to ensure timely updates without compromising security.</p>
+            <p>Maintainers must also secure their release workflows. Use trusted publishers, enforce 2FA, and lock dependencies to prevent unauthorized changes. These steps reduce the attack surface and protect users from compromised packages. The PyPI community is actively working on automated quarantining and improved reporting mechanisms to stay ahead of threats.</p>
+          </article>
+          <article class="archive-item" id="post-15369">
+            <p class="archive-meta"><time datetime="2026-03-16">16 March 2026</time> &middot; on Lumen</p>
+            <h3>KV-botnet: Don&#x27;t call it a comeback</h3>
+            <p>KV-botnet is a stark reminder of how state-sponsored actors exploit critical infrastructure. The recent takedown effort by the FBI, supported by Lumen’s null-routing, disrupted a major botnet used for espionage. This shows the importance of proactive defense, especially in sectors where infrastructure is a key target.</p>
+            <p>The botnet’s focus on SOHO routers and firewalls highlights a persistent threat. These devices, often overlooked, provide a foothold for attackers to build covert networks. The operators’ attempts to re-exploit devices after takedown efforts underscore the need for continuous monitoring and rapid response.</p>
+            <p>Supply chain security must be a priority. Compromised edge devices can serve as entry points for larger attacks. Organizations should ensure their infrastructure is resilient, with updated patches and robust detection mechanisms. This is not just about reacting to threats—it’s about anticipating them.</p>
+            <p>The collaboration between law enforcement and private sector defenders is crucial. It sets a precedent for how we can collectively counter sophisticated cyber threats. As we move toward more AI-driven security, we must integrate these lessons into our strategies for better protection.</p>
           </article>
         </div>
       </section>
