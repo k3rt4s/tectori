@@ -3913,6 +3913,165 @@ def check_page_endings(pages: list[Path], docs_root: Path) -> bool:
     return ok
 
 
+# SC 1.4.11 asks 3 to 1 of the visual information needed to find a control,
+# and the number is fixed by the standard at every conformance level, so it is
+# written here where the text check reads its own from the published statement.
+CONTROL_BOUNDARY_MINIMUM = 3.0
+CONTROL_TAGS = ("a", "button", "input", "select", "textarea", "summary")
+BORDER_COLOUR_RE = re.compile(
+    r"var\([^)]*\)|rgba?\([^)]*\)|#[0-9a-fA-F]{3,6}\b|transparent|currentColor|inherit",
+    re.IGNORECASE,
+)
+BORDER_STYLE_WORDS = ("solid", "dashed", "dotted", "double", "groove", "ridge", "inset", "outset")
+
+# The surface each control's border is read on, keyed by the selector as the
+# stylesheet writes it (one entry per comma-separated selector). Stated rather
+# than derived, for the reason CONTRAST_READ_ON is, and kept honest in both
+# directions: a control selector that sets a border colour and is not named
+# here fails as unmeasured, and so does a name here whose rule no longer sets
+# one. The surface is what the control sits on, not what its label sits on.
+# The two .button entries on a dark band are the ones declared for the dark
+# bands (the hero scrim and the call to action band); a translucent colour is
+# blended onto that surface before it is measured.
+CONTROL_BORDER_ON = {
+    ".desktop-nav .nav-contact": "the page",
+    ".nav-menu summary": "the page",
+    ".button.secondary": "a dark band",
+    ".button.light-outline": "a dark band",
+    ".button.outline": "the page",
+    ".form-field textarea": "the page",
+    ".form-field textarea:focus": "the page",
+    ".form-field input": "the page",
+    ".form-field input:focus": "the page",
+}
+
+
+def is_control_selector(selector: str, body: str) -> bool:
+    """Return whether one selector names something a visitor operates."""
+    last = re.split(r"[\s>+~]+", selector.strip())[-1]
+    tag = re.match(r"[A-Za-z][\w-]*", last)
+    classes = re.findall(r"\.([\w-]+)", last)
+    if tag and tag.group(0).lower() in CONTROL_TAGS:
+        return True
+    if "button" in classes or "nav-contact" in classes:
+        return True
+    return bool(re.search(r"cursor\s*:\s*pointer", body, re.IGNORECASE))
+
+
+def control_border_colours(declaration_name: str, value: str):
+    """Return (colours, problem) for a border or border-color declaration; colours is a list of strings."""
+    value = CSS_IMPORTANT_RE.sub("", value).strip()
+    if declaration_name == "border":
+        words = value.lower().split()
+        if not words or words[0] in ("0", "none") or value.lower() == "0 none":
+            return [], None
+        if re.match(r"0(px|rem|em)?\b", words[0]) and not BORDER_COLOUR_RE.search(value):
+            return [], None
+    found = BORDER_COLOUR_RE.findall(value)
+    if found:
+        return found, None
+    if declaration_name == "border-color" or any(w in value.lower().split() for w in BORDER_STYLE_WORDS):
+        return [], "names no colour, so the border takes the control's text colour, which is not measured here"
+    return [], None
+
+
+def check_control_contrast(docs_root: Path) -> bool:
+    """Every border a control draws around itself reaches 3 to 1 against the surface it sits on.
+
+    The text check measures colours a control's label is painted in. SC 1.4.11
+    asks the same of the boundary that identifies the control, 3 to 1, and
+    nothing computed it: on 2026-09-29 the header Contact pill's border
+    (--orange on the page) measured 2.70 to 1 with every check green, and
+    .button.outline carried the same border unused. Reads docs/styles.css only.
+    A control is a rule whose selector ends in a, button, input, select,
+    textarea or summary, or in .button or .nav-contact, or whose rule sets
+    cursor: pointer. Only the border shorthand and border-color are read,
+    because a one-sided border (border-bottom) is a divider between menu
+    entries and draws no boundary. Transparent is skipped, since it draws
+    nothing; a translucent colour is blended onto its surface first. Every
+    declaration in the file is measured, media blocks included, rather than
+    the one that wins a cascade, so a failure can be a state that never
+    paints; that is the safe error.
+
+    The wrong tree this exists to catch: a new or restyled control whose
+    border is a palette colour too pale for the surface it sits on; a border
+    on a selector this table does not name, which fails as unmeasured so a
+    new control cannot ship unchecked; a border with no colour, which takes
+    the text colour and is not measured. A tree that moves a pale-bordered
+    control onto a dark surface passes here only if the table is changed to
+    say so, which is a visible edit. Blind spots: a boundary drawn by
+    box-shadow or outline, and a control whose real surface is a photograph
+    (the hero) are read as the named surface. Added 2026-10-04.
+    """
+    stylesheet = docs_root / "styles.css"
+    if not stylesheet.is_file():
+        print("[FAIL] every control border reaches 3 to 1 against its surface: "
+              "styles.css is not in the tree")
+        return False
+    css = CSS_COMMENT_RE.sub(" ", stylesheet.read_text(encoding="utf-8"))
+    palette = css_palette(css)
+    problems: list[str] = []
+    seen: set[tuple[str, str]] = set()
+    measured_selectors: set[str] = set()
+    measured = 0
+    for selector_list, body in CSS_RULE_RE.findall(css):
+        for selector in (" ".join(part.split()) for part in selector_list.split(",")):
+            if not selector or selector.startswith("@") or not is_control_selector(selector, body):
+                continue
+            for declaration in body.split(";"):
+                if ":" not in declaration:
+                    continue
+                name, value = declaration.split(":", 1)
+                name, value = name.strip().lower(), value.strip()
+                if name not in ("border", "border-color"):
+                    continue
+                colours, problem = control_border_colours(name, value)
+                if problem:
+                    problems.append(f"{selector} {{ {name}: {value} }} {problem}")
+                    continue
+                for text in colours:
+                    if text.lower() in ("transparent",):
+                        continue
+                    measured_selectors.add(selector)
+                    if (selector, text) in seen:
+                        continue
+                    seen.add((selector, text))
+                    surface_name = CONTROL_BORDER_ON.get(selector)
+                    if surface_name is None:
+                        problems.append(
+                            f"{selector} draws a border in {text!r} and nothing "
+                            "here says which surface it sits on, so its contrast "
+                            "went unmeasured"
+                        )
+                        continue
+                    colour = css_colour(text, palette)
+                    surface = css_colour(CONTRAST_SURFACES[surface_name], palette)
+                    if not colour or not surface:
+                        problems.append(f"{selector}: {text!r} on {surface_name} is not a colour this check can read")
+                        continue
+                    measured += 1
+                    ratio = contrast_ratio(composite(colour, surface), surface)
+                    if ratio < CONTROL_BOUNDARY_MINIMUM:
+                        problems.append(
+                            f"{selector} draws its border in {text} on {surface_name}: "
+                            f"{ratio:.2f} to 1, and SC 1.4.11 asks "
+                            f"{CONTROL_BOUNDARY_MINIMUM:g} to 1 for a control's boundary"
+                        )
+    for selector in sorted(CONTROL_BORDER_ON):
+        if selector not in measured_selectors:
+            problems.append(
+                f"{selector} is listed here as a bordered control and styles.css "
+                "no longer sets a border colour on it, so this list has drifted "
+                "from the stylesheet"
+            )
+    ok = not problems
+    print(f"[{'PASS' if ok else 'FAIL'}] every control border reaches 3 to 1 against its "
+          f"surface: {measured} borders measured, {len(problems)} problems")
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -3958,6 +4117,7 @@ def main() -> int:
         check_jsonld_mirrors_title(pages),
         check_jsonld_identifies_its_own_page(pages, docs_root),
         check_declared_identity(pages, docs_root),
+        check_control_contrast(docs_root),
         check_page_endings(pages, docs_root),
         check_mobile_menu_is_complete(pages, docs_root),
     ]
