@@ -4072,6 +4072,222 @@ def check_control_contrast(docs_root: Path) -> bool:
     return ok
 
 
+TARGET_MINIMUM_PX = 24.0
+ROOT_FONT_PX = 16.0
+LENGTH_RE = re.compile(r"^(-?\d*\.?\d+)(px|rem|em|%)?$")
+CSS_TOKEN_RE = re.compile(r"[^\s(]+(?:\([^)]*\))?")
+# The classes that mark navigation. A rule that targets a link under one of
+# them and sets anything that changes its size has to be one of the families
+# below, so a new navigation link rule cannot ship unmeasured.
+NAV_CONTAINER_CLASSES = (
+    "utility-bar", "desktop-nav", "nav-menu", "footer-links", "footer-social", "site-footer",
+)
+SIZE_PROPERTIES = (
+    "min-height", "height", "padding", "padding-top", "padding-bottom", "font-size", "line-height",
+)
+# (name, selectors whose font-size and line-height the link inherits, in
+# order outermost first, selectors that style the link itself in cascade
+# order, the selector of the box the link is a child of). The last is what
+# says whether the link is blockified: a child of a flex or grid container is,
+# so its min-height applies and it is a box of its own.
+NAVIGATION_LINK_FAMILIES = (
+    ("utility bar links", (".utility-bar",), (".utility-bar a",), ".utility-bar div"),
+    ("desktop navigation links", (".desktop-nav",), (".desktop-nav a",), ".desktop-nav"),
+    ("header Contact pill", (".desktop-nav",), (".desktop-nav a", ".desktop-nav .nav-contact"), ".desktop-nav"),
+    ("mobile menu links", (".nav-menu", ".nav-menu nav"), (".nav-menu a", ".nav-menu nav a"), ".nav-menu nav"),
+    ("footer links", (".site-footer", ".footer-links"), (".footer-links a",), ".footer-links"),
+    ("footer social links", (".site-footer", ".footer-social"), (".footer-social a",), ".footer-social"),
+)
+
+
+def css_length(value: str, font_px: float):
+    """Return a length in pixels, resolving rem against 16px and em against font_px, or None."""
+    match = LENGTH_RE.match(value.strip().lower())
+    if not match:
+        return None
+    number, unit = float(match.group(1)), match.group(2)
+    if unit == "rem":
+        return number * ROOT_FONT_PX
+    if unit == "em":
+        return number * font_px
+    if unit == "%":
+        return number * font_px / 100
+    if unit is None and number != 0:
+        return None
+    return number
+
+
+def css_declarations(css: str):
+    """Return (selector, property, value) for every declaration in source order, with padding expanded to sides."""
+    declared = []
+    for selector_list, body in CSS_RULE_RE.findall(css):
+        for selector in (" ".join(part.split()) for part in selector_list.split(",")):
+            if not selector or selector.startswith("@"):
+                continue
+            for declaration in body.split(";"):
+                if ":" not in declaration:
+                    continue
+                name, value = declaration.split(":", 1)
+                name, value = name.strip().lower(), CSS_IMPORTANT_RE.sub("", value).strip()
+                if name == "padding":
+                    parts = CSS_TOKEN_RE.findall(value)
+                    top, bottom = {
+                        1: (0, 0), 2: (0, 0), 3: (0, 2), 4: (0, 2),
+                    }.get(len(parts), (None, None))
+                    if top is None:
+                        declared.append((selector, "padding-top", ""))
+                        declared.append((selector, "padding-bottom", ""))
+                    else:
+                        declared.append((selector, "padding-top", parts[top]))
+                        declared.append((selector, "padding-bottom", parts[bottom]))
+                else:
+                    declared.append((selector, name, value))
+    return declared
+
+
+def fold_selectors(declared, selectors) -> dict:
+    """Return each property's last value among rules whose selector is exactly one of the given ones."""
+    folded: dict = {}
+    for wanted in selectors:
+        for selector, name, value in declared:
+            if selector == wanted:
+                folded[name] = value
+    return folded
+
+
+def navigation_target_height(declared, containers, own, parent, border_box: bool):
+    """Return (height_px, arithmetic) for a navigation link, or (None, reason) if it cannot be computed."""
+    body = fold_selectors(declared, ("body",))
+    font = css_length(body.get("font-size", ""), ROOT_FONT_PX)
+    if font is None:
+        return None, "body declares no font-size this check can read"
+    line = body.get("line-height", "")
+    steps = [f"body {font:g}px"]
+    line_factor = None
+    line_px = None
+
+    def take_line(text: str, size: float):
+        if re.match(r"^\d*\.?\d+$", text):
+            return float(text), None
+        length = css_length(text, size)
+        return (None, length) if length is not None else (None, None)
+
+    line_factor, line_px = take_line(line, font)
+    if line_factor is None and line_px is None:
+        return None, "body declares no line-height this check can read"
+    for selector in list(containers) + list(own):
+        props = fold_selectors(declared, (selector,))
+        if "font-size" in props:
+            size = css_length(props["font-size"], font)
+            if size is None:
+                return None, f"{selector} font-size {props['font-size']!r} is not a length this check can read"
+            font = size
+            steps.append(f"{selector} font-size {props['font-size']} = {font:g}px")
+        if "line-height" in props:
+            line_factor, line_px = take_line(props["line-height"], font)
+            if line_factor is None and line_px is None:
+                return None, f"{selector} line-height {props['line-height']!r} is not one this check can read"
+    line_box = line_px if line_px is not None else line_factor * font
+    steps.append(f"line box {line_box:.2f}px")
+    mine = fold_selectors(declared, own)
+    padding = 0.0
+    for side in ("padding-top", "padding-bottom"):
+        text = mine.get(side, "0")
+        length = css_length(text, font)
+        if length is None:
+            return None, f"{side} {text!r} is not a length this check can read"
+        padding += length
+    steps.append(f"vertical padding {padding:g}px")
+    parent_display = fold_selectors(declared, (parent,)).get("display", "").lower()
+    own_display = mine.get("display", "inline").lower()
+    blockified = parent_display in ("flex", "inline-flex", "grid", "inline-grid") or own_display != "inline"
+    minimum = 0.0
+    if "min-height" in mine:
+        length = css_length(mine["min-height"], font)
+        if length is None:
+            return None, f"min-height {mine['min-height']!r} is not a length this check can read"
+        if blockified:
+            minimum = length
+            steps.append(f"min-height {length:g}px")
+        else:
+            steps.append(f"min-height {length:g}px ignored, the link is an inline box")
+    natural = line_box + padding
+    height = max(minimum, natural) if border_box else max(minimum, line_box) + padding
+    return height, "; ".join(steps) + f" => {height:.2f}px"
+
+
+def check_navigation_targets(docs_root: Path) -> bool:
+    """Every navigation link in docs/styles.css is at least 24 CSS pixels tall (SC 2.5.8).
+
+    The 24 pixel floor of WCAG 2.2 SC 2.5.8 applies to the target a visitor
+    taps. This reads only docs/styles.css and computes, for each family in
+    NAVIGATION_LINK_FAMILIES, the link's height as the larger of its min-height
+    (counted only when the link is a box of its own: a child of a flex or grid
+    box, or one with a display other than inline) and its line box plus
+    vertical padding. The line box is the declared line-height times the
+    font-size, where the font-size is the one declared on the link or the
+    nearest container, em against that container and rem against the 16px
+    root, and the line-height is the body's 1.6 unless a rule sets its own.
+    So the desktop links at 0.91rem are 14.56px x 1.6 = 23.30px of text, 41.30
+    with 9px above and below. The box is border-box when the stylesheet says
+    so for every element, which it does. Padding is read as its vertical
+    sides; a value this check cannot turn into pixels (clamp, calc, a
+    percentage of something else) fails as unmeasured rather than passing.
+
+    The wrong tree this exists to catch: a padding or min-height lost from a
+    link rule, a font-size cut that drops the line box under 24, a family
+    whose rule is removed so its links fall back to bare text height, and a
+    new navigation link rule that sets a size and is named nowhere here,
+    which fails as unmeasured. Not modelled: the SC's spacing exception (an
+    undersized target passes if a 24px circle on it touches no other
+    target), so a link that fails here on height can still conform; and
+    links inside running text, which the SC exempts and this does not read.
+    Added 2026-10-04 because the 2026-09-29 fix to the top bar had no
+    check, and the same audit measured the target at about 23 and 19px.
+    """
+    stylesheet = docs_root / "styles.css"
+    if not stylesheet.is_file():
+        print("[FAIL] every navigation link is at least 24px tall: styles.css is not in the tree")
+        return False
+    css = CSS_COMMENT_RE.sub(" ", stylesheet.read_text(encoding="utf-8"))
+    declared = css_declarations(css)
+    problems: list[str] = []
+    border_box = fold_selectors(declared, ("*",)).get("box-sizing", "").lower() == "border-box"
+    if fold_selectors(declared, ("html", ":root")).get("font-size"):
+        problems.append("html or :root declares a font-size, so the 16px root this check assumes is not safe")
+
+    known = {selector for _n, _c, own, _p in NAVIGATION_LINK_FAMILIES for selector in own}
+    for selector, name, _value in declared:
+        words = re.split(r"[\s>+~]+", selector)
+        base = re.sub(r":[\w-]+(\([^)]*\))?|::[\w-]+", "", selector)
+        last = re.split(r"[\s>+~]+", base)[-1]
+        if name not in SIZE_PROPERTIES or selector in known:
+            continue
+        in_nav = any(f".{cls}" in selector for cls in NAV_CONTAINER_CLASSES)
+        is_link = last == "a" or last.startswith("a.") or "nav-contact" in last
+        if in_nav and is_link and words:
+            problems.append(
+                f"{selector} sets {name} on a navigation link and nothing here "
+                "measures it, so its target size went unmeasured"
+            )
+    for family, containers, own, parent in NAVIGATION_LINK_FAMILIES:
+        height, how = navigation_target_height(declared, containers, own, parent, border_box)
+        if height is None:
+            problems.append(f"{family}: {how}")
+        elif height + 1e-9 < TARGET_MINIMUM_PX:
+            problems.append(
+                f"{family} are {height:.2f}px tall, under the {TARGET_MINIMUM_PX:g}px "
+                f"SC 2.5.8 asks for ({how})"
+            )
+    ok = not problems
+    print(f"[{'PASS' if ok else 'FAIL'}] every navigation link is at least "
+          f"{TARGET_MINIMUM_PX:g}px tall: {len(NAVIGATION_LINK_FAMILIES)} link families "
+          f"measured, {len(problems)} problems")
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -4117,6 +4333,7 @@ def main() -> int:
         check_jsonld_mirrors_title(pages),
         check_jsonld_identifies_its_own_page(pages, docs_root),
         check_declared_identity(pages, docs_root),
+        check_navigation_targets(docs_root),
         check_control_contrast(docs_root),
         check_page_endings(pages, docs_root),
         check_mobile_menu_is_complete(pages, docs_root),
