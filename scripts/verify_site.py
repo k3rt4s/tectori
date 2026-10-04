@@ -3663,6 +3663,168 @@ def check_declared_identity(pages: list[Path], docs_root: Path) -> bool:
     return ok
 
 
+def tag_attribute(tag_body: str, name: str):
+    """Return an attribute's value by standalone name, quoted or bare, or None if absent.
+
+    The name must stand alone, so data-href or x-class is not it, and an
+    unquoted value counts, matching the house shape in LABEL_CLASS_RE.
+    """
+    match = re.search(
+        r'(?<![\w:.-])' + re.escape(name) + r'(?![\w:.-])(?:\s*=\s*'
+        r'(?:(["\'])(.*?)\1|([^\s"\'<>=`]+)))?',
+        tag_body,
+        re.IGNORECASE | re.DOTALL,
+    )
+    if not match:
+        return None
+    return match.group(2) if match.group(2) is not None else (match.group(3) or "")
+
+
+MENU_ANCHOR_RE = re.compile(r"<a\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+# The mobile menu has to name these two pages. They were added to it on
+# 2026-09-30 after the desktop bar had no room for them, so the menu is the
+# only place a small-screen visitor reaches either from the header.
+MOBILE_MENU_REQUIRED = ("/resources", "/trust")
+
+
+def mobile_menu_entries(text: str):
+    """Return the (href, aria-current) pair of each link in the page's mobile menu, or None."""
+    found = MENU_RE.findall(HTML_COMMENT_RE.sub("", text))
+    if len(found) != 1:
+        return None
+    entries = []
+    for tag in MENU_ANCHOR_RE.findall(found[0][1]):
+        href = tag_attribute(tag, "href")
+        entries.append((html_lib.unescape(href or "").strip(), tag_attribute(tag, "aria-current")))
+    return entries
+
+
+def menu_destination(href: str, page: Path, docs_root: Path) -> str:
+    """Return where a menu link leads, as a docs-relative path, or the raw value if it is not internal."""
+    try:
+        kind, target = resolve_internal(href, page, docs_root)
+    except Exception:
+        return href
+    if kind != "internal" or target is None:
+        return href
+    try:
+        return target.resolve().relative_to(docs_root.resolve()).as_posix()
+    except ValueError:
+        return href
+
+
+def is_parent_section(page: Path, target) -> bool:
+    """Return whether the menu link leads to the section this page is an archive page of.
+
+    insights-2026-w40.html is a page of the Insights section, so marking
+    Insights as current there is the section marker the build sets on
+    purpose, not a stray one. The rule is a filename prefix, so it covers the
+    next archive page without an edit here and nothing else.
+    """
+    return target is not None and page.stem.startswith(target.stem + "-")
+
+
+def check_mobile_menu_is_complete(pages: list[Path], docs_root: Path) -> bool:
+    """Every page with the shared header carries the home page's mobile menu, and marks only itself.
+
+    Reads the built pages under docs/. The expectation is the menu on
+    index.html, not a list written here, so a deliberate reorder or addition
+    made everywhere passes and a page that drifts from the home page fails.
+    Two things are fixed regardless, because they are the regression:
+    /resources and /trust must be in the home menu, and each link must lead
+    to a page in the tree. On each page the link that resolves to the page
+    itself must carry aria-current="page" and no other link may carry any
+    aria-current, except that an archive page (insights-2026-w40) may mark
+    its section's link (Insights) when it has no entry of its own, and still
+    only one. Every page but login.html (NO_MENU, rendered without the
+    shared header) is read, which includes 404.html and thank-you.html.
+
+    The wrong tree this exists to catch: a menu that is the right length and
+    still wrong, one page that lost /trust while the home page kept it, a
+    link pointing at a page that was renamed, the current-page marker moved
+    to the wrong link or left off the right one, or the marker carried by
+    two links. Attributes are read by standalone name, quoted or bare, and a
+    commented-out menu or link does not count. Added 2026-10-04 because
+    /resources and /trust joined the menu on 2026-09-30 with no check
+    covering them, and check_keyboard_operable counts menus but never reads
+    what is in them.
+    """
+    problems: list[str] = []
+    home = docs_root / "index.html"
+    if not home.is_file():
+        print("[FAIL] every mobile menu matches the home page's and marks only "
+              "its own page: index.html is not in the tree")
+        return False
+    expected = mobile_menu_entries(home.read_text(encoding="utf-8"))
+    if expected is None:
+        print("[FAIL] every mobile menu matches the home page's and marks only "
+              "its own page: index.html does not carry exactly one mobile menu")
+        return False
+    expected_hrefs = [href for href, _marker in expected]
+    for required in MOBILE_MENU_REQUIRED:
+        if required not in expected_hrefs:
+            problems.append(f"index.html: the mobile menu does not list {required}")
+
+    read = 0
+    for page in pages:
+        if page.name == NO_MENU:
+            continue
+        entries = mobile_menu_entries(page.read_text(encoding="utf-8"))
+        if entries is None:
+            problems.append(f"{page.name}: does not carry exactly one mobile menu")
+            continue
+        read += 1
+        hrefs = [href for href, _marker in entries]
+        # Compared by destination, so root-absolute spelling on 404.html and
+        # thank-you.html (by design, they render for deep paths) and the
+        # relative spelling elsewhere are the same link.
+        if [menu_destination(h, page, docs_root) for h in hrefs] != [
+            menu_destination(h, home, docs_root) for h in expected_hrefs
+        ]:
+            here = [menu_destination(h, page, docs_root) for h in hrefs]
+            there = [menu_destination(h, home, docs_root) for h in expected_hrefs]
+            missing = [h for h, d in zip(expected_hrefs, there) if d not in here]
+            extra = [h for h, d in zip(hrefs, here) if d not in there]
+            detail = f"missing {missing}" if missing else ""
+            detail += f"{', ' if detail and extra else ''}unexpected {extra}" if extra else ""
+            problems.append(
+                f"{page.name}: the mobile menu differs from the home page's "
+                f"({detail or 'same links in a different order'})"
+            )
+        marked = 0
+        for href, marker in entries:
+            targets_self = False
+            try:
+                kind, target = resolve_internal(href, page, docs_root)
+            except Exception:
+                kind, target = "external", None
+            if kind == "internal" and target is not None:
+                if not target.is_file():
+                    problems.append(f"{page.name}: the mobile menu links to {href}, which is not in the tree")
+                elif target.resolve() == page.resolve():
+                    targets_self = True
+            is_marked = marker is not None and marker.strip().lower() not in ("", "false")
+            if is_marked:
+                marked += 1
+            if targets_self and (marker or "").strip().lower() != "page":
+                problems.append(f"{page.name}: its own menu entry {href} lacks aria-current=\"page\"")
+            if is_marked and not targets_self and not is_parent_section(page, target):
+                problems.append(
+                    f"{page.name}: the menu entry {href} carries aria-current={marker!r} "
+                    "but is not this page"
+                )
+        if marked > 1:
+            problems.append(f"{page.name}: {marked} menu entries carry aria-current")
+
+    ok = not problems
+    print(f"[{'PASS' if ok else 'FAIL'}] every mobile menu matches the home page's and marks "
+          f"only its own page: {read} menus read, {len(expected_hrefs)} links each, "
+          f"{len(problems)} problems")
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -3708,6 +3870,7 @@ def main() -> int:
         check_jsonld_mirrors_title(pages),
         check_jsonld_identifies_its_own_page(pages, docs_root),
         check_declared_identity(pages, docs_root),
+        check_mobile_menu_is_complete(pages, docs_root),
     ]
 
     passed = sum(results)
