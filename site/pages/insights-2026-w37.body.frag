@@ -3,7 +3,7 @@
           <p class="eyebrow">Insights archive</p>
           <h1 id="page-title">7 to 13 September 2026.</h1>
           <p class="page-lead">
-            71 short takes on what we read that week, newest first. Each one shows the article's own date where its publisher gave one, and credits the publication that reported it.
+            69 short takes on what we read that week, newest first. Each one shows the article's own date where its publisher gave one, and credits the publication that reported it.
           </p>
           <p><a class="text-link" href="/insights">Back to all Insights</a></p>
         </div>
@@ -242,13 +242,6 @@
             <p>This highlights the need for rigorous plugin and replication protocol security in enterprise environments. The replication path was never validated, making it a perfect entry point for attackers. It&#x27;s a stark reminder that even well-secured systems can have unguarded back doors.</p>
             <p>The blast radius is enormous because PostgreSQL powers so much of the internet. From financial transactions to medical records, a critical vulnerability in this database can have far-reaching consequences. It&#x27;s a wake-up call for all organizations relying on PostgreSQL.</p>
           </article>
-          <article class="archive-item" id="post-15922">
-            <p class="archive-meta"><time datetime="2026-09-09">9 September 2026</time> &middot; on Cyber sites beta gouv</p>
-            <h3>Cyberattaques : L’ANSSI met en place une capacité renforcée de réaction dédiée aux services de l’État</h3>
-            <p>L’ANSSI a répondu à la montée des cyberattaques en lançant REACTIV une capacité renforcée de réaction dédiée aux services de l’État. Ce dispositif opérationnel permet de mobiliser rapidement les ressources nécessaires pour répondre aux violations de données et aux compromissions de comptes. C’est une réponse proactive à une menace qui s’intensifie.</p>
-            <p>REACTIV marque un changement de paradigme en intégrant une approche systémique pour la gestion des incidents. Cela aligne la réponse aux attaques avec des principes comme le Zero Trust et le NIST CSF. Ces cadres permettent d’assurer une résilience durable et une réactivité accrue face aux menaces modernes.</p>
-            <p>L’Agence gagne en autorité en imposant des mesures immédiates aux ministères et en centralisant la communication technique en cas d’attaque. Cela renforce la coordination entre les acteurs et améliore la gestion des crises. Un exemple concret de l’importance d’une réponse structurée et rapide.</p>
-          </article>
           <article class="archive-item" id="post-1280">
             <p class="archive-meta"><time datetime="2026-09-09">9 September 2026</time> &middot; on The Hacker News</p>
             <h3>DeepSeek Harness Flaw Let AI Agents Disable Their Own File Sandbox Without Approval</h3>
@@ -366,14 +359,6 @@
             <p>The AI profiling feature in Bee Stealer is a triage tool for attackers. It helps identify high-value employees and accounts from stolen logs. This capability accelerates victim selection and emphasizes the importance of monitoring and blocking unauthorized outbound data transfers.</p>
             <p>Organizations must include AI applications in their endpoint inventories and data-handling policies. Endpoint protections and governance frameworks are critical to mitigating risks from stolen logs and AI-generated profiles. Proactive measures like revoking tokens and resetting credentials can also help contain breaches.</p>
             <p>This threat reinforces the need for Zero Trust principles and robust AI governance. As AI becomes more integrated into enterprise environments, securing data at rest and in motion is essential. We must stay ahead of these evolving threats through proactive security strategies.</p>
-          </article>
-          <article class="archive-item" id="post-15899">
-            <p class="archive-meta"><time datetime="2026-09-07">7 September 2026</time> &middot; on Reporter</p>
-            <h3>Exclusif: Une cyberattaque qui fait paniquer les médecins</h3>
-            <p>Un cyberattaque a touché un prestataire informatique au Luxembourg affectant plusieurs cabinets médicaux. Des données sensibles de patients ont été compromises. La responsabilité finale incombe aux médecins en cas de fuite.</p>
-            <p>La communication tardive et incohérente de la firme a alimenté la défiance. Les clients n&#x27;ont été informés qu&#x27;après plusieurs jours d&#x27;inactivité. La complexité de l&#x27;attaque a justifié un délai dans la publication des détails.</p>
-            <p>Cette situation souligne la fragilité des systèmes de santé numérisés. Les données sensibles doivent être protégées avec la plus grande rigueur. La gouvernance et la conformité sont cruciales pour éviter de tels risques.</p>
-            <p>Il est temps de renforcer les cadres réglementaires et les mesures de sécurité. Les acteurs du secteur doivent agir ensemble pour protéger les données des patients et restaurer la confiance.</p>
           </article>
           <article class="archive-item" id="post-15713">
             <p class="archive-meta"><time datetime="2026-09-04">4 September 2026</time> &middot; on Blogs windows</p>

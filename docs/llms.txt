@@ -13,8 +13,8 @@ Tectori connects cloud, security, compliance, evidence, and governed AI for regu
 - /faq: Answers about Tectori's audit-ready IT, cybersecurity, compliance, fractional leadership, AI governance, and technology solutions.
 - /how-we-work: Tectori's engagement model, documentation habits, remote delivery approach, communication expectations, and current hiring status.
 - /insights: Short, plain takes on the security and AI stories that matter to regulated organizations, collected a week at a time and credited to the publications that reported them.
-- /insights-2026-w36: 22 short takes on the security and AI reporting Tectori read in the week of 31 August to 6 September 2026, each credited to the publication that reported it.
-- /insights-2026-w37: 71 short takes on the security and AI reporting Tectori read in the week of 7 to 13 September 2026, each credited to the publication that reported it.
+- /insights-2026-w36: 21 short takes on the security and AI reporting Tectori read in the week of 31 August to 6 September 2026, each credited to the publication that reported it.
+- /insights-2026-w37: 69 short takes on the security and AI reporting Tectori read in the week of 7 to 13 September 2026, each credited to the publication that reported it.
 - /insights-2026-w38: 48 short takes on the security and AI reporting Tectori read in the week of 14 to 20 September 2026, each credited to the publication that reported it.
 - /insights-2026-w39: 85 short takes on the security and AI reporting Tectori read in the week of 21 to 27 September 2026, each credited to the publication that reported it.
 - /insights-2026-w40: 54 short takes on the security and AI reporting Tectori read in the week of 28 September to 4 October 2026, each credited to the publication that reported it.
