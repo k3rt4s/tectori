@@ -2,6 +2,15 @@
 
 Tectori website changes are recorded here.
 
+## 2026-10-14
+
+- Documented counts leave out the weekly Insights pages. README.md and
+  PERMISSIONS.md now say 25 generated pages and 46 published files, each
+  plus one per Insights week, and check_doc_claims.py counts the same way.
+  The old totals (30 and 51) went stale every Monday, so the scheduled
+  Insights export failed tectori's own CI gate and nothing reached the site
+  after the 2026-10-05 export.
+
 ## 2026-10-03
 
 - SERVICE-EYEBROWS, question 17 (a) as Jon answered it on 2026-10-02: the

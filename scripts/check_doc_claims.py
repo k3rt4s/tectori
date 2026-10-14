@@ -99,17 +99,28 @@ def is_results_append(node: ast.AST) -> bool:
     )
 
 
+# One page per Insights week, added by personal-automation's scheduled export
+# every Monday. The prose counts the fixed pages and says "plus one per
+# Insights week", because a number that includes them goes stale weekly and
+# fails the very export that grew it (2026-10-07 to 2026-10-14).
+WEEKLY_PAGE = re.compile(r"insights-\d{4}-w\d{2}")
+
+
 def published_files() -> int:
-    """Return how many files the site publishes, counted in docs/."""
+    """Return how many files the site publishes, counted in docs/, leaving out the weekly Insights pages."""
     # docs/ rather than a build, because two other checks already prove the
     # two are the same tree byte for byte and a build here would cost a
     # minute to learn nothing new.
-    return sum(1 for path in DOCS_ROOT.rglob("*") if path.is_file())
+    return sum(
+        1 for path in DOCS_ROOT.rglob("*")
+        if path.is_file() and not (path.parent == DOCS_ROOT and path.suffix == ".html" and WEEKLY_PAGE.fullmatch(path.stem))
+    )
 
 
 def modelled_pages() -> int:
-    """Return how many pages the content model declares."""
-    return len(read_json(SITE_DIR / "content" / "pages.json"))
+    """Return how many pages the content model declares, leaving out the weekly Insights pages."""
+    pages = read_json(SITE_DIR / "content" / "pages.json")
+    return sum(1 for page in pages if not WEEKLY_PAGE.fullmatch(page["slug"]))
 
 
 def service_pages() -> int:
