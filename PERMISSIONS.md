@@ -43,7 +43,8 @@ accounts below, never in this repository.
   the site needs from a host is one behaviour rather than a product: every
   internal link and every canonical is extensionless, so the host must serve
   `/about` for the file `about.html`. Pages does. A bucket or a default nginx
-  returns all 51 files correctly and 404s on every link on every page, and
+  returns all 46 files correctly, plus one page per Insights week, and 404s
+  on every link on every page, and
   every check in this repository still passes, because the checks read the
   tree rather than the live site. Only `scripts/check_live_deploy.py` would
   catch it, and only after the move.
