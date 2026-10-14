@@ -403,6 +403,7 @@
           <article class="archive-item" id="post-18085">
             <p class="archive-meta"><time datetime="2026-09-22">22 September 2026</time> &middot; on Cyber zorgenkind</p>
             <h3>Mapping Scaleway IAM, An Attacker’s View of the Trust Boundaries</h3>
+            <p>Scaleway&#x27;s IAM model allows leaked user API keys to enable full account takeover and exposes metadata as public information.</p>
             <p>Scaleway&#x27;s IAM model feels familiar at first glance, especially if you&#x27;ve worked with AWS or Azure. But there are key differences in how trust boundaries are defined, and those gaps can be exploited if you&#x27;re not careful.</p>
             <p>The biggest difference lies in how credentials function. A Scaleway user principal API key doesn&#x27;t just grant permissions—it impersonates the user. A leaked key means full account takeover, not just access to specific resources.</p>
             <p>This model also treats Organization and Project metadata as effectively public. Even a policy-less key can reveal enough to orient an attacker. Defenders need to treat all metadata as potentially exposed and build access controls accordingly.</p>
@@ -411,6 +412,7 @@
           <article class="archive-item" id="post-17881">
             <p class="archive-meta"><time datetime="2026-09-02">2 September 2026</time> &middot; on OpenAI</p>
             <h3>Daybreak</h3>
+            <p>Daybreak introduces an AI-driven approach to cyber defense that enhances existing workflows by integrating frontier models with trusted partners to improve risk reduction and collaboration.</p>
             <p>Daybreak represents a significant shift in how we approach cyber defense. By breaking down complex tasks into thousands of reasoning steps, it enables models to handle what once required specialized tools and multiple handoffs. This is not just about automation—it’s about creating a governed stack that keeps human control at the center while accelerating risk reduction.</p>
             <p>The integration of frontier models with trusted workflows and ecosystem partners is reshaping defensive operations. From secure SDLC to authorized testing, Daybreak is designed to fit into existing workflows. It’s about enhancing, not replacing, the expertise of defenders with AI that complements their skills.</p>
             <p>What stands out is the emphasis on collaboration and trust. Daybreak partners with leading security firms to ensure AI is deployed responsibly. This approach aligns with the principles of governance and compliance that are central to modern cybersecurity. It’s a step toward a more resilient digital ecosystem.</p>
@@ -418,6 +420,7 @@
           <article class="archive-item" id="post-18013">
             <p class="archive-meta"><time datetime="2026-08-31">31 August 2026</time> &middot; on Dark Reading</p>
             <h3>When Every Agent Looks Like an Insider</h3>
+            <p>The article discusses how traditional identity models fail to detect AI agents as insiders due to their unpredictable behavior and speed, creating security blind spots.</p>
             <p>The article highlights a critical gap in traditional identity models when applied to AI agents. These systems move at machine speed but behave non-deterministically, blurring the lines between human and machine. This makes them hard to detect as insiders, yet they pose unique risks that current frameworks miss.</p>
             <p>A key issue is that identity systems authenticate agents like service accounts and authorize them like employees. Neither model accounts for an actor that is fast but unpredictable. This creates a blind spot, especially when agents explore systems beyond their intended scope.</p>
             <p>The risk isn&#x27;t always obvious. A fleet of agents might act within their permissions but collectively cause unexpected issues. These problems are emergent, not anomalous, and often go unnoticed until damage is done. Traditional controls can&#x27;t catch them in real time.</p>
@@ -426,6 +429,7 @@
           <article class="archive-item" id="post-17412">
             <p class="archive-meta"><time datetime="2026-08-24">24 August 2026</time> &middot; on Dark Reading</p>
             <h3>Why trust can no longer be a one-time decision</h3>
+            <p>Continuous Identity is redefining trust by requiring dynamic, real-time validation of access rather than static permissions.</p>
             <p>Continuous Identity is reshaping how we think about trust in an increasingly autonomous world. Traditional models granted access once and assumed it remained valid. That’s no longer sustainable. Trust must now be re-earned dynamically as conditions evolve.</p>
             <p>The rise of AI agents and autonomous systems demands a shift from static permissions to continuous validation. Access decisions can’t rely solely on fixed attributes like roles or departments. They must incorporate real-time context—device status, workload changes, and evolving risk profiles.</p>
             <p>This isn’t just about adding another layer of security. It’s about redefining the operating model. Identity systems must now continuously evaluate whether access remains appropriate. Governance must evolve from validating past decisions to informing current ones in real-time.</p>
@@ -434,6 +438,7 @@
           <article class="archive-item" id="post-17729">
             <p class="archive-meta"><time datetime="2026-08-19">19 August 2026</time> &middot; on Pindrop</p>
             <h3>Deepfake Statistics 2026: Enterprise Survey of 250 Security Leaders</h3>
+            <p>Deepfake attacks pose a serious security threat to enterprises as they bypass Zero Trust controls and cause significant financial and reputational damage.</p>
             <p>Deepfakes are no longer a fringe concern. They&#x27;re a serious security threat that can lead to data theft and intrusion. These attacks bypass traditional Zero Trust controls by exploiting human trust in visual and auditory cues. This makes them dangerous in every virtual interaction from helpdesk calls to executive meetings.</p>
             <p>The Pindrop survey of 250 U.S. security leaders shows most are unprepared. Over 90% fear their defenses won&#x27;t keep up with attack sophistication. The stakes are high—over 25% of impacted organizations lost millions in a single incident. Until leadership sees the risk firsthand, deepfakes will remain a low priority.</p>
             <p>This isn&#x27;t just about detection. It&#x27;s about governance and integration. Zero Trust needs to evolve to address synthetic identities and AI-driven deception. We must build systems that verify intent and context, not just credentials. This requires cross-functional collaboration and a shift in how we think about trust in digital interactions.</p>
@@ -442,6 +447,7 @@
           <article class="archive-item" id="post-18093">
             <p class="archive-meta"><time datetime="2026-05-15">15 May 2026</time> &middot; on Ncsc</p>
             <h3>One does not simply defend agentically</h3>
+            <p>Cyber defenders face challenges using AI for security by aligning automated actions with organizational priorities and ensuring low-risk, controlled implementation.</p>
             <p>Defenders face unique challenges when using AI for cyber defence. Unlike attackers, who focus on technical problems with clear success metrics, we deal with organisational constraints and political hurdles. Our mission is to protect the business, not to conduct cyber offence. This means we must carefully assess how AI can support our goals without disrupting operations.</p>
             <p>The key is to align AI with our priorities. We need frameworks that ensure automated actions are low risk and tightly controlled. For example, AI can help summarise data or prioritise tasks, but it shouldn’t replace human judgment. We must build trust in these tools by proving they won’t harm the business.</p>
             <p>Agentic AI has potential, but it requires careful governance. We need to answer questions like: Can AI prove a system’s network calls or process dependencies? Only then can we confidently automate defences. This is where research and collaboration will be critical. The NCSC is working on initiatives like Cyber Shield to shape this future.</p>
@@ -450,6 +456,7 @@
           <article class="archive-item" id="post-17689">
             <p class="archive-meta"><time datetime="2026-02-25">25 February 2026</time> &middot; on Xygeni</p>
             <h3>Malicious npm Package in Baileys Fork (Skyzopedia Case)</h3>
+            <p>A malicious npm package in a Baileys fork injects runtime code to secretly control bot sessions through attacker channels.</p>
             <p>The runtime code injection in the npm package @dappaoffc/baileys-mod highlights a new frontier in supply chain attacks. This malicious fork of Baileys silently subscribes a bot session to attacker-controlled channels through a delayed payload. The injection occurs at runtime, evading install-time detection.</p>
             <p>The attack leverages trusted GitHub as a control channel, dynamically updating its payload without new npm versions. It mimics legitimate behavior, making it indistinguishable from user-initiated actions. This underscores the need for runtime-aware analysis beyond traditional scanning.</p>
             <p>The malicious code uses an IIFE to execute after an 80-second delay, fetching a JSON list of newsletter IDs from a GitHub raw URL. It spaces requests to avoid rate-limit detection and suppresses errors, further hiding its presence within the core library.</p>
@@ -458,6 +465,7 @@
           <article class="archive-item" id="post-18084">
             <p class="archive-meta"><time datetime="2026-01-01">1 January 2026</time> &middot; on Island</p>
             <h3>AI Playbook for Security Teams</h3>
+            <p>The article discusses how security teams must adapt traditional tools to manage AI adoption by implementing a unified control plane and addressing 40 key controls across nine entry points.</p>
             <p>The nine entry points in the AI playbook highlight where agents and AI systems enter the enterprise. These points are critical for understanding exposure and ensuring visibility. As security teams grapple with the rapid adoption of AI, it&#x27;s clear that traditional tools like DLP and endpoint protection are no longer sufficient. The playbook provides a framework to identify gaps and align with the necessary controls.</p>
             <p>A unified control plane is essential for managing AI at scale. The playbook emphasizes that piecing together multiple point solutions is inefficient and leaves gaps. A single control plane can provide comprehensive coverage across all nine entry points, ensuring consistency and reducing complexity. This approach aligns with the need for governance, audit, and control in agentic AI environments.</p>
             <p>The AI maturity assessment and checklist offer a practical way to evaluate readiness. Before scaling AI, organizations must address 40 key controls. These include agent visibility, identity management, model choice, and app publishing. The playbook underscores the importance of governance and compliance in every stage of AI deployment. This is where my expertise in frameworks like NIST CSF and ISO 27001 becomes relevant.</p>
@@ -466,6 +474,7 @@
           <article class="archive-item" id="post-18055">
             <p class="archive-meta"><time datetime="2026-01-01">1 January 2026</time> &middot; on Oligo</p>
             <h3>CADR for dummies</h3>
+            <p>The article discusses how CADR focuses on runtime behavior to detect threats in cloud applications and AI systems by analyzing real-time activity rather than static configurations.</p>
             <p>Cloud application security is evolving fast—but the answer doesn’t have to be complicated. CADR focuses on runtime behavior instead of static configurations. This approach helps separate real threats from noise by looking at what’s actually happening in running applications. It’s a shift from traditional tools that miss the early signs of attacks.</p>
             <p>Runtime is where modern threats live. Attacks often start in code, dependencies, and APIs—not at the perimeter. CADR gives deep visibility into these areas, catching issues before they escalate. This is critical for protecting production environments and reducing the time to respond.</p>
             <p>CADR unifies protection across apps, cloud, network, and AI. Attacks move freely between layers, and CAD’s runtime-driven model tracks them effectively. By correlating signals from different sources, it creates a full picture of what’s happening in real time. This helps reduce blind spots and improves overall security.</p>
@@ -474,6 +483,7 @@
           <article class="archive-item" id="post-14791">
             <p class="archive-meta"><time datetime="2025-12-12">12 December 2025</time> &middot; on Inoti</p>
             <h3>File Notification Attacks</h3>
+            <p>File-notification systems across multiple platforms expose user behavior through metadata leaks, allowing attackers to infer activity without direct file access.</p>
             <p>File-notification systems are a critical but often overlooked attack surface. Across Linux, Android, Windows, and macOS, these systems leak user behavior through file events, even when files themselves are unreadable. On Linux, watching a readable directory reveals all file activity, including keystrokes. On Android, apps can bypass privacy protections to monitor private folders like WhatsApp’s media. Windows is particularly vulnerable, as watching the root directory exposes full file paths, including real-time website visits. These flaws highlight the need for stronger access controls and rethinking how we handle cross-user notifications in enterprise environments.</p>
             <p>The root issue is that file-notification systems expose metadata, not content. This allows attackers to infer timing, file existence, and even application behavior. For example, inter-keystroke timing leaks can reveal typing patterns, while file events track when media is sent or received. These attacks don’t require direct file access, making them hard to detect. Enterprise environments must audit their use of file-notification APIs and enforce strict permissions to prevent cross-user exploitation.</p>
             <p>Modern systems like Linux and Windows have partial mitigations, but many attacks still work out-of-the-box. For instance, Windows’ undocumented behavior remains a risk unless policies are explicitly enabled. This underscores the importance of regular security audits and staying informed about emerging threats. As we increasingly rely on file-notification systems for automation and monitoring, we must ensure they’re designed with security in mind from the start.</p>
