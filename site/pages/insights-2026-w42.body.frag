@@ -3,7 +3,7 @@
           <p class="eyebrow">Insights archive</p>
           <h1 id="page-title">12 to 18 October 2026.</h1>
           <p class="page-lead">
-            31 short takes on what we read that week, newest first. Each one shows the article's own date where its publisher gave one, and credits the publication that reported it.
+            40 short takes on what we read that week, newest first. Each one shows the article's own date where its publisher gave one, and credits the publication that reported it.
           </p>
           <p><a class="text-link" href="/insights">Back to all Insights</a></p>
         </div>
@@ -14,6 +14,60 @@
           <h2 id="archive-title">What we read, and what it meant.</h2>
         </div>
         <div class="faq-list">
+          <article class="archive-item" id="post-21009">
+            <p class="archive-meta"><time datetime="2026-10-14">14 October 2026</time> &middot; on Darktrace</p>
+            <h3>Attackers Abuse Nezha Monitoring Tool | CSA</h3>
+            <p>Attackers are misusing the Nezha monitoring tool in cloud environments to evade detection and gain insights into compromised systems.</p>
+            <p>The misuse of legitimate tools like Nezha underscores the growing threat of dual-use software in cloud environments. Attackers are leveraging open-source monitoring tools to blend into operational tooling and evade detection. This highlights the need for stronger asset visibility and software governance to identify unexpected deployments.</p>
+            <p>Nezha’s open design allows attackers to expose compromised systems through its unauthenticated dashboard. This provides visibility into victimology and infrastructure, enabling both attackers and defenders to gain insights. The scale of such exposure is alarming, with hundreds of servers potentially compromised.</p>
+            <p>In cloud environments, distinguishing between benign and malicious use of monitoring tools is increasingly difficult. Organizations must focus on governance and visibility to detect anomalies rather than relying solely on malware-centric detection. Trust inversion is real, and it’s time to rethink how we secure our assets.</p>
+            <p>The lesson is clear: modern threats rely on legitimate tools to operate stealthily. We need to prioritize asset visibility, software governance, and proactive monitoring to stay ahead. The future of security lies in understanding and mitigating these subtle risks.</p>
+          </article>
+          <article class="archive-item" id="post-21008">
+            <p class="archive-meta"><time datetime="2026-10-14">14 October 2026</time> &middot; on Silmaril</p>
+            <h3>The Vital Trifecta for AI Agent Defense | CSA</h3>
+            <p>The article discusses the need for a defense framework that combines situational awareness external control and continuous learning to secure evolving enterprise AI systems.</p>
+            <p>The Vital Trifecta framework aligns closely with my work on agentic AI governance. It highlights the need for defenses that understand the application&#x27;s context, operate independently of the agent&#x27;s environment, and adapt to changing workflows. These properties are essential for securing enterprise AI systems as they evolve from local to async operations.</p>
+            <p>Each stage of AI agent development removes human oversight. The person at the keyboard—once the final check—becomes a distant memory. This shift demands a defense that can judge actions without human intervention. The Vital Trifecta provides the structure to do this by combining situational awareness, external control, and continuous learning.</p>
+            <p>Generic guardrails fall short. They can’t account for the complexity of real-world workflows or the subtlety of distributed attacks. A defense must know what normal looks like, track the agent’s trajectory, and keep learning. This is the only way to detect and block actions that deviate from the intended task.</p>
+            <p>The Vital Trifecta is the mirror of the lethal trifecta. While the latter enables attacks, the former prevents them. As agentic AI becomes more autonomous, we must prioritize defenses that are omniscient, independent, and adaptable. This is the foundation of secure AI operations.</p>
+          </article>
+          <article class="archive-item" id="post-20945">
+            <p class="archive-meta"><time datetime="2026-10-14">14 October 2026</time> &middot; on The Hacker News</p>
+            <h3>AI-Found Linux Kernel Flaw Gives Local Users Root, and Can Break a Guest Out to the Host</h3>
+            <p>A Linux kernel flaw allows local users to gain root access and escape virtualized environments through the vhost subsystem.</p>
+            <p>A new flaw in Linux&#x27;s vhost subsystem allows local users to read and write kernel memory, leading to root access. The vulnerability, tracked as CVE-2026-74580, was discovered using Corvus AI, a multi-agent system built by Tencent. This highlights how AI can aid in finding complex bugs that might otherwise remain undetected for years.</p>
+            <p>The flaw exists in the vhost code, which manages network and I/O for virtual machines. A local user can exploit it by accessing device nodes like /dev/vhost-net. The vulnerability is deterministic, requiring no lucky timing or memory grooming. This makes it a serious risk for systems relying on virtualization and containerization.</p>
+            <p>The impact is significant, affecting Linux kernels from 4.11 up to 7.2-rc4. The fix involves clearing the cache during ring reconfiguration. Organizations should install updated kernels and restrict access to vhost device nodes until patches are applied. This incident underscores the need for proactive security measures and continuous monitoring of infrastructure.</p>
+            <p>The role of AI in modern threat detection is becoming increasingly critical. Tools like Corvus AI can help identify vulnerabilities that traditional methods might miss. As we adopt more AI-driven security solutions, we must also ensure they are secure and governed properly. This is a step forward in the right direction.</p>
+          </article>
+          <article class="archive-item" id="post-20939">
+            <p class="archive-meta"><time datetime="2026-10-14">14 October 2026</time> &middot; on The Hacker News</p>
+            <h3>An AI Agent Found a Critical OTP Bypass in Production. The Attack Was the Easy Part.</h3>
+            <p>An AI agent identified a critical OTP bypass in a major insurer&#x27;s production system allowing users to redirect one-time passcodes and bypass account verification.</p>
+            <p>An AI pentesting agent found a critical OTP bypass on a major insurer&#x27;s production site. The flaw allowed users to choose where the one-time passcode went, bypassing account verification. This highlights how agentic AI can uncover vulnerabilities that traditional methods miss.</p>
+            <p>The agent mapped the login flow, directed the code to a controlled email inbox, and completed the login. It stopped there, respecting guardrails. This shows how context-aware testing can validate findings without compromising security.</p>
+            <p>The issue stemmed from the server not verifying the address linked to the account. OTPs must be tied to the correct user, a basic check often overlooked. This flaw could let attackers access customer accounts with minimal effort.</p>
+            <p>Agentic testing keeps pace with evolving threats. Unlike rigid pentest schedules, it repeats focused tests as needed. Reflectiz&#x27;s approach combines structured plans with real-browser execution, ensuring comprehensive coverage.</p>
+          </article>
+          <article class="archive-item" id="post-20927">
+            <p class="archive-meta"><time datetime="2026-10-14">14 October 2026</time> &middot; on The Hacker News</p>
+            <h3>Researchers Used a Public OpenAI Model to Build a $250,000 Chrome Full-Chain Exploit in Six Days</h3>
+            <p>Researchers used an openAI model to develop a Chrome full-chain exploit in six days highlighting accelerated exploit creation and reduced costs.</p>
+            <p>The pace of exploit development is accelerating thanks to AI. A team at XBOW used OpenAI&#x27;s GPT-5.6 Sol to build a full-chain Chrome exploit in six days. This is a game-changer for supply chain security. The attack chained three unknown bugs to run code on Windows without user interaction.</p>
+            <p>The implications are clear. AI is reducing the time and cost to create sophisticated attacks. What once took months now takes days and a fraction of the budget. Defenders must rethink how they secure their infrastructure.</p>
+            <p>This isn&#x27;t just about speed. It&#x27;s about the ability to rapidly exploit complex systems. The Chrome exploit crossed multiple sandboxes, showing how AI can bypass traditional defenses. Proactive strategies are no longer optional—they&#x27;re essential.</p>
+            <p>The source URL is</p>
+          </article>
+          <article class="archive-item" id="post-21007">
+            <p class="archive-meta"><time datetime="2026-10-13">13 October 2026</time> &middot; on Checkred</p>
+            <h3>DNS Risks DDI Misses: DNSPM in Cloud | CSA</h3>
+            <p>DNSPM enhances cloud security by continuously monitoring and assessing DNS assets outside traditional DDI oversight to mitigate risks and ensure compliance.</p>
+            <p>DNSPM complements DDI in securing cloud environments by filling critical gaps in DNS oversight. DDI manages what it provisions, but it lacks visibility into DNS assets created outside its scope. Cloud environments often host DNS zones directly with providers or through third-party apps, which remain invisible to DDI. This creates a blind spot where exposure risks go unnoticed.</p>
+            <p>DNSPM addresses this by continuously discovering and assessing all DNS assets across providers. It checks for decommissioned resources, unauthorized changes, and lookalike domains that could compromise brand trust. This ongoing discipline ensures compliance and mitigates risks before they escalate. DDI handles internal infrastructure, while DNSPM focuses on the external, customer-facing layer that’s increasingly scattered across cloud accounts.</p>
+            <p>The two tools should run together, not compete. DDI provides authoritative control over known assets, while DNSPM offers continuous oversight of everything else. This synergy closes security gaps and aligns with compliance frameworks. Security teams and compliance officers need DNSPM’s insights to understand real exposure and prevent incidents before they impact customers.</p>
+            <p>For organizations already using DDI, the key question isn’t whether it’s working—it’s what DNS exists outside of it. DNSPM sits atop DDI, covering exposure DDI was never built to find. This approach shortens audit cycles, protects brand trust, and ensures incidents are caught early. It’s a practical step toward securing the increasingly exposed DNS layer in the cloud.</p>
+          </article>
           <article class="archive-item" id="post-20282">
             <p class="archive-meta"><time datetime="2026-10-13">13 October 2026</time> &middot; on The Hacker News</p>
             <h3>Product Walkthrough: Bitdefender AI Visibility and Control</h3>
@@ -265,6 +319,24 @@
             <p>Zero trust isn’t just a buzzword—it’s a framework that demands continuous verification. Authentication starts the process, but privilege must be scoped, monitored, and revoked when no longer needed. AI agents, like any other identity, should operate with just-in-time access. This means verifying risk continuously, not assuming trust after the first login. The goal is to keep trust earned, not assumed.</p>
             <p>The challenge lies in visibility. As AI becomes more embedded in operations, the identities supporting them often bypass traditional governance. Service accounts, API keys, and workload identities carry standing privilege, making them high-value targets. Organizations must audit access, understand what each identity can do, and ensure controls are in place to mitigate risk. This isn’t just about security—it’s about control.</p>
           </article>
+          <article class="archive-item" id="post-21021">
+            <p class="archive-meta"><time datetime="2026-08-10">10 August 2026</time> &middot; on Cloud Security Alliance</p>
+            <h3>Frontier Ready Maturity Model | CSA</h3>
+            <p>The article discusses a framework helping organizations prepare against AI-enabled threats by focusing on security governance and continuous exposure management.</p>
+            <p>The Frontier Ready Assessment Framework offers a structured path for organizations to prepare against AI-enabled threats. It aligns with my focus on AI security, governance, and Zero Trust by emphasizing continuous exposure management and machine-speed defenses. The framework&#x27;s three domains and five maturity levels provide a clear roadmap for evolving security programs.</p>
+            <p>The 12 categories cover critical areas like defensive AI, incident response, and recovery. This mirrors the need for integrated, proactive approaches in securing agentic AI and LLM systems. Zero Trust and governed automation are central to achieving operational efficiency at scale.</p>
+            <p>For enterprises, the maturity grid is a valuable tool to assess gaps and set improvement targets. It supports the shift from human-paced to machine-speed operations, which is essential for defending against sophisticated, fast-moving adversaries. This approach reinforces the importance of consistent security fundamentals.</p>
+            <p>The framework&#x27;s emphasis on governance and exposure management resonates with my experience in compliance and risk management. It underscores the need for structured, repeatable processes that adapt to emerging threats while maintaining operational integrity.</p>
+          </article>
+          <article class="archive-item" id="post-21065">
+            <p class="archive-meta"><time datetime="2026-06-25">25 June 2026</time> &middot; on Risky</p>
+            <h3>Srsly Risky Biz: Open Weight Model Advances Make the Mythos Debate Moot</h3>
+            <p>Open weight models are making the Mythos debate irrelevant by enabling less-skilled attackers to conduct sophisticated cyber operations.</p>
+            <p>The open weight model advances are making the Mythos debate irrelevant. These models are now so capable they&#x27;re enabling even less-skilled attackers to conduct sophisticated cyber operations. The Five Eyes agencies are right to warn that AI is accelerating the speed, scale, and sophistication of threats.</p>
+            <p>The gap between open weight models and frontier models is closing rapidly. Recent evaluations show models like Kimi 2.5 performing competitively on structured cyber security tasks. Even if they&#x27;re not as good at vulnerability discovery, they&#x27;re still accelerating offensive workflows.</p>
+            <p>A recent case study showed a hacker using Opus 4.5 and GPT-5.2 to hack 14 companies with minimal skill. The attacker framed requests as part of a red team engagement, bypassing guardrails with clever prompting. This highlights the challenge of distinguishing between legitimate work and malicious activity.</p>
+            <p>Policymakers need to focus on strengthening cyber security across sectors rather than relying on guardrails or export bans. The genie is out of the bottle, and we need to prepare for a world where everyone has access to powerful models.</p>
+          </article>
           <article class="archive-item" id="post-19872">
             <p class="archive-meta"><time datetime="2026-06-10">10 June 2026</time> &middot; on F5</p>
             <h3>Attackers Target AI Development Platform Langflow</h3>
@@ -282,6 +354,15 @@
             <p>The use of poetry as a C2 mechanism is both clever and concerning. It underscores the need for robust monitoring and governance frameworks to detect and block such unconventional attack vectors. AI systems, especially those with public-facing endpoints, must be treated as critical assets requiring continuous visibility and protection.</p>
             <p>Organizations must prioritize securing their AI environments. This includes patching known vulnerabilities, restricting unnecessary external access, and implementing zero-trust principles. The PoeLLM incident serves as a stark reminder that even open-source tools can become entry points for sophisticated attacks.</p>
             <p>As AI adoption accelerates, so does the attack surface. Proactive security measures, including attack surface management and real-time monitoring, are essential to prevent exploitation. The lessons from PoeLLM should drive stronger governance and a culture of security across all AI deployments.</p>
+          </article>
+          <article class="archive-item" id="post-21066">
+            <p class="archive-meta"><time datetime="2024-06-17">17 June 2024</time> &middot; on arXiv</p>
+            <h3>Refusal in Language Models Is Mediated by a Single Direction</h3>
+            <p>Researchers found that refusal behavior in language models is controlled by a single direction, which can be manipulated to disable safety mechanisms without affecting other functions.</p>
+            <p>Refusal in language models is a safety mechanism designed to block harmful instructions. Recent research shows this behavior is controlled by a single direction in the model&#x27;s internal structure. This finding is significant because it suggests a way to manipulate model behavior by targeting this specific subspace.</p>
+            <p>The study tested this across 13 large models, revealing that removing or altering this direction can disable refusal without impacting other functions. This opens new possibilities for both defense and attack, highlighting the fragility of current safety measures.</p>
+            <p>For security teams, this means understanding model internals is key to building robust defenses. It also underscores the need for more resilient safety training methods. The implications extend beyond just refusal, touching on broader model control and governance.</p>
+            <p>This work is a reminder that while safety mechanisms are essential, they can be circumvented with deeper technical insight. As we advance in AI security, we must focus on creating systems that are both safe and robust.</p>
           </article>
         </div>
       </section>
