@@ -2,6 +2,23 @@
 
 Tectori website changes are recorded here.
 
+## 2026-10-15
+
+- CHECK-HARDENING: verify_site.py gains four checks, the mobile menu
+  complete and marking its own page, page endings (one call to action on
+  Insights pages, none on legal pages), SC 1.4.11 control border contrast
+  and SC 2.5.8 navigation target height, each proved on a recorded failing
+  input. A review pass made them fail as unmeasured wherever they used to
+  pass silently (percent padding, inline links, unmodelled height
+  properties, @media and !important rules, 8-digit hex, unreadable border
+  tokens, empty hrefs). They found four real defects, fixed in
+  site/static/styles.css: footer, footer social and footer phone links
+  23.04px, now 24px; form field borders 2.02 to 1 and the mobile menu
+  button border 1.40 to 1, now var(--muted), about 5.8 to 1. Merge
+  `01a9651`, verify and deploy passed (run 38844845288),
+  `check_live_deploy.py` 53 of 53. Rollback: `git revert -m 1 01a9651`
+  then push.
+
 ## 2026-10-14
 
 - Documented counts leave out the weekly Insights pages. README.md and
