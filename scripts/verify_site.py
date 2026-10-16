@@ -4124,7 +4124,8 @@ CSS_TOKEN_RE = re.compile(r"[^\s(]+(?:\([^)]*\))?")
 # them and sets anything that changes its size has to be one of the families
 # below, so a new navigation link rule cannot ship unmeasured.
 NAV_CONTAINER_CLASSES = (
-    "utility-bar", "desktop-nav", "nav-menu", "footer-links", "footer-social", "site-footer",
+    "utility-bar", "desktop-nav", "nav-menu", "footer-links", "footer-social", "footer-contact",
+    "site-footer",
 )
 # Properties that change a link's height and that the arithmetic below does
 # not model. A rule that sets one on a family's selector, or font or zoom on a
@@ -4159,6 +4160,7 @@ NAVIGATION_LINK_FAMILIES = (
     ("mobile menu links", (".nav-menu", ".nav-menu nav"), (".nav-menu a", ".nav-menu nav a"), ".nav-menu nav"),
     ("footer links", (".site-footer", ".footer-links"), (".footer-links a",), ".footer-links"),
     ("footer social links", (".site-footer", ".footer-social"), (".footer-social a",), ".footer-social"),
+    ("footer phone links", (".site-footer", ".footer-contact"), (".footer-contact a",), ".footer-contact"),
 )
 
 
@@ -4372,7 +4374,7 @@ def check_navigation_targets(docs_root: Path) -> bool:
     target), so a link that fails here on height can still conform; the SC's
     inline exception (a target in a sentence), so an inline link is reported
     as unmeasured, not as exempt; width, which the SC also bounds; and the
-    border a link draws, which only adds height. A link outside the six
+    border a link draws, which only adds height. A link outside the seven
     families is not read, and rules are matched by exact selector, not by
     specificity. Added 2026-10-04 because the 2026-09-29 fix to the top bar
     had no check, and the same audit measured the target at about 23 and

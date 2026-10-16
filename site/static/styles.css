@@ -240,6 +240,7 @@ a, .button, summary, .service-card, .path-card, .solution-card, .flow-step, inpu
 .site-footer a { text-decoration: none; }
 .footer-links a { min-height: 24px; }
 .footer-social a { min-height: 24px; }
+.footer-contact a { min-height: 24px; }
 .site-footer a:hover { color: var(--orange-text); }
 .footer-contact { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
 .tracking-pixel { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
