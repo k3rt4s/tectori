@@ -4,6 +4,20 @@ Tectori website changes are recorded here.
 
 ## 2026-10-16
 
+- ABOUT-LINKEDIN: the About page names no former employer (Jon, so the site
+  never ranks for those company names). The most recent employer's
+  paragraph is dropped, the CIO and CISO role is described without its
+  company, and the ISA credential names no sponsor. Career facts are
+  re-sourced from the LinkedIn profile applied 2026-08-29: ARR $10M to
+  $100M through four acquisitions with pre-close due diligence, a 12-person
+  team from a zero-function start, SOC 2 Type I to Type II in the first
+  year then four consecutive clean audits; the sectors list, teaching tile
+  and Nashville Software School wording match LinkedIn. Schools and
+  teaching programs stay. THEORY.md records the rule. Independent Sonnet
+  review, no blockers. Merge `f4c4e96`, deploy passed (run 38850747844),
+  `check_live_deploy.py` 53 of 53. Rollback: `git revert -m 1 f4c4e96`
+  then push, which would put the employer names back.
+
 - CHECK-NITS, the 2026-10-15 review's low findings: cta-band and mobile
   menu links now fail when empty, `hidden` or `aria-hidden="true"` (an img
   with alt counts as text); cta-band sections are read past a `>` in a
