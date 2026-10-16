@@ -163,7 +163,7 @@ against it with the same result it gives against the live site.
   identity survived. It fails if the old domain appears even once, or if the
   previous owner's name, given name or structured-data anchor does, because
   each of those is derived from one declared value everywhere. It counts
-  rather than fails on the old brand name, the old job title and the eleven
+  rather than fails on the old brand name, the old job title and the nine
   biography strings, and names the pages carrying them, because those are body
   copy a new owner rewrites rather than rebrands. Before it clones anything it
   reads the content model in both directions: a value declared in `site.json`
