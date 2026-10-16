@@ -23,7 +23,7 @@ What a session needs to believe before it changes anything in this repo.
 - The exporter writes the `insights-2026-w*` fragments with LF working copies. Git normalizes them on add, so the deploy is right, but in that checkout `check_site.py --full` fails its byte-for-byte and source-only checks on those pages, and so does `check_live_deploy.py` after a local build. `git ls-files --eol` lists them; `git checkout --` them and `docs/` before calling it a fault.
 - The hero uses `min-height`, so copy that wraps grows it rather than clipping.
 - Changing the words on a page means bumping that page's `lastmod` in `site/content/public_pages.json`, or the sitemap date check fails one step removed from its cause.
-- The accessibility statement is load-bearing: `check_colour_contrast` reads the WCAG level out of the published statement and enforces the ratio it implies, so editing it changes what the check demands. It covers text pairs only, never SC 1.4.11's 3 to 1 floor on a control's boundary, which is how the header Contact pill shipped at 2.70 to 1 with all checks green.
+- The accessibility statement is load-bearing: `check_colour_contrast` enforces the WCAG level it publishes, so editing it changes the check. Control borders (SC 1.4.11) and nav target heights (SC 2.5.8) use selector tables in `verify_site.py`; a new bordered control or nav link fails as unmeasured until added to them.
 
 ## Decisions that look wrong
 
