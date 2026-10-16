@@ -3680,7 +3680,17 @@ def tag_attribute(tag_body: str, name: str):
     return match.group(2) if match.group(2) is not None else (match.group(3) or "")
 
 
-MENU_ANCHOR_RE = re.compile(r"<a\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+# The attributes of one opening tag, a quoted value read whole so a ">" inside
+# it does not end the tag early. A stray quote with no partner matches nothing,
+# which makes the element unreadable and the check that wanted it fail.
+TAG_ATTRIBUTES = r"""((?:"[^"]*"|'[^']*'|[^>"'])*)"""
+# A link: (attributes, inner html). The inner html ends at the closing tag, at
+# the next opening <a, or at the end of the text, so an unclosed link is still
+# found.
+MENU_ANCHOR_RE = re.compile(
+    r"<a\b" + TAG_ATTRIBUTES + r">(.*?)(?=</a\s*>|<a\b|\Z)", re.IGNORECASE | re.DOTALL
+)
+IMG_RE = re.compile(r"<img\b" + TAG_ATTRIBUTES + r">", re.IGNORECASE | re.DOTALL)
 # The mobile menu has to name these two pages. They were added to it on
 # 2026-09-30 after the desktop bar had no room for them, so the menu is the
 # only place a small-screen visitor reaches either from the header.
@@ -3692,16 +3702,43 @@ def without_html_comments(text: str) -> str:
     return HTML_COMMENT_RE.sub("", text).split("<!--", 1)[0]
 
 
-def mobile_menu_entries(text: str):
-    """Return the (href, aria-current) pair of each link in the page's mobile menu, or None."""
+def link_fault(attributes: str, inner: str):
+    """Return why a link is unusable as a control (hidden, or no text), or None if it is usable.
+
+    Hidden is the hidden attribute (present at all, as a browser reads it) or
+    aria-hidden="true". Text is what is left of the inner html after tags are
+    removed, entities decoded and whitespace dropped, or an img inside it
+    with a non-empty alt.
+    """
+    if tag_attribute(attributes, "hidden") is not None:
+        return "carries the hidden attribute, so no visitor sees it"
+    if (tag_attribute(attributes, "aria-hidden") or "").strip().lower() == "true":
+        return 'carries aria-hidden="true", so a screen reader skips it'
+    if "".join(html_lib.unescape(re.sub(r"<[^>]*>", "", inner)).split()):
+        return None
+    for img in IMG_RE.findall(inner):
+        if html_lib.unescape(tag_attribute(img, "alt") or "").strip():
+            return None
+    return "has no text, so a visitor cannot tell where it leads"
+
+
+def mobile_menu_links(text: str):
+    """Return the (attributes, inner html) pair of each link in the page's mobile menu, or None."""
     found = MENU_RE.findall(without_html_comments(text))
     if len(found) != 1:
         return None
-    entries = []
-    for tag in MENU_ANCHOR_RE.findall(found[0][1]):
-        href = tag_attribute(tag, "href")
-        entries.append((html_lib.unescape(href or "").strip(), tag_attribute(tag, "aria-current")))
-    return entries
+    return MENU_ANCHOR_RE.findall(found[0][1])
+
+
+def mobile_menu_entries(text: str):
+    """Return the (href, aria-current) pair of each link in the page's mobile menu, or None."""
+    links = mobile_menu_links(text)
+    if links is None:
+        return None
+    return [
+        (html_lib.unescape(tag_attribute(tag, "href") or "").strip(), tag_attribute(tag, "aria-current"))
+        for tag, _inner in links
+    ]
 
 
 def menu_destination(href: str, page: Path, docs_root: Path) -> str:
@@ -3748,8 +3785,9 @@ def check_mobile_menu_is_complete(pages: list[Path], docs_root: Path) -> bool:
     still wrong, one page that lost /trust while the home page kept it, a
     link pointing at a page that was renamed, the current-page marker moved
     to the wrong link or left off the right one, or the marker carried by
-    two links, or a link with no href. Attributes are read by standalone name,
-    quoted or bare, and a commented-out menu or link does not count, nor does
+    two links, or a link with no href, no text (an img with an alt counts as text), the
+    hidden attribute or aria-hidden="true". Attributes are read by standalone
+    name, quoted or bare, a ">" inside a quoted value does not end the tag, and a commented-out menu or link does not count, nor does
     anything after a comment that never closes. A menu hidden from view by CSS
     is still read. Added 2026-10-04 because
     /resources and /trust joined the menu on 2026-09-30 with no check
@@ -3781,6 +3819,11 @@ def check_mobile_menu_is_complete(pages: list[Path], docs_root: Path) -> bool:
             problems.append(f"{page.name}: does not carry exactly one mobile menu")
             continue
         read += 1
+        for tag, inner in mobile_menu_links(page.read_text(encoding="utf-8")):
+            fault = link_fault(tag, inner)
+            if fault:
+                href = html_lib.unescape(tag_attribute(tag, "href") or "").strip()
+                problems.append(f"{page.name}: the mobile menu link to {href or '(no href)'} {fault}")
         hrefs = [href for href, _marker in entries]
         # Compared by destination, so root-absolute spelling on 404.html and
         # thank-you.html (by design, they render for deep paths) and the
@@ -3834,7 +3877,9 @@ def check_mobile_menu_is_complete(pages: list[Path], docs_root: Path) -> bool:
     return ok
 
 
-SECTION_OPEN_RE = re.compile(r"<section\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+# Opening and closing section tags, a quoted attribute value read whole so a
+# ">" in one does not end the tag early. Group 1 is "/" on a closing tag.
+SECTION_TAG_RE = re.compile(r"<(/?)section\b" + TAG_ATTRIBUTES + r">", re.IGNORECASE | re.DOTALL)
 # The pages that close without a call to action. A legal statement ending in
 # "start a conversation" reads as a sales pitch under the terms, so these
 # three carry none by design. The tree has no signal that separates them
@@ -3845,15 +3890,29 @@ PAGES_WITHOUT_CTA_BAND = ("privacy.html", "terms.html", "accessibility.html")
 
 
 def cta_bands(text: str):
-    """Return the inner text of each section whose class list holds cta-band, comments removed."""
+    """Return the inner text of each section whose class list holds cta-band, comments removed.
+
+    A band ends at the closing tag that matches its opening one, so a section
+    nested inside it does not cut it short. A band whose closing tag never
+    comes runs to the end of the text, and a section tag that cannot be read
+    (a stray quote) is skipped, which leaves its band missing and fails the
+    check, never passes it.
+    """
     text = without_html_comments(text)
     bands = []
-    for match in SECTION_OPEN_RE.finditer(text):
-        classes = (tag_attribute(match.group(1), "class") or "").split()
+    for match in SECTION_TAG_RE.finditer(text):
+        if match.group(1):
+            continue
+        classes = (tag_attribute(match.group(2), "class") or "").split()
         if "cta-band" not in classes:
             continue
-        end = text.find("</section", match.end())
-        bands.append(text[match.end(): end if end != -1 else len(text)])
+        depth, end = 1, len(text)
+        for tag in SECTION_TAG_RE.finditer(text, match.end()):
+            depth += -1 if tag.group(1) else 1
+            if depth == 0:
+                end = tag.start()
+                break
+        bands.append(text[match.end(): end])
     return bands
 
 
@@ -3873,7 +3932,11 @@ def check_page_endings(pages: list[Path], docs_root: Path) -> bool:
     exporter writes new weeks, so the next week is where this breaks), a band
     whose button leads elsewhere or is a tel: link only, a band turned into a
     div or commented out (or following a comment that never closes) so it is
-    no longer one, and a legal page that gained a pitch. A page whose band
+    no longer one, a band link with no text (an img with an alt counts as
+    text), the hidden attribute or aria-hidden="true", and a legal page that
+    gained a pitch. A band ends at its matching closing tag, a nested section
+    included, and a ">" inside a quoted attribute does not end the opening
+    tag. A page whose band
     moved to a different place on the page passes, since only presence and the
     link are read, and so does a band hidden by CSS. Added 2026-10-04 because the
     band was added to every insights page on 2026-09-30 by a build rule no
@@ -3901,8 +3964,12 @@ def check_page_endings(pages: list[Path], docs_root: Path) -> bool:
                 problems.append(f"{page.name}: carries {len(bands)} cta-band sections, expected exactly 1")
                 continue
             leads = False
-            for tag in MENU_ANCHOR_RE.findall(bands[0]):
+            for tag, inner in MENU_ANCHOR_RE.findall(bands[0]):
                 href = html_lib.unescape(tag_attribute(tag, "href") or "").strip()
+                fault = link_fault(tag, inner)
+                if fault:
+                    problems.append(f"{page.name}: a cta-band link to {href or '(no href)'} {fault}")
+                    continue
                 try:
                     kind, target = resolve_internal(href, page, docs_root)
                 except Exception:
@@ -3913,6 +3980,13 @@ def check_page_endings(pages: list[Path], docs_root: Path) -> bool:
                 problems.append(f"{page.name}: its cta-band does not link to /contact")
         elif not bands:
             problems.append(f"{page.name}: carries no cta-band section")
+        else:
+            for band in bands:
+                for tag, inner in MENU_ANCHOR_RE.findall(band):
+                    fault = link_fault(tag, inner)
+                    if fault:
+                        href = html_lib.unescape(tag_attribute(tag, "href") or "").strip()
+                        problems.append(f"{page.name}: a cta-band link to {href or '(no href)'} {fault}")
 
     ok = not problems
     print(f"[{'PASS' if ok else 'FAIL'}] insights pages end in one call to action to /contact, "
@@ -4281,8 +4355,6 @@ def navigation_target_height(declared, conditional, containers, own, parent, bor
         return None, "body declares no font-size this check can read"
     line = body.get("line-height", "")
     steps = [f"body {font:g}px"]
-    line_factor = None
-    line_px = None
 
     def take_line(text: str, size: float):
         if re.match(r"^\d*\.?\d+$", text):
@@ -4393,14 +4465,13 @@ def check_navigation_targets(docs_root: Path) -> bool:
 
     known = {selector for _n, _c, own, _p in NAVIGATION_LINK_FAMILIES for selector in own}
     for selector, name, _value in list(declared) + list(conditional):
-        words = re.split(r"[\s>+~]+", selector)
         base = re.sub(r":[\w-]+(\([^)]*\))?|::[\w-]+", "", selector)
         last = re.split(r"[\s>+~]+", base)[-1]
         if name not in SIZE_PROPERTIES or selector in known:
             continue
         in_nav = any(f".{cls}" in selector for cls in NAV_CONTAINER_CLASSES)
         is_link = last == "a" or last.startswith("a.") or "nav-contact" in last
-        if in_nav and is_link and words:
+        if in_nav and is_link:
             problems.append(
                 f"{selector} sets {name} on a navigation link and nothing here "
                 "measures it, so its target size went unmeasured"
