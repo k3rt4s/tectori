@@ -1277,7 +1277,7 @@ CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
 CSS_RULE_RE = re.compile(r"([^{}]+)\{([^{}]*)\}", re.DOTALL)
 CSS_VAR_RE = re.compile(r"--([a-z0-9-]+)\s*:\s*([^;}]+)")
 CSS_VAR_USE_RE = re.compile(r"var\(\s*--([a-z0-9-]+)\s*\)$")
-CSS_HEX_RE = re.compile(r"#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$")
+CSS_HEX_RE = re.compile(r"#([0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})$")
 CSS_RGBA_RE = re.compile(r"rgba?\(([^)]*)\)$")
 CSS_IMPORTANT_RE = re.compile(r"!\s*important\s*$", re.IGNORECASE)
 
@@ -1336,13 +1336,13 @@ def css_colour(value: str, palette: dict[str, str], depth: int = 0):
     written = CSS_HEX_RE.match(value)
     if written:
         digits = written.group(1)
-        if len(digits) == 3:
+        if len(digits) in (3, 4):
             digits = "".join(digit * 2 for digit in digits)
         return (
             int(digits[0:2], 16),
             int(digits[2:4], 16),
             int(digits[4:6], 16),
-            1.0,
+            int(digits[6:8], 16) / 255 if len(digits) == 8 else 1.0,
         )
     channels = CSS_RGBA_RE.match(value)
     if channels:
@@ -3687,9 +3687,14 @@ MENU_ANCHOR_RE = re.compile(r"<a\b([^>]*)>", re.IGNORECASE | re.DOTALL)
 MOBILE_MENU_REQUIRED = ("/resources", "/trust")
 
 
+def without_html_comments(text: str) -> str:
+    """Return the text with comments removed, and everything after one that never closes, as a browser reads it."""
+    return HTML_COMMENT_RE.sub("", text).split("<!--", 1)[0]
+
+
 def mobile_menu_entries(text: str):
     """Return the (href, aria-current) pair of each link in the page's mobile menu, or None."""
-    found = MENU_RE.findall(HTML_COMMENT_RE.sub("", text))
+    found = MENU_RE.findall(without_html_comments(text))
     if len(found) != 1:
         return None
     entries = []
@@ -3743,8 +3748,10 @@ def check_mobile_menu_is_complete(pages: list[Path], docs_root: Path) -> bool:
     still wrong, one page that lost /trust while the home page kept it, a
     link pointing at a page that was renamed, the current-page marker moved
     to the wrong link or left off the right one, or the marker carried by
-    two links. Attributes are read by standalone name, quoted or bare, and a
-    commented-out menu or link does not count. Added 2026-10-04 because
+    two links, or a link with no href. Attributes are read by standalone name,
+    quoted or bare, and a commented-out menu or link does not count, nor does
+    anything after a comment that never closes. A menu hidden from view by CSS
+    is still read. Added 2026-10-04 because
     /resources and /trust joined the menu on 2026-09-30 with no check
     covering them, and check_keyboard_operable counts menus but never reads
     what is in them.
@@ -3794,6 +3801,8 @@ def check_mobile_menu_is_complete(pages: list[Path], docs_root: Path) -> bool:
         marked = 0
         for href, marker in entries:
             targets_self = False
+            if not href:
+                problems.append(f"{page.name}: a mobile menu link has no href, so it leads nowhere")
             try:
                 kind, target = resolve_internal(href, page, docs_root)
             except Exception:
@@ -3837,7 +3846,7 @@ PAGES_WITHOUT_CTA_BAND = ("privacy.html", "terms.html", "accessibility.html")
 
 def cta_bands(text: str):
     """Return the inner text of each section whose class list holds cta-band, comments removed."""
-    text = HTML_COMMENT_RE.sub("", text)
+    text = without_html_comments(text)
     bands = []
     for match in SECTION_OPEN_RE.finditer(text):
         classes = (tag_attribute(match.group(1), "class") or "").split()
@@ -3863,9 +3872,10 @@ def check_page_endings(pages: list[Path], docs_root: Path) -> bool:
     or kept two (the build adds the band to every insights page, and the
     exporter writes new weeks, so the next week is where this breaks), a band
     whose button leads elsewhere or is a tel: link only, a band turned into a
-    div or commented out so it is no longer one, and a legal page that gained
-    a pitch. A page whose band moved to a different place on the page passes,
-    since only presence and the link are read. Added 2026-10-04 because the
+    div or commented out (or following a comment that never closes) so it is
+    no longer one, and a legal page that gained a pitch. A page whose band
+    moved to a different place on the page passes, since only presence and the
+    link are read, and so does a band hidden by CSS. Added 2026-10-04 because the
     band was added to every insights page on 2026-09-30 by a build rule no
     check covered.
     """
@@ -3897,7 +3907,7 @@ def check_page_endings(pages: list[Path], docs_root: Path) -> bool:
                     kind, target = resolve_internal(href, page, docs_root)
                 except Exception:
                     continue
-                if kind == "internal" and target is not None and target.name == "contact.html":
+                if kind == "internal" and target is not None and target.resolve() == (docs_root / "contact.html").resolve():
                     leads = True
             if not leads:
                 problems.append(f"{page.name}: its cta-band does not link to /contact")
@@ -3918,10 +3928,13 @@ def check_page_endings(pages: list[Path], docs_root: Path) -> bool:
 # written here where the text check reads its own from the published statement.
 CONTROL_BOUNDARY_MINIMUM = 3.0
 CONTROL_TAGS = ("a", "button", "input", "select", "textarea", "summary")
+# One whole token of a border value that names a colour. A hex colour is
+# taken at any length and left to css_colour to accept or refuse.
 BORDER_COLOUR_RE = re.compile(
-    r"var\([^)]*\)|rgba?\([^)]*\)|#[0-9a-fA-F]{3,6}\b|transparent|currentColor|inherit",
+    r"var\([^)]*\)|rgba?\([^)]*\)|#[0-9a-fA-F]+|transparent|currentColor|inherit",
     re.IGNORECASE,
 )
+BORDER_WIDTH_RE = re.compile(r"(\d*\.?\d+(px|rem|em)?|thin|medium|thick)$", re.IGNORECASE)
 BORDER_STYLE_WORDS = ("solid", "dashed", "dotted", "double", "groove", "ridge", "inset", "outset")
 
 # The surface each control's border is read on, keyed by the selector as the
@@ -3959,15 +3972,31 @@ def is_control_selector(selector: str, body: str) -> bool:
 
 
 def control_border_colours(declaration_name: str, value: str):
-    """Return (colours, problem) for a border or border-color declaration; colours is a list of strings."""
+    """Return (colours, problem) for a border or border-color declaration; colours is a list of strings.
+
+    Every token of the value has to be a colour this check recognises (or, in
+    the border shorthand, a width or a style word); one that is not, a named
+    colour or hsl() or color-mix(), is a problem, so a colour it cannot read
+    is never passed over because another token in the value was readable.
+    """
     value = CSS_IMPORTANT_RE.sub("", value).strip()
+    tokens = CSS_TOKEN_RE.findall(value)
     if declaration_name == "border":
         words = value.lower().split()
         if not words or words[0] in ("0", "none") or value.lower() == "0 none":
             return [], None
-        if re.match(r"0(px|rem|em)?\b", words[0]) and not BORDER_COLOUR_RE.search(value):
+        if re.match(r"0(px|rem|em)?\b", words[0]) and not any(BORDER_COLOUR_RE.fullmatch(t) for t in tokens):
             return [], None
-    found = BORDER_COLOUR_RE.findall(value)
+    found = []
+    for token in tokens:
+        if BORDER_COLOUR_RE.fullmatch(token):
+            found.append(token)
+        elif declaration_name == "border" and (
+            token.lower() in BORDER_STYLE_WORDS + ("none", "hidden") or BORDER_WIDTH_RE.match(token)
+        ):
+            continue
+        else:
+            return [], f"has {token!r}, which this check cannot read as a colour, so it was not measured"
     if found:
         return found, None
     if declaration_name == "border-color" or any(w in value.lower().split() for w in BORDER_STYLE_WORDS):
@@ -3988,10 +4017,14 @@ def check_control_contrast(docs_root: Path) -> bool:
     cursor: pointer. Only the border shorthand and border-color are read,
     because a one-sided border (border-bottom) is a divider between menu
     entries and draws no boundary. Transparent is skipped, since it draws
-    nothing; a translucent colour is blended onto its surface first. Every
-    declaration in the file is measured, media blocks included, rather than
-    the one that wins a cascade, so a failure can be a state that never
-    paints; that is the safe error.
+    nothing; a translucent colour (rgba, or hex with an alpha) is blended onto
+    its surface first. Every declaration in the file is measured, media blocks
+    included, rather than the one that wins a cascade, so a failure can be a
+    state that never paints; that is the safe error. Each token of a border
+    value has to be a colour it can read (var(), rgb(), rgba(), hex,
+    transparent): a named colour, hsl() or color-mix() fails as unmeasured, and
+    so does a custom property declared again outside the first :root rule,
+    since the palette is read from that rule alone.
 
     The wrong tree this exists to catch: a new or restyled control whose
     border is a palette colour too pale for the surface it sits on; a border
@@ -4000,8 +4033,12 @@ def check_control_contrast(docs_root: Path) -> bool:
     the text colour and is not measured. A tree that moves a pale-bordered
     control onto a dark surface passes here only if the table is changed to
     say so, which is a visible edit. Blind spots: a boundary drawn by
-    box-shadow or outline, and a control whose real surface is a photograph
-    (the hero) are read as the named surface. Added 2026-10-04.
+    box-shadow or outline; a control whose real surface is a photograph (the
+    hero), read as the named surface; a translucent border, blended onto the
+    surface although it paints over the control's own background; a control
+    with no tag or class this check recognises and no cursor: pointer, which
+    is not read as a control; and a one-sided or longhand border
+    (border-bottom, border-top-color), which is not read. Added 2026-10-04.
     """
     stylesheet = docs_root / "styles.css"
     if not stylesheet.is_file():
@@ -4011,6 +4048,13 @@ def check_control_contrast(docs_root: Path) -> bool:
     css = CSS_COMMENT_RE.sub(" ", stylesheet.read_text(encoding="utf-8"))
     palette = css_palette(css)
     problems: list[str] = []
+    root = re.search(r":root\s*\{(.*?)\}", css, re.DOTALL)
+    elsewhere = css[:root.start()] + css[root.end():] if root else css
+    for name in sorted({n for n, _v in CSS_VAR_RE.findall(elsewhere) if n in palette}):
+        problems.append(
+            f"--{name} is declared again outside the first :root rule, so the colour "
+            "this check reads for it may not be the one painted"
+        )
     seen: set[tuple[str, str]] = set()
     measured_selectors: set[str] = set()
     measured = 0
@@ -4082,9 +4126,27 @@ CSS_TOKEN_RE = re.compile(r"[^\s(]+(?:\([^)]*\))?")
 NAV_CONTAINER_CLASSES = (
     "utility-bar", "desktop-nav", "nav-menu", "footer-links", "footer-social", "site-footer",
 )
-SIZE_PROPERTIES = (
-    "min-height", "height", "padding", "padding-top", "padding-bottom", "font-size", "line-height",
+# Properties that change a link's height and that the arithmetic below does
+# not model. A rule that sets one on a family's selector, or font or zoom on a
+# container it inherits from, fails as unmeasured rather than being ignored.
+UNMODELLED_SIZE_PROPERTIES = (
+    "height", "max-height", "block-size", "min-block-size", "max-block-size",
+    "padding-block", "padding-block-start", "padding-block-end",
+    "font", "zoom", "transform", "scale",
 )
+SIZE_PROPERTIES = (
+    "min-height", "padding", "padding-top", "padding-bottom", "font-size", "line-height",
+) + UNMODELLED_SIZE_PROPERTIES
+# What a link's height reads from the rules above it (the font and line
+# height it inherits) and from its own (everything that sizes the box).
+INHERITED_SIZE_PROPERTIES = ("font-size", "line-height", "font", "zoom")
+OWN_SIZE_PROPERTIES = SIZE_PROPERTIES + ("display", "box-sizing")
+# The displays a link can have that this check knows the height rules of.
+LINK_DISPLAYS = (
+    "inline", "block", "inline-block", "flex", "inline-flex", "grid", "inline-grid",
+    "list-item", "flow-root",
+)
+BLOCKIFYING_PARENT_DISPLAYS = ("flex", "inline-flex", "grid", "inline-grid")
 # (name, selectors whose font-size and line-height the link inherits, in
 # order outermost first, selectors that style the link itself in cascade
 # order, the selector of the box the link is a child of). The last is what
@@ -4100,8 +4162,13 @@ NAVIGATION_LINK_FAMILIES = (
 )
 
 
-def css_length(value: str, font_px: float):
-    """Return a length in pixels, resolving rem against 16px and em against font_px, or None."""
+def css_length(value: str, font_px: float, percent_of_font: bool = False):
+    """Return a length in pixels, resolving rem against 16px and em against font_px, or None.
+
+    A percentage is read only where it is a percentage of the font size
+    (percent_of_font, for font-size and line-height). Everywhere else it is a
+    percentage of a box this check does not size, so it is not a length here.
+    """
     match = LENGTH_RE.match(value.strip().lower())
     if not match:
         return None
@@ -4111,38 +4178,48 @@ def css_length(value: str, font_px: float):
     if unit == "em":
         return number * font_px
     if unit == "%":
-        return number * font_px / 100
+        return number * font_px / 100 if percent_of_font else None
     if unit is None and number != 0:
         return None
     return number
 
 
 def css_declarations(css: str):
-    """Return (selector, property, value) for every declaration in source order, with padding expanded to sides."""
-    declared = []
-    for selector_list, body in CSS_RULE_RE.findall(css):
-        for selector in (" ".join(part.split()) for part in selector_list.split(",")):
+    """Return (outside, inside) lists of (selector, property, value) in source order, with padding expanded to sides.
+
+    inside holds the declarations of rules nested in an at-rule block (@media,
+    @supports), which only apply under a condition this check does not
+    evaluate; outside holds the rest. A value keeps its !important, so a reader
+    can see it.
+    """
+    outside: list = []
+    inside: list = []
+    for rule in CSS_RULE_RE.finditer(css):
+        nested = css.count("{", 0, rule.start(1)) > css.count("}", 0, rule.start(1))
+        declared = inside if nested else outside
+        for selector in (" ".join(part.split()) for part in rule.group(1).split(",")):
             if not selector or selector.startswith("@"):
                 continue
-            for declaration in body.split(";"):
+            for declaration in rule.group(2).split(";"):
                 if ":" not in declaration:
                     continue
                 name, value = declaration.split(":", 1)
-                name, value = name.strip().lower(), CSS_IMPORTANT_RE.sub("", value).strip()
+                name, value = name.strip().lower(), value.strip()
                 if name == "padding":
-                    parts = CSS_TOKEN_RE.findall(value)
+                    important = " !important" if CSS_IMPORTANT_RE.search(value) else ""
+                    parts = CSS_TOKEN_RE.findall(CSS_IMPORTANT_RE.sub("", value).strip())
                     top, bottom = {
                         1: (0, 0), 2: (0, 0), 3: (0, 2), 4: (0, 2),
                     }.get(len(parts), (None, None))
                     if top is None:
-                        declared.append((selector, "padding-top", ""))
-                        declared.append((selector, "padding-bottom", ""))
+                        declared.append((selector, "padding-top", important))
+                        declared.append((selector, "padding-bottom", important))
                     else:
-                        declared.append((selector, "padding-top", parts[top]))
-                        declared.append((selector, "padding-bottom", parts[bottom]))
+                        declared.append((selector, "padding-top", parts[top] + important))
+                        declared.append((selector, "padding-bottom", parts[bottom] + important))
                 else:
                     declared.append((selector, name, value))
-    return declared
+    return outside, inside
 
 
 def fold_selectors(declared, selectors) -> dict:
@@ -4151,14 +4228,53 @@ def fold_selectors(declared, selectors) -> dict:
     for wanted in selectors:
         for selector, name, value in declared:
             if selector == wanted:
-                folded[name] = value
+                folded[name] = CSS_IMPORTANT_RE.sub("", value).strip()
     return folded
 
 
-def navigation_target_height(declared, containers, own, parent, border_box: bool):
+def unmeasurable_size_rule(declared, conditional, containers, own, parent):
+    """Return a reason the height of a family cannot be computed from its rules, or None.
+
+    The arithmetic reads the last plain declaration of font-size, line-height,
+    padding, min-height and display on the selectors it names. It cannot
+    follow a declaration that wins by a rule it does not evaluate: one inside
+    a media or supports block, one marked !important, or a property that sizes
+    the box and is not in the arithmetic.
+    """
+    inherits = [*containers, parent, "body"]
+
+    def affects(selector: str, name: str) -> bool:
+        if selector in own:
+            return name in OWN_SIZE_PROPERTIES
+        if selector == "*":
+            return name == "box-sizing" or name in INHERITED_SIZE_PROPERTIES
+        if selector in inherits:
+            return name in INHERITED_SIZE_PROPERTIES or (name == "display" and selector == parent)
+        return False
+
+    for selector, name, value in conditional:
+        if affects(selector, name) and not (name == "display" and value.lower() == "none"):
+            return (f"{selector} sets {name} inside an @media or @supports block, which this "
+                    "check does not evaluate, so the height it computes could be wrong")
+    for selector, name, value in list(declared) + list(conditional):
+        if affects(selector, name) and CSS_IMPORTANT_RE.search(value):
+            return f"{selector} sets {name} with !important, which this check does not model"
+    for selector, name, _value in declared:
+        if (selector in own and (name in UNMODELLED_SIZE_PROPERTIES or name == "box-sizing")) or (
+            selector in inherits and name in ("font", "zoom")
+        ):
+            return (f"{selector} sets {name}, which changes a link's height and is not "
+                    "part of the arithmetic here")
+    return None
+
+
+def navigation_target_height(declared, conditional, containers, own, parent, border_box: bool):
     """Return (height_px, arithmetic) for a navigation link, or (None, reason) if it cannot be computed."""
+    reason = unmeasurable_size_rule(declared, conditional, containers, own, parent)
+    if reason:
+        return None, reason
     body = fold_selectors(declared, ("body",))
-    font = css_length(body.get("font-size", ""), ROOT_FONT_PX)
+    font = css_length(body.get("font-size", ""), ROOT_FONT_PX, True)
     if font is None:
         return None, "body declares no font-size this check can read"
     line = body.get("line-height", "")
@@ -4169,16 +4285,17 @@ def navigation_target_height(declared, containers, own, parent, border_box: bool
     def take_line(text: str, size: float):
         if re.match(r"^\d*\.?\d+$", text):
             return float(text), None
-        length = css_length(text, size)
+        length = css_length(text, size, True)
         return (None, length) if length is not None else (None, None)
 
     line_factor, line_px = take_line(line, font)
     if line_factor is None and line_px is None:
         return None, "body declares no line-height this check can read"
-    for selector in list(containers) + list(own):
+    inherited = list(containers) + ([parent] if parent not in containers and parent not in own else [])
+    for selector in inherited + list(own):
         props = fold_selectors(declared, (selector,))
         if "font-size" in props:
-            size = css_length(props["font-size"], font)
+            size = css_length(props["font-size"], font, True)
             if size is None:
                 return None, f"{selector} font-size {props['font-size']!r} is not a length this check can read"
             font = size
@@ -4200,17 +4317,21 @@ def navigation_target_height(declared, containers, own, parent, border_box: bool
     steps.append(f"vertical padding {padding:g}px")
     parent_display = fold_selectors(declared, (parent,)).get("display", "").lower()
     own_display = mine.get("display", "inline").lower()
-    blockified = parent_display in ("flex", "inline-flex", "grid", "inline-grid") or own_display != "inline"
+    if own_display not in LINK_DISPLAYS:
+        return None, f"display {own_display!r} on the link is not one this check can read"
+    if own_display == "inline" and parent_display not in BLOCKIFYING_PARENT_DISPLAYS:
+        return None, (
+            "the link is an inline box (its own display is inline and its parent is not a flex "
+            "or grid container), so its target is the font's content area plus padding, which "
+            "depends on font metrics this check does not model"
+        )
     minimum = 0.0
     if "min-height" in mine:
         length = css_length(mine["min-height"], font)
         if length is None:
             return None, f"min-height {mine['min-height']!r} is not a length this check can read"
-        if blockified:
-            minimum = length
-            steps.append(f"min-height {length:g}px")
-        else:
-            steps.append(f"min-height {length:g}px ignored, the link is an inline box")
+        minimum = length
+        steps.append(f"min-height {length:g}px")
     natural = line_box + padding
     height = max(minimum, natural) if border_box else max(minimum, line_box) + padding
     return height, "; ".join(steps) + f" => {height:.2f}px"
@@ -4222,17 +4343,25 @@ def check_navigation_targets(docs_root: Path) -> bool:
     The 24 pixel floor of WCAG 2.2 SC 2.5.8 applies to the target a visitor
     taps. This reads only docs/styles.css and computes, for each family in
     NAVIGATION_LINK_FAMILIES, the link's height as the larger of its min-height
-    (counted only when the link is a box of its own: a child of a flex or grid
-    box, or one with a display other than inline) and its line box plus
-    vertical padding. The line box is the declared line-height times the
-    font-size, where the font-size is the one declared on the link or the
-    nearest container, em against that container and rem against the 16px
-    root, and the line-height is the body's 1.6 unless a rule sets its own.
-    So the desktop links at 0.91rem are 14.56px x 1.6 = 23.30px of text, 41.30
-    with 9px above and below. The box is border-box when the stylesheet says
-    so for every element, which it does. Padding is read as its vertical
-    sides; a value this check cannot turn into pixels (clamp, calc, a
-    percentage of something else) fails as unmeasured rather than passing.
+    and its line box plus vertical padding. The line box is the declared
+    line-height times the font-size, where the font-size is the one declared
+    on the link or the nearest container, em against that container and rem
+    against the 16px root, and the line-height is the body's 1.6 unless a rule
+    sets its own. So the desktop links at 0.91rem are 14.56px x 1.6 = 23.30px
+    of text, 41.30 with 9px above and below. The box is border-box when the
+    stylesheet says so for every element, which it does. Padding is read as
+    its vertical sides, in px, em or rem only.
+
+    Anything the arithmetic cannot follow fails as unmeasured rather than
+    passing: a padding or min-height in a percentage, calc or clamp; a link
+    that is an inline box (its parent is not a flex or grid container and it
+    has no display of its own), because an inline box's target is its font's
+    content area plus padding, which depends on font metrics; a declaration
+    inside a media or supports block, which this check does not evaluate; a
+    declaration marked !important; a property that sizes the box and is not in
+    the arithmetic (height, max-height, block-size, padding-block, font,
+    zoom, transform); and a rule on a, on *, or on a navigation link that no
+    family names.
 
     The wrong tree this exists to catch: a padding or min-height lost from a
     link rule, a font-size cut that drops the line box under 24, a family
@@ -4240,24 +4369,28 @@ def check_navigation_targets(docs_root: Path) -> bool:
     new navigation link rule that sets a size and is named nowhere here,
     which fails as unmeasured. Not modelled: the SC's spacing exception (an
     undersized target passes if a 24px circle on it touches no other
-    target), so a link that fails here on height can still conform; and
-    links inside running text, which the SC exempts and this does not read.
-    Added 2026-10-04 because the 2026-09-29 fix to the top bar had no
-    check, and the same audit measured the target at about 23 and 19px.
+    target), so a link that fails here on height can still conform; the SC's
+    inline exception (a target in a sentence), so an inline link is reported
+    as unmeasured, not as exempt; width, which the SC also bounds; and the
+    border a link draws, which only adds height. A link outside the six
+    families is not read, and rules are matched by exact selector, not by
+    specificity. Added 2026-10-04 because the 2026-09-29 fix to the top bar
+    had no check, and the same audit measured the target at about 23 and
+    19px.
     """
     stylesheet = docs_root / "styles.css"
     if not stylesheet.is_file():
         print("[FAIL] every navigation link is at least 24px tall: styles.css is not in the tree")
         return False
     css = CSS_COMMENT_RE.sub(" ", stylesheet.read_text(encoding="utf-8"))
-    declared = css_declarations(css)
+    declared, conditional = css_declarations(css)
     problems: list[str] = []
     border_box = fold_selectors(declared, ("*",)).get("box-sizing", "").lower() == "border-box"
     if fold_selectors(declared, ("html", ":root")).get("font-size"):
         problems.append("html or :root declares a font-size, so the 16px root this check assumes is not safe")
 
     known = {selector for _n, _c, own, _p in NAVIGATION_LINK_FAMILIES for selector in own}
-    for selector, name, _value in declared:
+    for selector, name, _value in list(declared) + list(conditional):
         words = re.split(r"[\s>+~]+", selector)
         base = re.sub(r":[\w-]+(\([^)]*\))?|::[\w-]+", "", selector)
         last = re.split(r"[\s>+~]+", base)[-1]
@@ -4270,8 +4403,13 @@ def check_navigation_targets(docs_root: Path) -> bool:
                 f"{selector} sets {name} on a navigation link and nothing here "
                 "measures it, so its target size went unmeasured"
             )
+        elif base.strip() in ("a", "*"):
+            problems.append(
+                f"{selector} sets {name} on links in general and nothing here "
+                "measures it, so every family's target size went unmeasured"
+            )
     for family, containers, own, parent in NAVIGATION_LINK_FAMILIES:
-        height, how = navigation_target_height(declared, containers, own, parent, border_box)
+        height, how = navigation_target_height(declared, conditional, containers, own, parent, border_box)
         if height is None:
             problems.append(f"{family}: {how}")
         elif height + 1e-9 < TARGET_MINIMUM_PX:
