@@ -2,6 +2,18 @@
 
 Tectori website changes are recorded here.
 
+## 2026-10-16
+
+- CHECK-NITS, the 2026-10-15 review's low findings: cta-band and mobile
+  menu links now fail when empty, `hidden` or `aria-hidden="true"` (an img
+  with alt counts as text); cta-band sections are read past a `>` in a
+  quoted attribute and to their matching close past nested sections; dead
+  locals removed. `check_doc_claims.py` already fails loudly on a count word
+  past twenty-nine, so a thirtieth check must extend its WORDS table in the
+  same commit. Merge `c32731e`, deploy passed (run 38847296034),
+  `check_live_deploy.py` 53 of 53. Rollback: `git revert -m 1 c32731e` then
+  push.
+
 ## 2026-10-15
 
 - CHECK-HARDENING: verify_site.py gains four checks, the mobile menu
