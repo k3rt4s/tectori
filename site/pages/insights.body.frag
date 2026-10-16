@@ -14,6 +14,103 @@
           <h2 id="recent-title">What we read recently.</h2>
         </div>
         <div class="faq-list">
+          <article class="archive-item" id="post-21426">
+            <p class="archive-meta"><time datetime="2026-10-15">15 October 2026</time> &middot; on Security</p>
+            <h3>Aoki: Infostealer Targets AI Coding Assistant Credentials</h3>
+            <p>Aoki malware targets AI coding assistants and cryptocurrency assets by stealing credentials and private keys.</p>
+            <p>Aoki is evolving fast. It’s now targeting AI coding assistant credentials like Claude and Gemini. This marks a shift in how attackers are exploiting technology. The malware collects API keys and tokens that grant access to cloud services and CI/CD pipelines. These credentials can be used to impersonate users and bypass security controls.</p>
+            <p>The threat isn’t limited to AI tools. Aoki also steals data from browsers, wallets, and messaging apps. It looks for files with names like privatekey or mnemonic, which are common in crypto setups. This breadth suggests a financial motive, with a clear focus on cryptocurrency and digital assets.</p>
+            <p>Zero Trust principles are more critical than ever. AI credentials can be leveraged to move laterally within an environment, exposing sensitive systems. Governance frameworks like NIST CSF and ISO 27001 must adapt to address these new risks. Teams need to secure not just data, but the keys that control access.</p>
+          </article>
+          <article class="archive-item" id="post-21416">
+            <p class="archive-meta"><time datetime="2026-10-15">15 October 2026</time> &middot; on Hunt</p>
+            <h3>Inside a PaperCut Attacker’s AI Toolkit: Agent Instructions, Exploit Code, a Second RCE, and Victims Across 45+ Countries</h3>
+            <p>AI-assisted exploitation frameworks are being used to conduct large-scale attacks across 45+ countries with automated credential theft and persistent post-exploitation activities.</p>
+            <p>The rise of AI-assisted exploitation frameworks is reshaping how attackers operate. Tools like the one described in the PaperCut campaign leverage AI to automate discovery, triage, and execution across hundreds of targets. This isn&#x27;t just about faster attacks—it&#x27;s about smarter, more scalable infiltration.</p>
+            <p>The exposed directories revealed a structured post-exploitation pipeline, from credential theft to internal pivoting and automated follow-on activity. Behavioral indicators like reverse SOCKS5 tunnels and cron-based persistence are critical. These signals outlast infrastructure alone, making them key for detection.</p>
+            <p>The campaign’s scale—hundreds of targets, multiple RCE paths, and automated retries—highlights the need for continuous monitoring. Defenders must focus on patterns, not just IPs or certificates. The AI-driven workflow also underscores the growing role of agentic AI in orchestrating complex attacks.</p>
+            <p>The takeaway is clear: traditional perimeter defenses are no longer enough. We must shift to behavioral analysis, anomaly detection, and AI-driven threat modeling. The tools and tactics are evolving, and so must our approach.</p>
+          </article>
+          <article class="archive-item" id="post-21415">
+            <p class="archive-meta"><time datetime="2026-10-15">15 October 2026</time> &middot; on Bitsight</p>
+            <h3>The New Frontier of Malicious AI: What Underground Forums Tell Us About the Evolution of Cybercrime Tradecraft</h3>
+            <p>Criminals are adopting advanced AI tools and establishing dedicated forums to reshape cybercrime tactics and strategies.</p>
+            <p>The shift in cybercrime is unmistakable. Criminals are moving past basic chatbot tricks toward autonomous agents and open-weights models. These tools offer more control and fewer guardrails, making them attractive for advanced actors. The underground is adapting quickly, and the signal is clear: AI is no longer a sideshow.</p>
+            <p>This evolution isn’t just about better tools. It’s about deeper engagement with AI itself. Threat actors are probing models, agents, and the systems they connect to. AI is now both a target and a weapon. The lines between tool and technique are blurring, and the implications for security are significant.</p>
+            <p>What’s most telling is the structural change in underground forums. A third of the platforms we studied now have dedicated AI subforums. These aren’t temporary discussions. They’re institutional, signaling a permanent shift in how cybercrime operates. The demand for AI tradecraft is real and growing.</p>
+            <p>The data shows a clear pattern: AI interest is rising while traditional cybercrime terms are declining. This isn’t just a trend. It’s a fundamental shift in the threat landscape. As criminals become more sophisticated, so must our defenses. We need robust AI governance and security frameworks now more than ever.</p>
+          </article>
+          <article class="archive-item" id="post-21361">
+            <p class="archive-meta"><time datetime="2026-10-15">15 October 2026</time> &middot; on Citizenlab</p>
+            <h3>Exposing AdFection: How Discover-Tech Turned Targeted Ads Into a Pipeline for Zero-Click Mercenary Spyware</h3>
+            <p>The AdFection attack shows how Discover-Tech exploited the ad ecosystem to enable zero-click spyware through its Controlium platform.</p>
+            <p>The AdFection attack reveals how the advertising ecosystem can be weaponized for zero-click spyware. Discover-Tech, posing as a legitimate ad vendor, acts as a bridge between mercenary spyware groups and the digital ad infrastructure. Through its platform Controlium, it enables precise targeting and automatic infection of devices when ads are displayed.</p>
+            <p>This abuse highlights structural weaknesses in the ad system. The scale of data collection and the lack of oversight allow malicious actors to exploit user identifiers for mass surveillance and espionage. The fact that Discover-Tech operated within Google and IAB Europe’s approved vendor lists underscores the need for stricter validation and transparency in the industry.</p>
+            <p>Regulators and ad platforms must act to close these loopholes. We need stronger oversight, better audit mechanisms, and a rethinking of how ad data is handled. Without these changes, the risk of future attacks will only grow. The AdFection case is a wake-up call for the entire ecosystem.</p>
+          </article>
+          <article class="archive-item" id="post-21186">
+            <p class="archive-meta"><time datetime="2026-10-15">15 October 2026</time> &middot; on The Hacker News</p>
+            <h3>Langflow&#x27;s Critical Authenticated RCE Flaw Targeted in 1,423 Honeypot Exploit Attempts</h3>
+            <p>Langflow&#x27;s critical RCE vulnerability allows authenticated users to execute arbitrary commands leading to server compromise.</p>
+            <p>Langflow&#x27;s recent critical RCE flaw is a stark reminder of the risks in unvalidated command execution. The vulnerability, CVE-2026-105740, allows authenticated users to inject arbitrary commands into the server, leading to full compromise. The lack of validation and sandboxing creates a pathway for attackers to execute malicious payloads with elevated privileges.</p>
+            <p>The flaw is particularly dangerous because MCP server configurations are stored in project settings and not visible during normal flow review. This makes it harder to detect and remediate. Attackers can exploit this by crafting HTTP requests to inject malicious commands, which execute when the server list is fetched. The result is a persistent backdoor and potential lateral movement.</p>
+            <p>This incident underscores the importance of secure configuration management in agentic AI platforms. We must ensure all user inputs are strictly validated and sanitized. Enforcing least privilege, disabling unnecessary endpoints, and monitoring for suspicious activity are critical steps in mitigating such risks.</p>
+            <p>Previdian&#x27;s data shows a surge in exploitation attempts, highlighting the real-world impact of this flaw. Immediate patching and hardening of configurations are essential. As the threat landscape evolves, proactive security measures and continuous monitoring are more important than ever.</p>
+          </article>
+          <article class="archive-item" id="post-21174">
+            <p class="archive-meta"><time datetime="2026-10-15">15 October 2026</time> &middot; on The Hacker News</p>
+            <h3>Why AI Confidence Is Not Validation</h3>
+            <p>AI tools in digital forensics increasingly lack reliable verification methods despite growing confidence in their outputs, risking unreliable findings in legal and forensic contexts.</p>
+            <p>AI is already part of digital forensics and incident response work, with or without a policy in place to govern it. The issue is that these tools are growing more confident in their own output faster than practitioners are developing reliable ways to verify it. Without governance models and validation standards in place, that gap compounds and rarely stays contained to a workstation: an unverified finding can end up in a forensic report, a deposition, or in court.</p>
+            <p>Validation starts at the source file. A tool that doesn&#x27;t show its reasoning has already produced an unreliable result, regardless of the confidence score attached to it. A tool that cites the specific file it parsed — for example, a claim that browser history came from Chrome&#x27;s own database — gives an examiner somewhere to start. The claim is plausible at face value, but it still has to be confirmed independently before anyone treats it as fact.</p>
+            <p>The mistake I see often in the field is treating AI as a single source of truth. Practitioner forums are full of the same exchange: Someone scans a file, a detector reports it as AI-generated, and that becomes the finding. The claim has no named source and no reasoning behind it, and an examiner without foundational skills has no way to catch that.</p>
+            <p>Documenting what produced a finding matters as much as checking it. Plenty of examiners say they don&#x27;t use AI, while machine learning has been running skin detection, facial similarity, and image categorization inside their forensic tools for years, generating the confidence scores they rely on. Naming the tool is sufficient when AI is built into a forensic product, since opposing experts can research the integration themselves. For a general-purpose model, the exact version needs to be on record.</p>
+          </article>
+          <article class="archive-item" id="post-21156">
+            <p class="archive-meta"><time datetime="2026-10-15">15 October 2026</time> &middot; on The Hacker News</p>
+            <h3>Fake AI Attacks Spread Across US Companies: How MSSPs Can Stop Incidents Early</h3>
+            <p>Fake AI attacks target US companies by exploiting AI trust, enabling malware and credential theft, challenging MSSPs to detect and contain threats effectively.</p>
+            <p>Fake AI attacks are exploiting trust in popular AI brands to execute malware and steal credentials. These campaigns create unique challenges for MSSPs managing multiple customer environments. The initial indicators vary, but the attacker behavior remains consistent, making detection difficult.</p>
+            <p>Tools like ANY.RUN&#x27;s sandbox help analysts reproduce interactions in an isolated environment. This enables behavioral investigation and reduces the need for unnecessary escalations. Early detection and containment become possible without overburdening senior analysts.</p>
+            <p>Threat intelligence feeds from ANY.RUN provide validated indicators that can be integrated into existing security workflows. This helps MSSPs identify malicious infrastructure faster and reduce repetitive investigations across customers. The quality and breadth of these feeds are critical for expanding detection coverage.</p>
+            <p>By combining sandbox analysis with threat intelligence, MSSPs can scale their operations effectively. This approach improves detection rates, speeds up response times, and maintains consistent service levels. It&#x27;s a practical way to manage growing alert volumes without increasing analyst headcount.</p>
+          </article>
+          <article class="archive-item" id="post-21470">
+            <p class="archive-meta"><time datetime="2026-10-14">14 October 2026</time> &middot; on Semperis</p>
+            <h3>Ransomware Risk Report</h3>
+            <p>Ransomware attackers are using AI and compromised agents to target both systems and people causing psychological pressure and personal threats.</p>
+            <p>Ransomware attackers are evolving fast. They&#x27;re now using AI and compromised agents to escalate attacks. This isn&#x27;t just about data theft anymore. It&#x27;s about psychological pressure and personal threats.</p>
+            <p>The data shows a clear trend. Nearly 75% of organizations fear AI-driven identity attacks. And the numbers back that up. Attackers are exploiting their own AI systems to gain access.</p>
+            <p>Identity is the new gold. Attackers are using it to expand their reach and demand more. They&#x27;re not just targeting systems—they&#x27;re targeting people. Families, friends, and even physical safety are now on the line.</p>
+            <p>We need stronger AI governance and identity threat detection. Too many organizations still lack the tools to respond quickly. Cyber resilience isn&#x27;t optional. It&#x27;s a necessity.</p>
+          </article>
+          <article class="archive-item" id="post-21462">
+            <p class="archive-meta"><time datetime="2026-10-14">14 October 2026</time> &middot; on Censys</p>
+            <h3>Censys 2026 State of the Internet Report Finds Exposed AI Infrastructure Grew 63% in Nine Months</h3>
+            <p>The Censys 2026 report shows a 63% increase in exposed AI infrastructure over nine months with n8n and OpenClaw being among the most vulnerable tools.</p>
+            <p>The Censys 2026 report highlights a dramatic rise in exposed AI infrastructure, up 63% in nine months. This growth includes not just chatbots but the underlying systems that power AI interactions. The scale and speed of this expansion are staggering and demand immediate attention from security teams.</p>
+            <p>n8n and OpenClaw are now among the most exposed AI tools, with n8n leading at nearly 114,000 hosts. These platforms are foundational for automation and personal AI agents, yet their widespread exposure creates new attack surfaces. The U.S., China, and Germany dominate the landscape, but the geographic spread of these systems complicates security and governance.</p>
+            <p>As AI infrastructure expands, so do the risks. Traditional security frameworks like NIST CSF and ISO 27001 must evolve to address these new threats. Governance and compliance strategies need to include visibility into AI systems, continuous monitoring, and robust access controls. The exposure of ICS systems on consumer networks further underscores the need for a holistic approach to security.</p>
+            <p>The report serves as a wake-up call for organizations to prioritize AI security. It’s not just about protecting data but also about managing the infrastructure that enables AI. Proactive measures, including regular audits and patch management, are critical to mitigating risks. The future of AI depends on secure, governed systems.</p>
+          </article>
+          <article class="archive-item" id="post-21372">
+            <p class="archive-meta"><time datetime="2026-10-14">14 October 2026</time> &middot; on Azag</p>
+            <h3>Attorney General Mayes Announces Lawsuit against OpenAI for Deceiving Arizonans about the Safety of ChatGPT</h3>
+            <p>Attorney General Mayes filed a lawsuit against OpenAI alleging deceptive practices regarding ChatGPT&#x27;s safety and transparency.</p>
+            <p>Attorney General Mayes recently filed a lawsuit against OpenAI over alleged deceptive practices regarding ChatGPT&#x27;s safety. The case centers on claims that OpenAI designed the platform to maximize user engagement, particularly with minors, through manipulative tactics. This approach reportedly prioritized commercial gain over user safety and transparency.</p>
+            <p>The complaint highlights how ChatGPT&#x27;s design encourages deep engagement by mimicking human compassion and fostering agreement. These features, according to the lawsuit, expose users to risks like degraded critical thinking and unsafe behavior. OpenAI is accused of failing to disclose these dangers to Arizona consumers.</p>
+            <p>As a leader in AI security and governance, I see this as a critical moment for the industry. The legal and ethical implications of AI design practices are profound. Companies must balance innovation with responsibility, ensuring user safety and transparency. This case underscores the need for stronger oversight and ethical frameworks in AI development.</p>
+            <p>The lawsuit serves as a reminder that AI governance isn&#x27;t just about compliance—it&#x27;s about protecting people. We must ensure that the technologies we build don&#x27;t exploit vulnerabilities, especially among the most vulnerable users. The conversation around AI safety must include legal, ethical, and technical perspectives.</p>
+          </article>
+          <article class="archive-item" id="post-21210">
+            <p class="archive-meta"><time datetime="2026-10-14">14 October 2026</time> &middot; on Dark Reading</p>
+            <h3>Ivanti Zero-Day Attacks Highlight Vendor Patching Hurdles</h3>
+            <p>The Ivanti zero-day vulnerability highlights challenges in patch management as older systems remained vulnerable despite fixes being available for newer versions.</p>
+            <p>The Ivanti zero-day incident is a stark reminder of the complexities in supply chain security and patch management. Vendors can discover vulnerabilities before attackers do, yet the challenge lies in ensuring all supported versions are patched promptly. Ivanti&#x27;s partial discovery of CVE-2026-104935 in July highlights the gap between identifying a flaw and delivering a fix across all environments.</p>
+            <p>The backporting process is where things went sideways. While Ivanti fixed the issue in newer versions, the older ones remained vulnerable. Attackers exploited this window, showing how critical it is to close all gaps before exploitation occurs. This isn&#x27;t just about speed—it&#x27;s about coverage and coordination.</p>
+            <p>AI tools can help vendors find vulnerabilities faster, but they can&#x27;t eliminate the need for rigorous patching. The Ivanti case underscores that even with advanced detection, the real risk lies in the time between a fix being available and it being applied everywhere. Closing that distance is a continuous challenge.</p>
+            <p>Organizations must prioritize timely patching and maintain visibility across all systems. Tools like Ivanti&#x27;s Integrity Checker can be useful, but they aren&#x27;t foolproof. A layered approach—combining monitoring, forensics, and proactive patching—is essential in today&#x27;s threat landscape.</p>
+          </article>
           <article class="archive-item" id="post-21009">
             <p class="archive-meta"><time datetime="2026-10-14">14 October 2026</time> &middot; on Darktrace</p>
             <h3>Attackers Abuse Nezha Monitoring Tool | CSA</h3>
@@ -58,6 +155,24 @@
             <p>The implications are clear. AI is reducing the time and cost to create sophisticated attacks. What once took months now takes days and a fraction of the budget. Defenders must rethink how they secure their infrastructure.</p>
             <p>This isn&#x27;t just about speed. It&#x27;s about the ability to rapidly exploit complex systems. The Chrome exploit crossed multiple sandboxes, showing how AI can bypass traditional defenses. Proactive strategies are no longer optional—they&#x27;re essential.</p>
             <p>The source URL is</p>
+          </article>
+          <article class="archive-item" id="post-21411">
+            <p class="archive-meta"><time datetime="2026-10-13">13 October 2026</time> &middot; on Watchguard</p>
+            <h3>The Tales of a Trezor Data Breach Victim</h3>
+            <p>A Trezor data breach exposed user information through a compromised vendor via SQL injection and phishing attacks using fake QR codes.</p>
+            <p>The Trezor data breaches highlight the dangers of third-party vendor risk. When sensitive data is exposed through a vendor, it becomes a new attack surface. Attackers exploited a SQL injection zero-day in Metabase to access ShipMonk’s network, leading to the exposure of user data. This shows how critical it is to vet vendors and enforce strict data-handling policies.</p>
+            <p>The phishing campaigns used QR codes to mimic legitimate Trezor communications. These attacks leveraged stolen data and trusted brand logos to trick users into revealing wallet credentials. The infrastructure behind these attacks included fake QR code services hosted on servers in France and Germany, using cloaking to hide malicious activity. This underscores the need for zero-trust principles and strict access controls.</p>
+            <p>Organizations must treat third-party vendors as part of their own security perimeter. This means requiring rigorous assessments, audits, and breach notification protocols. Sharing only necessary data and ensuring vendors have robust security controls can mitigate the risk of data exposure. The Trezor case is a stark reminder of how easily breaches can escalate when trust is misplaced.</p>
+            <p>Users should never enter private keys or recovery phrases in response to unsolicited requests. Even typing a seed phrase into a phishing page can lead to compromise. Always verify security alerts through trusted channels and avoid scanning QR codes tied to urgent actions. Awareness and vigilance are your strongest defenses against sophisticated social engineering.</p>
+          </article>
+          <article class="archive-item" id="post-21410">
+            <p class="archive-meta"><time datetime="2026-10-13">13 October 2026</time> &middot; on Island</p>
+            <h3>How Attackers Built Software an AI Would Recommend</h3>
+            <p>Attackers created credible software repositories with malicious code to appear in AI recommendations by leveraging real functionality and trust signals.</p>
+            <p>Software linked to the MicrosoftSystem64 malware cluster became credible enough to appear in LLM recommendations. Attackers built repositories that looked established, trustworthy, and worth installing. They preserved real functionality, gave dependencies plausible uses, and automated fork activity to create the illusion of adoption. This infrastructure is exactly what AI-assisted discovery uses to decide what&#x27;s worth recommending.</p>
+            <p>The campaign we investigated used real, working software with malicious code introduced through dependency chains. A developer or an AI agent could install what looked like ordinary software without the malicious functionality being obvious. One repository surfaced unprompted in both ChatGPT and Google AI Overview during ordinary software discovery. This showed that manufactured trust signals are what AI systems use to decide what&#x27;s worth recommending.</p>
+            <p>The result raises an important question: what made this repository look like a reasonable piece of software to recommend? On the surface, it had detailed documentation and real working functionality. But one of its dependencies was part of the MicrosoftSystem64 delivery chain. The carrier names rotated while the repository and its functionality remained in place. This shifted the investigation from the malicious packages themselves to the infrastructure built around the repositories.</p>
+            <p>For defenders, a package name IOC can become stale quickly. Blocking or hunting for one known carrier may stop that package, while repositories that have moved to the next name will no longer match. None of these techniques is new on its own. What stands out is the combination and how it intersects with AI-assisted software discovery. The distance between &quot;find me a tool&quot; and &quot;install it&quot; can now be only a few prompts. That makes repository credibility more consequential.</p>
           </article>
           <article class="archive-item" id="post-21007">
             <p class="archive-meta"><time datetime="2026-10-13">13 October 2026</time> &middot; on Checkred</p>
@@ -209,120 +324,18 @@
             <p>Old processes designed for people don’t scale to machine-speed environments. Scheduled reviews and manual approvals are useless for ephemeral agent identities. Real progress demands continuous, automated, and contextual policy enforcement that matches AI’s velocity.</p>
             <p>Claiming to balance speed and security is a false compromise. Without the right architecture, organizations can’t move forward. The solution isn’t a rebuild—it’s extending existing governance to cover all identities, unifying them into a single, secure fabric.</p>
           </article>
-          <article class="archive-item" id="post-20540">
-            <p class="archive-meta"><time datetime="2026-10-08">8 October 2026</time> &middot; on Zenity Labs</p>
-            <h3>Security Research | AgentCorruption: How A Single Prompt Collapsed The Entire Cloud Security Model</h3>
-            <p>A single prompt injection in AWS Bedrock AgentCore exposed a critical security flaw allowing attackers to access IMDS endpoints and extract temporary IAM credentials.</p>
-            <p>A single prompt injection in AWS Bedrock AgentCore exposed a critical security flaw. The vulnerability allowed attackers to access IMDS endpoints and extract temporary IAM credentials. This opened the door to widespread lateral movement and data access across an entire AWS account. The issue stems from insufficient network isolation in Firecracker MicroVMs, enabling SSRF attacks through simple prompt injection.</p>
-            <p>The default IAM role for AgentCore was overprivileged, granting broad permissions across all resources in the region. This meant attackers could invoke any agent, read private conversations, and access secrets from AWS Secrets Manager. The blast radius was enormous, turning a single compromised agent into a gateway to the entire environment.</p>
-            <p>The research highlights the risks of agentic AI systems when security boundaries are not rigorously enforced. Enterprises must prioritize IAM role scoping, secure credential management, and continuous monitoring. Model evaluation and governance are critical to prevent persistent hijacking and memory poisoning. The incident underscores the need for robust AI security frameworks.</p>
-          </article>
-          <article class="archive-item" id="post-19947">
-            <p class="archive-meta"><time datetime="2026-10-08">8 October 2026</time> &middot; on Sonatype</p>
-            <h3>Q3 2026 Open Source Malware Index: When Compromise Compounds</h3>
-            <p>The article discusses how malicious open source packages in Q3 2026 are expanding attacks by exfiltrating secrets and enabling lateral movement.</p>
-            <p>The open source malware index for Q3 2026 shows a troubling trend: malicious packages are no longer just a threat to code, but a vector for expanding attacks. With 149,329 malicious packages logged, the scale is staggering. npm remains the dominant ecosystem, but the real signal lies in what these packages do. Over 74% involved droppers or secrets exfiltration, turning initial compromise into a springboard for further breaches.</p>
-            <p>The speed at which these attacks unfold is unprecedented. Automated systems and AI agents are executing supply chain exploits at machine speed, outpacing traditional defenses. A rogue AI agent in a misconfigured exercise demonstrated how quickly a compromised package can spread, exposing credentials and enabling lateral movement. The lesson is clear: trust must be validated continuously, not just once.</p>
-            <p>Defenders face a growing challenge: containing the chain of compromise without losing sight of the bigger picture. Malicious packages can expose credentials, deliver payloads, or establish persistence, turning a single breach into a cascading attack. The key is to treat each incident as a potential environment compromise, not just a dependency issue. Context matters more than ever.</p>
-            <p>AI is accelerating the pace of security findings, but faster doesn&#x27;t mean clearer. Prioritizing vulnerabilities requires understanding how they&#x27;re used in real-world environments. Defenders must invest in continuous trust validation, detect behavior, and protect automated analysis environments. The goal isn&#x27;t just to stop the initial breach but to prevent it from expanding.</p>
-          </article>
-          <article class="archive-item" id="post-19933">
-            <p class="archive-meta"><time datetime="2026-10-08">8 October 2026</time> &middot; on Zenity</p>
-            <h3>AgentCorruption: AWS AgentCore Flaws Let One Prompt Hijack All Agents</h3>
-            <p>A critical vulnerability in AWS AgentCore allows a single prompt to a public-facing agent to compromise all other agents in the same account and region.</p>
-            <p>Zenity Labs recently uncovered a critical chain of vulnerabilities in AWS AgentCore called AgentCorruption. A single prompt to a public-facing agent could grant access to all other AgentCore agents within the same AWS account and region. This exposed private data, credentials, and even allowed attackers to manipulate agent behavior. It&#x27;s a stark reminder of how interconnected cloud environments can be.</p>
-            <p>The root cause lies in how AgentCore&#x27;s infrastructure design and overprivileged roles allowed lateral movement. An attacker could move from a customer service agent to an internal finance agent, accessing data and tools meant for restricted use. This shows the dangers of not properly segmenting access and enforcing least-privilege principles.</p>
-            <p>The attack also exploited memory management to implant malicious instructions. These persisted across sessions, letting attackers control agent behavior long after the initial breach. This kind of persistent access is a major concern for any system relying on AI agents for critical functions.</p>
-            <p>Cloud security and AI agency are inherently at odds. One must balance the need for agents to operate autonomously with the need to protect sensitive data and infrastructure. Governance, strict access controls, and memory management are non-negotiable.</p>
-          </article>
-          <article class="archive-item" id="post-19900">
-            <p class="archive-meta"><time datetime="2026-10-08">8 October 2026</time> &middot; on Zscaler</p>
-            <h3>Trojanized Terraform Provider Campaign | ThreatLabz</h3>
-            <p>A trojanized Terraform provider was used in a supply chain attack to deliver malware through a Bash loader disguised as a font file.</p>
-            <p>The recent discovery of a trojanized Terraform provider used by TraderTraitor underscores the growing risk of supply chain attacks in DevOps environments. These attacks exploit trusted tools to deliver cross-platform malware, making secure DevOps practices more critical than ever. Terraform providers, often used in cloud infrastructure, can become vectors for sophisticated threats if not properly vetted.</p>
-            <p>The trojanized provider downloads a Bash loader disguised as a font file, which then decrypts and executes payloads tailored to the victim&#x27;s system. This multi-stage approach leverages public hosting and mimics legitimate developer activity, making detection challenging. Teams must verify third-party tools and enforce strict access controls to mitigate such risks.</p>
-            <p>FLATROOF and ROOFDECK malware exemplify the evolving threat landscape, combining credential theft with persistent backdoors. These tools use layered C2 discovery, including signed Pastebin files and Nostr metadata, to evade detection. Organizations must adopt Zero Trust principles and monitor for anomalous behavior in their DevOps pipelines.</p>
-            <p>This incident reinforces the need for rigorous provider validation, regular audits, and continuous monitoring. As agentic AI and cloud adoption grow, so do the attack surfaces. Prioritizing secure DevOps and fostering a culture of vigilance will be key to defending against these sophisticated threats.</p>
-          </article>
-          <article class="archive-item" id="post-19888">
-            <p class="archive-meta"><time datetime="2026-10-08">8 October 2026</time> &middot; on Cisco Talos</p>
-            <h3>UAT-11985: AI-assisted event lures delivering real-time Google AitM phishing</h3>
-            <p>AI-assisted phishing targeting Taiwan-based research organizations uses real-time synchronization and QR codes to bypass MFA and spread through printed materials.</p>
-            <p>The AI-assisted phishing campaign targeting Taiwan-based research organizations is a stark reminder of how adversaries are leveraging LLMs to scale and personalize spear-phishing with alarming precision. The emails exhibit a highly consistent structure, rhetorical style, and personalized flattery, suggesting a reusable template rather than independent authorship. This level of customization at scale points to AI-assisted content generation, which enables threat actors to maintain a cohesive social engineering framework while adapting to different geopolitical contexts.</p>
-            <p>UAT-11985 also incorporates QR code phishing, or quishing, by embedding malicious QR codes in event posters. This expands the attack surface beyond email recipients to include individuals who may encounter printed materials. The threat actor appears to anticipate that recipients might print and display these posters, tricking others into scanning the QR code and inadvertently registering for the event. This method underscores the growing sophistication of physical-world attack vectors in the age of AI.</p>
-            <p>The phishing kit itself demonstrates a hybrid HTTP and WebSocket architecture, allowing real-time synchronization of authentication workflows. This enables the interception of credentials and MFA challenges, effectively bypassing multi-factor authentication. The localization architecture, with Simplified Chinese as the default, suggests a developer whose primary working language is Simplified Chinese. This detail reinforces the campaign&#x27;s origin and the tailored nature of its execution.</p>
-          </article>
-          <article class="archive-item" id="post-19859">
-            <p class="archive-meta"><time datetime="2026-10-08">8 October 2026</time> &middot; on Socket</p>
-            <h3>TensorLake npm SDK Compromised in ChainDrop Shai-Hulud Credential-Stealing Attack</h3>
-            <p>The TensorLake npm SDK was compromised in a ChainDrop/Shai-Hulud attack delivering credential-stealing malware that exfiltrates data and establishes persistence.</p>
-            <p>The TensorLake npm SDK was compromised in a ChainDrop/Shai-Hulud attack, delivering credential-stealing malware. The malicious version 0.5.144 includes a preinstall hook that executes obfuscated code during installation. This hook gives the attacker access to the system before any generated code reaches a sandbox. It’s a critical vulnerability in AI agent tooling.</p>
-            <p>The payload steals credentials from multiple sources including npm, GitHub, AWS, HashiCorp Vault, Kubernetes, and more. It also exfiltrates data and establishes persistence. This attack pattern is now targeting AI infrastructure, which is a growing concern. Developers may unknowingly install a compromised SDK, exposing their environments to risk.</p>
-            <p>Teams using TensorLake should remove the affected version immediately and check for signs of compromise. Investigate hosts where the malicious code executed and isolate them. The dead-man switch means revoking tokens without removing the monitor could wipe the system. It’s a sobering reminder of the risks in supply chain attacks.</p>
-          </article>
-          <article class="archive-item" id="post-19856">
-            <p class="archive-meta"><time datetime="2026-10-08">8 October 2026</time> &middot; on Endor Labs</p>
-            <h3>Tensorlake npm package compromised by Shai-Hulud in latest software supply chain attack</h3>
-            <p>The npm package tensorlake was compromised by the Shai-Hulud worm through a supply chain attack allowing malicious code execution during installation.</p>
-            <p>The npm package tensorlake was compromised by the Shai-Hulud worm in a supply chain attack. The malicious version 0.5.144 was published through a trusted GitHub Actions pipeline, highlighting the risk of compromised maintainer accounts. The attack used a preinstall hook to execute malicious code during npm install, before any application code. This underscores the need for strict control over CI/CD pipelines and maintainer credentials.</p>
-            <p>The worm steals npm and GitHub credentials to republish itself into other packages and exfiltrate data. It targets a wide range of secrets, including cloud credentials and CI tokens. This attack demonstrates how critical it is to monitor repository activity and enforce strong access controls. Preinstall hooks and CI environments are particularly vulnerable and require heightened scrutiny.</p>
-            <p>Organizations should block version 0.5.144 and pin to 0.5.143 until a safe release is available. Any installation of the compromised version should trigger credential rotation and security audits. Script execution in CI should be disabled by default where possible to prevent such attacks. This incident reinforces the importance of supply chain security and proactive governance.</p>
-          </article>
-          <article class="archive-item" id="post-19855">
-            <p class="archive-meta"><time datetime="2026-10-08">8 October 2026</time> &middot; on Aikido Security</p>
-            <h3>tensorlake NPM package compromised with Shai Hulud worm</h3>
-            <p>The tensorlake NPM package was compromised with a Shai-Hulud worm that exfiltrates secrets and replicates through connected systems.</p>
-            <p>The compromise of the tensorlake NPM package highlights a critical risk in AI tooling supply chains. A malicious version 0.5.144 was published, embedding a Shai-Hulud worm that exfiltrates secrets and replicates through connected systems. This underscores the need for rigorous vetting of third-party packages, especially those used in serverless sandboxes and AI agent environments. The attack vector leverages preinstall scripts, making it a silent threat to development workflows.</p>
-            <p>The malware’s use of obfuscated scripts and multiple C2 mechanisms shows a high level of sophistication. It targets sensitive environment variables and browser extensions, reflecting an operator focused on monetizing infected endpoints. This shift in tactics emphasizes the evolving nature of supply chain threats and the importance of proactive detection and response strategies. Developers must treat any compromised package as a potential breach of their entire infrastructure.</p>
-            <p>Aikido’s detection capabilities offer a practical solution for identifying and mitigating such risks. For teams already using Aikido, regular scans and manual checks are essential. For others, adopting tools like Safe Chain can provide visibility into package origins and help prevent malicious installations before they cause harm. The key takeaway is that trust in supply chain components must be continuously validated.</p>
-          </article>
-          <article class="archive-item" id="post-19811">
-            <p class="archive-meta"><time datetime="2026-10-08">8 October 2026</time> &middot; on Cybersecurity Dive</p>
-            <h3>US government lagging in transition to post-quantum encryption, GAO finds</h3>
-            <p>U.S. government agencies are lagging in transitioning to post-quantum encryption as they face challenges in funding testing and implementing proactive governance measures.</p>
-            <p>U.S. government agencies are falling behind in migrating to post-quantum encryption, according to a GAO report. The risk of sensitive data being decrypted by quantum computers is real and growing. This isn’t just a technical challenge—it’s a compliance and risk management issue that demands proactive governance.</p>
-            <p>The GAO found that while agencies recognize the threat, they haven’t taken full action to prepare. Only one of 24 major agencies completed the first step of inventorying systems and vulnerable algorithms. Others are stuck on funding and testing. Without clear visibility into what needs to be done, it’s hard to build accurate budgets or timelines.</p>
-            <p>Proactive governance is key. Agencies need to act now to avoid being caught off guard when quantum computers become a reality. Testing PQC algorithms and identifying funding are critical steps. The GAO report highlights that without these, agencies won’t be ready to replace legacy systems or custom software that can’t support post-quantum encryption.</p>
-          </article>
-          <article class="archive-item" id="post-19799">
-            <p class="archive-meta"><time datetime="2026-10-08">8 October 2026</time> &middot; on Cointelegraph</p>
-            <h3>Ethereum Researchers Warn AI Could Crack Crypto Before Q-Day</h3>
-            <p>Ethereum researchers warn AI could crack cryptographic systems before quantum computers pose a threat.</p>
-            <p>Ethereum researchers are sounding the alarm about AI’s potential to crack cryptographic systems before quantum computers pose a threat. Advances in mathematical capabilities, driven by AI, are challenging long-held assumptions about security. This includes elliptic curve cryptography, which underpins many blockchain wallets. The speed at which AI is solving complex problems is humbling for human intuition and raises serious concerns about current cryptographic practices.</p>
-            <p>The risk extends beyond elliptic curves to other areas like lattice-based cryptography, which is supposed to resist quantum attacks. AI-driven mathematical breakthroughs could undermine these systems in the coming years. This is why Ethereum is shifting toward hash-only approaches, prioritizing simplicity and resilience against emerging threats.</p>
-            <p>A practical step for users is to migrate funds to fresh addresses, ensuring public keys remain private. This reduces exposure to potential vulnerabilities. However, migration must be gradual and well-managed. Rushing could introduce new risks, as seen in past botched moves that led to financial losses.</p>
-            <p>The takeaway is clear: we must stay vigilant and adaptive. AI’s rapid progress in mathematics demands a reevaluation of how we secure digital assets. Preparing for &quot;bunker mode&quot; isn’t just about crypto—it’s about anticipating and mitigating risks in an evolving threat landscape.</p>
-          </article>
-          <article class="archive-item" id="post-19560">
-            <p class="archive-meta"><time datetime="2026-10-08">8 October 2026</time> &middot; on Cybersecurity Dive</p>
-            <h3>What the C-suite needs to know about AI governance</h3>
-            <p>C-suite leaders face growing risks from AI adoption due to weak governance and unclear accountability for cybersecurity threats.</p>
-            <p>The C-suite is racing to adopt AI, but guardrails are lagging. Cybersecurity experts warn that without clear ownership and oversight, agentic AI tools can expose critical systems to risk. AI adoption is outpacing the ability to secure it, leaving many organizations unprepared for the threats ahead.</p>
-            <p>This gap in governance creates uncertainty about who is accountable for AI cyber risk. Less than 30% of AI accountability sits with CIOs, CTOs, or CISOs, according to a PwC report. Without defined ownership, it’s hard to ensure security is baked into AI initiatives from the start.</p>
-            <p>Agentic AI tools are being deployed widely, but their access levels and human oversight remain a concern. Cyber risk leaders stress the need to treat each agent as a new identity with a named owner. This approach can help mitigate the risks of unchecked access and unintended behavior.</p>
-            <p>Third-party tools are also a major risk. Many companies rely on external vendors for AI, but without proper visibility, these tools can access sensitive data that existing security systems miss. Vetting vendors from both a cybersecurity and technical standpoint is critical.</p>
-          </article>
-          <article class="archive-item" id="post-19551">
-            <p class="archive-meta"><time datetime="2026-10-08">8 October 2026</time> &middot; on Dark Reading</p>
-            <h3>&#x27;AgentCorruption&#x27; Puts AWS Environments At Risk With One Prompt</h3>
-            <p>A vulnerability in AWS Bedrock AgentCore allows attackers to access sensitive data via a single prompt by exploiting insufficient network isolation and over-privileged roles.</p>
-            <p>The recent discovery of AgentCorruption in AWS Bedrock AgentCore highlights a critical vulnerability in how agentic AI interacts with cloud infrastructure. A single prompt to a public-facing chatbot could grant an attacker access to IMDS, exposing sensitive data like temporary credentials and instance configurations. This flaw underscores the risks of over-privileged roles and insufficient network isolation in agentic AI deployments.</p>
-            <p>The issue stems from agents running in Firecracker MicroVMs without proper network boundaries. An attacker could exploit this to access IMDS and escalate privileges across an entire AWS region. This demonstrates how agentic AI, by design, can bypass traditional security controls if not carefully managed.</p>
-            <p>AWS has since updated AgentCore to use IMDSv2 with authentication and restricted default roles. However, the incident serves as a stark reminder that least privilege and strict access controls are essential. Without them, even a single compromised agent can lead to a full-scale breach.</p>
-            <p>As we adopt more agentic AI in cloud environments, we must prioritize security from the ground up. This includes rigorous governance, continuous monitoring, and ensuring that every agent operates within defined boundaries. The lesson is clear: security must evolve alongside innovation.</p>
-          </article>
         </div>
       </section>
       <section class="content-section" aria-labelledby="weeks-title">
         <div class="section-heading">
           <p class="eyebrow">Archive</p>
-          <h2 id="weeks-title">355 entries, a week at a time.</h2>
+          <h2 id="weeks-title">375 entries, a week at a time.</h2>
         </div>
         <div class="faq-list">
           <article class="archive-item">
-            <p class="archive-meta">40 entries &middot; 30 publications</p>
+            <p class="archive-meta">60 entries &middot; 45 publications</p>
             <h3><a class="text-link" href="/insights-2026-w42">12 to 18 October 2026</a></h3>
-            <p>Including Aikido Security, Checkpoint, Checkred, Cisco Talos, and 26 more.</p>
+            <p>Including Aikido Security, Azag, Bitsight, Censys, and 41 more.</p>
           </article>
           <article class="archive-item">
             <p class="archive-meta">38 entries &middot; 15 publications</p>
