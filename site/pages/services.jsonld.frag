@@ -5,7 +5,7 @@
           {
             "@type": "CollectionPage",
             "@id": "{{SITE_URL}}/services#webpage",
-            "name": "Services | Tectori",
+            "name": "IT, security, and compliance consulting services | Tectori",
             "url": "{{SITE_URL}}/services",
             "description": "Tectori's six consulting service lines, from fractional CIO and CISO leadership to cloud, cybersecurity, compliance, IT operations, and agentic AI.",
             "publisher": {
