@@ -61,7 +61,7 @@
               instead.
             </p>
           </div>
-          <script src="contact-form.js?v=20260929" defer></script>
+          <script src="contact-form.js?v=20261016" defer></script>
           <p>Business address: {{POSTAL_ADDRESS}}.</p>
           <p>
             You can also find Tectori on

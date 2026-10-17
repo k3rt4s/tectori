@@ -1,7 +1,7 @@
-    <div class="utility-bar">
+    <aside class="utility-bar" aria-label="Contact and client login">
       <span>Nashville, serving organizations nationwide</span>
       <div>
         <a href="{{PHONE_TEL_URI}}"><span class="nowrap">{{PHONE_DISPLAY}}</span></a>
         <a href="{{LOGIN_HREF}}">Client login</a>
       </div>
-    </div>
+    </aside>
