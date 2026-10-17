@@ -4499,6 +4499,84 @@ def check_navigation_targets(docs_root: Path) -> bool:
     return ok
 
 
+def stylesheet_rules(css: str):
+    """Yield (selector list, declaration text) for each top-level rule in css.
+
+    Comments are removed first, so a commented-out rule is not a rule. A rule
+    nested in a media or supports block is not yielded, so a rule that holds
+    only at some widths or preferences cannot satisfy a check.
+    """
+    css = CSS_COMMENT_RE.sub(" ", css)
+    depth = 0
+    start = 0
+    prelude = ""
+    for index, char in enumerate(css):
+        if char == "{":
+            if depth == 0:
+                prelude = css[start:index]
+                body_start = index + 1
+            depth += 1
+        elif char == "}" and depth:
+            depth -= 1
+            if depth == 0:
+                start = index + 1
+                if not prelude.strip().startswith("@"):
+                    selectors = [part.strip() for part in prelude.split(",")]
+                    yield selectors, css[body_start:index]
+
+
+def check_hidden_attribute_wins(docs_root: Path) -> bool:
+    """docs/styles.css carries a global [hidden] rule with display: none !important.
+
+    A class rule such as .contact-form { display: grid } outranks the browser's
+    own [hidden] rule, so contact-form.js setting form.hidden = true left the
+    filled form on screen after a send and open to a second submit. Only a
+    rule whose selector is exactly [hidden] counts, so .form-message[hidden]
+    does not satisfy it, and a commented-out rule does not.
+    """
+    stylesheet = docs_root / "styles.css"
+    if not stylesheet.is_file():
+        print("[FAIL] the hidden attribute always hides: styles.css is not in the tree")
+        return False
+    ok = False
+    for selectors, body in stylesheet_rules(stylesheet.read_text(encoding="utf-8")):
+        if "[hidden]" in selectors and re.search(
+            r"(?:^|;)\s*display\s*:\s*none\s*!\s*important\s*(?:;|$)", body
+        ):
+            ok = True
+    print(f"[{'PASS' if ok else 'FAIL'}] the hidden attribute always hides: "
+          + ("styles.css has a global [hidden] { display: none !important } rule"
+             if ok else "styles.css has no global [hidden] { display: none !important } "
+             "rule, so a class that sets display keeps a hidden element on screen"))
+    return ok
+
+
+def check_anchor_scroll_padding(docs_root: Path) -> bool:
+    """docs/styles.css sets scroll-padding-top on html so the sticky header cannot cover a target.
+
+    The header is sticky, so a skip link or fragment link can scroll its target
+    under it (WCAG 2.2 SC 2.4.11, focus not obscured). Only a rule whose
+    selector is exactly html counts, with a non-zero length.
+    """
+    stylesheet = docs_root / "styles.css"
+    if not stylesheet.is_file():
+        print("[FAIL] anchors clear the sticky header: styles.css is not in the tree")
+        return False
+    ok = False
+    for selectors, body in stylesheet_rules(stylesheet.read_text(encoding="utf-8")):
+        if "html" not in selectors:
+            continue
+        for value in re.findall(r"(?:^|;)\s*scroll-padding-top\s*:\s*([^;]+)", body):
+            number = re.match(r"\s*(\d*\.?\d+)", value)
+            if number and float(number.group(1)) > 0:
+                ok = True
+    print(f"[{'PASS' if ok else 'FAIL'}] anchors clear the sticky header: "
+          + ("styles.css sets scroll-padding-top on html" if ok else
+             "styles.css sets no scroll-padding-top on html, so a skip link or "
+             "fragment target can land under the sticky header"))
+    return ok
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -4548,6 +4626,8 @@ def main() -> int:
         check_control_contrast(docs_root),
         check_page_endings(pages, docs_root),
         check_mobile_menu_is_complete(pages, docs_root),
+        check_hidden_attribute_wins(docs_root),
+        check_anchor_scroll_padding(docs_root),
     ]
 
     passed = sum(results)
