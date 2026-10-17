@@ -129,7 +129,19 @@ LDJSON_RE = re.compile(
 JSONLD_TOP_LEVEL_MIRROR_PAGES = {"about.html", "contact.html"}
 # Pages whose JSON-LD is an "@graph" array holding a node whose "name" and
 # "description" mirror the page's <title> and meta description.
-JSONLD_GRAPH_MIRROR_NODE_TYPE = {"services.html": "CollectionPage"}
+JSONLD_GRAPH_MIRROR_NODE_TYPE = {
+    "services.html": "CollectionPage",
+    # The hub pages whose graph is a WebPage node plus a BreadcrumbList.
+    "ai-governance.html": "WebPage",
+    "audit-ready-it.html": "WebPage",
+    "case-study.html": "WebPage",
+    "how-we-work.html": "WebPage",
+    "insights.html": "WebPage",
+    "resources.html": "WebPage",
+    "solutions.html": "WebPage",
+    "tools.html": "WebPage",
+    "trust.html": "WebPage",
+}
 # The six service-*.html pages: an "@graph" array holding a "Service" node.
 # Its "name" and "serviceType" deliberately name the service, not the page
 # title, so they are a documented exception and are never compared to the

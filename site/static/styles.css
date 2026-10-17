@@ -46,7 +46,7 @@ a, .button, summary, .service-card, .path-card, .solution-card, .flow-step, inpu
 .skip-link { position: fixed; top: 10px; left: 10px; z-index: 100; padding: 10px 14px; background: var(--charcoal); color: var(--white); transform: translateY(-160%); }
 .skip-link:focus { transform: translateY(0); }
 
-.utility-bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 34px; padding: 6px clamp(20px, 4vw, 72px); background: var(--charcoal); color: rgba(254, 255, 254, 0.76); font-size: 0.75rem; font-weight: 650; }
+.utility-bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 34px; padding: 6px clamp(20px, 4vw, 72px); background: var(--charcoal); color: rgba(254, 255, 254, 0.76); font-size: 0.875rem; font-weight: 650; }
 .utility-bar div { display: flex; gap: 22px; }
 .utility-bar a { padding: 4px 0; text-decoration: none; }
 .utility-bar a:hover { color: var(--gold); }
@@ -77,7 +77,7 @@ a, .button, summary, .service-card, .path-card, .solution-card, .flow-step, inpu
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
 .action-row { display: flex; flex-wrap: wrap; gap: 12px; }
 
-.eyebrow { margin: 0 0 14px; color: var(--orange-text); font-size: 0.78rem; font-weight: 850; letter-spacing: 0; text-transform: uppercase; }
+.eyebrow { margin: 0 0 14px; color: var(--orange-text); font-size: 0.875rem; font-weight: 850; letter-spacing: 0; text-transform: uppercase; }
 .hero .eyebrow, .page-hero .eyebrow, .dark-band .eyebrow, .cta-band .eyebrow { color: var(--gold); }
 .button { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 18px; border: 1px solid transparent; border-radius: 6px; font: inherit; font-weight: 780; text-decoration: none; cursor: pointer; }
 .button:hover, .button:focus-visible { transform: translateY(-1px); }
@@ -148,7 +148,7 @@ a, .button, summary, .service-card, .path-card, .solution-card, .flow-step, inpu
 .resilience-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: 48px; border-top: 1px solid rgba(39, 49, 56, 0.3); }
 .resilience-grid article { min-height: 250px; padding: 26px; border-right: 1px solid rgba(39, 49, 56, 0.3); }
 .resilience-grid article:last-child { border-right: 0; }
-.resilience-grid span { font-size: 0.75rem; font-weight: 850; }
+.resilience-grid span { font-size: 0.875rem; font-weight: 850; }
 .resilience-grid h3 { margin-top: 38px; }
 .resilience-grid p { margin: 13px 0 0; color: rgba(39, 49, 56, 0.82); }
 
@@ -159,7 +159,7 @@ a, .button, summary, .service-card, .path-card, .solution-card, .flow-step, inpu
 .service-card, .path-card, .flow-step { min-height: 250px; padding: 24px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
 .path-card { display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
 .path-card:hover, .path-card:focus-visible { border-color: var(--orange); box-shadow: 0 12px 28px rgba(39, 49, 56, 0.1); }
-.path-kicker, .card-number, .flow-step .step-number { display: block; margin-bottom: 28px; color: var(--orange-text); font-size: 0.76rem; font-weight: 850; text-transform: uppercase; }
+.path-kicker, .card-number, .flow-step .step-number { display: block; margin-bottom: 28px; color: var(--orange-text); font-size: 0.875rem; font-weight: 850; text-transform: uppercase; }
 .service-card p, .path-card p, .principles p, .fact-item p, .flow-step p, .practice-item p, .disclosure p { margin: 14px 0 0; color: var(--muted); }
 .path-card .text-link { margin-top: 28px; }
 .principles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin-top: 38px; }
@@ -179,7 +179,7 @@ a, .button, summary, .service-card, .path-card, .solution-card, .flow-step, inpu
 .disclosure { max-width: 920px; padding: 24px; border-left: 4px solid var(--gold); background: rgba(249, 166, 62, 0.12); }
 .disclosure h2 { font-size: 1.15rem; }
 .case-metadata { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
-.case-metadata span { padding: 7px 10px; border: 1px solid rgba(254, 255, 254, 0.28); border-radius: 6px; color: rgba(254, 255, 254, 0.86); font-size: 0.84rem; font-weight: 700; }
+.case-metadata span { padding: 7px 10px; border: 1px solid rgba(254, 255, 254, 0.28); border-radius: 6px; color: rgba(254, 255, 254, 0.86); font-size: 0.875rem; font-weight: 700; }
 .contact-panel { display: grid; justify-items: start; gap: 24px; padding: 32px; border: 1px solid var(--line); border-radius: 8px; background: var(--white); box-shadow: var(--shadow); }
 .contact-panel p, .section-copy, .content-section > p { max-width: 800px; margin: 0; color: var(--muted); font-size: 1.08rem; }
 
@@ -228,6 +228,7 @@ a, .button, summary, .service-card, .path-card, .solution-card, .flow-step, inpu
 .form-field input { width: 100%; min-height: 50px; padding: 10px 13px; border: 1px solid var(--muted); border-radius: 6px; background: var(--white); color: var(--charcoal); font: inherit; }
 .form-field input:focus { border-color: var(--charcoal); outline: 3px solid var(--charcoal); outline-offset: 2px; }
 .login-form .button { width: 100%; margin-top: 4px; }
+.field-error { margin: 0; color: var(--charcoal); font-size: 0.9rem; font-weight: 680; }
 .form-message { min-height: 48px; margin: 0; padding: 12px 14px; border: 1px solid var(--orange); border-radius: 6px; background: rgba(246, 122, 56, 0.08); color: var(--charcoal); font-weight: 680; }
 
 .cta-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 36px; }

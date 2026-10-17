@@ -16,7 +16,50 @@
   const GENERIC_ERROR =
     "Something went wrong sending your message. Please try again.";
 
+  const FIELD_ERROR_CLASS = "field-error";
+
+  // Removes every per-field error and restores each input's own
+  // aria-describedby, so a resubmit or a success leaves no stale tie behind.
+  function clearFieldErrors() {
+    form.querySelectorAll("." + FIELD_ERROR_CLASS).forEach((node) => {
+      node.remove();
+    });
+    form.querySelectorAll("[aria-invalid]").forEach((input) => {
+      input.removeAttribute("aria-invalid");
+      const original = input.getAttribute("data-describedby-original");
+      if (original) {
+        input.setAttribute("aria-describedby", original);
+      } else {
+        input.removeAttribute("aria-describedby");
+      }
+      input.removeAttribute("data-describedby-original");
+    });
+  }
+
+  // Ties one Formspree field error to its input (WCAG SC 3.3.1): the message
+  // gets an id, the input names it in aria-describedby after any ids it
+  // already had, and aria-invalid marks the field.
+  function showFieldError(fieldName, message) {
+    const input = form.elements.namedItem(fieldName);
+    if (!input || !input.id || input.type === "hidden") return;
+    const errorId = "contact-error-" + fieldName;
+    if (document.getElementById(errorId)) return;
+    const note = document.createElement("p");
+    note.id = errorId;
+    note.className = FIELD_ERROR_CLASS;
+    note.textContent = message;
+    input.insertAdjacentElement("afterend", note);
+    const existing = input.getAttribute("aria-describedby") || "";
+    input.setAttribute("data-describedby-original", existing);
+    input.setAttribute(
+      "aria-describedby",
+      existing ? existing + " " + errorId : errorId,
+    );
+    input.setAttribute("aria-invalid", "true");
+  }
+
   function hideErrorRegion() {
+    clearFieldErrors();
     if (!errorRegion) return;
     errorRegion.hidden = true;
   }
@@ -29,6 +72,7 @@
   }
 
   function showSuccess() {
+    clearFieldErrors();
     form.hidden = true;
     if (!successRegion) return;
     successRegion.hidden = false;
@@ -48,6 +92,11 @@
         const messages = body.errors
           .map((entry) => entry && entry.message)
           .filter(Boolean);
+        body.errors.forEach((entry) => {
+          if (entry && entry.field && entry.message) {
+            showFieldError(String(entry.field), String(entry.message));
+          }
+        });
         if (messages.length) return messages.join(" ");
       }
       if (typeof body.error === "string" && body.error) return body.error;

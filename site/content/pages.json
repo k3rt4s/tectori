@@ -80,7 +80,7 @@
     "contact_label": "Contact",
     "footer_order": "about_early",
     "footer_omit": "ai_governance",
-    "jsonld_fragment": null,
+    "jsonld_fragment": "pages/ai-governance.jsonld.frag",
     "body_fragment": "pages/ai-governance.body.frag"
   },
   {
@@ -101,7 +101,7 @@
     "contact_label": "Contact",
     "footer_order": "about_early",
     "footer_omit": "audit_ready_it",
-    "jsonld_fragment": null,
+    "jsonld_fragment": "pages/audit-ready-it.jsonld.frag",
     "body_fragment": "pages/audit-ready-it.body.frag"
   },
   {
@@ -122,7 +122,7 @@
     "contact_label": "Contact",
     "footer_order": "about_early",
     "footer_omit": "case_study",
-    "jsonld_fragment": null,
+    "jsonld_fragment": "pages/case-study.jsonld.frag",
     "body_fragment": "pages/case-study.body.frag"
   },
   {
@@ -185,7 +185,7 @@
     "contact_label": "Contact",
     "footer_order": "about_early",
     "footer_omit": "how_we_work",
-    "jsonld_fragment": null,
+    "jsonld_fragment": "pages/how-we-work.jsonld.frag",
     "body_fragment": "pages/how-we-work.body.frag"
   },
   {
@@ -227,7 +227,7 @@
     "contact_label": "Contact",
     "footer_order": "standard",
     "footer_omit": null,
-    "jsonld_fragment": null,
+    "jsonld_fragment": "pages/insights.jsonld.frag",
     "body_fragment": "pages/insights.body.frag"
   },
   {
@@ -416,7 +416,7 @@
     "contact_label": "Contact",
     "footer_order": "standard",
     "footer_omit": null,
-    "jsonld_fragment": null,
+    "jsonld_fragment": "pages/resources.jsonld.frag",
     "body_fragment": "pages/resources.body.frag"
   },
   {
@@ -584,7 +584,7 @@
     "contact_label": "Talk with Tectori",
     "footer_order": "standard",
     "footer_omit": null,
-    "jsonld_fragment": null,
+    "jsonld_fragment": "pages/solutions.jsonld.frag",
     "body_fragment": "pages/solutions.body.frag"
   },
   {
@@ -647,7 +647,7 @@
     "contact_label": "Contact",
     "footer_order": "standard",
     "footer_omit": null,
-    "jsonld_fragment": null,
+    "jsonld_fragment": "pages/tools.jsonld.frag",
     "body_fragment": "pages/tools.body.frag"
   },
   {
@@ -668,7 +668,7 @@
     "contact_label": "Contact",
     "footer_order": "standard",
     "footer_omit": null,
-    "jsonld_fragment": null,
+    "jsonld_fragment": "pages/trust.jsonld.frag",
     "body_fragment": "pages/trust.body.frag"
   }
 ]
