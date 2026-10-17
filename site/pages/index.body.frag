@@ -93,6 +93,13 @@
             <span class="text-link">Build the AI operating model</span>
           </a>
         </div>
+        <p>
+          More service lines:
+          <a class="text-link" href="/service-compliance-risk">Compliance and risk management</a>,
+          <a class="text-link" href="/service-cybersecurity">Cybersecurity</a>,
+          <a class="text-link" href="/service-it-operations">IT operations</a>,
+          <a class="text-link" href="/service-agentic-ai">Agentic AI orchestration</a>.
+        </p>
       </section>
 
       <section class="dark-band solutions-preview" aria-labelledby="solutions-title">

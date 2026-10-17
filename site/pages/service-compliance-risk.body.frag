@@ -135,6 +135,17 @@
         </div>
       </section>
 
+      <section class="content-section" aria-label="Related services">
+        <div class="prose">
+          <p class="eyebrow">Related services</p>
+          <p>
+            <a class="text-link" href="/service-cybersecurity">Cybersecurity</a>,
+            <a class="text-link" href="/service-fractional-leadership">Fractional CIO and CISO leadership</a>,
+            <a class="text-link" href="/service-it-operations">IT operations</a>
+          </p>
+        </div>
+      </section>
+
       <section class="cta-band">
         <div class="cta-inner">
           <h2>Walk into the exam with the records already written.</h2>

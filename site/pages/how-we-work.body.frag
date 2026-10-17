@@ -17,7 +17,7 @@
         <div class="practice-grid">
           <article class="practice-item">
             <h3>Fractional leadership</h3>
-            <p>Ongoing fractional CIO or CISO support for priorities, governance, executive communication, vendors, budgets, and program delivery.</p>
+            <p>Ongoing <a class="text-link" href="/service-fractional-leadership">fractional CIO or CISO support</a> for priorities, governance, executive communication, vendors, budgets, and program delivery.</p>
           </article>
           <article class="practice-item">
             <h3>Defined projects</h3>
