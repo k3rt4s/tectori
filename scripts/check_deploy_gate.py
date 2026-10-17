@@ -4,7 +4,9 @@
 The deploy job's ``needs`` list is parsed as GitHub Actions parses it
 (scalar, flow list, or block list) and matched against the verify job's
 id exactly, not as a substring, so a decoy job such as ``verify-real``
-does not count.
+does not count. The verify job's steps are parsed too: the check, build
+diff and rebrand scripts must each be run by a step that cannot be skipped
+or have its failure ignored, not merely be mentioned somewhere in the job.
 """
 
 # The deploy job is the only route to the site, so it is the one thing in this
@@ -130,6 +132,162 @@ def needs_job_ids(body):
         return [rest.strip("'\"")]
     return []
 
+# What the verify job's steps must run. Each entry is a script and the
+# extra command (if any) that must also run, unescaped, in the same step.
+GATING_STEPS = (
+    ("scripts/check_site.py", None),
+    ("scripts/build_site.py", "git diff --exit-code"),
+    ("scripts/rehearse_rebrand.py", None),
+)
+# A command followed by one of these cannot fail the step.
+SWALLOWED = re.compile(r"(?:\|\||;)\s*(?::|true|exit\s+0)\s*(?:$|[;&|)])")
+
+
+def job_steps(body):
+    """Return the job's steps, each a dict of its keys mapped to raw values.
+
+    A step is a ``- `` item under ``steps:``. Keys are read at the step's own
+    indent; a ``|`` or ``>`` block scalar's lines are returned joined by
+    newlines, backslash continuations folded, and full-line YAML comments
+    outside a block scalar are ignored, so a commented ``# run: ...`` is not
+    a step key.
+    """
+    lines = body.splitlines()
+    start = None
+    for i, line in enumerate(lines):
+        if re.match(r"^\s*steps:\s*(?:#.*)?$", line):
+            start = i + 1
+            steps_indent = len(line) - len(line.lstrip())
+            break
+    if start is None:
+        return []
+    items = []
+    item_indent = None
+    for line in lines[start:]:
+        if not line.strip() or line.lstrip().startswith("#"):
+            if items:
+                items[-1].append(line)
+            continue
+        indent = len(line) - len(line.lstrip())
+        if indent <= steps_indent:
+            break
+        if line.lstrip().startswith("- ") and (
+            item_indent is None or indent == item_indent
+        ):
+            item_indent = indent
+            items.append([line])
+        elif items:
+            items[-1].append(line)
+    steps = []
+    for item in items:
+        first = item[0]
+        dash = len(first) - len(first.lstrip())
+        item = [" " * (dash + 2) + first.lstrip()[2:]] + item[1:]
+        key_indent = dash + 2
+        step = {}
+        i = 0
+        while i < len(item):
+            line = item[i]
+            i += 1
+            if not line.strip() or line.lstrip().startswith("#"):
+                continue
+            if len(line) - len(line.lstrip()) != key_indent:
+                continue
+            match = re.match(r"^\s*([A-Za-z0-9_-]+):\s*(.*)$", line)
+            if not match:
+                continue
+            key, value = match.group(1), match.group(2)
+            if re.match(r"^[|>][+-]?\d*\s*(?:#.*)?$", value):
+                block = []
+                while i < len(item) and (
+                    not item[i].strip()
+                    or len(item[i]) - len(item[i].lstrip()) > key_indent
+                ):
+                    block.append(item[i].strip())
+                    i += 1
+                step[key] = "\n".join(block)
+            else:
+                step[key] = _strip_comment(value).strip()
+        steps.append(step)
+    return steps
+
+
+def _commands(run):
+    """Split a run value into shell lines: continuations joined, comments dropped."""
+    joined = re.sub(r"\\[ \t]*\n\s*", " ", run)
+    out = []
+    for line in joined.splitlines():
+        line = _strip_comment(line).strip()
+        if line:
+            out.append(line)
+    return out
+
+
+def _unquote(value):
+    return value.strip().strip("'\"").strip()
+
+
+def step_runs(step, script, also):
+    """Say why a step does not really run ``script``, or return None if it does."""
+    if _unquote(step.get("continue-on-error", "false")).lower() not in (
+        "false", "${{ false }}"
+    ):
+        return "has continue-on-error set, so its failure is ignored"
+    condition = step.get("if")
+    if condition is not None:
+        text = _unquote(condition)
+        if text.startswith("${{") and text.endswith("}}"):
+            text = text[3:-2].strip()
+        if text.lower() in ("false", "0", "null", "''", '""', "!true"):
+            return "has an if that is always false, so it never runs"
+    run = step.get("run")
+    if run is None:
+        return "has no run command"
+    # The command must start the line or follow &&, so an echo or a string
+    # argument that merely names the script is not a run of it.
+    invoke = re.compile(
+        r"(?:^|&&)\s*python[\d.]*\s+(?:-[\w-]+\s+)*['\"]?(?:\./)?"
+        + re.escape(script) + r"(?![\w.])"
+    )
+    wanted = [invoke] + (
+        [re.compile(r"(?:^|&&)\s*" + re.escape(also) + r"(?![\w-])")]
+        if also else []
+    )
+    for pattern in wanted:
+        hits = [(c, m) for c in _commands(run) for m in [pattern.search(c)] if m]
+        if not hits:
+            return "does not invoke " + (also if pattern is not invoke else script)
+        # Any || after the command runs something else when it fails, which
+        # makes the step pass whatever that something is.
+        if all(SWALLOWED.search(c) or "||" in c[m.end():] for c, m in hits):
+            return "swallows the failure of " + (
+                also if pattern is not invoke else script
+            )
+    return None
+
+
+def verify_problems(body):
+    """Return the problems with how the verify job runs its gating scripts."""
+    steps = job_steps(body)
+    problems = []
+    for script, also in GATING_STEPS:
+        reasons = []
+        ok = False
+        for step in steps:
+            why = step_runs(step, script, also)
+            if why is None:
+                ok = True
+                break
+            if "run" in step and script in step["run"]:
+                reasons.append(why)
+        if not ok:
+            detail = f" (a step mentioning it {reasons[0]})" if reasons else ""
+            problems.append(
+                f"the {VERIFY_JOB} job has no step that runs {script} and "
+                f"fails when it fails{detail}"
+            )
+    return problems
+
 
 def main():
     problems = []
@@ -143,8 +301,8 @@ def main():
 
     if VERIFY_JOB not in found:
         problems.append(f"no {VERIFY_JOB} job, so nothing runs the checks")
-    elif "check_site.py" not in found[VERIFY_JOB]:
-        problems.append(f"the {VERIFY_JOB} job does not run check_site.py")
+    else:
+        problems.extend(verify_problems(found[VERIFY_JOB]))
 
     if DEPLOY_JOB not in found:
         problems.append(
