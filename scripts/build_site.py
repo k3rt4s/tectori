@@ -317,6 +317,15 @@ def render_utility_bar(entry):
     return tmpl.encode("utf-8")
 
 
+def render_tail(entry):
+    tmpl = load_fragment("fragments/tail.frag").decode("utf-8")
+    # Root-absolute on 404.html, which Pages serves for a deep path where a
+    # relative src would resolve beside the missing address.
+    prefix = "/" if entry["root_absolute"] else ""
+    tmpl = tmpl.replace("{{NAV_MENU_SRC}}", prefix + "nav-menu.js?v=20261016")
+    return tmpl.encode("utf-8")
+
+
 def site_absolute(path):
     """Return a site relative path as the absolute URL the head tags need."""
     return SITE["site_url"] + path
@@ -406,7 +415,7 @@ def render_page(entry, cache):
     out.append(("    </main>" + CRLF).encode("utf-8"))
     out.append(CRLF.encode())
     out.append(render_footer(entry))
-    out.append(cached_fragment("tail"))
+    out.append(render_tail(entry))
     page = b"".join(out)
     # A mistyped placeholder would otherwise render as literal braces on a live
     # page and pass every other check, since nothing else in the tree uses this

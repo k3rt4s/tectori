@@ -1,4 +1,4 @@
-    <script src="nav-menu.js?v=20261016" defer></script>
+    <script src="{{NAV_MENU_SRC}}" defer></script>
     <!-- Page view counting. Disclosed on privacy.html. Nothing is added to login.html. -->
     <script
       type="module"

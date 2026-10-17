@@ -5,7 +5,7 @@
           {
             "@type": "WebPage",
             "@id": "{{SITE_URL}}/solutions#webpage",
-            "name": "Solutions | Tectori",
+            "name": "Tools for compliance, security, and IT operations | Tectori",
             "url": "{{SITE_URL}}/solutions",
             "description": "Explore Tectori's product brands for compliance, operations, file intelligence, security, and architecture.",
             "publisher": {

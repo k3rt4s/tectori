@@ -17,6 +17,7 @@
     "Something went wrong sending your message. Please try again.";
 
   const FIELD_ERROR_CLASS = "field-error";
+  const FIELD_ERROR_SUMMARY = "Please correct the fields marked below.";
 
   // Removes every per-field error and restores each input's own
   // aria-describedby, so a resubmit or a success leaves no stale tie behind.
@@ -41,9 +42,9 @@
   // already had, and aria-invalid marks the field.
   function showFieldError(fieldName, message) {
     const input = form.elements.namedItem(fieldName);
-    if (!input || !input.id || input.type === "hidden") return;
+    if (!input || !input.id || input.type === "hidden") return false;
     const errorId = "contact-error-" + fieldName;
-    if (document.getElementById(errorId)) return;
+    if (document.getElementById(errorId)) return true;
     const note = document.createElement("p");
     note.id = errorId;
     note.className = FIELD_ERROR_CLASS;
@@ -56,6 +57,7 @@
       existing ? existing + " " + errorId : errorId,
     );
     input.setAttribute("aria-invalid", "true");
+    return true;
   }
 
   function hideErrorRegion() {
@@ -89,14 +91,20 @@
     try {
       const body = await response.json();
       if (Array.isArray(body.errors) && body.errors.length) {
-        const messages = body.errors
-          .map((entry) => entry && entry.message)
-          .filter(Boolean);
+        // A message tied to its field is read there, so the alert carries
+        // only the rest and otherwise points to the marked fields.
+        const messages = [];
+        let tied = 0;
         body.errors.forEach((entry) => {
-          if (entry && entry.field && entry.message) {
-            showFieldError(String(entry.field), String(entry.message));
+          if (!entry || !entry.message) return;
+          const message = String(entry.message);
+          if (entry.field && showFieldError(String(entry.field), message)) {
+            tied += 1;
+          } else {
+            messages.push(message);
           }
         });
+        if (tied) messages.unshift(FIELD_ERROR_SUMMARY);
         if (messages.length) return messages.join(" ");
       }
       if (typeof body.error === "string" && body.error) return body.error;

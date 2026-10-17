@@ -3982,8 +3982,14 @@ def check_nav_menu_script(pages: list[Path], docs_root: Path) -> bool:
             if not src_match:
                 continue
             src = html_lib.unescape(src_match.group(2) if src_match.group(1) else src_match.group(3)).strip()
-            if src.split("?", 1)[0] == NAV_MENU_SCRIPT:
+            path = src.split("?", 1)[0]
+            if path.lstrip("/") == NAV_MENU_SCRIPT and path.count("/") <= 1:
                 loads = True
+                # 404.html is served for deep paths, so only a root-absolute
+                # src finds the script there.
+                if page.name == "404.html" and not path.startswith("/"):
+                    problems.append(f"{page.name}: loads {NAV_MENU_SCRIPT} by a relative path, "
+                                    "which misses it on a deep 404")
                 if not re.search(r"\bdefer\b", SCRIPT_SRC_ATTR_RE.sub(" ", attributes), re.IGNORECASE):
                     problems.append(f"{page.name}: loads {NAV_MENU_SCRIPT} without defer")
         if page.name == NO_MENU:
