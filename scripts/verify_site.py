@@ -3925,6 +3925,67 @@ def check_mobile_menu_is_complete(pages: list[Path], docs_root: Path) -> bool:
     return ok
 
 
+# The one script the shared chrome loads. It closes the details menu on Escape
+# or when focus leaves it, and has no business with the network or storage.
+NAV_MENU_SCRIPT = "nav-menu.js"
+# Any address in the script text: it has no use for one.
+URL_IN_SCRIPT_RE = re.compile(r"(?:https?:)?//[A-Za-z0-9]", re.IGNORECASE)
+
+
+def check_nav_menu_script(pages: list[Path], docs_root: Path) -> bool:
+    """Every page with the mobile menu loads nav-menu.js deferred, and the script stays offline.
+
+    Without the script the details menu stays open when keyboard focus tabs
+    out of it and ignores Escape. Reads the built pages: each one carrying a
+    nav-menu details element must have a same-origin script element for
+    nav-menu.js with the defer attribute, and login.html (NO_MENU, rendered
+    without the shared header and under a CSP) must not load it. The script
+    itself is read for FORBIDDEN_IN_SCRIPT, for an address of any kind, and
+    for eval, new Function, innerHTML and import(, so a later edit that makes it fetch, store
+    or phone home fails here. A script element inside an HTML comment loads
+    nowhere and does not count.
+    """
+    problems: list[str] = []
+    script = docs_root / NAV_MENU_SCRIPT
+    if not script.is_file():
+        problems.append(f"{NAV_MENU_SCRIPT} is not in the tree, so no menu closes on Escape")
+    else:
+        body = script.read_text(encoding="utf-8")
+        for token in FORBIDDEN_IN_SCRIPT + ("eval(", "new Function", "innerHTML", "import("):
+            if token in body:
+                problems.append(f"{NAV_MENU_SCRIPT} contains {token!r}, which it has no use for")
+        if URL_IN_SCRIPT_RE.search(body):
+            problems.append(f"{NAV_MENU_SCRIPT} contains an address, which it has no use for")
+
+    read = 0
+    for page in pages:
+        text = HTML_COMMENT_RE.sub(" ", page.read_text(encoding="utf-8"))
+        loads = False
+        for attributes in SCRIPT_START_TAG_RE.findall(text):
+            src_match = SCRIPT_SRC_ATTR_RE.search(attributes)
+            if not src_match:
+                continue
+            src = html_lib.unescape(src_match.group(2) if src_match.group(1) else src_match.group(3)).strip()
+            if src.split("?", 1)[0] == NAV_MENU_SCRIPT:
+                loads = True
+                if not re.search(r"\bdefer\b", SCRIPT_SRC_ATTR_RE.sub(" ", attributes), re.IGNORECASE):
+                    problems.append(f"{page.name}: loads {NAV_MENU_SCRIPT} without defer")
+        if page.name == NO_MENU:
+            if loads:
+                problems.append(f"{page.name}: loads {NAV_MENU_SCRIPT}, but has no menu and is under a CSP")
+        elif MENU_RE.search(text):
+            read += 1
+            if not loads:
+                problems.append(f"{page.name}: has the mobile menu and does not load {NAV_MENU_SCRIPT}")
+
+    ok = not problems
+    print(f"[{'PASS' if ok else 'FAIL'}] the mobile menu script is loaded on every menu page and stays "
+          f"offline: {read} pages read, {len(problems)} problems")
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 # Opening and closing section tags, a quoted attribute value read whole so a
 # ">" in one does not end the tag early. Group 1 is "/" on a closing tag.
 SECTION_TAG_RE = re.compile(r"<(/?)section\b" + TAG_ATTRIBUTES + r">", re.IGNORECASE | re.DOTALL)
@@ -4674,6 +4735,7 @@ def main() -> int:
         check_control_contrast(docs_root),
         check_page_endings(pages, docs_root),
         check_mobile_menu_is_complete(pages, docs_root),
+        check_nav_menu_script(pages, docs_root),
         check_hidden_attribute_wins(docs_root),
         check_anchor_scroll_padding(docs_root),
     ]
