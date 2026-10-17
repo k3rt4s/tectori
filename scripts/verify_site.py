@@ -39,12 +39,34 @@ CONTACT_STRINGS = {
 # space after the colon is valid JSON, is what a compact formatter emits, and as
 # a literal string it is simply a different string from the one this tuple held
 # until 2026-09-12. The label beside each pattern is what a failure names.
+SCHEMA_TYPE_PREFIX = rb"(?:https?://(?:www\.)?schema\.org/|schema:)?"
 FORBIDDEN_MARKUP = (
     ("AggregateRating", re.compile(rb"AggregateRating")),
     ('"@type": "Review"', re.compile(rb'"@type"\s*:\s*"Review"')),
     ('"offers"', re.compile(rb'"offers"')),
+    ("ratingValue", re.compile(rb"ratingValue")),
+    ("reviewRating", re.compile(rb"reviewRating")),
+    ("reviewCount", re.compile(rb"reviewCount")),
+    ("priceRange", re.compile(rb"priceRange")),
+    ("makesOffer", re.compile(rb"makesOffer")),
+    ('"priceSpecification"', re.compile(rb'"priceSpecification"')),
+    # An @type of Offer, AggregateOffer, Review or AggregateRating, as a string or
+    # as a member of an @type array, bare or written as a schema.org URL or with
+    # the schema: prefix. The name must end the quoted string, so "OfferCatalog"
+    # does not match.
+    ('"@type" of Offer/AggregateOffer/Review/AggregateRating', re.compile(
+        rb'"@type"\s*:\s*(?:"' + SCHEMA_TYPE_PREFIX + rb'(?:Offer|AggregateOffer|Review|AggregateRating)"'
+        rb'|\[[^\]]*"' + SCHEMA_TYPE_PREFIX + rb'(?:Offer|AggregateOffer|Review|AggregateRating)"[^\]]*\])')),
+    # Microdata itemtype, http or https, with or without www, quoted either way
+    # or unquoted.
+    ("itemtype schema.org/Review|AggregateRating|Offer|AggregateOffer", re.compile(
+        rb"itemtype\s*=\s*[\"']?\s*https?://(?:www\.)?schema\.org/(?:Review|AggregateRating|Offer|AggregateOffer)\b")),
 )
 FORBIDDEN_TEXT = ("Qualified Security Assessor",)
+# Case-sensitive and word-bounded, so "qsa" inside another word or a lowercase
+# token never matches; the plural "QSAs" is a claim of the same credential and
+# fails too. Not applied to insights pages or insights.xml, which quote outside news.
+FORBIDDEN_ACRONYM = re.compile(r"\bQSAs?\b")
 
 TITLE_RE = re.compile(rb"<title>(.*?)</title>", re.IGNORECASE | re.DOTALL)
 CANONICAL_RE = re.compile(
@@ -2965,36 +2987,62 @@ def check_login_tracking(pages: list[Path]) -> bool:
     return ok
 
 
-def check_no_forbidden_claims(pages: list[Path]) -> bool:
-    """No page carries Review/AggregateRating/offers markup or the wrong security credential.
+INSIGHTS_FILE_RE = re.compile(r"insights(?:-\d{4}-w\d{2})?\.html|insights\.xml")
 
-    Justified directly by THEORY.md: the site claims no clients, testimonials,
-    ratings, prices, or results, and carries no Review, AggregateRating, or
-    offers markup, and the credential is Internal Security Assessor (ISA),
-    never Qualified Security Assessor. Both are exact, mechanically checkable
-    strings, not a restated style preference.
+
+def is_insights_file(name: str) -> bool:
+    """Return True for the generated insights hub, weekly archives and feed, which quote outside news.
+
+    Matched by the exact names the exporter writes, so a hand-written page
+    that merely starts with insights does not escape the acronym rule.
+    """
+    return INSIGHTS_FILE_RE.fullmatch(name) is not None
+
+
+def check_no_forbidden_claims(pages: list[Path], docs_root: Path | None = None) -> bool:
+    """No page, llms.txt or top-level .txt/.xml file carries rating, review or offer markup or the wrong credential.
+
+    Justified directly by THEORY.md: the site claims no clients, client counts,
+    testimonials, ratings, prices, or results, and carries no Review,
+    AggregateRating, Offer or price markup, and the credential is Internal
+    Security Assessor (ISA), never Qualified Security Assessor (or QSA). All
+    are exact, mechanically checkable strings, not a restated style preference.
 
     The forbidden phrase is checked two ways: as decoded, whitespace-collapsed,
     casefolded markup, which still catches it inside an attribute value where
     there is no rendered text; and as `visible_text`, which also catches a
-    split inline tag. A page matching either is reported once.
+    split inline tag. A page matching either is reported once. The acronym QSA
+    is matched case-sensitively on decoded markup and visible text of every
+    page except insights*.html. When docs_root is given, the .txt and .xml files
+    directly in it (llms.txt, robots.txt, sitemap.xml, insights.xml) get the same
+    markup and text rules, with insights.xml exempt from the acronym only.
     """
     problems: list[str] = []
-    for page in pages:
+    files = list(pages)
+    if docs_root is not None:
+        files += sorted(p for p in docs_root.iterdir()
+                        if p.is_file() and p.suffix in (".txt", ".xml"))
+    for page in files:
         raw = page.read_bytes()
+        is_html = page.suffix == ".html"
         for label, pattern in FORBIDDEN_MARKUP:
             if pattern.search(raw):
                 problems.append(f"{page.name}: contains {label!r}")
-        markup_text = " ".join(html_lib.unescape(raw.decode("utf-8")).split()).casefold()
-        visible = " ".join(visible_text(raw).split()).casefold()
+        decoded = " ".join(html_lib.unescape(raw.decode("utf-8")).split())
+        texts = [decoded]
+        if is_html:
+            texts.append(" ".join(visible_text(raw).split()))
         for marker in FORBIDDEN_TEXT:
             folded = marker.casefold()
-            if folded in markup_text or folded in visible:
+            if any(folded in t.casefold() for t in texts):
                 problems.append(f"{page.name}: contains {marker!r}")
+        if not is_insights_file(page.name) and any(FORBIDDEN_ACRONYM.search(t) for t in texts):
+            problems.append(f"{page.name}: contains 'QSA'")
 
     ok = not problems
-    print(f"[{'PASS' if ok else 'FAIL'}] no Review/AggregateRating/offers markup, "
-          f"no 'Qualified Security Assessor': {len(pages)} pages checked, {len(problems)} problems")
+    print(f"[{'PASS' if ok else 'FAIL'}] no Review/AggregateRating/Offer/price markup, "
+          f"no 'Qualified Security Assessor' or 'QSA' (insights exempt from QSA): "
+          f"{len(files)} files checked (pages plus top-level .txt/.xml), {len(problems)} problems")
     for problem in problems[:20]:
         print(f"       {problem}")
     return ok
@@ -4618,7 +4666,7 @@ def main() -> int:
         check_phone_is_one_number(pages, docs_root),
         check_login_tracking(pages),
         check_login_promise(docs_root),
-        check_no_forbidden_claims(pages),
+        check_no_forbidden_claims(pages, docs_root),
         check_jsonld_mirrors_title(pages),
         check_jsonld_identifies_its_own_page(pages, docs_root),
         check_declared_identity(pages, docs_root),
