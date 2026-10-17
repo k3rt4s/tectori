@@ -4,6 +4,45 @@ Tectori website changes are recorded here.
 
 ## 2026-10-16
 
+- CONTACT-HIDDEN-FIX and A11Y-FOCUS-MENU part (a), from the 2026-10-16
+  audit: the contact form now disappears after a successful send. Its
+  `display: grid` had outranked the browser's own `[hidden]` rule, so the
+  filled form stayed on screen and could be sent twice. A global
+  `[hidden] { display: none !important; }` replaces the narrower
+  `.form-message[hidden]` rule. `html` carries `scroll-padding-top: 96px`,
+  so skip-link and fragment targets clear the sticky header (WCAG 2.2 SC
+  2.4.11). Two new verify_site.py checks read top-level stylesheet rules
+  only, comments removed, so a commented-out rule or one inside a media
+  block does not count; 31 checks. Commit `76e2f56`, merge `d88fadc`.
+  Rollback: `git revert -m 1 d88fadc` then push.
+
+- DEPLOY-GATE-STEPS, from the 2026-10-16 audit: `check_deploy_gate.py`
+  used to pass if `check_site.py` appeared anywhere in the verify job,
+  including a comment. It now parses the job's steps and requires an
+  uncommented step that runs each of `check_site.py`, `build_site.py`
+  with `git diff --exit-code`, and `rehearse_rebrand.py`, with the command
+  starting its line or following `&&`, no truthy `continue-on-error`, no
+  always-false `if`, and nothing after it that swallows a failure. Proved
+  on 20 mutated workflows plus echo, `||` and backslash-continuation cases.
+  Commit `6e166b0`, merge `79fdfb0`. Lanes A and B deployed together, run
+  38995297530 passed, `check_live_deploy.py` 53 of 53. Rollback:
+  `git revert -m 1 79fdfb0` then push.
+
+- CLAIM-MARKUP-WIDEN, from the 2026-10-16 audit: the forbidden-claims
+  check also fails `ratingValue`, `reviewRating`, `reviewCount`,
+  `priceRange`, `makesOffer`, `priceSpecification`, an `@type` of Offer,
+  AggregateOffer, Review or AggregateRating in any spelling (string,
+  array member, schema.org URL, `schema:` prefix), and the matching
+  microdata itemtypes. `QSA` and `QSAs` fail everywhere except the
+  generated insights hub, archives and feed, matched by exact name. The
+  scan now reads `llms.txt`, `robots.txt`, `sitemap.xml` and
+  `insights.xml` too. The tree was clean before and after. Merge
+  `efc8133`. Rollback: `git revert -m 1 efc8133` then push.
+
+All three had a Sonnet worker draft, an orchestrator review with fixes,
+and an independent Sonnet review (no blockers; its should-fix findings were
+applied before merge). Built under Jon's 2026-10-16 overnight approval.
+
 - ABOUT-LINKEDIN: the About page names no former employer (Jon, so the site
   never ranks for those company names). The most recent employer's
   paragraph is dropped, the CIO and CISO role is described without its
