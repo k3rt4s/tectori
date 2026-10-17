@@ -36,7 +36,8 @@ against it with the same result it gives against the live site.
 - `docs/contact.html` and `docs/faq.html` provide direct conversion and
   answer-oriented search pages.
 - `docs/login.html` is a static portal preview with no authentication, storage,
-  or network submission.
+  or network submission. It is noindex and stays out of `docs/sitemap.xml` and
+  `docs/llms.txt`.
 - `docs/404.html` is the not found page GitHub Pages serves for any address
   that does not exist. It is noindex and stays out of `docs/sitemap.xml` and the
   navigation. Its links and assets are root-absolute so the page still renders

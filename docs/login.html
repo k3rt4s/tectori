@@ -8,7 +8,7 @@
     <meta
       name="description"
       content="Sign in to the Tectori client portal for project workspaces, evidence requests, and review status.">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="robots" content="noindex, follow">
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">

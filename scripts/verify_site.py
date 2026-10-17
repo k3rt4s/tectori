@@ -25,7 +25,11 @@ FOUNDER_CONFIG_PATH = SCRIPT_DIR.parent / "site" / "content" / "founder.json"
 FOUNDER = json.loads(FOUNDER_CONFIG_PATH.read_text(encoding="utf-8"))
 
 SITE_PREFIX = SITE["site_url"]
+# The two noindex pages nothing links to. login.html is noindex too but sits in
+# the navigation, so it is in NOINDEX_PAGES and not in this set.
 NOINDEX_ALLOWED = {"404.html", "thank-you.html"}
+# Every page that must carry noindex and stay out of sitemap.xml and llms.txt.
+NOINDEX_PAGES = NOINDEX_ALLOWED | {"login.html"}
 # The displayed form of the site URL is the bare host. The scheme appears in
 # canonicals and JSON-LD, which are markup rather than visible text, so the
 # full site_url would match nothing here and this arm would pass on an empty
@@ -397,7 +401,7 @@ def check_head_tags(pages: list[Path]) -> bool:
 
 
 def check_noindex_and_navigation(pages: list[Path], docs_root: Path) -> bool:
-    """404.html and thank-you.html are the only noindex pages, and no page links to them."""
+    """404.html, thank-you.html and login.html are the only noindex pages, and no page links to the first two."""
     problems: list[str] = []
     noindex_found = set()
     for page in pages:
@@ -405,9 +409,9 @@ def check_noindex_and_navigation(pages: list[Path], docs_root: Path) -> bool:
         match = ROBOTS_RE.search(raw)
         if match and b"noindex" in match.group(3).lower():
             noindex_found.add(page.name)
-    if noindex_found != NOINDEX_ALLOWED:
-        unexpected = noindex_found - NOINDEX_ALLOWED
-        missing = NOINDEX_ALLOWED - noindex_found
+    if noindex_found != NOINDEX_PAGES:
+        unexpected = noindex_found - NOINDEX_PAGES
+        missing = NOINDEX_PAGES - noindex_found
         if unexpected:
             problems.append(f"unexpected noindex on: {sorted(unexpected)}")
         if missing:
@@ -433,8 +437,8 @@ def check_noindex_and_navigation(pages: list[Path], docs_root: Path) -> bool:
                 problems.append(f"{page.name}: links to {target.name}")
 
     ok = not problems
-    print(f"[{'PASS' if ok else 'FAIL'}] only 404.html and thank-you.html are noindex, "
-          f"and neither is linked from any page: {len(problems)} problems")
+    print(f"[{'PASS' if ok else 'FAIL'}] only 404.html, thank-you.html and login.html are noindex, "
+          f"and the first two are linked from no page: {len(problems)} problems")
     for problem in problems[:20]:
         print(f"       {problem}")
     return ok
@@ -462,7 +466,7 @@ def check_sitemap(pages: list[Path], docs_root: Path) -> bool:
     expected_paths = set()
     declaring: dict[str, list[str]] = {}
     for page in pages:
-        if page.name in NOINDEX_ALLOWED:
+        if page.name in NOINDEX_PAGES:
             continue
         path = canonical_path(page.read_bytes())
         if path is None:
@@ -1052,7 +1056,7 @@ def check_robots_policy(pages: list[Path], docs_root: Path) -> bool:
     # naming only the one a page does not use would otherwise pass unseen.
     requested: list[tuple[str, set[str]]] = []
     for page in pages:
-        if page.name in NOINDEX_ALLOWED:
+        if page.name in NOINDEX_PAGES:
             continue
         file_path = "/" + page.relative_to(docs_root).as_posix()
         page_paths = {file_path}
