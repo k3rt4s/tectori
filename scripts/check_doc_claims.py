@@ -26,6 +26,7 @@ WORDS = {
     "twenty": 20, "twenty-one": 21, "twenty-two": 22, "twenty-three": 23,
     "twenty-four": 24, "twenty-five": 25, "twenty-six": 26,
     "twenty-seven": 27, "twenty-eight": 28, "twenty-nine": 29,
+    "thirty": 30, "thirty-one": 31,
 }
 ORDINALS = {
     "first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5,
