@@ -4,6 +4,47 @@ Tectori website changes are recorded here.
 
 ## 2026-10-16
 
+- HUB-TITLES and SERVICE-INTERLINKS, from the 2026-10-16 audit: /services
+  is titled "IT, security, and compliance consulting services" and /solutions
+  "Tools for compliance, security, and IT operations", og:title and the
+  JSON-LD names matching. Each service page has a Related services section
+  linking three others, the homepage links all six services, FAQ answers
+  link the service they describe (FAQ JSON-LD text unchanged) and How we
+  work links fractional leadership. Merge `dc79805`. Rollback:
+  `git revert -m 1 dc79805` then push.
+
+- A11Y-FOCUS-MENU part (b): `nav-menu.js`, loaded deferred from the shared
+  chrome on every page but `login.html`, closes the mobile menu on Escape
+  (focus back to its summary), on an outside click, or when keyboard focus
+  leaves it. Without JavaScript the menu works as before. A new
+  verify_site.py check fails a menu page that does not load it deferred,
+  `login.html` loading it, or the script gaining a network, storage, eval or
+  address token; 32 checks. Merge `70a8098`. Rollback:
+  `git revert -m 1 70a8098` then push.
+
+- LOGIN-INDEXING: `login.html`, a static portal preview that transmits
+  nothing, is now `noindex, follow` and out of `sitemap.xml` and `llms.txt`.
+  The noindex, sitemap and robots checks require that state. Merge
+  `4c014ad`. Rollback: `git revert -m 1 4c014ad` then push.
+
+- A11Y-MINOR: utility bar, eyebrow, kicker, card and step number, resilience
+  and case-metadata labels rise to 0.875rem, the 14 px interface minimum
+  (the homepage portal illustration keeps its sizes). Formspree field errors
+  render beside their input, tied with `aria-describedby` and
+  `aria-invalid` (WCAG 3.3.1). The utility bar is a labelled `aside`. Nine
+  hub pages gain WebPage plus BreadcrumbList JSON-LD whose name and
+  description are checked against the page. Merge `e4ca80c`.
+  Rollback: `git revert -m 1 e4ca80c` then push.
+
+These four were the round-two build of Jon's 2026-10-16 overnight approval
+("keep building until there is nothing left"): Sonnet workers, orchestrator
+review with fixes, an independent Sonnet review whose findings landed
+as `560a217` (404.html loads the menu script root-absolute, contact field
+errors are not repeated in the alert, the solutions JSON-LD name follows
+its title; revert it before the merges it fixes). LOGIN-INDEXING and the
+14 px label size were decisions the run took by default (board Questions 5
+and 7); reverse either with its rollback.
+
 - CONTACT-HIDDEN-FIX and A11Y-FOCUS-MENU part (a), from the 2026-10-16
   audit: the contact form now disappears after a successful send. Its
   `display: grid` had outranked the browser's own `[hidden]` rule, so the
