@@ -166,6 +166,10 @@ JSONLD_GRAPH_SERVICE_DESCRIPTION_PAGES = {
 # carrying JSON-LD that appears in none of these tables is a gap in the check
 # rather than a page with nothing to verify, and is reported as a problem.
 JSONLD_NO_MIRROR_PAGES = {"index.html", "faq.html"}
+# Insights week archives (insights-YYYY-wNN.html) carry a synthesised WebPage
+# plus a three item BreadcrumbList; the WebPage mirrors title and description
+# like the hub's, and the breadcrumb must end at the page's own canonical URL.
+INSIGHTS_WEEK_PAGE_RE = re.compile(r"insights-\d{4}-w\d{2}\.html")
 
 
 def html_pages(root: Path) -> list[Path]:
@@ -3456,6 +3460,34 @@ def check_jsonld_mirrors_title(pages: list[Path]) -> bool:
 
         in_top = name in JSONLD_TOP_LEVEL_MIRROR_PAGES
         graph_node_type = JSONLD_GRAPH_MIRROR_NODE_TYPE.get(name)
+        is_week = bool(INSIGHTS_WEEK_PAGE_RE.fullmatch(name))
+        if is_week:
+            graph_node_type = "WebPage"
+            week_canonical = canonical_path(raw)
+            crumbs = [n for d in parsed for n in find_graph_nodes(d, "BreadcrumbList")]
+            week_url = (SITE_PREFIX.rstrip("/") + week_canonical) if week_canonical else None
+            # The whole trail is compared, so a wrong middle crumb, a wrong
+            # name or a .html URL in any position fails. The week label is the
+            # title after its "Insights, " prefix and before the last " | ".
+            week_title = page_title(raw) or ""
+            prefix, label_and_brand = "Insights, ", week_title.rsplit(" | ", 1)
+            if week_title.startswith(prefix) and len(label_and_brand) == 2:
+                label = label_and_brand[0][len(prefix):]
+            else:
+                label = None
+                problems.append(f"{name}: title {week_title!r} is not 'Insights, <label> | <brand>'")
+            expected_trail = [
+                {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_PREFIX.rstrip("/") + "/"},
+                {"@type": "ListItem", "position": 2, "name": "Insights", "item": SITE_PREFIX.rstrip("/") + "/insights"},
+                {"@type": "ListItem", "position": 3, "name": label, "item": week_url},
+            ]
+            if len(crumbs) != 1:
+                problems.append(f"{name}: {len(crumbs)} BreadcrumbList nodes, expected exactly 1")
+            elif crumbs[0].get("itemListElement") != expected_trail:
+                problems.append(
+                    f"{name}: BreadcrumbList must be exactly Home, Insights, {label!r} at "
+                    f"{week_url!r}, found {crumbs[0].get('itemListElement')!r}"
+                )
         in_service = name in JSONLD_GRAPH_SERVICE_DESCRIPTION_PAGES
         if not (in_top or graph_node_type or in_service):
             if name in JSONLD_NO_MIRROR_PAGES:
@@ -4805,6 +4837,65 @@ def check_anchor_scroll_padding(docs_root: Path) -> bool:
     return ok
 
 
+# Each item is read on its own, so a link or a date can never be borrowed
+# from the item after it, and an item missing either is a finding.
+INSIGHTS_ITEM_BLOCK_RE = re.compile(r"<item>(.*?)</item>", re.DOTALL)
+INSIGHTS_ITEM_LINK_RE = re.compile(r"<link>[^<]*?/insights-(\d{4})-w(\d{2})#[^<]*</link>")
+INSIGHTS_ITEM_DATE_RE = re.compile(r"<pubDate>([^<]+)</pubDate>")
+
+
+def check_insights_feed_dates(docs_root: Path) -> bool:
+    """Every insights.xml item is dated inside the ISO week its link names, newest first.
+
+    The source article's date is not when Tectori published the entry, so a
+    pubDate outside the week page it links to tells readers the entry is years
+    older than the site. The renderer clamps into the week; this holds it to that.
+    """
+    import datetime as dt
+    from email.utils import parsedate_to_datetime
+
+    feed = docs_root / "insights.xml"
+    if not feed.is_file():
+        print("[PASS] insights.xml item dates: no insights.xml, nothing to check")
+        return True
+    problems: list[str] = []
+    previous = None
+    count = 0
+    text = feed.read_text(encoding="utf-8")
+    blocks = INSIGHTS_ITEM_BLOCK_RE.findall(text)
+    opened = text.count("<item>")
+    if len(blocks) != opened:
+        problems.append(f"{opened} <item> tags open but {len(blocks)} items close")
+    for block in blocks:
+        count += 1
+        links = INSIGHTS_ITEM_LINK_RE.findall(block)
+        dates = INSIGHTS_ITEM_DATE_RE.findall(block)
+        if len(links) != 1 or len(dates) != 1:
+            problems.append(
+                f"item {count}: {len(links)} week-page links and {len(dates)} pubDates, expected one of each"
+            )
+            continue
+        year, week = int(links[0][0]), int(links[0][1])
+        try:
+            published = parsedate_to_datetime(dates[0]).date()
+            monday = dt.date.fromisocalendar(year, week, 1)
+            sunday = dt.date.fromisocalendar(year, week, 7)
+        except (ValueError, TypeError) as exc:
+            problems.append(f"item {count}: pubDate {dates[0]!r} or week {year}-w{week:02d} does not parse ({exc})")
+            continue
+        if not monday <= published <= sunday:
+            problems.append(f"item {count}: pubDate {published} is outside {year}-w{week:02d} ({monday} to {sunday})")
+        if previous is not None and published > previous:
+            problems.append(f"item {count}: pubDate {published} is newer than the item before it ({previous})")
+        previous = published
+    ok = not problems
+    print(f"[{'PASS' if ok else 'FAIL'}] insights.xml items are dated inside their ISO week and newest first: "
+          f"{count} items, {len(problems)} problems")
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -4829,6 +4920,7 @@ def main() -> int:
         check_pages_are_reachable(pages, docs_root),
         check_head_tags(pages),
         check_sitemap(pages, docs_root),
+        check_insights_feed_dates(docs_root),
         check_llms_txt(docs_root),
         check_noindex_and_navigation(pages, docs_root),
         check_contact_details(pages),
