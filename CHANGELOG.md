@@ -2,6 +2,81 @@
 
 Tectori website changes are recorded here.
 
+## 2026-10-18
+
+Unattended main-orchestrator run (Jon: build unattended, go with the
+recommendation, push after peer review). Each lane was reviewed by an
+independent Opus reader before landing; round one deployed on Actions run
+39192642761 and `check_live_deploy.py` found 54 of 54 files identical.
+
+- CI-CONCURRENCY-REF: the verify job has its own concurrency group
+  (`verify-${{ github.ref }}`, cancel-in-progress) so a second push cancels
+  the stale checks; the deploy job keeps group `pages` alone with cancel off
+  and now also requires `github.ref == 'refs/heads/main'`, so a manual run on
+  any other ref deploys nothing. `check_deploy_gate.py` enforces the ref
+  condition, the group placement, a group on every other job and the absence
+  of a workflow-level group; ARCHITECTURE's deploy edges and THEORY say the
+  same. Merge `5fe72e1`. Rollback: `git revert -m 1 5fe72e1` then push.
+
+- SERVE-TRAVERSAL and REHEARSE-OUT-RMTREE: `serve_docs.py` answers 404 for
+  any path that resolves outside `docs/`; `rehearse_rebrand.py` writes a
+  `.tectori-rehearsal` marker into its output and refuses to clear a
+  non-empty `--out` that lacks one, or one inside or above the repo. New
+  `check_script_guards.py` judges both guards on eleven cases without
+  touching the disk and is the seventeenth `check_site.py` check. A
+  rehearsal directory left by the old script must be deleted by hand once
+  (THEORY). Merge `f13dae5`. Rollback: `git revert -m 1 f13dae5` then push.
+
+- LOGO-DIMS-CLS and HERO-LCP-PRIORITY: the build reads the logo's pixel size
+  from the file and writes `width` and `height` on the header, footer and
+  login logos (`{{LOGO_WIDTH}}`, `{{LOGO_HEIGHT}}`), with `height: auto` in
+  the stylesheet so the scaled copies keep their ratio; the hero image is
+  `fetchpriority="high" decoding="async"`. `verify_site.py` reads image
+  attributes by tokenising the tag (a `width=` inside an alt text is not an
+  attribute), matches the hero `<picture>` by whole class name, requires
+  whole-number dimensions and the hero's `decoding=async`, and fails a page
+  with no `<header>` other than `login.html`. Stylesheet version
+  `?v=20261018`. Merge `b6e0499`. Rollback: `git revert -m 1 b6e0499` then
+  push.
+
+- DOC-DRIFT-ARCH-PERMS: ARCHITECTURE, PERMISSIONS and README corrected
+  where the tree had moved on (47 fixed files plus one page per Insights
+  week, login built from its fragment with tokens substituted and no shared
+  chrome, the `insights-cta` fragment, the `scriptGuards` node, pixel and
+  beacon counts, the three noindex pages, the deploy gate's conditions).
+  `check_doc_claims.py` now reads ARCHITECTURE too and counts pixel loads by
+  `src` attribute, 22 counts. Merge `2cb7a94`. Rollback:
+  `git revert -m 1 2cb7a94` then push.
+
+- RSS-PUBDATE, INSIGHTS-WEEK-BREADCRUMB and WEBSITE-NODE: every
+  `insights.xml` item is dated inside the ISO week its link names (the
+  source article's date was shipping entries dated years before the site)
+  and the feed is newest first; each Insights week page carries a WebPage
+  and a Home, Insights, week BreadcrumbList synthesised by the build from
+  the entry's title; the home page JSON-LD is a graph with an Organization
+  and a WebSite node. `verify_site.py` gains a per-item feed date check as
+  its thirty-third check, reads each item on its own block so a missing
+  link or date is a finding and a bad one is reported rather than a crash,
+  and compares week breadcrumbs whole. Merge `1b4a279`. Rollback:
+  `git revert -m 1 1b4a279` then push.
+
+- LLMS-FORMAT and SOCIAL-META-CHECK: `llms.txt` follows the llmstxt.org
+  shape (a `# Tectori` heading, one `> summary` blockquote carrying the home
+  page's description, then `- [page title](absolute url): description` per
+  page, all from the values the pages render with); `check_llms_drift.py`
+  reads that shape and its `--fix` keeps each entry's name and url;
+  `verify_site.py` requires the heading, the summary, every list line to be
+  an entry, each name to equal the page title and each url to sit under the
+  site. A page title with a square bracket stops the build. New
+  `check_social_meta` is the thirty-fourth check: every page but
+  `login.html` carries exactly one of each of the nine `og:` tags (read from
+  `property=`) and `twitter:card` (from `name=`), `og:url` equals the
+  canonical or the page's own URL where there is none, `og:image` is an
+  absolute site URL, title, description, image and image alt are non-empty,
+  `og:site_name` is the brand and `og:type` is `website` except the case
+  study's `article`. Merge `64e52bf`. Rollback: `git revert -m 1 64e52bf`
+  then push.
+
 ## 2026-10-16
 
 - HUB-TITLES and SERVICE-INTERLINKS, from the 2026-10-16 audit: /services
