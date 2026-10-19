@@ -17,6 +17,8 @@ from urllib.parse import unquote, urlsplit
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DOCS_ROOT = PROJECT_ROOT / "docs"
+# What a refused path resolves to: a name no file has, so the 404 page is served.
+NOT_FOUND_PATH = DOCS_ROOT / "__not_found__"
 
 
 class CleanUrlHandler(SimpleHTTPRequestHandler):
@@ -26,8 +28,18 @@ class CleanUrlHandler(SimpleHTTPRequestHandler):
         request_path = unquote(urlsplit(path).path)
         if request_path == "/":
             return str(DOCS_ROOT / "index.html")
-        relative = request_path.lstrip("/")
-        candidate = DOCS_ROOT / relative
+        # A backslash is a separator on Windows and a segment holding a colon
+        # can be a drive, which a Path join treats as replacing the root.
+        if "\\" in request_path or ":" in request_path or "\0" in request_path:
+            return str(NOT_FOUND_PATH)
+        try:
+            candidate = (DOCS_ROOT / request_path.lstrip("/")).resolve()
+        except (OSError, ValueError):
+            return str(NOT_FOUND_PATH)
+        if DOCS_ROOT not in candidate.parents:
+            # docs/ itself included: its .html rewrite would be the sibling
+            # file docs.html, outside the tree.
+            return str(NOT_FOUND_PATH)
         if not candidate.suffix:
             html_candidate = candidate.with_suffix(".html")
             if html_candidate.exists():
