@@ -3,6 +3,7 @@
 
 import argparse
 import datetime
+import html as html_lib
 import json
 import os
 import re
@@ -727,8 +728,8 @@ def static_page_description(path, verbatim):
 CANONICAL_ORIGIN = re.compile(r"^https?://[^/]+")
 
 
-def descriptions_by_path(entries):
-    """Map each generated page's site-relative canonical path to its meta description."""
+def fields_by_path(entries, field):
+    """Map each generated page's site-relative canonical path to one content-model field."""
     # Strip whatever origin the canonical carries rather than only the
     # configured one. The canonicals in pages.json still spell the domain out,
     # so matching on site_url alone would silently produce an empty map the
@@ -740,8 +741,33 @@ def descriptions_by_path(entries):
         if not canonical:
             continue
         path = CANONICAL_ORIGIN.sub("", canonical)
-        by_path[path or "/"] = entry["description"]
+        by_path[path or "/"] = entry[field]
     return by_path
+
+
+def descriptions_by_path(entries):
+    """Map each generated page's site-relative canonical path to its meta description."""
+    return fields_by_path(entries, "description")
+
+
+def titles_by_path(entries):
+    """Map each generated page's site-relative canonical path to its <title> text."""
+    return fields_by_path(entries, "title")
+
+
+STATIC_PAGE_TITLE = re.compile(rb"<title>(.*?)</title>", re.DOTALL)
+
+
+def static_page_title(path, verbatim):
+    """Return the <title> text of a verbatim page, read from its rendered markup."""
+    name = path.lstrip("/") or "index.html"
+    if not name.endswith(".html"):
+        name += ".html"
+    raw = verbatim.get(name)
+    match = STATIC_PAGE_TITLE.search(raw) if raw is not None else None
+    if match is None:
+        raise ValueError(f"{name}: no <title> for its llms.txt line")
+    return " ".join(html_lib.unescape(match.group(1).decode("utf-8")).split())
 
 
 def render_cname():
@@ -777,12 +803,16 @@ def render_sitemap(public_pages):
 
 
 def render_llms(public_pages, entries, verbatim):
-    """Return llms.txt, one line per public page carrying that page's own meta description."""
+    """Return llms.txt in the llmstxt.org shape: a blockquote summary, then one link line per public page.
+
+    Each line is `- [<page title>](<absolute url>): <meta description>`.
+    """
     # This file was maintained by hand and drifted silently, which is what
     # scripts/check_llms_drift.py exists to catch. Building it from the same
     # descriptions the pages are rendered from removes the drift rather than
     # reporting it.
     by_path = descriptions_by_path(entries)
+    title_path = titles_by_path(entries)
     if "/" not in by_path:
         raise ValueError(
             "llms.txt: no page canonical resolves to /, so the file would have "
@@ -791,14 +821,20 @@ def render_llms(public_pages, entries, verbatim):
     lines = [
         f"# {SITE['brand_name']}",
         "",
-        by_path["/"],
+        "> " + by_path["/"],
         "",
         "## Pages",
     ]
     for page in public_pages:
         path = page["path"]
         description = by_path.get(path) or static_page_description(path, verbatim)
-        lines.append(f"- {path}: {description}")
+        title = " ".join((title_path.get(path) or static_page_title(path, verbatim)).split())
+        # The title is the link text of a Markdown link; a bracket in it
+        # would end the link early, so the build stops rather than escape
+        # it and hand the checks a shape they do not read.
+        if any(ch in title for ch in "[]"):
+            raise ValueError(f"llms.txt: the title of {path} contains a square bracket: {title!r}")
+        lines.append(f"- [{title}]({SITE['site_url']}{path}): {description}")
     return (CRLF.join(lines) + CRLF).encode("utf-8")
 
 

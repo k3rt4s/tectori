@@ -76,13 +76,17 @@ against it with the same result it gives against the live site.
   when a change reformats the templates on purpose and byte equality would
   report a failure that is not one.
 - `scripts/check_llms_drift.py` compares every `docs/llms.txt` page
-  description, and the file's summary paragraph, against the corresponding
-  page's meta description. It predates the generator and is kept as a
+  description, and the file's summary blockquote, against the corresponding
+  page's meta description, and fails an entry whose URL is not under the
+  site URL. Each entry reads `- [<page title>](<absolute url>): <meta
+  description>`, the llmstxt.org shape. It predates the generator and is kept as a
   second opinion; now that `llms.txt` is built from those same
   descriptions, byte equality already covers it.
 - `scripts/verify_site.py` checks that a built site tree is internally
   consistent: internal links resolve, head tags are singular, the sitemap
-  and `llms.txt` cover the same pages with matching descriptions, only the
+  and `llms.txt` cover the same pages with matching titles, URLs and
+  descriptions, every page but `login.html` carries one complete social card
+  that agrees with its canonical, only the
   three documented pages (`404.html`, `thank-you.html` and `login.html`)
   are noindex, every other page is linked to from some
   page that is not itself, the contact details are character for character,
@@ -244,7 +248,7 @@ it.
 In order. Steps 1 to 4 are mechanical and the checks catch a mistake in any
 of them. Step 5 is the real work and no tool can do it. These steps were
 rehearsed against a clone on 2026-09-12: a fictional business replacing every
-declared value reaches a tree that passes all thirty-three checks, carries the
+declared value reaches a tree that passes all thirty-four checks, carries the
 previous owner's name nowhere, and is told which files still hold his
 credentials and career for step 5 to rewrite.
 
@@ -293,7 +297,7 @@ credentials and career for step 5 to rewrite.
 6. Rebuild in place with `python scripts/build_site.py --out docs`, then run
    `python scripts/check_site.py`. Every check must pass before the tree is
    worth deploying. One of them is `scripts/verify_site.py`, which is
-   thirty-three checks of its own that read the built tree as a site rather
+   thirty-four checks of its own that read the built tree as a site rather
    than as a set of files, and it is the one that catches a value you
    missed. To
    see steps 1 to 4 and this one run end to end before you do them

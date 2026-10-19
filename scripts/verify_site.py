@@ -416,6 +416,98 @@ def check_head_tags(pages: list[Path]) -> bool:
     return ok
 
 
+# Pages that carry no social card on purpose. login.html is the client sign-in
+# page: noindex, linked from the navigation only, shared with no one, and it
+# renders no Open Graph or Twitter tags at all. Naming it here keeps the rule
+# whole for every other page, including 404.html and thank-you.html, which do
+# carry the full set.
+SOCIAL_CARD_EXEMPT = {"login.html"}
+# The one page whose card says article: the case study is a single published
+# write-up, and its pages.json entry declares og_type "article" on purpose.
+# Every other page is a website. Pinned by page and by value, so the case study
+# cannot drift to anything else and no other page can claim article.
+SOCIAL_TYPE_EXCEPTIONS = {"case-study.html": "article"}
+SOCIAL_PROPERTIES = (
+    "og:title", "og:description", "og:type", "og:url", "og:image",
+    "og:image:width", "og:image:height", "og:image:alt", "og:site_name",
+)
+# The values a card cannot leave blank. The numeric sizes are measured
+# against the file by check_image_dimensions.
+SOCIAL_NON_EMPTY = ("og:title", "og:description", "og:image", "og:image:alt")
+
+
+def check_social_meta(pages: list[Path]) -> bool:
+    """Every page but the named exemptions carries one complete, consistent social card."""
+    problems: list[str] = []
+    checked = 0
+    for page in pages:
+        if page.name in SOCIAL_CARD_EXEMPT:
+            continue
+        checked += 1
+        text = HTML_COMMENT_RE.sub("", page.read_text(encoding="utf-8"))
+        head_end = text.find("</head>")
+        head = text if head_end == -1 else text[:head_end]
+        values: dict[str, list[str]] = {}
+        canonicals: list[str] = []
+        for tag in HEAD_META_OR_LINK_RE.finditer(head):
+            attrs = tag_attributes(tag.group(2))
+            if tag.group(1).lower() == "link":
+                if "canonical" in attrs.get("rel", "").lower().split():
+                    canonicals.append(attrs.get("href", "").strip())
+                continue
+            content = attrs.get("content", "")
+            # Open Graph is read from property= and Twitter from name=, which
+            # is how every consumer reads them; the generator writes the
+            # same, so a tag with the other attribute is a regression.
+            prop = attrs.get("property", "").strip().lower()
+            if prop.startswith("og:"):
+                values.setdefault(prop, []).append(content)
+            name = attrs.get("name", "").strip().lower()
+            if name.startswith("twitter:"):
+                values.setdefault(name, []).append(content)
+        for key in SOCIAL_PROPERTIES + ("twitter:card",):
+            count = len(values.get(key, []))
+            if count != 1:
+                problems.append(f"{page.name}: {count} {key} tags")
+        # Two canonicals are check_head_tags' finding; here the first is used.
+        # A page with no canonical (404.html, thank-you.html) is its own URL,
+        # with or without the .html the host strips from clean addresses.
+        if canonicals:
+            allowed_urls = {canonicals[0]}
+        else:
+            allowed_urls = {f"{SITE_PREFIX}/{page.name}", f"{SITE_PREFIX}/{page.stem}"}
+
+        def single(key: str):
+            got = values.get(key, [])
+            return got[0] if len(got) == 1 else None
+
+        for key in SOCIAL_NON_EMPTY:
+            value = single(key)
+            if value is not None and not value.strip():
+                problems.append(f"{page.name}: {key} is empty")
+        image = single("og:image")
+        if image is not None and image.strip() and not image.startswith(SITE_PREFIX + "/"):
+            problems.append(
+                f"{page.name}: og:image is {image!r}, which is not an absolute URL under "
+                f"{SITE_PREFIX}, so crawlers that take no relative card image show none"
+            )
+        for key, want in (
+            ("og:url", allowed_urls),
+            ("og:site_name", {SITE["brand_name"]}),
+            ("og:type", {SOCIAL_TYPE_EXCEPTIONS.get(page.name, "website")}),
+            ("twitter:card", {"summary_large_image"}),
+        ):
+            value = single(key)
+            if value is not None and value not in want:
+                problems.append(f"{page.name}: {key} is {value!r}, expected {' or '.join(sorted(map(repr, want)))}")
+    ok = not problems
+    print(f"[{'PASS' if ok else 'FAIL'}] social card tags are complete and agree with the canonical: "
+          f"{checked} pages checked, {len(problems)} problems")
+    for problem in problems[:20]:
+        print(f"       {problem}")
+    return ok
+
+
 def check_noindex_and_navigation(pages: list[Path], docs_root: Path) -> bool:
     """404.html, thank-you.html and login.html are the only noindex pages, and no page links to the first two."""
     problems: list[str] = []
@@ -519,12 +611,12 @@ def check_sitemap(pages: list[Path], docs_root: Path) -> bool:
 
 
 def check_llms_txt(docs_root: Path) -> bool:
-    """llms.txt covers the sitemap's page set once each and repeats each page's meta description."""
+    """llms.txt covers the sitemap's page set once each, names each page by its title and URL, and repeats its meta description."""
     llms_file = docs_root / "llms.txt"
     sitemap = docs_root / "sitemap.xml"
     problems: list[str] = []
     if not llms_file.is_file() or not sitemap.is_file():
-        print("[FAIL] llms.txt matches the sitemap's page set and descriptions: file(s) missing")
+        print("[FAIL] llms.txt matches the sitemap's page set, titles, URLs and descriptions: file(s) missing")
         return False
 
     sitemap_paths = {
@@ -535,25 +627,51 @@ def check_llms_txt(docs_root: Path) -> bool:
 
     # check_llms_drift.entries() and .LLMS_FILE are hard-coded to this repo's own
     # docs/llms.txt, so they are reused only for the parts that already take a
-    # Path argument (meta_description) or a plain regex (LLMS_ENTRY). The
+    # Path argument (meta_description), a plain regex (LLMS_ENTRY) or an
+    # explicit site URL (path_from_url). The
     # page-set comparison to the sitemap below is not something
     # check_llms_drift does at all, so it is written fresh here.
     text = llms_file.read_text(encoding="utf-8")
+    # The file's shape is checked as well as its entries: the heading is the
+    # brand, the summary is one blockquote carrying the home page's
+    # description, and every list line is an entry (a "* " or an unlinked
+    # "- " line would otherwise be skipped as prose).
+    file_lines = text.splitlines()
+    if not file_lines or file_lines[0] != f"# {SITE['brand_name']}":
+        problems.append(f"llms.txt:1: the heading is not '# {SITE['brand_name']}'")
+    quotes = [(n, line) for n, line in enumerate(file_lines, start=1) if line.startswith(">")]
+    home = docs_root / "index.html"
+    home_description = check_llms_drift.meta_description(home) if home.is_file() else None
+    if len(quotes) != 1:
+        problems.append(f"llms.txt: {len(quotes)} blockquote lines, expected one summary")
+    elif home_description is not None and " ".join(quotes[0][1][1:].split()) != home_description:
+        problems.append(f"llms.txt:{quotes[0][0]}: the summary differs from index.html's meta description")
+    for n, line in enumerate(file_lines, start=1):
+        if line[:2] in ("- ", "* ", "+ ") and not check_llms_drift.LLMS_ENTRY.match(line):
+            problems.append(f"llms.txt:{n}: list line is not '- [title](url): description'")
     llms_paths = set()
     llms_lines = []
+    names: dict[int, str] = {}
     for number, line in enumerate(text.splitlines(), start=1):
         match = check_llms_drift.LLMS_ENTRY.match(line)
-        if match:
-            llms_paths.add(match.group(1))
-            llms_lines.append((number, match.group(1), " ".join(match.group(2).split())))
+        if match is None:
+            if line.startswith("- "):
+                problems.append(f"llms.txt:{number}: entry is not `- [title](url): description`")
+            continue
+        url_path = check_llms_drift.path_from_url(match.group(2), SITE_PREFIX)
+        if url_path is None:
+            problems.append(f"llms.txt:{number}: {match.group(2)!r} is not under {SITE_PREFIX}")
+            continue
+        llms_paths.add(url_path)
+        names[number] = " ".join(match.group(1).split())
+        llms_lines.append((number, url_path, " ".join(match.group(3).split())))
 
     for url_path, count in sorted(Counter(path for _, path, _ in llms_lines).items()):
         if count > 1:
             problems.append(f"llms.txt: {url_path!r} appears {count} times")
 
-    # The sitemap lists absolute https://www.tectori.com URLs and llms.txt
-    # lists site-relative paths. That format difference is expected and is
-    # normalized away above; the two page sets themselves must be identical.
+    # Both list absolute URLs; the site URL is stripped from each above so
+    # the two page sets compare as paths, and they must be identical.
     missing = sitemap_paths - llms_paths
     extra = llms_paths - sitemap_paths
     for path in sorted(missing):
@@ -570,6 +688,13 @@ def check_llms_txt(docs_root: Path) -> bool:
         if not page.is_file():
             problems.append(f"llms.txt:{number}: {url_path} names no page in {docs_root}")
             continue
+        title = page_title(HTML_COMMENT_RE.sub("", page.read_text(encoding="utf-8")).encode("utf-8"))
+        if title is None:
+            problems.append(f"llms.txt:{number}: {page.name} has no <title>")
+        elif title != names[number]:
+            problems.append(
+                f"llms.txt:{number}: {url_path} is named {names[number]!r} but {page.name} is titled {title!r}"
+            )
         current = check_llms_drift.meta_description(page)
         if current is None:
             problems.append(f"llms.txt:{number}: {page.name} has no meta description")
@@ -579,7 +704,7 @@ def check_llms_txt(docs_root: Path) -> bool:
             problems.append(f"llms.txt:{number}: {url_path} description has drifted from {page.name}")
 
     ok = not problems
-    print(f"[{'PASS' if ok else 'FAIL'}] llms.txt matches the sitemap's page set and descriptions: "
+    print(f"[{'PASS' if ok else 'FAIL'}] llms.txt matches the sitemap's page set, titles, URLs and descriptions: "
           f"{len(llms_lines)} entries, {drift} drifted, {len(problems) - drift} other problems")
     for problem in problems[:20]:
         print(f"       {problem}")
@@ -3123,6 +3248,20 @@ ATTR_PAIR_RE = re.compile(
 )
 
 
+def tag_attributes(tag_body: str) -> dict[str, str]:
+    """Return a tag's attributes keyed by lowercase name, first occurrence winning, values unescaped.
+
+    Tokenised from the front of the tag with ATTR_PAIR_RE, as img_attr is,
+    so a value that merely contains "property=" is never an attribute,
+    which a search over the whole tag text cannot promise.
+    """
+    found: dict[str, str] = {}
+    for match in ATTR_PAIR_RE.finditer(tag_body):
+        value = next((g for g in match.groups()[1:] if g is not None), "")
+        found.setdefault(match.group(1).lower(), html_lib.unescape(value))
+    return found
+
+
 def img_attr(attrs: str, name: str):
     """Return an <img> attribute's value (quoted or bare), "" for a valueless one, None when absent.
 
@@ -3877,6 +4016,7 @@ def tag_attribute(tag_body: str, name: str):
 # it does not end the tag early. A stray quote with no partner matches nothing,
 # which makes the element unreadable and the check that wanted it fail.
 TAG_ATTRIBUTES = r"""((?:"[^"]*"|'[^']*'|[^>"'])*)"""
+HEAD_META_OR_LINK_RE = re.compile(r"<(meta|link)\b" + TAG_ATTRIBUTES + ">", re.IGNORECASE)
 # A link: (attributes, inner html). The inner html ends at the closing tag, at
 # the next opening <a, or at the end of the text, so an unclosed link is still
 # found.
@@ -4919,6 +5059,7 @@ def main() -> int:
         check_links(pages, docs_root),
         check_pages_are_reachable(pages, docs_root),
         check_head_tags(pages),
+        check_social_meta(pages),
         check_sitemap(pages, docs_root),
         check_insights_feed_dates(docs_root),
         check_llms_txt(docs_root),
