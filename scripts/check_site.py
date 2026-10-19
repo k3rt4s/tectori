@@ -148,6 +148,13 @@ def main():
         [script("check_deploy_gate.py")],
     ))
 
+    # The local server and the rehearsal each delete or read files on a path
+    # they are handed. Nothing above hands them a hostile one.
+    results.append(run(
+        "the server and the rehearsal refuse paths outside their trees",
+        [script("check_script_guards.py")],
+    ))
+
     # The render comparison needs a real built tree, so build one into a
     # temporary directory rather than the default output location, which a
     # person may be holding output in.

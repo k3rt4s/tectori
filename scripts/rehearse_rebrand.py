@@ -142,12 +142,55 @@ def fixture_gaps(original, founder):
     return gaps
 
 
+MARKER = ".tectori-rehearsal"
+
+
+def _same_or_inside(path, root):
+    """Say whether path is root or lies beneath it, comparing as the OS does."""
+    path = os.path.normcase(os.path.abspath(path))
+    root = os.path.normcase(os.path.abspath(root))
+    try:
+        return os.path.commonpath([path, root]) == root
+    except ValueError:
+        # Different drives, so neither contains the other.
+        return False
+
+
+def out_dir_refusal(out_dir, repo_root, exists, is_empty, has_marker):
+    """Return why out_dir may not be wiped and rebuilt, or None when it may."""
+    if _same_or_inside(repo_root, out_dir):
+        # clone() deletes out_dir first, so out_dir may not be the repo or
+        # anything that holds it.
+        return f"refusing an --out that is or contains the repo: {out_dir}"
+    if _same_or_inside(out_dir, repo_root):
+        # The clone is generated data and a rewritten copy of every page. Letting
+        # it land inside the repo would put a second, wrong copy of the site
+        # under version control.
+        return f"refusing to write the clone inside the repo: {out_dir}"
+    if exists and not is_empty and not has_marker:
+        return (
+            f"refusing to delete a non-empty directory this script did not "
+            f"create (no {MARKER} marker in it): {out_dir}"
+        )
+    return None
+
+
+def out_dir_refusal_on_disk(out_dir):
+    """Return out_dir_refusal for a real path, reading the facts from the disk."""
+    exists = os.path.isdir(out_dir)
+    is_empty = exists and not os.listdir(out_dir)
+    has_marker = exists and os.path.isfile(os.path.join(out_dir, MARKER))
+    return out_dir_refusal(out_dir, REPO_ROOT, exists, is_empty, has_marker)
+
+
 def clone(out_dir):
     """Copy the repo tree to a scratch directory, without its git history."""
     shutil.rmtree(out_dir, ignore_errors=True)
     shutil.copytree(
         REPO_ROOT, out_dir, ignore=shutil.ignore_patterns(".git", "__pycache__")
     )
+    with open(os.path.join(out_dir, MARKER), "w", encoding="utf-8") as f:
+        f.write("Made by scripts/rehearse_rebrand.py; safe for it to delete.\n")
 
 
 def read_json(path):
@@ -522,11 +565,9 @@ def main():
     )
     args = parser.parse_args()
     out_dir = os.path.abspath(args.out)
-    if os.path.commonpath([out_dir, REPO_ROOT]) == REPO_ROOT:
-        # The clone is generated data and a rewritten copy of every page. Letting
-        # it land inside the repo would put a second, wrong copy of the site
-        # under version control.
-        raise SystemExit(f"refusing to write the clone inside the repo: {out_dir}")
+    refusal = out_dir_refusal_on_disk(out_dir)
+    if refusal:
+        raise SystemExit(refusal)
 
     original = read_json(os.path.join(REPO_ROOT, "site", "content", "site.json"))
     founder = read_json(os.path.join(REPO_ROOT, "site", "content", "founder.json"))

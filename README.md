@@ -178,6 +178,16 @@ against it with the same result it gives against the live site.
   the site rather than the tree itself, and the deploy job is the one thing
   here whose removal is silent: delete the line that makes it wait and every
   other check still passes while a failing run ships.
+- `scripts/check_script_guards.py` proves the two scripts that act on a path
+  they are handed refuse the wrong ones. It asks the local server in
+  `scripts/serve_docs.py` where `/%2e%2e/%2e%2e/README.md`,
+  `/C:/Windows/win.ini` and `/..%5c..%5cREADME.md` lead, and requires every
+  answer to stay inside `docs/` or name nothing, while `/` and `/about` still
+  reach `index.html` and `about.html`. It then feeds the guard in
+  `scripts/rehearse_rebrand.py` the cases for `--out`: the repo itself, a
+  parent of it, a directory inside it and a non-empty directory the
+  rehearsal did not create are refused, and a missing, empty or marked one is
+  allowed. It opens no socket and deletes nothing.
 - `scripts/check_live_deploy.py` fetches every file in `docs/` from the live
   site and reports any that differs. It is the only check that reads what a
   visitor gets: the others read the tree about to be deployed, and what a
@@ -185,7 +195,7 @@ against it with the same result it gives against the live site.
   the extensionless path of every page, because a host that serves files
   literally returns all 47 files correctly, plus one page per Insights week,
   and 404s on every link on every
-  page. It needs the network, so it is not one of the fifteen.
+  page. It needs the network, so it is not one of the sixteen.
 - `PERMISSIONS.md` lists everything the site needs to build, deploy, and
   serve: runtime, filesystem paths, every outbound host, the operator
   accounts, the DNS records, and a from-scratch deploy runbook. It replaced
@@ -283,7 +293,7 @@ credentials and career for step 5 to rewrite.
    missed. To
    see steps 1 to 4 and this one run end to end before you do them
    yourself, run `python scripts/check_site.py --full`, which adds the
-   rehearsal as a sixteenth check.
+   rehearsal as a seventeenth check.
 7. Follow the runbook in `PERMISSIONS.md` for the repository, the Pages
    settings, the DNS records and the accounts behind the three third-party
    services.
