@@ -199,6 +199,58 @@ SITE_TOKENS = {
 }
 
 
+INSIGHTS_WEEK_CANONICAL = re.compile(r"^/insights-\d{4}-w\d{2}$")
+
+
+def render_insights_week_jsonld(entry):
+    """Return the JSON-LD block for an Insights week page: a WebPage and a Home, Insights, week BreadcrumbList.
+
+    The same shape site/pages/insights.jsonld.frag writes by hand for the hub.
+    The week label is taken from the entry's title ("Insights, <label> | Brand"),
+    which is the wording the page's own heading uses.
+    """
+    title = entry["title"]
+    # The brand after " | " is body copy the rehearsal leaves as is, so only
+    # the prefix and the separator are required, not the brand's spelling.
+    prefix, label_and_brand = "Insights, ", title.rsplit(" | ", 1)
+    if not (title.startswith(prefix) and len(label_and_brand) == 2):
+        raise SystemExit(
+            f"{entry['slug']}: title {title!r} is not 'Insights, <label> | <brand>', "
+            "so the breadcrumb label cannot be taken from it"
+        )
+    label = label_and_brand[0][len(prefix):]
+    site_url = SITE["site_url"]
+    url = site_url + entry["canonical"]
+    graph = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebPage",
+                "@id": url + "#webpage",
+                "name": title,
+                "url": url,
+                "description": entry["description"],
+                "publisher": {"@id": site_url + "/#organization"},
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": url + "#breadcrumb",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Home", "item": site_url + "/"},
+                    {"@type": "ListItem", "position": 2, "name": "Insights", "item": site_url + "/insights"},
+                    {"@type": "ListItem", "position": 3, "name": label, "item": url},
+                ],
+            },
+        ],
+    }
+    body = json.dumps(graph, indent=2, ensure_ascii=False)
+    body = "\n".join("      " + line for line in body.split("\n"))
+    text = (
+        '    <script type="application/ld+json">\n' + body + "\n    </script>\n"
+    ).replace("\n", CRLF)
+    return text.encode("utf-8")
+
+
 def load_fragment(rel_path):
     with open(os.path.join(SITE_DIR, rel_path), "rb") as f:
         raw = f.read()
@@ -415,6 +467,8 @@ def render_page(entry, cache):
         ).encode("utf-8"))
     if entry["jsonld_fragment"]:
         out.append(load_fragment(entry["jsonld_fragment"]))
+    elif INSIGHTS_WEEK_CANONICAL.match(entry["canonical"] or ""):
+        out.append(render_insights_week_jsonld(entry))
     out.append(("  </head>" + CRLF).encode("utf-8"))
     out.append(("  <body>" + CRLF).encode("utf-8"))
     out.append(cached_fragment("skip-link"))
@@ -748,6 +802,21 @@ def render_llms(public_pages, entries, verbatim):
     return (CRLF.join(lines) + CRLF).encode("utf-8")
 
 
+def feed_item_date(record):
+    """Return the record's date clamped into the ISO week named by record["week"] (YYYY-wNN)."""
+    try:
+        year, week = record["week"].split("-w")
+        monday = datetime.date.fromisocalendar(int(year), int(week), 1)
+        sunday = datetime.date.fromisocalendar(int(year), int(week), 7)
+        date = datetime.datetime.strptime(record["date"], "%Y-%m-%d").date()
+    except (ValueError, KeyError, AttributeError) as exc:
+        raise SystemExit(
+            f"insights_feed.json record {record.get('anchor', record.get('title', '?'))!r}: "
+            f"week {record.get('week')!r} or date {record.get('date')!r} is invalid ({exc})"
+        ) from None
+    return min(max(date, monday), sunday)
+
+
 def render_insights_feed(feed_records):
     """Return insights.xml, an RSS 2.0 feed of every published Insights entry, newest first.
 
@@ -761,9 +830,19 @@ def render_insights_feed(feed_records):
     # The newest record's date, not wall-clock time: build_site.py --check and
     # check_source_only_build.py both require a build from the same tracked
     # source to reproduce the same bytes, which "now" never does.
-    newest_date = feed_records[0]["date"] if feed_records else "1970-01-01"
+    # A record's own date is the source article's, which can be years older
+    # than the site. The feed reports when Tectori published it, which is the
+    # week of the page it links to, so each date is clamped into that ISO week
+    # and the items are ordered newest first by the clamped date (a stable
+    # sort, so records sharing a date keep their file order).
+    dated = sorted(
+        ((feed_item_date(record), record) for record in feed_records),
+        key=lambda pair: pair[0],
+        reverse=True,
+    )
+    newest_date = dated[0][0] if dated else datetime.date(1970, 1, 1)
     build_date = format_datetime(
-        datetime.datetime.strptime(newest_date, "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc),
+        datetime.datetime.combine(newest_date, datetime.time(), tzinfo=datetime.timezone.utc),
         usegmt=True,
     )
     lines = [
@@ -778,11 +857,10 @@ def render_insights_feed(feed_records):
         "    <language>en-us</language>",
         f"    <lastBuildDate>{build_date}</lastBuildDate>",
     ]
-    for record in feed_records:
+    for item_date, record in dated:
         item_url = f'{site_url}/insights-{record["week"]}#{record["anchor"]}'
         pub_date = format_datetime(
-            datetime.datetime.strptime(record["date"], "%Y-%m-%d").replace(
-                tzinfo=datetime.timezone.utc),
+            datetime.datetime.combine(item_date, datetime.time(), tzinfo=datetime.timezone.utc),
             usegmt=True,
         )
         credit = record["publisher"] or "an unnamed source"
