@@ -102,9 +102,10 @@ What a published page causes a visitor's browser to fetch, all on port 443
 over HTTPS:
 
 - **static.cloudflareinsights.com**: best-effort, the page view beacon, on
-  all 24 public pages and never on `docs/login.html`. Blocked or failing, the
-  page renders normally and the visit goes uncounted.
-- **static.scarf.sh**: best-effort, the page view pixel, same 24 pages and
+  25 pages, plus one per Insights week, and never on `docs/login.html`.
+  Blocked or failing, the page renders normally and the visit goes
+  uncounted.
+- **static.scarf.sh**: best-effort, the page view pixel, same 25 pages and
   the same exclusion, same degradation.
 - **formspree.io**: required for the contact form only, the POST target of
   the form on `docs/contact.html`. Unreachable, the form cannot submit and

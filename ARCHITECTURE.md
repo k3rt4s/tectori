@@ -12,19 +12,19 @@ flowchart TB
     subgraph source["Source, committed"]
         siteContent["site/content/*.json\n(site.json, founder.json,\npages.json, public_pages.json)"]
         sitePages["site/pages/*.frag\n(body, jsonld)"]
-        siteFragments["site/fragments/*.frag\n(header, footer, utility-bar,\nskip-link, tail, robots)"]
+        siteFragments["site/fragments/*.frag\n(header, footer, utility-bar,\nskip-link, tail, robots,\ninsights-cta)"]
         siteStatic["site/static/\n(styles.css, script, images)"]
         loginSrc["site/pages/login.page.frag"]
     end
 
     build["scripts/build_site.py"]
-    docsOut["docs/\n(published tree, 43 files)"]
+    docsOut["docs/\n(published tree, 47 files,\nplus one page per Insights week)"]
 
     siteContent --> build
     sitePages --> build
     siteFragments --> build
     siteStatic --> build
-    loginSrc -->|copied unchanged| build
+    loginSrc -->|"site tokens substituted,\nno shared chrome"| build
     build -->|"--out docs"| docsOut
 
     subgraph checks["scripts/check_site.py runs these in order"]
@@ -34,13 +34,14 @@ flowchart TB
         sourceOnly["check_source_only_build.py\n(site/+scripts/ only, no docs/ present)"]
         lastmod["check_lastmod.py\n(reads git history)"]
         stdlibOnly["check_stdlib_only.py"]
-        docClaims["check_doc_claims.py\n(reads README.md, PERMISSIONS.md)"]
+        docClaims["check_doc_claims.py\n(reads README.md, PERMISSIONS.md,\nARCHITECTURE.md)"]
         permHosts["check_permissions_hosts.py\n(reads PERMISSIONS.md, site.json)"]
         noNetwork["check_no_network_calls.py"]
         checksWired["check_checks_wired.py"]
         classNames["check_class_names.py\n(reads docs/, site/static/styles.css)"]
         docCommands["check_documented_commands.py\n(reads every *.md)"]
         deployGate["check_deploy_gate.py\n(reads .github/workflows/verify.yml)"]
+        scriptGuards["check_script_guards.py\n(serve_docs.py, rehearse_rebrand.py guards)"]
         renderCompare["compare_render.py\n(docs/ vs a fresh build)"]
         rehearse["rehearse_rebrand.py\n(--full only, clones tree outside repo)"]
     end
@@ -100,8 +101,8 @@ flowchart LR
 
     visitor -->|"GET /any-page"| ghPages
     ghPages -->|"HTML + CSS + JS + images"| visitor
-    visitor -.->|"fires on 24 pages,\nnever on login.html"| cloudflare
-    visitor -.->|"fires on 24 pages,\nnever on login.html"| scarf
+    visitor -.->|"fires on 25 pages, plus one per\nInsights week, never on login.html"| cloudflare
+    visitor -.->|"fires on 25 pages, plus one per\nInsights week, never on login.html"| scarf
     visitor -->|"POST, docs/contact.html only"| formspree
 ```
 
@@ -110,9 +111,11 @@ Every arrow above except the initial page request is the visitor's browser
 acting on published markup: the beacon and the pixel are best-effort and
 degrade to nothing if blocked, the phone number on the same page is the
 fallback if Formspree is unreachable. `docs/login.html` is excluded from the
-beacon, the pixel, and the generator itself; it carries its own
+beacon, the pixel, and the shared chrome; it carries its own
 Content-Security-Policy denying connections, framing, and form actions, and
-is copied into `docs/` unchanged rather than rendered.
+is built from its own fragment, `site/pages/login.page.frag`, which the
+build passes through the same site token substitution as every other
+fragment (including the logo width and height) and nothing else.
 
 `scripts/check_permissions_hosts.py` requires this same host list to appear,
 in both directions, in `PERMISSIONS.md`'s network egress section and in

@@ -83,7 +83,8 @@ against it with the same result it gives against the live site.
 - `scripts/verify_site.py` checks that a built site tree is internally
   consistent: internal links resolve, head tags are singular, the sitemap
   and `llms.txt` cover the same pages with matching descriptions, only the
-  two documented pages are noindex, every other page is linked to from some
+  three documented pages (`404.html`, `thank-you.html` and `login.html`)
+  are noindex, every other page is linked to from some
   page that is not itself, the contact details are character for character,
   the analytics tags are on every page except `login.html`, and
   no ratings markup or Qualified Security Assessor claim appears. Its last
@@ -174,8 +175,12 @@ against it with the same result it gives against the live site.
   carried it. Nothing in the repository is modified by a run.
 - `scripts/check_deploy_gate.py` reads `.github/workflows/verify.yml` and
   confirms the deploy job still waits for the checks, uploads `docs/`, and
-  refuses pull requests. It is the only check that reads how the tree reaches
-  the site rather than the tree itself, and the deploy job is the one thing
+  refuses pull requests and any ref other than `refs/heads/main`. It also
+  requires the `pages` concurrency group on the deploy job alone with
+  cancel-in-progress off, a group of its own on the verify job, and no
+  concurrency at the workflow level. It is the only check that reads how
+  the tree reaches the site rather than the tree itself, and the deploy job
+  is the one thing
   here whose removal is silent: delete the line that makes it wait and every
   other check still passes while a failing run ships.
 - `scripts/check_script_guards.py` proves the two scripts that act on a path
