@@ -7,6 +7,10 @@ id exactly, not as a substring, so a decoy job such as ``verify-real``
 does not count. The verify job's steps are parsed too: the check, build
 diff and rebrand scripts must each be run by a step that cannot be skipped
 or have its failure ignored, not merely be mentioned somewhere in the job.
+The deploy job's own condition must name both the event and the branch, so a
+manual run on a feature branch deploys nothing, and the ``pages``
+concurrency group must sit on the deploy job alone, never cancelling, never
+shared with the verify job or placed on the whole workflow.
 """
 
 # The deploy job is the only route to the site, so it is the one thing in this
@@ -31,10 +35,20 @@ WORKFLOW = os.path.join(REPO_ROOT, ".github", "workflows", "verify.yml")
 # The job that runs the checks, and the job that publishes docs/.
 VERIFY_JOB = "verify"
 DEPLOY_JOB = "deploy"
-# What the deploy job's own condition has to say, character for character.
-# Matching the whole thing rather than looking for the word `pull_request`
-# in it is the point: the inverted form contains the same word.
-EXPECTED_CONDITION = "github.event_name != 'pull_request'"
+# What the deploy job's own condition has to say: exactly these two clauses,
+# joined by && in either order. Matching whole clauses rather than looking for
+# the word `pull_request` in it is the point: the inverted form contains the
+# same word. The second clause is what keeps a workflow_dispatch run on a
+# feature branch from deploying, which would otherwise rest on a Pages
+# environment rule that lives outside this tree.
+EXPECTED_CLAUSES = frozenset(
+    {"github.event_name != 'pull_request'", "github.ref == 'refs/heads/main'"}
+)
+EXPECTED_CONDITION = (
+    "github.event_name != 'pull_request' && github.ref == 'refs/heads/main'"
+)
+# The one concurrency group a deploy may use.
+DEPLOY_GROUP = "pages"
 # Any of these in the deploy job makes it run whatever the verify job did,
 # which leaves the `needs` line in place and decorative.
 OVERRIDES = ("always()", "failure()", "cancelled()")
@@ -131,6 +145,64 @@ def needs_job_ids(body):
         # Scalar.
         return [rest.strip("'\"")]
     return []
+
+
+def condition_clauses(text):
+    """Return a condition's clauses as a set, or None if it is not a plain && chain.
+
+    Any ``||``, parenthesis, negation or expression wrapper makes the
+    condition something other than two required clauses, so it is rejected
+    here rather than guessed at.
+    """
+    if "||" in text or "(" in text or "${{" in text:
+        return None
+    return {part.strip() for part in text.split("&&")}
+
+
+def job_concurrency(body):
+    """Return a job's own ``concurrency`` as (group, cancel), or None if it has none.
+
+    Only the job-level key (four spaces in) counts, and a commented-out
+    block is not a block. Values are returned as written, unquoted and
+    without trailing comments; a missing key comes back as None.
+    """
+    lines = body.splitlines()
+    for i, line in enumerate(lines):
+        match = re.match(r"^    concurrency:\s*(.*)$", line)
+        if not match:
+            continue
+        if _strip_comment(match.group(1)).strip():
+            # Scalar or flow form: not the block this gate reads.
+            return ("", None)
+        group = cancel = None
+        for later in lines[i + 1:]:
+            if not later.strip() or later.lstrip().startswith("#"):
+                continue
+            if len(later) - len(later.lstrip()) <= 4:
+                break
+            pair = re.match(r"^\s+([A-Za-z0-9_-]+):\s*(.*)$", later)
+            if pair:
+                value = _unquote(_strip_comment(pair.group(2)))
+                if pair.group(1) == "group":
+                    group = value
+                elif pair.group(1) == "cancel-in-progress":
+                    cancel = value.lower()
+        return (group, cancel)
+    return None
+
+
+def workflow_level_concurrency(text):
+    """Say whether an uncommented ``concurrency`` key sits at the workflow level.
+
+    YAML key order carries no meaning, so the whole file is read, not only the
+    text before ``jobs:``; a quoted key and a space before the colon are
+    accepted too, since GitHub reads both.
+    """
+    return (
+        re.search(r"""^["']?concurrency["']?\s*:""", text, re.MULTILINE)
+        is not None
+    )
+
 
 # What the verify job's steps must run. Each entry is a script and the
 # extra command (if any) that must also run, unescaped, in the same step.
@@ -299,6 +371,13 @@ def main():
         text = f.read()
     found = jobs(text)
 
+    if workflow_level_concurrency(text):
+        problems.append(
+            "the workflow has a concurrency block of its own at the top, so "
+            "every job, including a pull request's checks, shares one group "
+            "and a pull request can displace a pending deploy of main"
+        )
+
     if VERIFY_JOB not in found:
         problems.append(f"no {VERIFY_JOB} job, so nothing runs the checks")
     else:
@@ -334,11 +413,57 @@ def main():
                 f"the {DEPLOY_JOB} job has no condition of its own, so a pull "
                 "request deploys and an unmerged branch reaches the site"
             )
-        elif condition.group(1) != EXPECTED_CONDITION:
+        else:
+            written = _strip_comment(condition.group(1)).strip()
+            if condition_clauses(written) != EXPECTED_CLAUSES:
+                problems.append(
+                    f"the {DEPLOY_JOB} job's condition is {written!r} "
+                    f"rather than {EXPECTED_CONDITION!r} (both clauses, joined "
+                    "by &&), so a manual run on a feature branch can deploy"
+                )
+        deploy_conc = job_concurrency(body)
+        if deploy_conc is None:
             problems.append(
-                f"the {DEPLOY_JOB} job's condition is {condition.group(1)!r} "
-                f"rather than {EXPECTED_CONDITION!r}"
+                f"the {DEPLOY_JOB} job has no concurrency block, so deploys "
+                "are not serialised"
             )
+        elif deploy_conc != (DEPLOY_GROUP, "false"):
+            problems.append(
+                f"the {DEPLOY_JOB} job's concurrency is group "
+                f"{deploy_conc[0]!r} with cancel-in-progress {deploy_conc[1]!r}"
+                f" rather than group {DEPLOY_GROUP!r} with cancel-in-progress "
+                "false, so a deploy can be cancelled mid-upload"
+            )
+        if VERIFY_JOB in found:
+            verify_conc = job_concurrency(found[VERIFY_JOB])
+            if verify_conc is None or not verify_conc[0]:
+                problems.append(
+                    f"the {VERIFY_JOB} job has no concurrency group of its own"
+                )
+        # No other job may share the deploy's group: a pull request or a
+        # feature-branch run of that job would take the one pending slot that
+        # a deploy of main is waiting for. Group names are compared folded,
+        # which is how GitHub compares them.
+        taken = {DEPLOY_GROUP.lower()}
+        if deploy_conc is not None and deploy_conc[0]:
+            taken.add(deploy_conc[0].lower())
+        for name, other in found.items():
+            if name == DEPLOY_JOB:
+                continue
+            other_conc = job_concurrency(other)
+            if other_conc is None or not other_conc[0]:
+                continue
+            # Text left once every ${{ }} is removed is in the group name
+            # whatever the expression evaluates to, so a group with any such
+            # text can never equal the deploy's; a bare expression could.
+            literal = re.sub(r"\$\{\{.*?\}\}", "", other_conc[0]).strip()
+            if other_conc[0].lower() in taken or not literal:
+                problems.append(
+                    f"the {name} job's concurrency group {other_conc[0]!r} is "
+                    f"the {DEPLOY_JOB} job's group, or an expression that could "
+                    "evaluate to it, so a pull request event can displace a "
+                    "pending deploy of main"
+                )
         for override in OVERRIDES:
             if override in body:
                 problems.append(

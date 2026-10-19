@@ -73,17 +73,20 @@ flowchart LR
 
     push --> verify
     verify -->|"check_site.py,\nbuild_site.py --out docs\n+ git diff --exit-code,\nrehearse_rebrand.py"| gate
-    gate -->|"pass, and not a pull_request"| deploy
-    gate -->|"fail, or is a pull_request"| stop["nothing deploys\nsite already up keeps serving"]
+    gate -->|"pass, on main, not a pull_request"| deploy
+    gate -->|"fail, a pull_request, or not main"| stop["nothing deploys\nsite already up keeps serving"]
     deploy -->|"upload-pages-artifact: docs/"| pages
     pages --> live
 ```
 
 The deploy job runs only `needs: verify` and only `if:
-github.event_name != 'pull_request'`, so a pull request runs every check and
-ships nothing, and a failed check on `main` leaves the previously deployed
-tree serving. `check_deploy_gate.py` reads this file and fails if that wait
-or that condition is ever removed.
+github.event_name != 'pull_request' && github.ref == 'refs/heads/main'`, so
+a pull request or a manual run on another branch runs every check and ships
+nothing, and a failed check on `main` leaves the previously deployed tree
+serving. The `pages` concurrency group (never cancelled) sits on the deploy
+job alone, and verify has its own per-ref group, so a pull request cannot
+displace a pending deploy. `check_deploy_gate.py` fails if any of this is
+removed.
 
 ## Runtime, a visitor's browser
 

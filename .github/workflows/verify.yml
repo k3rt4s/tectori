@@ -21,15 +21,17 @@ on:
 permissions:
   contents: read
 
-# One deploy at a time, and never cancel one in flight. A cancelled deploy
-# leaves whichever tree was mid-upload, and the site is the artifact.
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
 jobs:
   verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Its own group per ref, so a newer push to a pull request cancels only
+    # that pull request's stale checks. It must never share the deploy's
+    # group: a pull request event would then queue against, and could
+    # displace, a pending deploy of main.
+    concurrency:
+      group: verify-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       # These majors are the ones running on Node 24. The previous pair,
       # checkout@v4 and setup-python@v5, still work and annotate every run
@@ -41,6 +43,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - uses: actions/setup-python@v6
         with:
@@ -72,11 +75,18 @@ jobs:
         run: python scripts/rehearse_rebrand.py --out "${{ runner.temp }}/rehearsal"
 
   # Publishes docs/ to Pages, and only if every step above passed. This is the
-  # go-live. A pull request runs the checks and deploys nothing.
+  # go-live. A pull request runs the checks and deploys nothing, and so does
+  # a manual run on any branch other than main.
   deploy:
     needs: verify
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # One deploy at a time, and never cancel one in flight. A cancelled deploy
+    # leaves whichever tree was mid-upload, and the site is the artifact.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     permissions:
       pages: write
       id-token: write
@@ -85,6 +95,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - uses: actions/configure-pages@v6
 
