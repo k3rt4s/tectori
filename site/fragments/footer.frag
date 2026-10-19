@@ -1,6 +1,6 @@
     <footer class="site-footer">
       <div class="footer-brand">
-        <img loading="lazy" src="{{LOGO_SRC}}" alt="{{BRAND_NAME}}">
+        <img loading="lazy" src="{{LOGO_SRC}}" alt="{{BRAND_NAME}}" width="{{LOGO_WIDTH}}" height="{{LOGO_HEIGHT}}">
         <span>{{TAGLINE}}.</span>
       </div>
       <nav class="footer-links" aria-label="Footer navigation">

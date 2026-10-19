@@ -1,7 +1,7 @@
       <section class="hero" aria-labelledby="hero-title">
         <picture class="hero-image">
           <source srcset="assets/{{HERO_WEBP_FILENAME}}" type="image/webp">
-          <img src="assets/{{HERO_PNG_FILENAME}}" alt="Abstract secure cloud architecture on a modern operations desk">
+          <img src="assets/{{HERO_PNG_FILENAME}}" alt="Abstract secure cloud architecture on a modern operations desk" fetchpriority="high" decoding="async">
         </picture>
         <div class="hero-scrim" aria-hidden="true"></div>
         <div class="hero-content">

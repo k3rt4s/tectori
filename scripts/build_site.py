@@ -146,6 +146,19 @@ ADDRESS_STREET, ADDRESS_LOCALITY, ADDRESS_REGION, ADDRESS_POSTAL_CODE = (
     address_parts(SITE["postal_address"])
 )
 
+def logo_dims():
+    """Return the logo's width and height as strings, read from the declared file rather than written as literals."""
+    # rehearse_rebrand.py and a new owner swap the logo; a literal would be
+    # true only for the file this repo shipped, and a false one distorts it.
+    path = Path(STATIC_DIR) / "assets" / SITE["logo_filename"]
+    size, reason = image_size(path)
+    if size is None:
+        raise ValueError(f"{path}: {reason}, so the logo width and height cannot be rendered")
+    return str(int(size[0])), str(int(size[1]))
+
+
+LOGO_WIDTH, LOGO_HEIGHT = logo_dims()
+
 # Every value below appears on all 24 generated pages, so declaring it once is
 # what stops the same phone number or analytics id existing in 24 places that
 # can disagree. verify_site.py checks a built tree against the same file, so a
@@ -168,6 +181,8 @@ SITE_TOKENS = {
     "{{ADDRESS_REGION}}": ADDRESS_REGION,
     "{{ADDRESS_POSTAL_CODE}}": ADDRESS_POSTAL_CODE,
     "{{LOGO_FILENAME}}": SITE["logo_filename"],
+    "{{LOGO_WIDTH}}": LOGO_WIDTH,
+    "{{LOGO_HEIGHT}}": LOGO_HEIGHT,
     "{{PHONE_SCHEMA}}": SITE["phone_schema"],
     "{{LINKEDIN_URL}}": SITE["social"]["linkedin"],
     "{{GITHUB_URL}}": SITE["social"]["github"],
