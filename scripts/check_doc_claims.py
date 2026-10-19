@@ -120,6 +120,20 @@ def published_files() -> int:
     )
 
 
+def pixel_pages(host: str) -> int:
+    """Return how many fixed pages in docs/ load a third-party host, leaving out the weekly Insights pages.
+
+    A page counts only when a src attribute fetches from the host; prose
+    naming it (privacy.html does) is not a load.
+    """
+    loads = re.compile(r'src="https://' + re.escape(host) + "/")
+    return sum(
+        1 for path in DOCS_ROOT.glob("*.html")
+        if not WEEKLY_PAGE.fullmatch(path.stem)
+        and loads.search(path.read_text(encoding="utf-8"))
+    )
+
+
 def modelled_pages() -> int:
     """Return how many pages the content model declares, leaving out the weekly Insights pages."""
     pages = read_json(SITE_DIR / "content" / "pages.json")
@@ -261,6 +275,36 @@ CLAIMS = (
         rf"The {NUMBER} third-party identifiers in",
         third_party_identifiers,
         "third-party identifiers site.json declares",
+    ),
+    (
+        "ARCHITECTURE.md",
+        rf"published tree, {NUMBER} files",
+        published_files,
+        "files published under docs/",
+    ),
+    (
+        "ARCHITECTURE.md",
+        rf"fires on {NUMBER} pages, plus one per\\nInsights week, never on login\.html\"\| cloudflare",
+        lambda: pixel_pages("static.cloudflareinsights.com"),
+        "fixed pages in docs/ that load the Cloudflare beacon",
+    ),
+    (
+        "ARCHITECTURE.md",
+        rf"fires on {NUMBER} pages, plus one per\\nInsights week, never on login\.html\"\| scarf",
+        lambda: pixel_pages("static.scarf.sh"),
+        "fixed pages in docs/ that load the Scarf pixel",
+    ),
+    (
+        "PERMISSIONS.md",
+        rf"the page view beacon, on {NUMBER} pages, plus one per Insights week",
+        lambda: pixel_pages("static.cloudflareinsights.com"),
+        "fixed pages in docs/ that load the Cloudflare beacon",
+    ),
+    (
+        "PERMISSIONS.md",
+        rf"the page view pixel, same {NUMBER} pages",
+        lambda: pixel_pages("static.scarf.sh"),
+        "fixed pages in docs/ that load the Scarf pixel",
     ),
     (
         "README.md",
