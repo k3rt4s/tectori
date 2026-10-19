@@ -14,7 +14,7 @@
       content="default-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
     <link rel="canonical" href="{{SITE_URL}}/login.html">
     <link rel="icon" href="assets/{{FAVICON_FILENAME}}">
-    <link rel="stylesheet" href="styles.css?v=20260929">
+    <link rel="stylesheet" href="styles.css?v=20261018">
     <script src="site.js?v=20260820" defer></script>
   </head>
   <body>
@@ -25,7 +25,9 @@
           ><img
             class="login-brand-logo"
             src="assets/{{LOGO_FILENAME}}"
-            alt="Tectori"></a>
+            alt="Tectori"
+            width="{{LOGO_WIDTH}}"
+            height="{{LOGO_HEIGHT}}"></a>
         <div class="login-message">
           <p class="eyebrow">Control desk</p>
           <h1 id="portal-title">

@@ -206,7 +206,7 @@ a, .button, summary, .service-card, .path-card, .solution-card, .flow-step, inpu
 .login-page { display: grid; min-height: 100vh; grid-template-columns: minmax(0, 0.9fr) minmax(520px, 0.7fr); background: var(--charcoal); }
 .login-brand { position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh; padding: 44px clamp(32px, 6vw, 100px); overflow: hidden; background: var(--charcoal); color: var(--white); }
 .login-brand::after { position: absolute; right: -110px; bottom: -130px; width: 470px; height: 470px; border: 90px solid var(--orange); border-radius: 50%; content: ""; opacity: 0.85; }
-.login-brand-logo { position: relative; z-index: 1; width: 190px; filter: brightness(0) invert(1); }
+.login-brand-logo { position: relative; z-index: 1; width: 190px; height: auto; filter: brightness(0) invert(1); }
 .login-message { position: relative; z-index: 1; max-width: 680px; }
 .login-message h1 { font-size: clamp(2.35rem, 3.92vw, 4.46rem); }
 .login-message p { max-width: 600px; margin: 24px 0 0; color: rgba(254, 255, 254, 0.76); font-size: 1.1rem; }
@@ -235,7 +235,7 @@ a, .button, summary, .service-card, .path-card, .solution-card, .flow-step, inpu
 .cta-inner h2 { max-width: 900px; font-size: clamp(2.2rem, 3.5vw, 3.8rem); }
 .site-footer { display: grid; grid-template-columns: 1.2fr 1fr auto; gap: 48px; padding: 52px clamp(32px, 5vw, 92px); border-top: 1px solid var(--line); background: var(--white); color: var(--muted); font-size: 0.9rem; }
 .footer-brand { max-width: 440px; }
-.footer-brand img { display: block; width: 160px; margin-bottom: 12px; }
+.footer-brand img { display: block; width: 160px; height: auto; margin-bottom: 12px; }
 .footer-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 22px; }
 .footer-social { display: flex; flex-direction: column; gap: 8px; font-weight: 720; }
 .site-footer a { text-decoration: none; }

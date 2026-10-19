@@ -3103,6 +3103,36 @@ SOURCE_RE = re.compile(r"<source\b([^>]*)>", re.IGNORECASE | re.DOTALL)
 WIDTH_ATTR_RE = re.compile(r'\bwidth\s*=\s*["\']?(\d+)', re.IGNORECASE)
 HEIGHT_ATTR_RE = re.compile(r'\bheight\s*=\s*["\']?(\d+)', re.IGNORECASE)
 SRC_ATTR_RE = re.compile(r'\bsrc\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
+# The class name is matched whole: data-class= is not class=, and
+# hero-image-wrap is not hero-image (a hyphen counts as a word boundary).
+HERO_PICTURE_RE = re.compile(
+    r'<picture\b[^>]*(?<![\w-])class\s*=\s*["\']?[^"\'>]*(?<![\w-])hero-image(?![\w-])[^>]*>(.*?)</picture\s*>',
+    re.IGNORECASE | re.DOTALL,
+)
+HEADER_RE = re.compile(r"<header\b[^>]*>(.*?)</header\s*>", re.IGNORECASE | re.DOTALL)
+REMOTE_SRC_RE = re.compile(r"^(?:[a-z][a-z0-9+.-]*:|//)", re.IGNORECASE)
+
+
+ATTR_PAIR_RE = re.compile(
+    r'([^\s"\'=<>/]+)(?:\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s"\'=<>`]+)))?',
+    re.DOTALL,
+)
+
+
+def img_attr(attrs: str, name: str):
+    """Return an <img> attribute's value (quoted or bare), "" for a valueless one, None when absent.
+
+    The attribute string is tokenised from the left, each name with its
+    quoted or bare value, so a name inside another attribute's value (an
+    alt text saying width=10) is never read, and data-width or min-height
+    never stands in for width or height.
+    """
+    wanted = name.lower()
+    for match in ATTR_PAIR_RE.finditer(attrs):
+        if match.group(1).lower() != wanted:
+            continue
+        return next((g for g in match.groups()[1:] if g is not None), "")
+    return None
 SRCSET_ATTR_RE = re.compile(r'\bsrcset\s*=\s*(["\'])(.*?)\1', re.IGNORECASE | re.DOTALL)
 SVG_VIEWBOX_RE = re.compile(
     r'viewBox\s*=\s*(["\'])\s*[-\d.]+\s+[-\d.]+\s+([\d.]+)\s+([\d.]+)\s*\1',
@@ -3204,6 +3234,73 @@ def check_image_dimensions(pages: list[Path], docs_root: Path) -> bool:
     declared = 0
     for page in pages:
         text = page.read_text(encoding="utf-8")
+        live = HTML_COMMENT_RE.sub("", text)
+
+        # Every local image states its size, so the browser reserves its box
+        # before the file arrives. The one exemption is the hero, which is
+        # absolutely positioned to fill its section and cannot move anything.
+        # The tracking pixel is remote and states its own 1 by 1.
+        hero_starts: set[int] = set()
+        for hero in HERO_PICTURE_RE.finditer(live):
+            for inner in IMG_ATTRS_RE.finditer(hero.group(1)):
+                hero_starts.add(hero.start(1) + inner.start())
+        for match in IMG_ATTRS_RE.finditer(live):
+            if match.start() in hero_starts:
+                continue
+            src_value = img_attr(match.group(1), "src")
+            if not src_value or REMOTE_SRC_RE.match(src_value):
+                continue
+            missing = [
+                name for name in ("width", "height")
+                if not (img_attr(match.group(1), name) or "").strip().isdigit()
+            ]
+            if missing:
+                problems.append(
+                    f"{page.name}: {src_value} has no whole-number "
+                    f"{' or '.join(missing)}, so the browser reserves no "
+                    "space for it and the page shifts when it arrives"
+                )
+
+        # Loading hints. The hero is the largest paint on the home page and the
+        # header logo is above the fold on every page, so neither may be lazy.
+        headers = list(HEADER_RE.finditer(live))
+        if not headers and page.name != NO_MENU:
+            problems.append(f"{page.name}: the page has no <header>")
+        for header in headers:
+            logos = [m.group(1) for m in IMG_ATTRS_RE.finditer(header.group(1))]
+            if not logos:
+                problems.append(f"{page.name}: the header has no logo img")
+            for attrs in logos:
+                if (img_attr(attrs, "loading") or "").lower() == "lazy":
+                    problems.append(
+                        f"{page.name}: the header logo is loading=lazy, so it "
+                        "arrives late and moves the sticky header"
+                    )
+        if page.name == "index.html":
+            heroes = [
+                m.group(1)
+                for hero in HERO_PICTURE_RE.finditer(live)
+                for m in IMG_ATTRS_RE.finditer(hero.group(1))
+            ]
+            if not heroes:
+                problems.append("index.html: no img inside picture.hero-image")
+            for attrs in heroes:
+                if (img_attr(attrs, "fetchpriority") or "").lower() != "high":
+                    problems.append(
+                        "index.html: the hero img lacks fetchpriority=high, so "
+                        "the browser ranks the largest paint below other images"
+                    )
+                if (img_attr(attrs, "loading") or "").lower() == "lazy":
+                    problems.append(
+                        "index.html: the hero img is loading=lazy, which defers "
+                        "the largest paint"
+                    )
+                if (img_attr(attrs, "decoding") or "").lower() != "async":
+                    problems.append(
+                        "index.html: the hero img lacks decoding=async, so its "
+                        "decode blocks the first paint of the text beside it"
+                    )
+
         for match in IMG_ATTRS_RE.finditer(text):
             attrs = match.group(1)
             src = SRC_ATTR_RE.search(attrs)
