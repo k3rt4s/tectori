@@ -2,6 +2,18 @@
 
 Tectori website changes are recorded here.
 
+## 2026-10-21
+
+- IMAGE-LOSSLESS (the lossless half of IMAGE-REENCODE): seven PNGs
+  re-filtered and recompressed with no change to size, colour type or the
+  sRGB, gAMA and pHYs chunks. `tectori-social.png` 739,109 to 626,478
+  bytes, `tectori-logo.png` 120,997 to 97,736, the five solution marks
+  405,306 to 375,574 in all, 165 KB less. Every pixel identical, proved by
+  Pillow independently of the encoder, whose comparer reports a one-pixel
+  mutation. `tectori-hero.png` gained nothing and is unchanged; the lossy
+  quality pass stays in the backlog for Jon's eye. Merge `200982d`.
+  Rollback: `git revert -m 1 200982d` then push.
+
 ## 2026-10-18
 
 Unattended main-orchestrator run (Jon: build unattended, go with the
